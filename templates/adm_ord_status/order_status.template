@@ -1,0 +1,20 @@
+<fieldset id="order-status-form">
+
+  ${err_msgs}
+  
+  <p>
+    <span class="italic">from</span><br />
+    <span class="bold">${cur_status}</span>
+  </p>
+  
+  <p>
+    <span class="italic">to</span><br />
+    <span class="bold">${new_status}</span>
+  </p>
+  
+  <input type="checkbox" id="${conf_button}" name="${conf_button}" /> <label for="${conf_button}">${text}</label><br />
+  
+  <input type="submit" name="Confirm" value="Confirm" class="submit-button" />
+  ${NAME}
+
+</fieldset>

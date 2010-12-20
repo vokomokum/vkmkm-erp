@@ -1,0 +1,4285 @@
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '850'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '850'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '850'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '850'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '850'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '850'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '850'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '850'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '802',
+                      '48',
+                      '850'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+notes begin 9
+17
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          'A note of caution'
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          'A note of caution'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => 'A note of caution',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          'A note of caution'
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          'A note of caution'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => 'A note of caution',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          'A note of caution'
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          'A note of caution'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => 'A note of caution',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+notes begin 22
+17
+notes end 22
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+18
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+18
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+18
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          'A note of caution'
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          'A note of caution'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => 'A note of caution',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          'A note of caution'
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          'A note of caution'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => 'A note of caution',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          'A note of caution'
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          'A note of caution'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => 'A note of caution',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+get_lines begin 18
+
+$VAR1 = {};
+get_lines end 18
+get_lines begin 18
+
+$VAR1 = {};
+get_lines end 18
+get_lines begin 18
+
+$VAR1 = {};
+get_lines end 18
+get_lines begin 18
+
+$VAR1 = {};
+get_lines end 18
+get_lines begin 17
+
+$VAR1 = {};
+get_lines end 17
+get_lines begin 17
+
+$VAR1 = {};
+get_lines end 17
+notes begin 9
+18
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          'A note of caution'
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          'A note of caution'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => 'A note of caution',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE mem_id = ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE mem_id = ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE mem_id = ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE mem_id = ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT ord_no, ord_status, ord_label FROM order_header
+
+$VAR1 = {};
+prepare end SELECT ord_no, ord_status, ord_label FROM order_header
+prepare begin SELECT * FROM members WHERE mem_id = ? AND mem_admin
+
+$VAR1 = {};
+prepare end SELECT * FROM members WHERE mem_id = ? AND mem_admin
+prepare begin SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+
+$VAR1 = {};
+prepare end SELECT news_id FROM member_news ORDER BY news_id DESC LIMIT 1
+prepare begin SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+
+$VAR1 = {};
+prepare end SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, m.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label FROM members m, mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id
+prepare begin SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+
+$VAR1 = {};
+prepare end SELECT sum(meml_missing * meml_ex_btw) as missing, sum(meml_damaged * meml_ex_btw) as damaged FROM mem_line WHERE ord_no = ? AND mem_id = ?
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+prepare begin SELECT order_totals(?, ?)
+
+$VAR1 = {};
+prepare end SELECT order_totals(?, ?)
+main begin 18
+
+$VAR1 = {};
+main end 18
+main begin 18
+
+$VAR1 = {};
+main end 18
+main begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main end 18
+main begin 18
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main end 18
+main-0 begin 18
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main-0 end 18
+main begin 18
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main end 18
+main-0 begin 18
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main-0 end 18
+main begin 18
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main end 18
+main-0 begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main-0 end 17
+main begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main end 17
+main-0 begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main-0 end 17
+main begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main end 17
+main-0 begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main-0 end 18
+main begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main end 18
+main-0 begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main-0 end 17
+main begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main end 17
+main-0 begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main-0 end 18
+main begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main end 18
+main-0 begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main-0 end 17
+main begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main end 17
+main-0 begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main-0 end 18
+main begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main end 18
+main-0 begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main-0 end 17
+main begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main end 17
+main-0 begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main-0 end 18
+main begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main end 18
+main-0 begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main-0 end 17
+main begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main end 17
+main-0 begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main-0 end 18
+main begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main end 18
+main-0 begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main-0 end 18
+main begin 18
+
+$VAR1 = {
+          'order_no' => '18'
+        };
+main end 18
+main-0 begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main-0 end 17
+main begin 17
+
+$VAR1 = {
+          'order_no' => '17'
+        };
+main end 17
+notes begin 9
+18
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          'A note of caution'
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          'A note of caution'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => 'A note of caution',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+notes begin 12
+18
+notes end 12
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '0',
+                      '0',
+                      '0.0',
+                      '0',
+                      '0',
+                      '0.0',
+                      '0',
+                      '0',
+                      '0'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 12
+17
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+notes end 12
+get_totals begin 
+
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 350,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '19557',
+                      '1173',
+                      '6',
+                      '1382',
+                      '263',
+                      '19',
+                      '20939',
+                      '1436',
+                      '22725'
+                    ],
+          'notes' => 'Just to see what happens
+',
+          'transfer_out' => {},
+          'transfer_in' => {
+                             '222' => [
+                                        '9:3'
+                                      ]
+                           }
+        };
+view_mem end tothash
+notes begin 12
+17
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+notes end 12
+get_totals begin 
+
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 350,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '19557',
+                      '1173',
+                      '6',
+                      '1382',
+                      '263',
+                      '19',
+                      '20939',
+                      '1436',
+                      '22725'
+                    ],
+          'notes' => 'Just to see what happens
+',
+          'transfer_out' => {},
+          'transfer_in' => {
+                             '222' => [
+                                        '9:3'
+                                      ]
+                           }
+        };
+view_mem end tothash
+notes begin 12
+17
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+notes end 12
+get_totals begin 
+
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 350,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '18856',
+                      '1131',
+                      '6',
+                      '1382',
+                      '263',
+                      '19',
+                      '20238',
+                      '1394',
+                      '21982'
+                    ],
+          'notes' => 'Just to see what happens
+',
+          'transfer_out' => {},
+          'transfer_in' => {
+                             '222' => [
+                                        '9:3'
+                                      ]
+                           }
+        };
+view_mem end tothash
+notes begin 12
+17
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+notes end 12
+get_totals begin 
+
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 350,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '18856',
+                      '1131',
+                      '6',
+                      '1382',
+                      '263',
+                      '19',
+                      '20238',
+                      '1394',
+                      '21982'
+                    ],
+          'notes' => 'Just to see what happens
+',
+          'transfer_out' => {},
+          'transfer_in' => {
+                             '222' => [
+                                        '9:3'
+                                      ]
+                           }
+        };
+view_mem end tothash
+notes begin 9
+18
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          'A note of caution'
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          'A note of caution'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 400,
+                          'mo_stgeld_rxed' => 150,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8904',
+                      '534',
+                      '9188'
+                    ],
+          'notes' => 'A note of caution',
+          'transfer_out' => {
+                              '222' => [
+                                         '12:3'
+                                       ]
+                            },
+          'transfer_in' => {
+                             '1' => [
+                                      '33:5'
+                                    ]
+                           }
+        };
+view_mem end tothash
+notes begin 9
+18
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 22
+17
+notes end 22
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 12
+17
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+notes end 12
+get_totals begin 
+
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 350,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '18856',
+                      '1131',
+                      '6',
+                      '1382',
+                      '263',
+                      '19',
+                      '20238',
+                      '1394',
+                      '21982'
+                    ],
+          'notes' => 'Just to see what happens
+',
+          'transfer_out' => {},
+          'transfer_in' => {
+                             '222' => [
+                                        '9:3'
+                                      ]
+                           }
+        };
+view_mem end tothash
+notes begin 9
+18
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+18
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 22
+18
+notes end 22
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2112',
+                      '127',
+                      '6',
+                      '10674',
+                      '2028',
+                      '19',
+                      '12786',
+                      '2155',
+                      '14941'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 10
+18
+notes end 10
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '5435',
+                      '326',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '5435',
+                      '326',
+                      '5761'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+18
+notes end 9
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '1954',
+                      '117',
+                      '6',
+                      '1296',
+                      '246',
+                      '19',
+                      '3250',
+                      '363',
+                      '3613'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 12
+17
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+notes end 12
+get_totals begin 
+
+$VAR1 = [
+          'Just to see what happens
+'
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 350,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '18856',
+                      '1131',
+                      '6',
+                      '1382',
+                      '263',
+                      '19',
+                      '20238',
+                      '1394',
+                      '21982'
+                    ],
+          'notes' => 'Just to see what happens
+',
+          'transfer_out' => {},
+          'transfer_in' => {
+                             '222' => [
+                                        '9:3'
+                                      ]
+                           }
+        };
+view_mem end tothash
+notes begin 16
+17
+notes end 16
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '2927',
+                      '176',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '2927',
+                      '176',
+                      '3103'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 33
+17
+notes end 33
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '3877',
+                      '233',
+                      '6',
+                      '482',
+                      '92',
+                      '19',
+                      '4359',
+                      '325',
+                      '4684'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '1' => [
+                                       '9:5'
+                                     ]
+                            },
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 33
+17
+notes end 33
+get_totals begin 
+
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '3877',
+                      '233',
+                      '6',
+                      '482',
+                      '92',
+                      '19',
+                      '4359',
+                      '325',
+                      '4684'
+                    ],
+          'notes' => '',
+          'transfer_out' => {
+                              '1' => [
+                                       '9:5'
+                                     ]
+                            },
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          ''
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          ''
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8365',
+                      '502',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8365',
+                      '502',
+                      '8867'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+notes begin 9
+17
+$VAR1 = [
+          ''
+        ];
+notes end 9
+get_totals begin 
+
+$VAR1 = [
+          ''
+        ];
+get_totals end 
+view_mem begin tothash
+
+$VAR1 = {
+          'payments' => {
+                          'mo_misc_rxed' => 0,
+                          'mo_crates_rxed' => 0,
+                          'mo_crates_refunded' => 0,
+                          'mo_stgeld_rxed' => 0,
+                          'mo_misc_refunded' => 0,
+                          'mo_stgeld_refunded' => 0
+                        },
+          'btws' => [
+                      '0',
+                      '0',
+                      '0.0',
+                      '8365',
+                      '502',
+                      '6',
+                      '0',
+                      '0',
+                      '0.0',
+                      '8365',
+                      '502',
+                      '8867'
+                    ],
+          'notes' => '',
+          'transfer_out' => {},
+          'transfer_in' => {}
+        };
+view_mem end tothash
+print html begin 
+
+$VAR1 = {
+          'HASH(0xd467e0)' => undef,
+          'all' => {
+                     'mem_btw' => 14186,
+                     'prc_marg' => '91.4639870028281',
+                     'mem_tot' => 166190,
+                     'btw_due' => -14186,
+                     'margin' => 152004,
+                     'mem_ex_btw' => 166190
+                   }
+        };
+print html end 
+print html begin 
+
+$VAR1 = {
+          'HASH(0xd467e0)' => undef,
+          'all' => {
+                     'mem_btw' => 14186,
+                     'prc_marg' => '91.4639870028281',
+                     'mem_tot' => 166190,
+                     'btw_due' => -14186,
+                     'margin' => 152004,
+                     'mem_ex_btw' => 166190
+                   }
+        };
+print html end 
+print html begin 
+
+$VAR1 = {
+          'wh_id' => {
+                       '1' => {
+                                'ex_btw' => 144426,
+                                'mem_tot' => '152004',
+                                'total' => 1491813,
+                                'btw' => 1347387
+                              }
+                     },
+          'all' => {
+                     'btw_due' => '-712.129999999999',
+                     'total' => 1491813,
+                     'ex_btw' => 144426,
+                     'mem_btw' => 14186,
+                     'mem_tot' => 166190,
+                     'prc_marg' => '12.6673506227812',
+                     'margin' => '21051.87',
+                     'btw' => '13473.87',
+                     'mem_ex_btw' => 166190
+                   }
+        };
+print html end 
+print html begin 
+
+$VAR1 = {
+          'wh_id' => {
+                       '1' => {
+                                'ex_btw' => 144426,
+                                'mem_tot' => '152004',
+                                'total' => 1491813,
+                                'btw' => 1347387
+                              }
+                     },
+          'all' => {
+                     'btw_due' => '-712.129999999999',
+                     'total' => 1491813,
+                     'ex_btw' => 144426,
+                     'mem_btw' => 14186,
+                     'mem_tot' => 166190,
+                     'prc_marg' => '12.6673506227812',
+                     'margin' => '21051.87',
+                     'btw' => '13473.87',
+                     'mem_ex_btw' => 166190
+                   }
+        };
+print html end 
+print html begin 
+
+$VAR1 = {
+          'wh_id' => {
+                       '1' => {
+                                'ex_btw' => 144426,
+                                'mem_tot' => '152004',
+                                'total' => 157899,
+                                'btw' => 13473
+                              }
+                     },
+          'all' => {
+                     'btw_due' => -713,
+                     'total' => 157899,
+                     'ex_btw' => 144426,
+                     'mem_btw' => 14186,
+                     'mem_tot' => 166190,
+                     'prc_marg' => '12.6668271255792',
+                     'margin' => 21051,
+                     'btw' => 13473,
+                     'mem_ex_btw' => 166190
+                   }
+        };
+print html end 
+print html begin 
+
+$VAR1 = {
+          'wh_id' => {
+                       '1' => {
+                                'ex_btw' => 144426,
+                                'mem_tot' => '152004',
+                                'total' => 157899,
+                                'btw' => 13473
+                              }
+                     },
+          'all' => {
+                     'btw_due' => -713,
+                     'total' => 157899,
+                     'ex_btw' => 144426,
+                     'mem_btw' => 14186,
+                     'mem_tot' => 166190,
+                     'prc_marg' => '12.6668271255792',
+                     'margin' => 21051,
+                     'btw' => 13473,
+                     'mem_ex_btw' => 166190
+                   }
+        };
+print html end 
+print html begin 
+
+$VAR1 = {
+          'wh_id' => {
+                       '1' => {
+                                'ex_btw' => 144426,
+                                'mem_tot' => '152004',
+                                'total' => 157899,
+                                'btw' => 13473
+                              }
+                     },
+          'all' => {
+                     'btw_due' => -713,
+                     'total' => 157899,
+                     'ex_btw' => 144426,
+                     'mem_btw' => 14186,
+                     'mem_tot' => 166190,
+                     'prc_marg' => '4.51632851767059',
+                     'margin' => 6865,
+                     'btw' => 13473,
+                     'mem_ex_btw' => 152004
+                   }
+        };
+print html end 
+print html begin 
+
+$VAR1 = {
+          'wh_id' => {
+                       '1' => {
+                                'ex_btw' => 144426,
+                                'mem_tot' => '152004',
+                                'total' => 157899,
+                                'btw' => 13473
+                              }
+                     },
+          'all' => {
+                     'btw_due' => -713,
+                     'total' => 157899,
+                     'ex_btw' => 144426,
+                     'mem_btw' => 14186,
+                     'mem_tot' => 166190,
+                     'prc_marg' => 451,
+                     'margin' => 6865,
+                     'btw' => 13473,
+                     'mem_ex_btw' => 152004
+                   }
+        };
+print html end 

@@ -1,0 +1,12 @@
+<p/>
+<table>
+  <tr>
+    <td align="center" width="30%"><input type="submit" value="Submit"
+    name="Submit"/></td>
+    <td width = 30% align="center"><input type="submit"
+    Value="$toggle" name="toggle_list"/></td>
+  </tr?
+</table>
+</form>
+</body>
+</htnl>

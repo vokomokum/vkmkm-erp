@@ -1,0 +1,8 @@
+<h2 align="center">Who ordered productcode $product_id ?</h2>
+<p align="center"><i>$prod_name</i></p>                                                
+<table border='1' align="center">
+  <tr>
+    <th>ID</th><th>Name</th><th>Quantity</th>
+  </tr>                  
+$ROWS
+</table>

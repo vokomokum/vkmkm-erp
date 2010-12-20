@@ -1,0 +1,17 @@
+<tr class="myorder" >
+  <td>$URL $wh_pr_id</td>
+  <td><input type="text" size="80" align="left" name="d_$wh_pr_id"
+  value="$p_desc" padding="3px"></input></td>
+  <td align="center"><select name="c_$wh_pr_id" style="width:4em">$DROP</select></td>
+  <td align="center"><input class="qtyinp" name="q_$wh_pr_id" value="$qqq"/></td>
+  <td class="qty4" align="center">$wh_wh_q</td>
+  <td align="center"><input class="prinp" name="p_${wh_pr_id}" value="$mprice"/></td>
+  <td class="price4"><align="center">$w_price</td>
+  <td class="qty4" align="center">$wh_btw</td>
+  <td align="center"><input class="qtyinp" name="m_${wh_pr_id}" value="$mmm"/></td>
+  <td align="center"><input type="text" size="1" maxlength="1"
+  name="i_$wh_pr_id" value="$sss"/></td>
+</tr>
+
+
+

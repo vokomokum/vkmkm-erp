@@ -1,0 +1,37 @@
+<div id="header">
+
+    <h3><a href="/cgi-bin/welcome.cgi" class="blue">Welcome ${mem_name}</a></h3>
+       
+    <ul id="main-menu">
+        <li>[ <a href="/cgi-bin/welcome.cgi" class="blue">Home</a> ]</li>
+        <li>[ <span class="$news"><a href="/cgi-bin/read_news.cgi" style="$news">News</a></span> ]</li>
+        <li>[ <span class="$message"><a href="/cgi-bin/read_msg.cgi" style="$message">New Message</a></span>]</li>
+        <li>[ <a href="/cgi-bin/logout.cgi" class="blue">Logout</a> ]</li>
+    </ul>
+    
+    <ul id="order-system-menu">
+        <li>[<a href="/cgi-bin/adm_adj_shortages.cgi">$shortages</a>]</li>
+        <li>[<a href="/cgi-bin/adm_delivery.cgi">$delivery</a>]</li>
+        <li>[<a href="/cgi-bin/adm_view_memord.cgi">View member order</a>]</li>
+        <li>[ <a href="/cgi-bin/who_ordered.pm">Who ordered this product?</a> ]</li>
+        <li>[<a href="/cgi-bin/adm_ord_status.cgi">Change order status</a>]<br /></li>
+        <li>[<a href="/cgi-bin/adm_dnb.cgi">DNB products</a>]</li>
+        <li>[<a href="/cgi-bin/adm_zap.cgi">Zapatista Coffee products</a>]</li>
+        <li>[<a href="/cgi-bin/edit_product.cgi">Edit products</a>]</li>
+        <li>[<a href="/cgi-bin/edit_category.cgi">Edit/Create Product Category</a>]</li>
+        <li>[<a href="/cgi-bin/edit_subcat.cgi">Edit/Create Sub-Category</a>]</li>
+        <li>[<a href="/cgi-bin/edit_member.cgi">Edit/Create Member</a>]<br /></li>
+        <li>[<a href="/cgi-bin/order">My Orders</a>]</li>
+        <li>[<a href="/cgi-bin/all-order">All Products</a>]</li>
+        <li>[<a href="/cgi-bin/post_news.cgi">Post/Edit News</a>]</li>
+        <li>[<a href="/cgi-bin/adm_update_welcome.cgi">Update Welcome Page</a>]</li>
+        <li>[<a href="/cgi-bin/adm_kassa.cgi">Kassa</a>]</li>
+	<li>[<a href="/cgi-bin/kassalist.pm">Kassa List</a>]</li>
+	<li>[<a href="/cgi-bin/pickuplists.pm">Pickup Lists</a>]</li>
+    </ul>
+    
+    <h1>${Title}</h1>
+    $SUBTITLE
+    $BUTTONS
+
+</div>

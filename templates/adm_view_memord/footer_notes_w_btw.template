@@ -1,0 +1,8 @@
+  <tr class="myorder">
+     <td>Notes:</td>
+     <td  colspan="7"><textarea rows="3" cols="100"
+     name="notes" readonly>$note</textarea>
+     </td>
+     <td></td>
+  </tr>
+

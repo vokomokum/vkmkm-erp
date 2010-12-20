@@ -1,0 +1,9 @@
+<tr class="${RowClass}" >
+  <td class="quantity">${wh_no}</td>
+  <td class="quantity">${pr_id}</td><td class="whprcode">${prcode}</td>
+  <td class="descr">${descr}</td><td class="quantity">${qty}</td>
+  <td class="quantity">${received}</td>
+  <td class="price">${price}</td>
+  <td class="price">${price_inc_btw}</td>
+</tr>
+

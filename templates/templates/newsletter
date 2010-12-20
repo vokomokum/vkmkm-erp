@@ -1,0 +1,9 @@
+<div class="center">
+    <h2>Welcome to the Vokomokum On-Line Order Pages</h2>
+    <img src="http://vokomokum.nl/media/images/logo-vokomokum.jpg" alt="Vokomokum" />
+    <p>
+        Please provide feedback over the new site - problems, suggestions, even compliments.<br />
+        Members can now begin ordering products for the ${order_name} order.<br />
+        Ordering will close on April 21 and you can pick up your order on April 28.
+    </p>
+</div>

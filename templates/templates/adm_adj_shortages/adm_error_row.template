@@ -1,0 +1,8 @@
+<tr class="error" >
+  <td class="quantity">${pr_id}</td><td class="descr">${descr}</td>
+  <td class="quantity">${mem_qty}</td><td class="quantity">${reduce_by}</td>
+  <td class="quantity">${qty}</td><td
+  class="price">$(price}</td>
+  <td class="price">${cost}</td>
+</tr>
+

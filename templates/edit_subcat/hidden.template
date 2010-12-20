@@ -1,0 +1,5 @@
+<input type="hidden" name="pass" value="$pass"></input>
+<input type="hidden" name="cat_id" value="$cat_id"></input>
+<input type="hidden" name="cat_name" value="$cat_name"></input>
+<input type="hidden" name="sc_id" value="$sc_id"></input>
+

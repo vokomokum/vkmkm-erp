@@ -1,0 +1,18 @@
+<tr class="title">
+  <td><a name="X$cat"></a>&nbsp;</td>
+  <td></td>
+  <td><h2 style="margin: 0; text-align: center;">$Name</h2></td>
+  <td colspan="5" align="right"><input  type="submit" 
+    name="Save" value="Save order changes" class="blue bold" />
+    [ <a href="#top">back to top</a> ]</td>
+  </tr>
+<tr class="title">
+    <td class="qty4">Product</td>
+  <td></td>
+    <td class="ttldsc">$Description</td>
+    <td class="ttlqty">All ords.</td>
+    <td class="ttlqty">Shortage</td>
+    <td class="ttlqty">My order</td>
+    <td class="ttlprc">Unit price</td>
+    <td class="ttlprc">Total price</td>
+</tr>  

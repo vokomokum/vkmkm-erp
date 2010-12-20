@@ -1,0 +1,51 @@
+<span class="warn"><strong> $err_msgs</strong></span>
+<h2 aligne="center">$Title</h2><p/>
+<input type="hidden" name="state" value="2"/>
+<input type="hidden" name="sel_state" value="2"/>
+<input type="hidden" name="check_out" value="$check_out"/>
+<input type="hidden" name="check_out_name" value="$check_out_name"/>
+<input type="hidden" name="from_id" value="$from_id"/>
+<input type="hidden" name="to_id" value="$to_id"/>
+<input type="submit" name="Submit" value="Submit"/>
+<p/><table>
+ <tr>
+    <td align = "center"><input type="submit" name="Close" value="Go" 
+        width="5%"></td>
+    <td align="left" width="30%">Check-out completed, close this order</td>
+    <td width="30%">&nbsp;</td>
+    <td width="30%">&nbsp;</td>
+ </tr>
+ <tr>
+    <td align = "center"><input type="submit" name="Missing" value="Go" 
+        width="5%"></td>
+    <td align="left" width="30%">Record items missing from order</td>
+    <td width="30%">&nbsp;</td>
+    <td width="30%">&nbsp;</td>
+ </tr>
+ <tr>
+    <td align = "center"><input type="submit" name="Damaged" value="Go" 
+        width="5%"></td>
+    <td align="left" width="30%">Record items damaged in this order</td>
+    <td width="30%">&nbsp;</td>
+    <td width="30%">&nbsp;</td>
+ </tr>
+ <tr>
+    <td align = "center"><input type="submit" name="Xfer_Out" value="Go" 
+        width="5%"></td>
+    <td align="left" width="30%">Move some items to another member's order</td>
+    <td width="30%">&nbsp;</td>
+    <td width="30%">&nbsp;</td>
+ </tr>
+ <tr>
+    <td align = "center"><input type="submit" name="Xfer_In" value="Go" 
+        width="5%"></td>
+    <td align="left" width="30%">Move some items from another member's
+      order to this order</td>
+    <td width="30%">&nbsp;</td>
+    <td width="30%">&nbsp;</td>
+ </tr>
+</table>
+
+<table class="main">
+
+

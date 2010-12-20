@@ -1,0 +1,15 @@
+<table>
+  <tr class="nobox">
+    <td><input class="checkbox" type="checkbox" name="All"
+      ${All}></input></td>
+    <td align="left"><b> Include products marked as inactive</b></td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td><input type="submit" value="&nbsp;Edit Selected Products;&nbsp" name="Submit"></input></td>
+
+  </tr>
+</table>
+<p/>
+<table class="main">
+

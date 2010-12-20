@@ -1,0 +1,6 @@
+</table>
+<p/><input type="checkbox" id="showbtw" name="showbtw" $btwchecked /><label
+for="showbtw">Show BTW details</label><br>
+<p/><input type="checkbox" id="showall" name="showall" $allchecked /><label
+for="showall">Show complete details, inc. BTW</label><br>
+<table class="main">

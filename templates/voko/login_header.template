@@ -1,0 +1,37 @@
+Content-Type: text/html
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+<link href="/stylesheet.css" rel="stylesheet" type="text/css" media="screen" />
+<title>${Pagename}</title>
+</head>
+<body>
+    <div class="center">
+        <h1>${Title}</h1>
+        <img src="http://vokomokum.nl/media/images/logo-vokomokum.jpg" alt="Vokomokum" />
+        <form method="post" enctype="multipart/form-data" action="$Nextcgi">
+            <h2>Please log-in with your Vokomokum Member Nr.<br />or your e-mail address and your password</h2>
+            <fieldset id="log-in">
+                <legend>log-in</legend>
+                <label for="Member">Member Nr.<br />or email address</label><br />
+                <input type="text" name="Member" id="Member" /><br />
+                <label for="Password">Password</label><br />
+                <input align="left" type="password" name="Password" id="Password" /><br />
+                <input type="submit" name="Login" value="Login" /><br />
+                <input type="checkbox" name="Forgot" id="Forgot" />
+                <label for="Forgot">
+                    I Forgot My Password<br />
+                    ( <span class="small italic">enter your Member Nr. or e-mail address,<br />tick the check-box and click Login</span> )
+                </label>
+                
+                <input type="hidden" name="caller" value="$Caller}"></input>
+            </fieldset>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.22.00.06;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<table width="100%">
+  <tr>
+    <td width="50%"<input align="center" type="submit" 
+         value="Show All Postings" name="ShowAll"</td>
+    <td width="33%"<input align="center" type="submit" 
+        value="Mark All as Read" name="MarkRead"</td>
+  </tr>  
+</table>
+</span>
+</form>
+</body>
+</html>
+
+@

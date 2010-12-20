@@ -1,0 +1,19 @@
+<p/><p/>
+<span class="boldtxt">
+<table class="main" width="100%"> 
+  <tr class="myorder">
+    <td align="center" colspan="2">Password (6 to 30 characters)</td>
+  </tr>
+  <tr class="myorder">
+    <td align="left">Password:</td> 
+    <td><input type="password" align="left" size="30" name="Pwd0"  maxlength="30"></td>
+  </tr>
+  <tr class="myorder">
+    <td align="left">Retype:</td> 
+    <td><input type="password" align="left" size="30" name="Pwd1" maxlength="30"></td>
+  </tr>
+</table>
+$ADMIN
+
+
+       

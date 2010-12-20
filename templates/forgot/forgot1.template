@@ -1,0 +1,7 @@
+<div class="center">
+    <h2>Your password is updated and you are logged in<h2>
+    <input type="submit" value="OK" name="OK" />
+</div>
+</form>
+</body>
+</html>

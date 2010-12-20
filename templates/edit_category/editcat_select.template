@@ -1,0 +1,11 @@
+    <div id="edit-create-category">
+        <h3>Select Category to Edit/Create</h3>
+        <select align="center" name="Menu" size="12">
+            <option value="0">Create a New Category</option>
+            $ROWS
+        </select>
+        <input type="submit" name="Submit" value="Submit" />
+    </div>
+</form>
+</body>
+</html>

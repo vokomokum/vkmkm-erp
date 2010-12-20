@@ -1,0 +1,73 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.21.59.55;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<div id="find-create-member">
+
+  <fieldset>
+    <legend>Find / Create a Member</legend>
+    <table class="noborder">
+      <tr>
+        <td align="right"><label for="Member">Member no.:</label></td>
+        <td><input type="text" name="Member" id="Member" value="$Member" size="3" /></td>
+      <tr>
+        <td align="right"><label for="Email">Email:</label></td>
+        <td><input type="text" name="Email" id="Email" value="$Email" maxlength="50" /></td>
+      </tr>
+      <tr>
+        <td class="5em" align="right"><label for="Forename">Forename:</label></td>
+        <td><input type="text" name="Forename" id="Forename" value="$Forename" maxlength="20" /></td>
+      </tr>
+      <tr>
+        <td class="5em" align="right"><label for="Lastname">Lastname:</label></td>
+        <td><input type="text" name="Lastname" id="Lastname" value="$Lastname" maxlength="20" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td align="right"><input type="submit" value="Find" name="Find" /> <input type="submit" value="$Create" name="Create" /></td>
+      </tr>
+    </table>
+  </fieldset>
+  
+  <p class="italic">Find All Members</p>
+  <ul>
+    <li>Without filling out any info click on the “Find” action button</li>
+  </ul>
+  
+  <p class="italic">Find a specific Member</p>
+  <ul>
+    <li>Fill-in any one field, combination of fields or all fields</li>
+    <li>Click on the “Find” action button</li>
+  </ul>
+  
+  <p class="italic">Create a New Member</p>
+  <ul>
+    <li>Fill-in all fields except for the Member no.</li>
+    <li>Click on the “Create a New Account” action button</li>
+  </ul>
+
+</div>
+</body>
+</html>
+
+
+@

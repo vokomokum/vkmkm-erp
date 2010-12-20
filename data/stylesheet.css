@@ -1,0 +1,246 @@
+/* HTML */
+
+    body {
+        font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        color: #231f20;
+    }
+    
+    th         {text-align:center; border:thin solid black; padding:0;}
+    h2         {}
+    h3         {}
+
+    h1, h3 {
+	margin-bottom: 3px;
+    }
+    
+    p {
+	margin-top: 0;
+    }
+    
+    a {
+	text-decoration: none;
+	color: #231f20;
+	outline: none;
+	padding: 1px 3px;
+    }
+    
+    a:hover {
+	background-color: #231f20;
+	color: #fff;
+    }
+    
+    legend { font-weight: bold; }
+
+.main      { border:thin solid black; padding-right:3px; padding-left:3px;}
+.noborder  { border: none; }
+.warn      { color:#ff0000; }
+.heading   { font-size:xx-large;}
+.boldtxt   { font-weight:bold;}
+.errmsg	   { background-color:white; color:red; }
+.checkbox  { font-weight: bold; text-align:left; }
+.catname   {text-align:left;   padding-left:1em; padding-right:1em; width:300px;}
+.catdesc   {text-align:center; padding-left:1em; padding-right:1em; width:700px;}
+.nobox     { text-align: center; border: none; width: 20em; padding-right: 1em; }
+.nb        {text-align:center; padding-top:8px; padding-bottom:8px;}
+.box       {border:solid black; padding-left:1em; padding-right:1em;}
+.text      {text-align:left; border:thin solid black; padding-left:1em; vertical-align:0px; width:40em;}
+.hidden    {visibility:hidden; }
+.normal    {background-color:white;   color:black;   border: solid black; }
+.title     {background-color:#a0a0a0; color:black;   border: solid black; }
+.subtitle  {background-color:#c0c0c0; color:black;   border: solid black; line-height:100%;}
+.editok    {background-color:#c0c0ff; color:black;   border: solid black; }
+.myorder   {background-color:#b0ffb0; color:black;   border: solid black; }
+.error     {background-color:#ff9090; color:black;   border: solid black; }
+.commitmsg {background-color:#ff00ff; color:#ff0000; border: solid black; }
+.quantity  {text-align:right;width:6em;}
+.qty4      {text-align:right;width:4em;}
+.ttlqty    {text-align:center;width:6em;}
+.ttlqty4    {text-align:center;width:6em;}
+.price     {text-align:right;width:9em;}
+.price4    {text-align:right;width:4em;}
+.ttlprc    {text-align:center;width:9em;}
+.ttlprc4    {text-align:center;width:4em;}
+.ttltxt    {text-align:center;width:9em;}
+.qtyinp    { background-color: white; text-align: right; width: 4em; padding-right: 3px }
+.qtyinpgry { background-color: #d0d0d0; text-align: right; width: 4em; padding-right: 3px }
+.prinp    { background-color: white; text-align: right; padding-right:3px }
+.yninp    { background-color: white; text-align: center; width: 2em; padding-right:3px; }
+.descr	   {text-align:left; width :60em;} 
+.spacer	   {text-align:left; width :10%;} 
+.ttldsc    {text-align:center; width :60em;} 
+.whprcode  {text-align:right; width:16em;}
+.nc        {text-align:left; width:5%;}
+.wc        {text-align:left; width:40%;}
+.fiveem    {width:5em;}
+.bang      {background-color:#ffffff; font-size:larger; font-weight:bold;}
+.red_bold  A:link {font-weight:bold; color:red;}
+.red_bold  A:visited {font-weight:bold; color:red;}
+.no_msg    A:link {font-weight:lighter; color:#000077}
+.no_msg    A:visited {font-weight:lighter; color:#280d44;}
+.change   {background-color:#ff0000; color:black;}
+.change   {background-color:#0000ff; color:black;}
+
+
+	#wrapper {
+	    width: 700px;
+	    margin: auto;
+	}
+	#header {
+	    text-align: center;
+	}
+	
+	#main-menu li,
+	#order-menu li,
+	#order-system-menu li,
+	#order-categories-menu li {
+	    list-style: none;
+	    display: inline;
+	    margin-right: 20px;
+	    line-height: 170%;
+	}
+	
+	#order-categories-menu {
+	    padding: 0;
+	}
+	
+	#main-menu,
+	#order-system-menu {
+	    margin: 0;
+	}
+	
+	#kassa-ul {
+          display: block;
+          list-style: none;
+          font-style: italic;
+          font-weight: bold;
+	  margin-left: 100px;
+	  }
+
+	#error-div {
+          align: center;
+	  font-weight: bold;
+	  color: red;
+	}
+
+/* GLOBAL CLASSES */
+
+	.blue {
+	    color: #0000ff;
+	}
+	.red {
+	    color: #ff0000;
+	}
+	.bold {
+	    font-weight: bold;
+	}
+	.italic {
+	    font-style: italic;
+	}
+	
+	.selected {
+	    border-bottom: dashed 1px #0000ff;
+	    color: #0000ff;
+	}
+	
+	.center {
+		text-align: center;
+	}
+
+    .small {
+        font-size: 8.5pt;
+    }	
+	
+	
+/* FORMS */
+
+	fieldset {
+		width: 300px;
+		margin: 9.5pt auto auto auto;
+		text-align: center;
+	}
+	
+	.submit-button {
+		margin-top: 9.5pt;
+		cursor: pointer;
+	}
+	
+
+/* LOGIN */
+    
+    #log-in {
+        width: 300px;
+        margin: auto;
+    }
+    
+    #log-in legend {
+        font-weight: bold;
+    }
+    
+    #log-in input {
+        margin-bottom: 3px;
+    }
+    
+    
+/* ORDER BUTTONS */
+
+    #select-order-nr {
+        position: relative;
+        top: -50px;
+    }
+    
+    #order-menu {
+        padding-top: 25px;
+    }
+    
+/* RESET PASSWORD */
+
+    #reset-password-form {
+        width: 400px;
+        margin: 20px auto 0 auto;
+    }
+    
+/* FIND / CREATE MEMBER */
+
+    #find-create-member {
+	width: 350px;
+	margin: 20px auto 0 auto;
+    }
+    
+    #find-create-member fieldset {
+	margin-bottom: 20px;
+    }
+    
+    
+/* EDIT / CREATE CATEGORY */
+  
+    #edit-create-category {
+		width: 350px;
+		margin: 9.5pt auto 0 auto;
+		text-align: center;
+    }
+    
+    #edit-create-category h3 {
+		margin-bottom: 9.5pt;
+    }
+    
+    #edit-create-category input {
+		display: block;
+		margin: 9.5pt auto 0 auto;
+    }
+    
+    
+/* EDIT CATEGORY */
+
+    #edit-category {
+		width: 350px;
+		margin: 9.5pt auto 0 auto;
+    }
+    
+    #edit-category .input {
+		width: 250px;
+    }
+	
+	
+/* ORDER STATUS FORM */
+	

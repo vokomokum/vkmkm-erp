@@ -1,0 +1,5 @@
+<tr class="myorder">
+   <td colspan="2" align="center">$verb $qty items of product_code $pr_id $to_from
+        order for member $xfer_id</td>
+    <td colspan="$wid">&nbsp;</td>
+</tr>

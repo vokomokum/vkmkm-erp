@@ -1,0 +1,37 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.22.00.05;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<p>
+<span class="boldtxt">
+<table class=:main" width="100%">
+  <tr class="$RowClass">
+    <td align="center" width="25%">Posted$posted</td>
+    <td align="left" width="35%">By: $author</td>
+    <td width="40%"&nbsp;</td>
+  </tr>
+  <tr class="$RowClass" align="center">
+     <td colspan="3"><textarea rows="5" cols="100" name="text_${news_id}">$body</textarea></td>
+  </tr>
+</table>
+</p>
+@

@@ -1,0 +1,3 @@
+<p/><input type="submit" name="Upload" value="Upload" />&nbsp;&nbsp;&nbsp;
+File to Upload: <input type="file" name="dnb_data_file" /><p/>
+<p/>

@@ -1,0 +1,21 @@
+<br>
+<span align="center" width="500%">$DROP<input type="Submit" value="Go"/></span>
+<br><br>
+
+<table border='1'>
+  <thead>
+    <td>Nr</td>
+    <td>Name</td>
+    <td align="center">Products Ex-BTW</td>
+    <td align="center">btw</td>
+    <td align="center">Missing</td>
+    <td align="center">Damaged</td>
+    <td align="center">Membership</td>
+    <td align="center">Statiegeld in</td>
+    <td align="center">Crates in</td>
+    <td align="center">Misc in</td>
+    <td align="center">Statiegeld out</td>
+    <td align="center">Crates out</td>
+    <td align="center">Misc out</td>
+    <td align="center">Total</td>
+  </thead>

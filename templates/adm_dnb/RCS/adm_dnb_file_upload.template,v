@@ -1,0 +1,27 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.21.59.32;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<p/><input type="submit" name="Upload" value="Upload" />&nbsp;&nbsp;&nbsp;
+File to Upload: <input type="file" name="dnb_data_file" /><p/>
+<p/>
+@

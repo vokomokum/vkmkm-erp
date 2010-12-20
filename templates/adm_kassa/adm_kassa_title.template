@@ -1,0 +1,11 @@
+<tr class="title">
+    <td class="qty4">Pr code</td>
+    <td class="ttldsc">Description</td>
+    <td class="ttlqty">Xfer in</td>
+    <td class="ttlqty">Xfer out</td>
+    <td class="ttlqty">Damaged</td>
+    <td class="ttlqty">Missing</td>
+    <td class="ttlqty">Pickup</td>
+    <td class="ttlprc">Unit Price</td>
+    <td class="ttlprc">Total</td>
+</tr>  

@@ -1,0 +1,13 @@
+<tr class="$RowClass" >
+  <td>$mem_id</td>
+  <td>$mem_name</td>
+  <td class="quantity"><a href="who_ordered.pm?ProdID=${pr_id}">${pr_id}</a></td>
+  <td class="descr">${descr}</td>
+  <td class="quantity">${mem_qty}</td>
+  <td class="quantity">${reduce_by}</td>
+  <td><input class=${Qty} name="p_${pr_id}m_$mem_id" value="${qty}"/></td>
+</tr>
+
+
+
+

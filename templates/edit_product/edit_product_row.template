@@ -1,0 +1,17 @@
+<tr class="myorder" >
+  <td align = "center">$pr_id</td>
+  <td><input type="text" size="80" align="left" name="pr_desc_$pr_id"
+  value="$pr_desc" padding="3px"></input></td>
+  <td align="center"><select name="pr_cat_$pr_id" style="width:4em">$DROP</select></td>
+  <td align="center"><select name="pr_sc_$pr_id" style="width:4em">$SC_DROP</select></td>
+  <td align="center"><input class="qtyinp" name="pr_mem_q_${pr_id}" value="$pr_mem_q"/></td>
+  <td class="qty4" align="center">$pr_wh_q</td>
+  <td align="center"><input class="prinp" name="pr_mem_price_${pr_id}" value="$pr_mem_price"/></td>
+  <td class="price4"><align="center">$pr_wh_price</td>
+  <td class="qty4" align="center">$pr_btw</td>
+  <td align="center"><input class="qtyinp" name="pr_margin_${pr_id}" value="$pr_margin"/></td>
+  <td align="center"><input class="yninp" name="pr_active_${pr_id}" value="$pr_active"/></td>
+</tr>
+
+
+

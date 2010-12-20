@@ -1,0 +1,9 @@
+<tr class="myorder">
+  <td align="left" colspan="6">Sub-total ex-btw</td>
+  <td class="price">${items_ex_btw}</td>
+</tr>
+<tr class="myorder">
+  <td align="left" colspan="6">Total BTW</td>
+  <td class="price">${total_btw}</td>
+</tr>
+

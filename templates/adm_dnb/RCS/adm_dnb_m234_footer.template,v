@@ -1,0 +1,36 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.21.59.32;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<p/>
+<table>
+  <tr>
+    <td align="center" width="30%"><input type="submit" value="Submit"
+    name="Submit"/></td>
+    <td width = 30% align="center"><input type="submit"
+    Value="$toggle" name="toggle_list"/></td>
+  </tr?
+</table>
+</form>
+</body>
+</htnl>
+@

@@ -1,0 +1,33 @@
+<h3>These produts products have changed in the DNB product list<br>
+Each product has two rows, the top row is from the current DNB list,
+the second is from the current Vokomokum product list<br>
+The changed fields are marked in the upper row with a red background.<br>
+Some fields will be automatically updated (wholesale price, quantity
+and BTW).<br>The unit price in the top line is the minimum price for the
+current margin.<br>The Vokomokum product list is only updated when you
+tick the 'Apply' checkbox in the top row.</h3>
+<p/><input type="submit" value="Submit" name="Submit"/>
+<input type="hidden" name="hidden_choice" value="1" />
+<p/>
+</table>
+<table class="main">
+  <tr class="title">
+    <td class="ttlqty4">Product code</td>
+    <td class="ttlqty4">DNB Product code</td>
+    <td class="ttldsc">DNB Description</td>
+    <td class="ttlqty4">Wh. Qty.</td>
+    <td class="ttlprc4">Wh. Pr.</td>
+    <td class="ttlprc4">Min. Pr.</td>
+    <td class="ttlqty4">BTW</td>
+    <td class="ttlqty4">Apply</td>
+  </tr>
+  <tr class="title">
+    <td class="ttlqty4">&nbsp;</td>
+    <td class="ttlqty4">&nbsp;</td>
+    <td class="ttldsc">Description</td>
+    <td class="ttlqty4"&nbsp;</td>
+    <td class="ttlprc4">&nbsp</td>
+    <td class="ttlprc4">Mem. Pr.</td>
+    <td class="ttlqty4" &nbsp;</td>
+    <td class="ttlqty4">Margin</td>
+  </tr>

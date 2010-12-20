@@ -1,0 +1,10 @@
+<p/><p/>
+
+<table>
+  <tr>
+    <td align="right" width="1em"><input type="checkbox" name="SendEmail" id="SendEmail" /></td>
+    <td align="left" width="20%"><label for="SendEmail" class="bold">Send password reset email</label></td>
+    <td align="left" width="20%">&nbsp;</td>
+    <td align="center"><input type="submit" value="Update Member Details" name="Find" /></td>
+</tr>
+</table>

@@ -1,0 +1,5 @@
+<tr class="myorder">
+  <td align="left" colspan="$width">$desc</td>
+  <td>$credit</td>
+  <td><input class="qtyinp" name="$name" value="$amount"/></td>
+</tr>

@@ -1,0 +1,5 @@
+<tr class="myorder">
+  <td align="left" colspan="5">Sub-total</td>
+  <td class="price">${items_w_btw}</td>
+</tr>
+

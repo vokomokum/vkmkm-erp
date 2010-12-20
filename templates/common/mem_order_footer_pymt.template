@@ -1,0 +1,5 @@
+<tr class="myorder">
+  <td align="left" colspan="4">$pmt_dsc</td>
+  <td class="qty">$credit</td>
+  <td class="price">$amount</td>
+</tr>

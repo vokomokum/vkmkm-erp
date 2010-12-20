@@ -1,0 +1,26 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.21.59.55;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<input type="hidden" name="pass" value="$pass"></input>
+<input type="hidden" name="mem" value="$member_id"></input>
+@

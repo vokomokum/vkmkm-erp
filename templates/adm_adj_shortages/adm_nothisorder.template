@@ -1,0 +1,7 @@
+<tr class="$RowClass" >
+  <td class="quantity"><a href="who_ordered.pm?ProdID=${pr_id}">${pr_id}</a></td>
+  <td class="descr">${descr}</td>
+  <td class="quantity">${ordered}</td>
+  <td class="quantity">${reduce_by}</td>
+</tr>
+

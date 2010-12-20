@@ -1,0 +1,28 @@
+<div id="edit-category">
+
+  <fieldset>
+  
+    <legend>edit sub-category</legend>
+    
+    <table class="noborder">
+      <tr>
+        <td class="5em" align="right">Name:</td>
+        <td><input type="text" name="sc_name" value="$sc_name"
+      class="input" maxlength="50" /></td>
+      </tr>
+      <tr>
+        <td class="5em" align="right">Descripton:</td>
+        <td><input type="text" name="sc_desc" value="$sc_desc" class="input" maxlength="50" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><input type="submit" value="Submit" name="$edit" /></td>
+      </tr>
+    </table>
+
+  </fieldset>
+
+</body>
+</html>
+
+

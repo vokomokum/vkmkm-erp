@@ -1,0 +1,13 @@
+<tr class="${RowClass}" >
+  <td class="quantity"><a href="who_ordered.pm?ProdID=${pr_id}">${pr_id}</a></td>
+  <td class="descr">$URL ${pr_desc}</td>
+  <td class="quantity">${meml_xfer_in}</td>
+  <td class="quantity">${meml_xfer_out}</td>
+  <td class="quantity">${meml_damaged}</td>
+  <td class="quantity">${meml_missing}</td>
+  <td class="quantity">${meml_pickup}</td>
+  <td class="price">${meml_unit_price}</td>
+  <td class="price">${cost_inc_btw}</td>
+</tr>
+
+

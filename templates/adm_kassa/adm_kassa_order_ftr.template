@@ -1,0 +1,14 @@
+  <tr class="myorder">
+     <td align="left" colspan="$wid">Total</td>
+     <td align="right">$total</td>
+  </tr>
+  <tr class="myorder">
+     <td>Notes:</td>
+     <td  colspan="$wid"><textarea rows="3" cols="100" name="notes">$note</textarea>
+     </td>
+  </tr>
+</table>
+<br><br><input type="submit" name="Submit"value="Submit"/></p>
+</form>
+</body>
+</html>

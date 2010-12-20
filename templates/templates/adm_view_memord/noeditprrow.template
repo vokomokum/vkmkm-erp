@@ -1,0 +1,9 @@
+<tr class="${RowClass}" >
+  <td class="qty4">${pr_id}</td><td class="descr">$URL ${pr_desc}</td>
+  <td class="quantity">${mem_qty}</td><td class="quantity">${short}</td>
+  <td class="quantity">${order}</td>
+  <td class="price">${pr_mem_price}</td>
+  <td class="price">${cost}</td>
+</tr>
+
+

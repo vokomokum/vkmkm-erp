@@ -1,0 +1,35 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.21.59.54;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@    <div id="edit-create-category">
+        <h3>Select Category to Edit/Create</h3>
+        <select align="center" name="Menu" size="12">
+            <option>0 Create a New Category</option>
+            $ROWS
+        </select>
+        <input type="submit" name="Submit" value="Submit" />
+    </div>
+</form>
+</body>
+</html>
+@

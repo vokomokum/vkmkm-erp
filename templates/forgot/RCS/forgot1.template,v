@@ -1,0 +1,31 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.22.00.01;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<div class="center">
+    <h2>Your password is updated and you are logged in<h2>
+    <input type="submit" value="OK" name="OK" />
+</div>
+</form>
+</body>
+</html>
+@

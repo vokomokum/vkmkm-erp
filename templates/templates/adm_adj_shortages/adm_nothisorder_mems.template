@@ -1,0 +1,6 @@
+<tr class="$RowClass" >
+  <td>$mem_id</td><td>$mem_name</td>
+  <td class="quantity">${pr_id}</td><td class="descr">${descr}</td>
+  <td class="quantity">${ordered}</td><td class="quantity">${reduce_by}</td>
+</tr>
+

@@ -1,0 +1,50 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.21.59.54;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<div id="edit-category">
+
+  <fieldset>
+  
+    <legend>edit category</legend>
+    
+    <table class="noborder">
+      <tr>
+        <td class="5em" align="right">Name:</td>
+        <td><input type="text" name="cat_name" value="$cat_name" class="input" maxlength="50" /></td>
+      <tr>
+        <td class="5em" align="right">Descripton:</td>
+        <td><input type="text" name="cat_desc" value="$cat_desc" class="input" maxlength="50" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><input type="submit" value="Submit" name="$edit" /></td>
+      </tr>
+    </table>
+
+  </fieldset>
+
+</body>
+</html>
+
+
+@

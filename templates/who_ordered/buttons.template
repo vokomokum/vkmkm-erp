@@ -1,0 +1,16 @@
+<br/><br/>
+<table border="0" align="center">
+ <tre border="0">
+   <td align="left">Enter Product code here:</td>
+   <td align = "left" >Vokomokum or wholesaler</td>
+ </tr>
+ <tre border="0">
+   <td><input id='ProdID' name='ProdID' type='text' class='input-text'/></td>
+   <td>$WHOLESALERS</td>
+ </tr>
+ <tre border="0">
+ <td align="center" colspan="2"><input type='submit' value='Look who ordered this Product'id='Search'></td>
+ </tr>
+</table>
+
+                                                                            

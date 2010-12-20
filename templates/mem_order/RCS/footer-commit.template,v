@@ -1,0 +1,43 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.22.00.02;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<tr class="myorder">
+  <td align="left" colspan="6">Total</td>
+  <td class="price">${total}</td>
+</tr>
+<p/>
+</table>
+<table>
+<tr><td width="50%" align="left">
+    <input class = "checkbox" type="checkbox" name="CommitYes" ></input>
+    <b>I understand that by pressing Commit, I have agreed to purchase this order</b></td>
+    <td width="25%" align="center"><input type="submit" value="Preview" name="Reload"></input></td>
+    <td width="25%" align="center"><input  type="submit" value=${CommitTxt} name="Commit" >  </input></td>
+</tr>
+</table>
+</form>
+<script src="/js/jquery-1.3.2.min.js"></script>
+<script src="/js/js.js"></script>
+</body>
+</html>
+@

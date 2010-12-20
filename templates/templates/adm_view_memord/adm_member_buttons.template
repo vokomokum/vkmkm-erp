@@ -1,0 +1,12 @@
+<table class="noborder">
+  <tr>
+    <td>${DROP}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td><strong>Member number or email address</td>
+    <td><input type="text" align="left" size="50" name="Member" value="$mem_id"/></td>
+    <td width="10em"></td>
+    <td><input type="submit" name="Submit" value="Submit"></input><td>
+  </tr>
+</table>
+<p/>
+<table class="main">
+

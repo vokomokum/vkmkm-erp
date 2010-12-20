@@ -1,0 +1,10 @@
+<h3>These produts are no longer available from the DNB<br>
+They have been dropped from the product file and current orders</h3>
+</table>
+<table class="main">
+  <tr class="title">
+    <td class="ttlqty">Product code</td>
+    <td class="ttlqty">DNB Product code</td>
+    <td class="ttldsc">Description</td>
+  </tr>
+  

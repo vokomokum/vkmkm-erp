@@ -1,0 +1,12 @@
+    <div id="edit-create-category">
+        <h3>Select Sub-Category of $cat_name to Edit/Create</h3>
+        <select align="center" name="SC_Menu" size="12">
+            <option value="0">Select a Differrent Category</option>
+            <option value="1">Create a new Sub-Category</option>
+            $ROWS
+        </select>
+        <input type="submit" name="Submit" value="Submit" />
+    </div>
+</form>
+</body>
+</html>

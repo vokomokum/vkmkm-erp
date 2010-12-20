@@ -1,0 +1,36 @@
+<fieldset id="member-edit">
+  <table class="noborder">
+    <tr>
+    <td colspan="2" align="center" big>Enter one or more search terms</td>
+    </tr>
+    <tr>
+    <td class="5em" align="right">Member no.:</td>
+    <td><input class = "qtyinp" name="Member" value="$Member"/></td>
+    <tr>
+    <td class="5em" align="right">Email:</td>
+    <td><input type="text" align="left" size="50" name="Email" 
+    value="$Email" maxlength="50">
+    </input></td>
+    </tr>
+    <tr>
+    <td class="5em" align="right">Forename:</td>
+    <td><input type="text" align="left" size="50" name="Forename" 
+    value="$Forename" maxlength="20"></input></td>
+    </tr>
+    <tr>
+    <td class="5em" align="right">Lastname:</td>
+    <td><input type="text" align="left" size="50" name="Lastname" 
+    value="$Lastname" maxlength="20"></input></td>
+    </tr>
+    </table>
+    </span>
+    <p/><p/>
+    <table>
+    <col span="3" width="1*">
+    <tr>
+    <td align="center"><input type="submit" value="Edit Member" name="Edit"></input></td>
+    <td align="center"><input type="submit" value="Create New Member" name="Create"></input></td>
+    </tr>
+  </table>
+</fieldset>
+$FOOTER

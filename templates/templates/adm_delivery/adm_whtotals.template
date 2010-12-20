@@ -1,0 +1,9 @@
+<tr class="${RowClass}">
+  <td align="left" colspan="6">Totals</td>
+  <td class="price">${total}</td>
+  <td class="price">${total_inc}</td>
+</tr>
+$LINK
+<tr>
+  <td colspan="8"></td>
+</tr>

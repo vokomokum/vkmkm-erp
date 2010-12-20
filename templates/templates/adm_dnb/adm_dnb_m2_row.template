@@ -1,0 +1,13 @@
+<tr class="myorder" >
+  <td>$URL $wh_pr_id</td>
+  <td>$p_desc</td>
+  <td class="qty4" align="center">$wh_wh_q</td>
+  <td align="center">$mprice</td>
+  <td class="price4"><align="center">$w_price</td>
+  <td class="qty4" align="center">$wh_btw</td>
+  <td align="center"><input type="text" size="1" maxlength="1"
+  name="s_$wh_pr_id" value="$sss"/></td>
+</tr>
+
+
+

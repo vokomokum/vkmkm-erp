@@ -1,0 +1,21 @@
+<p/><p/><p/>
+<h3>
+<p align="center">${err_msgs}</p><p/>
+<table align="center">
+  <tr class="nobox">
+    <td align="right">From:</td><td>&nbsp;</td><td align="left">${cur_status}</td><td>&nbsp;</td>
+  </tr>
+  <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+  <tr>
+    <td align="right">To:</td><td>&nbsp;</td><td align="left">${new_status}</td><td>&nbsp;</td><td>&nbsp;</td>
+  </tr>
+  <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+  <tr>
+    <td>&nbsp;</td><td><input type="checkbox" name="${conf_button}"></input></td>
+    <td align="left">${text}</td>
+   <td><input align="center" type="Submit" name="Confirm" value="Confirm"></input>
+  </tr>
+${NAME}
+</table>
+<p>
+

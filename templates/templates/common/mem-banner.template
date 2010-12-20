@@ -1,0 +1,22 @@
+<div id="header">
+
+    <h3><a href="/cgi-bin/welcome.cgi" class="blue">Welcome ${mem_name}</a></h3>
+       
+    <ul id="main-menu">
+        <li>[ <a href="/cgi-bin/welcome.cgi" class="blue">Home</a> ]</li>
+        <li>[ <a href="/cgi-bin/read_news.cgi" class="blue">News</a> ]</li>
+        <li>[ <a href="/cgi-bin/read_msg.cgi" class="blue">New Message</a>]</li>
+        <li>[ <a href="/cgi-bin/logout.cgi" class="blue">Logout</a> ]</li>
+    </ul>
+    
+    <ul id="order-system-menu">
+        <li>[ <a href="/cgi-bin/order">My Orders</a> ]</li>
+        <li>[ <a href="/cgi-bin/all-order">My Current Order</a> ]</li>
+        <li>[ <a href="/cgi-bin/edit_member.cgi">Edit Account Details</a> ]</li>
+    </ul>
+    
+    <h1>${Title}</h1>
+    $SUBTITLE
+    $BUTTONS
+
+</div>

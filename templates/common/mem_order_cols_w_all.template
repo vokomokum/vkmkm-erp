@@ -1,0 +1,12 @@
+<tr class="title">
+    <td class="qty4">Product</td>
+    <td class="ttlinfo">Info</td>
+    <td class="ttldsc">Description</td>
+    <td class="ttlqty">Order</td>
+    <td class="ttlqty">Adjust</td>
+    <td class="ttlqty">Recvd</td>
+    <td class="ttlqty">Pickup</td>
+    <td class="ttlqty">BTW %</td>
+    <td class="ttlprc">Pr ex-BTW</td>
+    <td class="ttlprc">Total ex-BTW</td>
+</tr>

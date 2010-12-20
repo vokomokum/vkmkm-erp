@@ -1,0 +1,50 @@
+.main      { border:thin solid black; padding-right:3px; padding-left:3px;}
+.noborder  { frame:none;}
+.warn      { color:#ff0000;}
+.heading   { font-size:xx-large;}
+.boldtxt   { font-weight:bold;}
+th         {text-align:center; border:thin solid black; padding:0;}
+h2         {background-color:white; color:black;}
+h3         {background-color:white; color:black;}
+.errmsg	   {background-color:white; color:red;}
+.checkbox  {strong; text-align:left;}
+.catname   {text-align:left;   padding-left:1em; padding-right:1em; width:300px;}
+.catdesc   {text-align:center; padding-left:1em; padding-right:1em; width:700px;}
+.nobox     {text-align:center; align:center; frame:none; width:20em; padding right:1em;}
+.nb        {text-align:center; padding-top:8px; padding-bottom:8px;}
+.box       {border:solid black; padding-left:1em; padding-right:1em;}
+.text      {text-align:left; border:thin solid black; padding-left:1em; vertical-align:0px; width:40em;}
+.hidden    {visibility:hidden; }
+.normal    {background-color:white;   color:black;   border: solid black; }
+.title     {background-color:#a0a0a0; color:black;   border: solid black; }
+.editok    {background-color:#c0c0ff; color:black;   border: solid black; }
+.editoknb   {background-color:#c0c0ff; color:#909090; }
+.myordernb  {background-color:#b0ffb0; color:black;   border: solid black; }
+.myorder   {background-color:#b0ffb0; color:black;   border: solid black; }
+.errornb     {background-color:#ff9090; color:black;  }
+.error     {background-color:#ff9090; color:black;   border: solid black; }
+.commitmsg {background-color:#ff00ff; color:#ff0000; border: solid black; }
+.quantity  {text-align:right;width:6em;}
+.qty4      {text-align:right;width:4em;}
+.ttlqty    {text-align:center;width:6em;}
+.price     {text-align:right;width:9em;}
+.price4    {text-align:right;width:4em;}
+.ttlprc    {text-align:center;width:9em;}
+.ttltxt    {text-align:center;width:9em;}
+.qtyinp    {background-color:white;text-align:right;size:4;maxlength:4;type:text;width:4em;padding right:3px}
+.qtyinpgry {background-color:#d0d0d0;text-align:right;size:4;maxlength:4;type:text;width:4em;padding right:3px}
+.prinp    {background-color:white;text-align:right;size:6;maxlength:6;type:text;width:4em;padding right:3px}
+.yninp    {background-color:white;text-align:center;size:1;maxlength:1;type:text;width:2em;padding right:3px}
+.descr	   {text-align:left;width :60em;} 
+.spacer	   {text-align:left;width :10%;} 
+.ttldsc    {text-align:center;width :60em;} 
+.whprcode  {text-align:right;width:16em;}
+.nc        {text-align:left;width:5%;}
+.wc        {text-align:left;width:40%;}
+.fiveem    {width:5em;}
+.bang      {background-color:#ffffff; font-size:larger; font-weight:bold;}
+.red_bold  A:link {font-weight:bold; color:red;}
+.red_bold  A:visited {font-weight:bold; color:red;}
+.no_msg    A:link {font-weight:lighter; color:#000077}
+.no_msg    A:visited {font-weight:lighter; color:#280d44;}
+.test {}

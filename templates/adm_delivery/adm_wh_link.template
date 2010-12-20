@@ -1,0 +1,18 @@
+<tr>
+  <td colspan="3">&nbsp;</td>
+  <td><a href="$filename">Download</a> Right click and select Save As
+  to create an order</td>
+  <td colspan="k4">&nbsp;</td> 
+</tr>
+<tr>
+  <td colspan="3">&nbsp;</td>
+  <td><a href="$chk_filename">Download</a> Right click and select Save As
+  to create a checklist for this order</td>
+  <td colspan="k4">&nbsp;</td> 
+</tr>
+<tr>
+  <td colspan="3">&nbsp;</td>
+  <td><a href="$chk_filename_nl">Download</a> Right click and select Save As
+  to create a checklist for this order (NL versie)</td>
+  <td colspan="k4">&nbsp;</td> 
+</tr>

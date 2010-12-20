@@ -1,0 +1,19 @@
+
+  <tr>
+    <td class='qty4'><a
+    href="/cgi-bin/adm_view_memord.cgi?order_no=$ord_num&Member=$mem_id"
+    class="blue">$mem_id</a></td>
+    <td>$name</td>
+    <td class='quantity'>$price</td>
+    <td class='quantity'>$btw</td>
+    <td class='quantity'>$missing</td>
+    <td class='quantity'>$damaged</td>
+    <td class='quantity'>$membership</td>
+    <td class='quantity'>$statiegeld_in</td>
+    <td class='quantity'>$crates_in</td>
+    <td class='quantity'>$misc_in</td>
+    <td class='quantity'>$statiegeld_out</td>
+    <td class='quantity'>$crates_out</td>
+    <td class='quantity'>$misc_out</td>
+    <td class='quantity'>$total</td>
+  </tr>

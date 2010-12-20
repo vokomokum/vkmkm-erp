@@ -1,0 +1,15 @@
+Content-Type: text/html
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+<link href="/stylesheet.css" rel="stylesheet" type="text/css" media="screen" />
+<title>${Pagename}</title>
+</head>
+<body id="top">
+<form method="post" enctype="multipart/form-data" action="${Nextcgi}">
+$BANNER

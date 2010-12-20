@@ -1,0 +1,14 @@
+<tr class="${RowClass}" >
+  <td><input class = "checkbox" type="checkbox" name="x_${pr_id}" value="x_${pr_id}" $checked></input></td>
+  <td class="quantity">${pr_id}</td>
+  <td class="descr">$URL ${pr_desc}</td>
+  <td class="quantity">${pr_mem_q}</td>
+  <td class="quantity">${pr_wh_q}</td>
+  <td class="price">${mem_price}</td>
+  <td class="price">${wh_price}</td>
+  <td class="quantity">${pr_btw}</td>
+  <td class="quantity">${pr_margin}</td>
+  <td class="quantity">${active}</td>
+</tr>
+
+

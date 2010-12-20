@@ -1,0 +1,31 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.21.59.45;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@..
+@
+
+
+1.1
+log
+@.
+@
+text
+@<p>${DROP}</p>
+<label for="Member">Member number or email address</label><br />
+<input type="text" id="Member" name="Member" value="$mem_id" class="input-text" /><br />
+<input type="submit" name="Login" value="get member’s order" class="submit-button" /><br />
+<br />
+<table class="main">
+@

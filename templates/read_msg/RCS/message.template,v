@@ -1,0 +1,50 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.22.00.07;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<p></p>
+<span class="boldtxt">
+<table class=:main" width="100%">
+  <tr class="myorder">
+    <td align="center" width="25%">$sent</td>
+    <td align="left" width="35%">From: $author</td>
+    <td width="40%"&nbsp;</td>
+  </tr>
+  <tr class="myorder" align="center">
+     <td colspan="3"><textarea rows="5" cols="100" name="Message" readonly>
+                      $body</textarea></td>
+  </tr>
+</table>
+<p></p>
+<table width="100%">
+  <tr>
+    <td width="33%">&nbsp;</td>
+    <td width="33%"><input align="center" type="submit" name="Delete"
+    value="Delete Message"></td>
+    <td width="33%">&nbsp;</td>
+  </tr>  
+</table>
+</span>
+</form>
+</body>
+</html>
+@

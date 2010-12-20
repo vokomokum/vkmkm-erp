@@ -1,0 +1,42 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.22.00.02;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<ul id="order-menu">
+    <li>
+        <input type="submit" name="Save" value="Save Changes" class="blue bold" />
+    </li>
+    <li>
+        <input type="submit" name="Reload" value="Preview Order" />
+    </li>
+    <li>
+        <input type="submit" name="SetDef" value="Set As Default" />
+    </li>
+    <li>
+        <input type="reset" value="Reset Changes" name="Reset" /><br />
+    </li>
+    <li id="select-order-nr">
+        $DROP
+    </li>
+</ul>
+
+<table class="main">@

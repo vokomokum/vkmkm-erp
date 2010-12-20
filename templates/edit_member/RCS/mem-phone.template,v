@@ -1,0 +1,48 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.21.59.55;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<p/><p/>
+<span class="boldtxt">
+<table class="main" width="100%"> 
+  <tr class="myorder">
+    <td align="center" colspan="3">Telephone <font color="red">(At least one is required)</font></td>
+  </tr>
+  <tr class="myorder">
+    <td align="left" width="33%">Home:</td> 
+    <td><align="left" width="33%">Work:</td>
+    <td align="left"width="33%">Mobile:</td> 
+  </tr>
+  <tr class="myorder">
+    <td><input type="text" align="left" size="20" name="Homeph"
+             Value="$Homeph" maxlength="20"></input></td>
+    <td><input type="text" align="left" size="20" name="Workph"
+             Value="$Workph" maxlength="20"></input></td>
+    <td><input type="text" align="left" size="20" name="Mobile"
+             Value="$Mobile" maxlength="20"></input></td>
+  </tr>
+</table>
+</span>
+$BANKNO
+
+       
+@

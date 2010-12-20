@@ -1,0 +1,35 @@
+head	1.1;
+access;
+symbols;
+locks
+	jes:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2010.04.12.22.00.02;	author jes;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@.
+@
+text
+@<table>
+  <tr class="nobox" >
+    <td>$DROP</td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><input type="submit" value="Preview" name="Reload"></input></td>
+    </td><td class = "spacer"> </td></td><td class = "spacer"> </td>
+    <td><input type="submit" value="Set As Default" name="SetDef"></input></td>
+  </tr>
+</table>
+<p/>
+<table class="main">
+
+@

@@ -1,0 +1,14 @@
+<tr class="${RowClass}" >
+  <td class="qty4">${pr_id}</td>
+  <td class="info">$URL</td>
+  <td class="descr">${pr_desc}</td>
+  <td class="quantity">${meml_qty}</td>
+  <td class="quantity">${meml_adj}</td>
+  <td class="quantity">${meml_rcv}</td>
+  <td class="quantity">${meml_pickup}</td>
+  <td class="quantity">${meml_btw}</td>
+  <td class="price">${meml_ex_btw}</td>
+  <td class="price">${cost_ex_btw}</td>
+</tr>
+
+
