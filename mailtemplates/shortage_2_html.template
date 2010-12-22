@@ -1,0 +1,6 @@
+<tr>
+  <td align="right">$pr_id</td>
+  <td align="center">$pr_desc</td>
+  <td align="right">$meml_qty</td>
+  <td align="right">$at_least</td>
+ </tr>

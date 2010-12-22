@@ -1,0 +1,14 @@
+From: $admin_email
+To: $email
+Date: $now
+Subject: $subject
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+  boundary="----------C6731FB0946739B2"
+
+------------C6731FB0946739B2
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+
+

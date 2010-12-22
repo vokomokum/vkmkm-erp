@@ -1,0 +1,3 @@
+#!/bin/sh
+/usr/bin/rsync -vaz -e '/usr/bin/ssh -i /home/jes/.ssh/vokodbback'  /var/tmp/dbbackups/ jes@j-e-s.net:/var/voko/dbbackups
+
