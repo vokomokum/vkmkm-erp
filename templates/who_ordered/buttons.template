@@ -9,7 +9,7 @@
    <td>$WHOLESALERS</td>
  </tr>
  <tre border="0">
- <td align="center" colspan="2"><input type='submit' value='Look who ordered this Product'id='Search'></td>
+ <td align="center" colspan="2"><input type='submit' value='See who ordered this Product'id='Search'></td>
  </tr>
 </table>
 
