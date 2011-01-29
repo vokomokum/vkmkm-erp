@@ -1,7 +1,5 @@
 #! /usr/bin/perl -w
-# $Id: mem_order.cgi,v 1.2 2010/04/13 06:19:46 jes Exp jes $
-#! /usr/bin/perl -w 
-
+# $Rev$
 ######################################################################
 # This file is part of the Vokomokum Food Cooperative Administration.
 #
