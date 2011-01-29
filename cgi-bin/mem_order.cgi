@@ -1,21 +1,5 @@
 #! /usr/bin/perl -w
-
-######################################################################
-# This file is part of the Vokomokum Food Cooperative Administration.
-#
-# Vokomokum is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Vokomokum is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Vokomokum.  If not, see <http://www.gnu.org/licenses/>.
-######################################################################
+# $Id: mem_order.cgi,v 1.2 2010/04/13 06:19:46 jes Exp jes $
 
 use strict;
 use Config::General;
@@ -186,7 +170,7 @@ sub get_products {
               and ($ord_no != $current_no) )
     	    ? $price->{$pr_no} :
     	    sprintf "%0.2f", $h->{pr_mem_price}/100.0;
-
+	$h->{meml_unit_price} = $h->{pr_mem_price};
         $h->{cost} =
             ( defined( $cost->{$pr_no} )
               and ( $ord_no != $current_no ) )
@@ -590,7 +574,7 @@ sub print_html {
 		
     my %tots = (total  => $total,
 		CommitTxt => "Commit This Order");
-	
+    $tots{NOTES} = "";
     $tplf->assign(\%tots);
     $tplf->parse(MAIN => "footer");
     $tplf->print();
