@@ -435,6 +435,8 @@ my %pymnts = ( stgeld_rxed => {col => 'mo_stgeld_rxed', type =>'&nbsp;',
 			    desc=>"Miscellaneous charges (see notes)", ord => 5},
 	      misc_refunded => {col => 'mo_misc_refunded', type=>'Credit', 
 				desc => "Miscellaneous credits (see notes)", ord => 6},
+	      vers_rxed  => {col => 'mo_vers', type=>'&nbsp', 
+				desc => "Vers (groente, kaas, eiren)", ord => 7},
 );
 
 sub posted_pymnts {
