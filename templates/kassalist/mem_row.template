@@ -15,5 +15,6 @@
     <td class='quantity'>$statiegeld_out</td>
     <td class='quantity'>$crates_out</td>
     <td class='quantity'>$misc_out</td>
+    <td class='quantity'>$vers</td>
     <td class='quantity'>$total</td>
   </tr>
