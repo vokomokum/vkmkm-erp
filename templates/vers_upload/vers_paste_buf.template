@@ -1,27 +1,30 @@
 
 <br><p>Highlight the spreadsheet totals beginning with the member
-number cell for the first member line and stopping on the 'afwogen'
+number cell for the first member line and stopping on the 'afgewogen'
 cell for the last member (the word Afgewogen must be included in the
-pasted data). With Google Docs, slect 'Bewerken->Copy', in
-Excel simply press Control-C or Right click and select Kopie(Copy). Then
+pasted data). Simply press Control-C or Right click and select Kopie(Copy). Then
 place the mouse in the text box below and press Control-V or right
 click and select Plakken (Paste). Then press the submit button. The
 site will check the data to be sure that all the member numbers are
 valid and that there is a number in the Afwogen and Bestelling
 Columns.
-</p><br>No data will be imported if:
+</p><br>Not all the data will be imported if:
 <ul><li>There is a member number which is not an active member of
-Vokomokum</li>
+Vokomokum - no data will be imported at all</li>
 <li>The line with the member number does not end with the word
-'Bestelling'</li>
-<li>The line folloing the member number does not end with the word
-'Afwogen'</li>
+'Bestelling' - no data will be imported at all</li>
+<li>The line following the member number does not end with the word
+'Afgewogen' - no data will be imported at all</li>
 <li>There isn't a valid number, greater than or equal to zero in the
-cells before Bestelling and Afwogen'
+cells before 'Bestelling' and Afgewogen' - no data will be imported at all
+<li>If there is no member number at the start of the 'Bestelling'
+row, this row and its 'Afgewogen' line will be ignored</li>
+<li>If the member has already checked out and this upload would change
+their vers amount, the data for that member will not be changed</li>
 </ul>
-<br><p>If the Afwogen quantity is zero, then the value in Bestelling
+<br><p>If the Afgewogen quantity is zero, then the value in Bestelling
 will be placed in the 'Vers' field of the member's order. If there is
-a number in the 'Afwogen' field, then that one will be used
+a number in the 'Afgewogen' field, then that one will be used
 instead. This allows the Kassa screen to have an approximate value for
 the Vers purchases before all the products have been sorted and
 prepared for pickup.
@@ -31,8 +34,7 @@ prepared for pickup.
 <table align="center" class="noborder">
  <tr border="none">
   <td width="10%">&nbsp</td>
-  <td><textarea rows="10" cols="100" name="paste" />
-  </textarea></td>
+  <td><textarea rows="10" cols="100" name="paste"></textarea></td>
   <td width="10%">&nbsp</td>
  </tr>
 </table>
