@@ -56,12 +56,13 @@ sub get_kassa_list_data{
     my $all_tot  = 0;
     my $all_missing = 0;
     my $all_damaged = 0;
+    my $all_vers = 0;
     my $all_total = 0;
 
     # find members and the number of their order items we need to list
     my $st = 'SELECT m.mem_id, m.mem_lname, join_name(m.mem_fname, m.mem_prefix, '.
         'm.mem_lname) as mem_name, mo.mo_stgeld_rxed, mo.mo_stgeld_refunded, '.
-	'mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, '.
+	'mo,mo_stgeld_refunded, mo.mo_crates_rxed, mo.mo_crates_refunded, mo.mo_vers, ' .
 	'mo.mo_misc_rxed, mo.mo_misc_refunded, mo.ord_label, mo.mo_membership FROM members m, '.
         'mem_order mo WHERE mo.ord_no = ? AND m.mem_id = mo.mem_id';
     my $mem_details = prepare($st, $dbh);
@@ -73,7 +74,7 @@ sub get_kassa_list_data{
     $mem_details->execute($config->{ord_no});
     # loop through all members
     my ($mem_price, $mem_btw, $mem_tot, $statiegeld_in_sum, $crates_in_sum, $misc_in_sum, 
-	$statiegeld_out_sum, $crates_out_sum, $misc_out_sum, $membership_sum);
+	$statiegeld_out_sum, $crates_out_sum, $misc_out_sum, $membership_sum, $mem_vers_sum);
     while(my $mem = $mem_details->fetchrow_hashref) {
 	# unlock mem_order table so we can get the order totals
 	$dbh->commit;
@@ -90,6 +91,7 @@ sub get_kassa_list_data{
 	$all_misc_in += $misc_in_sum = $mem->{mo_misc_rxed};
 	$all_misc_out += $misc_out_sum = -$mem->{mo_misc_refunded} ;
 	$all_membership += $membership_sum = $mem->{mo_membership};
+	$all_vers += $mem_vers_sum = $mem->{mo_vers};
 	$mis_sth->execute($config->{ord_no}, $mem->{mem_id});
 	my $href = $mis_sth->fetchrow_hashref;
 	$href = {missing => 0, damaged => 0} if(not defined($href) or 
@@ -101,7 +103,7 @@ sub get_kassa_list_data{
 		$href->{damaged} == 0 and $crates_in_sum == 0 and $crates_out_sum == 0
 		and $statiegeld_in_sum == 0 and $statiegeld_out_sum == 0 and
 		$misc_in_sum == 0 and $misc_out_sum == 0 and $membership_sum == 0 and
-		$mem_tot == 0);
+		$mem_vers_sum == 0 and $mem_tot == 0);
         $kassa_list{mems}->{$mem->{mem_lname}} = {
 	    ord_num        => $config->{ord_no},
 	    mem_id         => $mem->{mem_id},
@@ -117,6 +119,7 @@ sub get_kassa_list_data{
 	    crates_out     => $crates_out_sum, 
 	    misc_out       => $misc_out_sum,
 	    membership     => $membership_sum,
+	    vers           => $mem_vers_sum,
 	    total          => $mem_tot,
 	};
 						    
@@ -138,6 +141,7 @@ sub get_kassa_list_data{
 	crates_out     => $all_crates_out, 
 	misc_out       => $all_misc_out,
 	membership     => $all_membership,
+	vers           => $all_vers,
 	total          => $all_total,
     };
 
@@ -226,7 +230,6 @@ sub print_html_kassa_list{
 
     my %kassa = get_kassa_list_data($config, $dbh);
     my %wh_tots = get_wholesale_data($config, $dbh);
-
     $wh_tots{all}->{mem_ex_btw} = $kassa{all}->{price} - $kassa{all}->{btw};
     $wh_tots{all}->{mem_btw}    = $kassa{all}->{btw};
     $wh_tots{all}->{mem_tot}    = $kassa{all}->{price};
@@ -276,7 +279,7 @@ sub print_html_kassa_list{
         $value = $kassa{mems}->{$key};
 	foreach my $f (qw(price btw missing damaged statiegeld_in
 			  statiegeld_out crates_in crates_out
-			   misc_in misc_out membership  total)) {
+			   misc_in misc_out membership  vers total)) {
 	    $value->{$f} = sprintf("%.2f", $value->{$f}/100.0);
 	}
 	my $tplr = new CGI::FastTemplate($config->{templates});
@@ -308,7 +311,7 @@ sub print_html_kassa_list{
 
     $value = $kassa{all};
     foreach my $f (qw(price btw missing damaged statiegeld_in statiegeld_out 
-		      crates_in crates_out misc_in misc_out membership total)) {
+		      crates_in crates_out misc_in misc_out membership vers total)) {
 	$value->{$f} = sprintf("%.2f", $value->{$f}/100.0);
     }
     my $tplt = new CGI::FastTemplate($config->{templates});
