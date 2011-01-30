@@ -107,7 +107,7 @@ sub get_vars {
     my $sth = prepare("SELECT  mem_active FROM members WHERE mem_id = ?", $dbh);
     my $mo_sth = prepare("SELECT mo_checked_out, mo_vers FROM mem_order WHERE mem_id = ? and ord_no = ?", 
 			 $dbh);
-    my $new_mo = prepare("SELECT open_mem_ord(?. 'f', ''", $dbh);
+    my $new_mo = prepare("SELECT open_mem_ord(?, 'f', '')", $dbh);
     my $upd_vers = prepare("UPDATE mem_order SET mo_vers = ? WHERE mem_id = ? AND ord_no = ?", $dbh);
     foreach my $mem (keys %update) {
 	$sth->execute($mem);
