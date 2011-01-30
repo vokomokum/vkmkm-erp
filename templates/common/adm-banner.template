@@ -17,6 +17,7 @@
         <li>[<a href="/cgi-bin/adm_ord_status.cgi">Change order status</a>]<br /></li>
         <li>[<a href="/cgi-bin/adm_dnb.cgi">DNB products</a>]</li>
         <li>[<a href="/cgi-bin/adm_zap.cgi">Zapatista Coffee products</a>]</li>
+	<li>[<a href="/cgi-bin/vers_upload.cgi">Upload Vers Group data</a>]</li>
         <li>[<a href="/cgi-bin/edit_product.cgi">Edit products</a>]</li>
         <li>[<a href="/cgi-bin/edit_category.cgi">Edit/Create Product Category</a>]</li>
         <li>[<a href="/cgi-bin/edit_subcat.cgi">Edit/Create Sub-Category</a>]</li>
