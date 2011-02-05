@@ -1,0 +1,2 @@
+#!/bin/bash
+/Users/nic/local/bin/paster serve  development.ini --reload
