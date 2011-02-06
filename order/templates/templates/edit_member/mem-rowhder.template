@@ -1,7 +1,0 @@
-<span class="warn"><strong> $err_msgs
-</strong></span>
-<span><strong><big>
-<table class="main">
-$ROWS
-$FOOTER
-

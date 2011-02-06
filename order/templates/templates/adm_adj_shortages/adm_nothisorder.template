@@ -1,5 +1,0 @@
-<tr class="$RowClass" >
-  <td class="quantity">${pr_id}</td><td class="descr">${descr}</td>
-  <td class="quantity">${ordered}</td><td class="quantity">${reduce_by}</td>
-</tr>
-

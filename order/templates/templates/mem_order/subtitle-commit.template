@@ -1,6 +1,0 @@
-<div>
-    <input type="checkbox" name="CommitYes" id="CommitYes" class="checkbox" />
-    <label for="CommitYes" class="italic red"> I understand that by pressing <br />
-    Commit, I have agreed to purchase this order</label><br />
-    <input type="submit" name="Commit" value="Commit" class="bold red" />
-</div>

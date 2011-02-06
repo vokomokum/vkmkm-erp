@@ -1,5 +1,0 @@
-<tr>
- <td align="right" width="33%">$mem_id</td>
- <td align="center" width="33%">$fullname</td>
- <td align="center" width="33%">$mem_email</td>
-</tr>

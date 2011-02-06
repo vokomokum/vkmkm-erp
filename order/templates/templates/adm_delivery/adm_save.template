@@ -1,8 +1,0 @@
-<table>
-  <tr class="nobox" >
-    <td><input type="submit" value="Save" name="Save" ></input></td>
-  </tr>
-</table>
-<p/>
-<table class="main">
-

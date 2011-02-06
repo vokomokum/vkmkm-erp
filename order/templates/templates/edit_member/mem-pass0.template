@@ -1,8 +1,0 @@
-<p/><p/>
-<table>
-<col span="2" width="1*">
-  <tr>
-    <td align="center"><input type="submit" value="Find Matching Members" name="Find"></input></td>
-    <td align="center"><input type="submit" value="$Create" name="Create"></input></td>
-</tr>
-</table>
