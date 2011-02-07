@@ -1,3 +1,11 @@
+'''
+member
+=========
+
+The member class.
+Describes all attributes of the database we need here.
+'''
+
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import Unicode
@@ -7,6 +15,9 @@ from sqlalchemy import Unicode
 from setup import Base
 
 class Member(Base):
+    '''
+    Data model
+    '''
     __tablename__ = 'members'
     id = Column(Integer, primary_key=True)
     mem_fname = Column(Unicode(255))

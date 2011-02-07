@@ -26,7 +26,7 @@ class Membership(Base):
     mem_id = Column(Integer)
     #active = Column(Boolean)
 
-    def __init__(self, wg_id. mem_id):
+    def __init__(self, wg_id, mem_id):
         self.wg_id = wg_id
         self.mem_id = mem_id
 
