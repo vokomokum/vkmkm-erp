@@ -1,0 +1,3 @@
+These docs are sphinx-based. Sphinx is a python-based documentation engine, for which the ReStructuredText format is used.
+
+To generate HTML docs, call `make html` in this directory.

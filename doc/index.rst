@@ -10,13 +10,13 @@ grow into a coherent source of information.
 
 
 ******************
-Narrative contents
+Order application
 ******************
 
 .. toctree::
     :maxdepth: 2
 
-    tut/test.rst
+    order/app.rst
 
 
 
@@ -26,14 +26,22 @@ Narrative contents
 
 
 ******************
-Code documentation
+Member application
 ******************
 
-There is a detailled documentation of all internal modules and functions:
-
 .. toctree::
+    :maxdepth: 2
 
-    code.rst
+    members/app.rst
+
+
+*******************
+The database
+******************
+
+The database is shared between applications.
+It runs on postgres.
+We try to model many constraints on the database itself, also with procedures.
 
     
 .. Indices and tables
