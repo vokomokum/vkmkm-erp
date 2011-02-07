@@ -1,0 +1,93 @@
+#!/usr/bin/perl -w
+# script to replace the vokotest database with one of the database dump 
+# files in /var/tmp/dbbackups
+
+use strict;
+use Data::Dumper;
+
+my $createdb = "/usr/bin/sudo su jes -c '/usr/bin/createdb vokotest'";
+my $dropdb = "su jes -c '/usr/bin/dropdb vokotest'";
+my $loaddb = "su jes -c \'/usr/bin/psql vokotest";
+my $backups = "/var/tmp/dbbackups";
+
+sub main {
+    my $type = "vokotest";
+    my $file_name;
+
+    while(1) {
+	print "Load a copy of the test-site database or a copy of the main site [TM]?";
+	my $line = <STDIN>;
+	last if($line =~ /^\s*T/i);
+	next if($line !~ /^\s*M/i);
+	$type = "voko";
+	last;
+    }
+    
+    # create an array of hashes, one hash for each database backup. The array
+    # will be in chronological order, oldest backup first
+
+    while(1) {
+	my (@files);
+	my $entry;
+	my ($d, $h);
+	my $last_day = "";
+
+	open(LS, "/bin/ls -1rt ${backups}/$type.* |");
+	while(my $f = <LS>) {
+	    $f =~ s/\s+$//;
+	    $f =~ /^[^.]*\.([^.]*)\.(\d\d)/;
+	    $d = $1;
+	    $h = $2;
+	    if($d ne $last_day) {
+		# finished with previous day's entry, start a new one
+		push @files, $entry if $last_day ne "";
+		$entry = {
+		    name      => "$backups/$type.$d",
+		    day       => $d,
+		    disp_day  => $d,
+		    first     => $h,
+		    last      => $h
+		    };
+	    }
+	    $last_day = $entry->{day} = $d;
+	    $entry->{last} = $h;
+	}
+
+	close(LS);
+	push @files, $entry if $last_day ne "";
+	$files[0]->{disp_day} = "Previous " . $files[0]->{day}
+	if scalar(@files) > 7;
+	#print Dumper(@files);
+
+	print "no  Day          First   Last\n";
+	for(my $i = 0; $i < scalar(@files); ++$i) {
+	    printf " %d: %-12.12s %s:00 - %s:00\n", $i + 1, 
+		   $files[$i]->{disp_day}, $files[$i]->{first}, 
+		   $files[$i]->{last};
+	}
+
+	while(1) {
+	    printf 
+	    "Enter the day number [1..\%d] and the hour - for example \n  2 17\nwould be 17:00 on the second day in the list\nSelection: ", scalar(@files);
+	    my $l = <STDIN>;
+	    $l =~ s/\s+$//;
+	    next if($l !~ /^\s*(\d)\s+(\d\d?).*$/);
+	    my ($day, $hour) = ($1, $2);
+	    next if($day < 1 or $day > scalar(@files));
+	    next if($hour > 23);
+	    $file_name = sprintf("%s.%02d", $files[$day - 1]->{name},
+				    $hour);
+	    if(! -e $file_name) {
+		print "Can't find backup file $file_name\n";
+		next;
+	    }
+	    last;
+	}
+	system($dropdb);
+	system($createdb);
+	system("$loaddb <$file_name\'");
+	exit (0);
+    }
+}
+
+main;

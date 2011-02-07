@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# check out repository
+cd /var/voko
+
+echo Removing previous svn-install directory if it exists
+/usr/bin/sudo /bin/rm -rf svn-install
+
+mkdir svn-install
+cd svn-install
+svn co http://subversion.assembla.com/svn/vokomokum/
+cd vokomokum/trunk
+
+echo Temporary fixups - remove templates/templates/, remove RCS directories
+/usr/bin/sudo /bin/rm order/templates/templates
+/usr/bin/sudo /usr/bin/find . -name RCS -type d | /usr/bin/xargs /bin/rm -rf
+
+echo Set ownership apache:apache, premissions 775  on everything in order
+/usr/bin/sudo /bin/chown -R apache:apache order
+/usr/bin/sudo /bin/chmod -R 775 order
+
+echo make template files group permissions 644
+/usr/bin/sudo /usr/bin/find order/templates -type f -print0 | /usr/bin/xargs -0 /usr/bin/sudo /bin/chmod 644
+
+echo make all directories under order/ 775
+/usr/bin/sudo /usr/bin/find order -type d -print0 | xargs -0 /usr/bin/sudo /bin/chmod 775 
+
+echo now move everythingn onto the voko server
+
+
+while [ 1 == 1 ]; do
+    echo -n 'Update the main site with the svn files? '
+    read answer
+    case $answer in 
+        yes|YES)
+            cd order
+            /usr/bin/sudo /bin/cp -rp cgi-bin templates /var/www/voko/
+            exit 0
+            ;;
+        no|NO)
+             exit 0
+            ;;
+        *)
+            echo Please answer yes or no
+            ;;
+    esac
+done
+
+
