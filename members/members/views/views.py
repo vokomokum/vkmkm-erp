@@ -1,5 +1,5 @@
-from members.models import DBSession
-from members.models import Member
+from members.models.setup import DBSession
+from members.models.member import Member
 
 def my_view(request):
     dbsession = DBSession()

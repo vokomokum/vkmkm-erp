@@ -1,33 +1,15 @@
 import transaction
 
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import Unicode
-
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
-
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
-
 from zope.sqlalchemy import ZopeTransactionExtension
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
-
-class Member(Base):
-    __tablename__ = 'members'
-    id = Column(Integer, primary_key=True)
-    mem_fname = Column(Unicode(255))
-    mem_prefix = Column(Unicode(255))
-    mem_lname = Column(Unicode(255))
-
-    def __init__(self, fname, prefix, lname):
-        self.mem_fname = fname
-        self.mem_prefix = prefix
-        self.mem_lname = lname
-
+from member import Member
 
 def populate():
     session = DBSession()
