@@ -8,21 +8,29 @@ from setup import Base
 
 class Workgroup(Base):
     __tablename__ = 'workgroups'
-    wg_id = Column(Integer, primary_key=True)
-    wg_name = Column(Unicode(255))
-    wg_desc = Column(Unicode(255))
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode(255))
+    desc = Column(Unicode(255))
     leader_id = Column(Integer)
-    active = Column(Boolean)
+    active = Column(Boolean, default=False)
 
-    def __init__(self, gname, leader_id, desc):
-        self.wg_name = gname
-        self.wg_desc = desc
+    def __init__(self, name, desc):
+        self.name = name
+        self.desc = desc
+
+    def __repr__(self):
+        return self.name
+
+    def set_leader(self, leader_id):
         self.leader_id = leader_id
 
 
 class Membership(Base):
     __tablename__ = 'wg_membership'
-    wg_id = Column(Integer, primary_key=True)
+    
+    id = Column(Integer, primary_key=True)
+    wg_id = Column(Integer)
     mem_id = Column(Integer)
     #active = Column(Boolean)
 

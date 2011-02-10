@@ -14,10 +14,22 @@
 </head>
 <body>
 
-    <h1>A list of members</h1>
+    <h1>Members</h1>
     <ul tal:repeat="mem members">
-        <li tal:content="mem.mem_fname"></li>
+        <li>${mem.mem_fname} ${mem.id}</li>
     </ul>
+
+    <h1>Workgroups</h1>
+    <ul tal:repeat="wg workgroups">
+        <li tal:content="wg.name"></li>
+    </ul>
+
+    <h1>Shifts</h1>
+    <ul tal:repeat="shift shifts">
+        <li tal:content="shift.year, shift.month, shift.day, shift.wg_id, shift.mem_id"></li>
+    </ul>
+
+
 
 </body>
 </html>
