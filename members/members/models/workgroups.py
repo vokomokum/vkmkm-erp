@@ -1,9 +1,16 @@
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import Unicode
-from sqlalchemy import Boolean
+from sqlalchemy import Table, Column, Integer, Unicode, Boolean
+from sqlalchemy.orm import relationship
+from sqlalchemy import ForeignKey 
 
 from setup import Base
+from member import Member
+
+
+membership = Table(
+    'wg_membership', Base.metadata,
+    Column('wg_id', Integer, ForeignKey('workgroups.id')),
+    Column('mem_id', Integer, ForeignKey('members.id'))
+    )
 
 
 class Workgroup(Base):
@@ -15,6 +22,8 @@ class Workgroup(Base):
     leader_id = Column(Integer)
     active = Column(Boolean, default=False)
 
+   
+ 
     def __init__(self, name, desc):
         self.name = name
         self.desc = desc
@@ -25,17 +34,5 @@ class Workgroup(Base):
     def set_leader(self, leader_id):
         self.leader_id = leader_id
 
-
-class Membership(Base):
-    __tablename__ = 'wg_membership'
-    
-    id = Column(Integer, primary_key=True)
-    wg_id = Column(Integer)
-    mem_id = Column(Integer)
-    #active = Column(Boolean)
-
-    def __init__(self, wg_id, mem_id):
-        self.wg_id = wg_id
-        self.mem_id = mem_id
-
-
+Workgroup.members = relationship('Member', secondary=membership)
+Member.workgroups = relationship('Workgroup', secondary=membership)

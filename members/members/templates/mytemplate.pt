@@ -16,7 +16,7 @@
 
     <h1>Members</h1>
     <ul tal:repeat="mem members">
-        <li>${mem.mem_fname} ${mem.id}</li>
+        <li>${mem.mem_fname} ${mem.id} ${mem.workgroups}</li>
     </ul>
 
     <h1>Workgroups</h1>

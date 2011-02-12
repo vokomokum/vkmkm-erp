@@ -21,6 +21,7 @@ def populate():
     test_workgroup = Workgroup(name=u'Besteling', desc=u'Besteling at wholesale')
     session.add(test_workgroup)
     session.flush() # flush now to get member and workgroup IDs
+    test_member.workgroups.append(test_workgroup)
     test_shift = Shift(wg_id=test_workgroup.id, mem_id=test_member.id, year=2011, month=2)
     test_shift.set_day(3)
     session.add(test_shift)

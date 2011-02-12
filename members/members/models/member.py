@@ -14,6 +14,7 @@ from sqlalchemy import DateTime
 
 from setup import Base
 
+
 class Member(Base):
     '''
     Data model
@@ -47,6 +48,7 @@ class Member(Base):
     mem_message_auth = Column(Integer())
     mem_message_date = Column(DateTime()) #timestamp
     mem_membership_paid = Column(Boolean())
+
 
 
     def __init__(self, fname, prefix, lname):
