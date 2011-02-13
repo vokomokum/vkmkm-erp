@@ -50,7 +50,6 @@ class Member(Base):
     mem_membership_paid = Column(Boolean())
 
 
-
     def __init__(self, fname, prefix, lname):
         self.mem_fname = fname
         self.mem_prefix = prefix

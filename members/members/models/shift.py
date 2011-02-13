@@ -21,10 +21,11 @@ class Shift(Base):
         self.mem_id = mem_id
 
     def __repr__(self):
-        return "%d/%d/%d member: %d, group: %d, state: %s" %\
-                (self.year, self.month, self.day, self.mem_id, self.wg_id, self.state)
+        return "%d/%d/%s member: %d, group: %d, state: %s" %\
+                (self.year, self.month, str(self.day), self.mem_id, self.wg_id, self.state)
 
     def set_day(self, day):
+        assert(day in xrange(1, 25, 1))
         self.day = day
 
     def set_state(self, state):

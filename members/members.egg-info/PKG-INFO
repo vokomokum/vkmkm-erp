@@ -1,21 +1,15 @@
 Metadata-Version: 1.0
 Name: members
 Version: 0.0
-Summary: tutorial
+Summary: members
 Home-page: UNKNOWN
 Author: UNKNOWN
 Author-email: UNKNOWN
 License: UNKNOWN
-Description: tutorial README
+Description: members app README
         
         
         
-        
-        
-        0.0
-        ---
-        
-        -  Initial version
         
 Keywords: web wsgi bfg pylons pyramid
 Platform: UNKNOWN

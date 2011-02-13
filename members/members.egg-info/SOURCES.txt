@@ -1,14 +1,13 @@
-CHANGES.txt
 MANIFEST.in
 README.txt
 development.ini
 production.ini
+run
 setup.cfg
 setup.py
+wg.odt
 members/__init__.py
-members/models.py
 members/tests.py
-members/views.py
 members.egg-info/PKG-INFO
 members.egg-info/SOURCES.txt
 members.egg-info/dependency_links.txt
@@ -17,6 +16,11 @@ members.egg-info/not-zip-safe
 members.egg-info/paster_plugins.txt
 members.egg-info/requires.txt
 members.egg-info/top_level.txt
+members/models/__init__.py
+members/models/member.py
+members/models/setup.py
+members/models/shift.py
+members/models/workgroups.py
 members/static/favicon.ico
 members/static/footerbg.png
 members/static/headerbg.png
@@ -27,3 +31,5 @@ members/static/pyramid-small.png
 members/static/pyramid.png
 members/static/transparent.gif
 members/templates/mytemplate.pt
+members/views/__init__.py
+members/views/views.py

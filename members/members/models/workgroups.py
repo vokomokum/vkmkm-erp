@@ -20,9 +20,6 @@ class Workgroup(Base):
     name = Column(Unicode(255))
     desc = Column(Unicode(255))
     leader_id = Column(Integer)
-    active = Column(Boolean, default=False)
-
-   
  
     def __init__(self, name, desc):
         self.name = name
