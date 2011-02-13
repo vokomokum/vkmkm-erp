@@ -26,7 +26,7 @@
 
     <h1>Shifts</h1>
     <ul tal:repeat="shift shifts">
-        <li tal:content="shift.year, shift.month, shift.day, shift.wg_id, shift.mem_id"></li>
+        <li tal:content="shift.year, shift.month, shift.day, shift.mem_fname"></li>
     </ul>
 
 

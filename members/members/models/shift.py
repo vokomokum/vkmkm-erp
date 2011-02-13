@@ -1,6 +1,4 @@
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import Unicode
+from sqlalchemy import Column, Integer, Unicode, ForeignKey 
 
 from setup import Base
 
@@ -12,8 +10,8 @@ class Shift(Base):
     year = Column(Integer)
     month = Column(Integer)
     day = Column(Integer)
-    wg_id = Column(Integer)
-    mem_id = Column(Integer)
+    wg_id = Column(Integer, ForeignKey('workgroups.id'))
+    mem_id = Column(Integer, ForeignKey('members.id'))
     state = Column(Unicode(255), default='assigned')
 
     def __init__(self, wg_id, mem_id, year, month):

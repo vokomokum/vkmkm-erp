@@ -7,8 +7,7 @@ def my_view(request):
     dbsession = DBSession()
     peter = dbsession.query(Member).filter(Member.mem_fname==u'Peter').first()
     wgs = dbsession.query(Workgroup).all()
-    shifts = dbsession.query(Shift)
-    #shifts = dbsession.query('SELECT s.*, m.fname AS mfname, wg.name AS wgname FROM \
-    #                          shifts s, members m, workgroups wg \
-    #                          WHERE s.mem_id=m.id AND s.wg_id=wg.id')
+    shifts = dbsession.query(Shift.day, Shift.month, Shift.year, Member.mem_fname)\
+                             .filter(Shift.mem_id == Member.id)\
+                             .filter(Shift.mem_id == peter.id)
     return {'members':[peter], 'workgroups':wgs, 'shifts':shifts}
