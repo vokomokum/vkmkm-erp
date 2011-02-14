@@ -11,7 +11,7 @@ from members.models.shift import Shift
 def _initTestingDB():
     from sqlalchemy import create_engine
     from members.models.setup import initialize_sql
-    session = initialize_sql(create_engine('sqlite:///members.db'))
+    session = initialize_sql(create_engine('sqlite:///members-test.db'))
     #session = initialize_sql(create_engine('postgres://'))
     return session
 
