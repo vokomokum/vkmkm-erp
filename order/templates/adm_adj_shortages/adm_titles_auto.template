@@ -1,0 +1,11 @@
+</table>
+<table class="main">
+  <tr class="title">
+    <td class="ttlqty">Product code</td>
+    <td class="ttldsc">Description</td>
+    <td class="ttlqty">Member orders</td>
+    <td class="ttlqty">Can Reduce by</td>
+    <td class="ttlqty">Reduce by</td>
+    <td class="ttlqty">This Order</td>
+  </tr>
+  

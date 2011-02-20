@@ -1,0 +1,10 @@
+<table>
+  <tr class="nobox" >
+    <td><input type="submit" name="$showhide" value="$showhide Members" /></td>
+    <td><input type="submit" value="Auto_Adjust" name="Auto" ></input></td>
+    <td><input type="submit" value="Save" name="Save" ></input></td>
+  </tr>
+</table>
+<p/>
+<table class="main">
+
