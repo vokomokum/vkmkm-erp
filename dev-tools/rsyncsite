@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/bin/rsync   -vaz -e '/usr/bin/ssh -i /home/jes/.ssh/vokositeback'  /var/tmp/site-backups/ jes@j-e-s.net:/var/voko/sitebackups
