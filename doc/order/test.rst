@@ -25,7 +25,7 @@ For example::
     Set ownership apache:apache, premissions 775 on everything in order
     make template files group permissions 644
     make all directories under order/ 775
-    now move everythingn onto the vokotest server
+    now move everything onto the vokotest server
     jes:/var/voko$
 
 The script update-main-from-svn works the same, but asks for confirmation before copying the files into the main site.
