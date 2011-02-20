@@ -28,7 +28,7 @@ BEGIN {
                       admin_banner test_cookie process_login_data open_cgi
                       password_reset get_cats order_selector print_sub_cat
 		      mem_names_hash make_dropdown make_scdrop email_header
-		      email_chunk email_rows get_ord_totals dump_stuff);
+		      email_chunk email_rows err_msg_2_html get_ord_totals dump_stuff);
     %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
     @EXPORT_OK   = ();
 }
@@ -730,6 +730,25 @@ sub email_rows {
 	print $fh $$ref;
     }
 }
+
+# convert error message to standard form for display - call with accumulated string of
+# error messages formatted by this routine and a new message, returns new accumulated 
+# string 
+
+sub err_msg_2_html {
+    my ($msg, $err_msgs, $config) = @_;
+
+    my $tpl = new CGI::FastTemplate($config->{templates});
+    $tpl->strict();
+    $tpl->define( emsg => "common/err_pr_title.template");
+    $tpl->assign({err_msg => $msg});
+    $tpl->parse(MAIN => "emsg");
+    my $e =  $tpl->fetch("MAIN");
+    $err_msgs .= $$e;
+    $tpl = undef;
+    return $err_msgs;
+}
+
 
 # get the order totals as an array
 # returns ref to array with

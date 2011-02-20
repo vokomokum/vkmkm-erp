@@ -435,8 +435,12 @@ my %pymnts = ( stgeld_rxed => {col => 'mo_stgeld_rxed', type =>'&nbsp;',
 			    desc=>"Miscellaneous charges (see notes)", ord => 5},
 	      misc_refunded => {col => 'mo_misc_refunded', type=>'Credit', 
 				desc => "Miscellaneous credits (see notes)", ord => 6},
-	      vers_rxed  => {col => 'mo_vers', type=>'&nbsp', 
-				desc => "Vers (groente, kaas, eiren)", ord => 7},
+	      vers_g_rxed  => {col => 'mo_vers_groente', type=>'&nbsp', 
+				desc => "Vers groente", ord => 7},
+	      vers_k_rxed  => {col => 'mo_vers_kaas', type=>'&nbsp', 
+				desc => "Vers kaas", ord => 8},
+	      vers_m_rxed  => {col => 'mo_vers_misc', type=>'&nbsp', 
+				desc => "Vers misc.", ord => 9},
 );
 
 sub posted_pymnts {

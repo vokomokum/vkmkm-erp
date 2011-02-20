@@ -149,7 +149,7 @@ sub show_orderers{
 	$tpl->assign( {
 	    ord_no   => $config->{ord_no},
 	    onr      => $orderer,
-	    mem_name => $orderers{$orderer}->{mem_name},
+	    mem_name => escapeHTML($orderers{$orderer}->{mem_name}),
 	    qty      => $orderers{$orderer}->{qty},
 		      } );
 	$tpl->parse(ROWS => ".row");
