@@ -12,7 +12,7 @@
         <input type="reset" value="Reset Changes" name="Reset" /><br />
     </li>
     <li id="select-order-nr">
-        $DROP
+        $DROP<input type="Submit" value="Go"/>
     </li>
 </ul>
 

@@ -1,6 +1,6 @@
 <table>
   <tr class="nobox" >
-    <td>$DROP</td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td>$DROP<input type="Submit" value="Go"/></td><td>&nbsp;&nbsp;&nbsp;</td>
     <td><input type="submit" value="Preview" name="Reload"></input></td>
     </td><td class = "spacer"> </td></td><td class = "spacer"> </td>
     <td><input type="submit" value="Set As Default" name="SetDef"></input></td>

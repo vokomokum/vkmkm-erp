@@ -1,1 +1,1 @@
-$mem_id	$name	$price	$btw	$missing	$damaged	$membership	$statiegeld_in	$crates_in	$misc_in $crates_out	$statiegeld_out	$misc_out	$total
+$mem_id	$name	$wh_exbtw	$wh_btw	$wh_tot	$missing	$damaged	$membership	$statiegeld_in	$crates_in	$misc_in	$crates_out	$statiegeld_out	$misc_out	$vers_g	$vers_k	$vers_m		$mem_exbtw	$mem_btw	$mem_tot

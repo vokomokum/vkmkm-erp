@@ -1,4 +1,4 @@
-<p>$DROP</p>
+<p><span align="center" width="500%">$DROP<input type="Submit" value="Go"/></span></p>
 <p><input type="submit" value="Set As Default" name="SetDef" /></p>
 
 <table class="main">

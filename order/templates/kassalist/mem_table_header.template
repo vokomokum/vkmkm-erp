@@ -6,8 +6,9 @@
   <thead>
     <td>Nr</td>
     <td>Name</td>
-    <td align="center">Products Ex-BTW</td>
-    <td align="center">btw</td>
+    <td align="center">Wh Ex-BTW</td>
+    <td align="center">Wh BTW</td>
+    <td align="center">Wh Tot</td>
     <td align="center">Missing</td>
     <td align="center">Damaged</td>
     <td align="center">Membership</td>
@@ -17,6 +18,10 @@
     <td align="center">Statiegeld out</td>
     <td align="center">Crates out</td>
     <td align="center">Misc out</td>
-    <td align="center">Vers</td>
-    <td align="center">Total</td>
+    <td align="center">Vers Groente</td>
+    <td align="center">Vers Kaas</td>
+    <td align="center">Vers Misc</td>
+    <td align="center">Mem Ex-BTW</td>
+    <td align="center">Mem BTW</td>
+    <td align="center">Mem Tot</td>
   </thead>

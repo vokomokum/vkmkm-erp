@@ -1,0 +1,6 @@
+<tr class="$colour">
+  <td class="qty">$mem_id</td>
+  <td>$mem_name</td>
+  <td class="quantity">$old</td>
+  <td align="right"><input class="qtyinp" name="$ident" value="$new"/></td>
+</tr>

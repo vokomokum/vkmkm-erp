@@ -1,0 +1,8 @@
+<table align="center" class="noborder">
+ <tr border="none">
+  <td align="center" width=10%><input type="submit" align="center"
+ name="Cancel" value="Cancel"/></td>
+  <td width="20em">&nbsp;</td>
+  <td align="center"width=10%><input type="submit" align="center" name="Submit" value="Submit"/></td>
+ </tr>
+</table>

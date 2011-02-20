@@ -4,8 +4,9 @@
     href="/cgi-bin/adm_view_memord.cgi?order_no=$ord_num&Member=$mem_id"
     class="blue">$mem_id</a></td>
     <td>$name</td>
-    <td class='quantity'>$price</td>
-    <td class='quantity'>$btw</td>
+    <td class='quantity'>$wh_exbtw</td>
+    <td class='quantity'>$wh_btw</td>
+    <td class='quantity'>$wh_tot</td>
     <td class='quantity'>$missing</td>
     <td class='quantity'>$damaged</td>
     <td class='quantity'>$membership</td>
@@ -15,6 +16,10 @@
     <td class='quantity'>$statiegeld_out</td>
     <td class='quantity'>$crates_out</td>
     <td class='quantity'>$misc_out</td>
-    <td class='quantity'>$vers</td>
-    <td class='quantity'>$total</td>
+    <td class='quantity'>$vers_g</td>
+    <td class='quantity'>$vers_k</td>
+    <td class='quantity'>$vers_m</td>
+    <td class='quantity'>$mem_exbtw</td>
+    <td class='quantity'>$mem_btw</td>
+    <td class='quantity'>$mem_tot</td>
   </tr>

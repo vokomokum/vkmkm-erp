@@ -1,9 +1,10 @@
+</table>
 <br>
 <a href="$filename_en">Download</a> Right click and select Save As
-  to create an order - EN version (full stop as decimal separator)</td>
+  to create a spreadsheet .csv file - EN version (full stop as decimal separator)</td>
 <br>
 <a href="$filename_nl">Download</a> Right click and select Save As
-  to create an order - NL version (comma as decimal separator)</td>
+  to create a spreadsheet .csv file - NL version (comma as decimal separator)</td>
 </form?
 </body>
 </html?

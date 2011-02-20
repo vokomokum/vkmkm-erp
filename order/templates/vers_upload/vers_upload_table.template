@@ -1,0 +1,18 @@
+<br>
+<h3 align="center">$Title</h3>
+<br>
+<table class="main">
+<tr class="myorder">
+  <td class="ttlqty">Mem No.</td>
+  <td class="ttldsc">Name</td>
+  <td class="ttlqty">Current</td>
+  <td class="ttlqty">New</td>
+</tr>
+$ROWS
+</table>
+<input type="hidden" name="which" value="$which"/>
+<input type="hidden" name="column" value="$column"/>
+</form>
+</body>
+</html>
+
