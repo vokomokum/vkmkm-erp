@@ -28,6 +28,7 @@ use Unix::Syslog qw( :macros :subs );
 use POSIX qw(strftime);
 use MIME::Base64;
 use voko;
+use List::Util qw(min max);
 
 my $conf = "../passwords/db.conf";
 
@@ -52,14 +53,21 @@ sub get_shorts {
 	$h->{unit_pr}  = sprintf "%0.2f", $h->{unit_pr};
 	$h->{descr} = escapeHTML($h->{descr});
 	$h->{mem_name} = $mem_names->{$h->{mem_id}};
+	$h->{can_reduce} = min($h->{reduce_by}, ($h->{ordered} % $h->{wh_q}));
 	next if(($status < 5) and (($h->{ordered} % $h->{wh_q}) == 0));
 	next if(($status >= 5) and ($h->{wh_ord} == $h->{wh_rcv}));
-	$shorts{"${pr_id}_$h->{mem_id}"} = $h;
+	if(!defined($shorts{$pr_id})) {
+	    $shorts{$pr_id} = {$h->{mem_id} => $h};
+	} else {
+	    $shorts{$pr_id}->{$h->{mem_id}} = $h;
+	}
     }
     $sh_sth->finish;
     return (\%shorts);
 }
 
+# return an hash of submitted values, 
+# key = product -> hash member->adjusted qty, 
 sub get_vars {
     my ($config, $cgi) = @_;
     my %pr_dat;
@@ -99,16 +107,45 @@ sub pr_sort{
 # and apply any changed values
 sub do_changes {
     my ($config, $cgi, $dbh) = @_;
+    my $vals = $cgi->Vars;
     my $new_vals = get_vars($config, $cgi);
     my $shorts = get_shorts($dbh);
+
+    #dump_stuff("new_vals", "", "", $new_vals);
+    #dump_stuff("shorts", "pre auto", "", $shorts);
+    if(($status == 3) and defined($vals->{Auto})) {
+	# go through the shortages, looking for products where the sum of
+	# can_reduce == reduce_by. In those cases, insert new_vals 
+	# records with the reduction applied
+	for my $pid (keys %{$shorts}) {
+	    my $sum_can_reduce = 0;
+	    my $reduce_by = 0;
+	    my $hash = $shorts->{$pid};
+	    for my $mid (keys %{$hash}) {
+		$sum_can_reduce += $hash->{$mid}->{can_reduce};
+		$reduce_by = $hash->{$mid}->{reduce_by};
+	    }
+	    if($sum_can_reduce == $reduce_by) {
+		# there is only one solution possible, fill it in
+		for my $mid (keys %{$shorts->{$pid}}) {
+		    $new_vals->{$pid}->{$mid} = 
+			$shorts->{$pid}->{$mid}->{ordered} -
+			$shorts->{$pid}->{$mid}->{can_reduce};
+		}
+	    }
+	}
+	#dump_stuff("shorts", "post auto", "", $shorts);
+
+    }
 
     #dump_stuff("do_changes", "new_vals", "", $new_vals);
     #dump_stuff("do_changes", "shorts", "", $shorts);
     foreach my $pr_id (keys %{$new_vals}) {
 	my $lines = $new_vals->{$pr_id};
 	foreach my $mem (keys %{$lines}) {
-	    if(defined($shorts->{"${pr_id}_$mem"})) {
-		my $h = $shorts->{"${pr_id}_$mem"};
+	    if(defined($shorts->{$pr_id}) and 
+		       defined($shorts->{$pr_id}->{$mem})) {
+		my $h = $shorts->{$pr_id}->{$mem};
 		if($h->{qty} != $lines->{$mem}) {
 		    my $sth = prepare('SELECT add_order_to_member(?, ?, ?, ?)', $dbh);
 		    eval {
@@ -153,10 +190,14 @@ sub do_changes {
 	"adm_adj_shortages/adm_titles_mem.template" :
 	"adm_adj_shortages/adm_titles.template";
     if($status == 3) {
+	$config->{divider} = ($config->{show_members}) ?
+	    "adm_adj_shortages/adm_titles_mem_auto.template" :
+	    "adm_adj_shortages/adm_titles_auto.template";
 	$config->{title}    = "Adjust Order Shortages";
+	$config->{buttons}  = "adm_adj_shortages/adm_adj_auto_save.template";
 	$config->{row}      = ($config->{show_members}) ? 
-	    "adm_adj_shortages/adm_editrow_mems.template" : 
-	    "adm_adj_shortages/adm_editrow.template";
+	    "adm_adj_shortages/adm_editrow_mems_auto.template" : 
+	    "adm_adj_shortages/adm_editrow_auto.template";
     } elsif($status == 6) {
 	$config->{title}   = "Adjust Delivery Shortages";
 	$config->{row}     = ($config->{show_members}) ? 
@@ -182,8 +223,11 @@ sub print_html {
     my $last_pid = 0;
     my $color_flip = 1;
 
-    foreach my $line (values(%{$prh})) {
-	push @pra, $line;
+    for my $pid (keys %{$prh}) {
+	my $hash = $prh->{$pid};
+	for my $line (values %{$hash}) {
+	    push @pra, $line;
+	}
     }
 
     my @pr = sort pr_sort @pra;
