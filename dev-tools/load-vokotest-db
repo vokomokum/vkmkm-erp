@@ -55,7 +55,7 @@ sub main {
 
 	close(LS);
 	push @files, $entry if $last_day ne "";
-	$files[0]->{disp_day} = "Previous " . $files[0]->{day}
+	$files[0]->{disp_day} = $files[0]->{day}
 	if scalar(@files) > 7;
 	#print Dumper(@files);
 
@@ -71,7 +71,7 @@ sub main {
 	    "Enter the day number [1..\%d] and the hour - for example \n  2 17\nwould be 17:00 on the second day in the list\nSelection: ", scalar(@files);
 	    my $l = <STDIN>;
 	    $l =~ s/\s+$//;
-	    next if($l !~ /^\s*(\d)\s+(\d\d?).*$/);
+	    next if($l !~ /^\s*(\d+)\s+(\d\d?).*$/);
 	    my ($day, $hour) = ($1, $2);
 	    next if($day < 1 or $day > scalar(@files));
 	    next if($hour > 23);
