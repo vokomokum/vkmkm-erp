@@ -499,7 +499,7 @@ sub print_html {
     $tpl->assign(\%hdr_h);
     $tpl->parse( STUFF => "prbuttons" );
     $tpl->parse( BUTTONS => "cats" );
-	$tpl->parse( SUBTITLE => "subtitle" );
+    # $tpl->parse( SUBTITLE => "subtitle" );
     admin_banner($status, "BANNER", "banner", $tpl, $config);
 
     $tpl->parse( MAIN => "header" );
