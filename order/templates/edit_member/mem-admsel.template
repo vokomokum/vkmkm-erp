@@ -19,6 +19,20 @@
         <td><input type="text" name="Lastname" id="Lastname" value="$Lastname" maxlength="20" /></td>
       </tr>
       <tr>
+        <td class="5em" align="right"><label for="OnlyActive">Only active:</label></td>
+        <td><input type="checkbox" name="OnlyActive" id="OnlyActive" checked="true" /></td>
+      </tr>
+      <tr>
+        <td class="5em" align="right"><label for="OrderBy">Order by:</label></td>
+        <td>
+            <select name="OrderBy" id="OrderBy">
+                <option value="name">Last name, first name, Prefix</option> 
+                <option value="id">Member ID</option> 
+            </select>
+        </td>
+      </tr>
+
+      <tr>
         <td>&nbsp;</td>
         <td align="right"><input type="submit" value="Find" name="Find" /> <input type="submit" value="$Create" name="Create" /></td>
       </tr>

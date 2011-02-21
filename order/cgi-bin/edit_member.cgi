@@ -88,7 +88,7 @@ my %db_2_vars = (
     mem_adm_comment => "Comment",
     );
 
-# this will turned into a input-field -> db column translation
+# this will be turned into a input-field -> db column translation
 my %vars_2_db;
 
 # the values we will put into the databse on update/insert
@@ -518,7 +518,7 @@ sub pass0 {
     $tpl->print("MAIN");
 
     if(length($err_msgs) > 0) {
-	print "<span class=\"warn\"><big>$err_msgs</big></span>";
+    	print "<span class=\"warn\"><big>$err_msgs</big></span>";
     }
 
     $tpl = new CGI::FastTemplate($config->{templates});
@@ -560,7 +560,7 @@ sub pass1 {
 	$vals->{mem} = $vals->{Member};
     }
 
-    # look for the following 3 input terms, count all non-blank entries
+    # look for the following input terms, count all non-blank entries
     foreach my $k (qw(Forename Lastname Email Member)) {
 	if(defined($vals->{$k})) {
 	    my $v = trimstr($k, $vals);
@@ -577,13 +577,21 @@ sub pass1 {
 		if($sel_cnt) {
 		    $st .= " AND $vars_2_db{$k} = ?";
 		} else {
-		    $st .= " WHERE $vars_2_db{$k} =  ?";
+		    $st .= " WHERE $vars_2_db{$k} = ?";
 		}
 	    }
 	    push @execvals, $v;
 	    $sel_cnt++;
 	}
     }
+    if (defined($vals->{'OnlyActive'})) {
+        if ($sel_cnt) {
+            $st .= " AND mem_active = true";
+        } else {
+            $st .= " WHERE mem_active = true";
+        }
+    }
+    
     if($sel_cnt == 0) {
        pass3(5, $parse_hash, $vals, $config, $cgi, $dbh) 
 	   if(defined($vals->{Create}));;
@@ -612,8 +620,15 @@ sub pass1 {
 	pass0($vals, $config, $cgi, $dbh);
     }
 
-    $cmd = "SELECT * $st". " ORDER BY lower(mem_lname), lower(mem_fname), ".
-	"lower(mem_prefix)";
+    $cmd = "SELECT * $st";
+    if (defined($vals->{'OrderBy'})) {
+        if ($vals->{'OrderBy'} eq 'id'){
+            $cmd .= " ORDER BY mem_id";
+        } else {
+            $cmd .= " ORDER BY lower(mem_lname), lower(mem_fname), lower(mem_prefix)";
+        }
+    }
+
     $sth = prepare($cmd, $dbh);
     $sth->execute(@execvals);
     my $href;
@@ -637,11 +652,12 @@ sub pass1 {
     }
 
     # we have more than one match, present matching rows
+    $err_msgs .= "<p>Found $aref->[0] members.</p>";
     pass6($sth, $parse_hash, $vals, $config, $cgi, $dbh);
 
 }
 
-# output the htnl and set the following pass. Used to begin an edit/create 
+# output the html and set the following pass. Used to begin an edit/create 
 # phase. Never entered from a submit
 sub pass3 {
     my ($next_pass, $parse_hash, $vals, $config, $cgi, $dbh) = @_;
@@ -926,9 +942,9 @@ sub pass6 {
     $tpl->parse(MAIN => "header");
     $tpl->print("MAIN");
 
-    if(length($err_msgs) > 0) {
-	print "<span class=\"warn\"><big>$err_msgs</big></span>";
-    }
+    #if(length($err_msgs) > 0) {
+    #	print "<span class=\"warn\"><big>$err_msgs</big></span>";
+    #}
 
     $tpl = new CGI::FastTemplate($config->{templates});
     $tpl->strict();
