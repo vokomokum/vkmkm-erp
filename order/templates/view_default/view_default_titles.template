@@ -1,0 +1,13 @@
+</table>
+<br>
+<h2 align="center">Every month, your order will automatically have these items</h2>
+<br>
+<table>
+<tr class="title">
+    <td class="qty4">Product</td>
+    <td class="ttlinfo">Info</td>
+    <td class="ttldsc">Description</td>
+    <td class="ttlqty">Quantity</td>
+    <td class="ttlprc">Unit price</td>
+    <td class="ttlprc">Total price</td>
+</tr>

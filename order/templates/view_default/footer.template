@@ -1,0 +1,13 @@
+<tr class="${RowClass}" >
+	<td align="left">Total</td> 
+	<td colspan = "4">&nbsp;</td>
+	<td class="price">$total</td>
+</tr>
+</table>
+<br>
+<div id="header">
+<input type="submit" name="Delete" value="Delete my default order"/>
+</div>
+</form>
+</body>
+</html>

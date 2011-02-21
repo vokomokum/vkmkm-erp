@@ -24,6 +24,7 @@
         <li>[<a href="/cgi-bin/edit_member.cgi">Edit/Create Member</a>]<br /></li>
         <li>[<a href="/cgi-bin/order">My Orders</a>]</li>
         <li>[<a href="/cgi-bin/all-order">All Products</a>]</li>
+	<li>[ <a href="/cgi-bin/view_default.cgi">View/Clear Default Order</a> ]</li>
         <li>[<a href="/cgi-bin/post_news.cgi">Post/Edit News</a>]</li>
         <li>[<a href="/cgi-bin/adm_update_welcome.cgi">Update Welcome Page</a>]</li>
         <li>[<a href="/cgi-bin/adm_kassa.cgi">Kassa</a>]</li>
