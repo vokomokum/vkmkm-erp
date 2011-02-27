@@ -30,6 +30,7 @@
         <li>[<a href="/cgi-bin/adm_kassa.cgi">Kassa</a>]</li>
 	<li>[<a href="/cgi-bin/kassalist.pm">Kassa List</a>]</li>
 	<li>[<a href="/cgi-bin/pickuplists.pm">Pickup Lists</a>]</li>
+	<li>[<a href="/cgi-bin/prod_history.cgi">Product Order History</a>]</li>
     </ul>
     
     <h1>${Title}</h1>

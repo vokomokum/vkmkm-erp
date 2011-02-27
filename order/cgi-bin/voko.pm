@@ -366,8 +366,8 @@ sub handle_cookie {
 
 # generate an admin banner appropriate to the status
 my @links = (
-    [3, "Adjust&nbsp;for&nbsp;order&nbsp;shortages", 6, "Adjust&nbsp;for&nbsp;delivery&nbsp;shortages", -1, "Shortages&nbsp;in&nbsp;current&nbsp;order"],
-    [5, "Enter&nbsp;delivery&nbsp;shortages", -1, "View&nbsp;wholesale&nbsp;order"],
+    [3, "Adjust&nbsp;for&nbsp;order&nbsp;shortages", 5, "Enter&nbsp;delivery&nbsp;shortages", 6, "Adjust&nbsp;for&nbsp;delivery&nbsp;shortages", -1, "Shortages&nbsp;in&nbsp;current&nbsp;order"],
+    [-1, "View&nbsp;wholesale&nbsp;order"],
 );
 
 # choose the correct text for one link, based on current status
