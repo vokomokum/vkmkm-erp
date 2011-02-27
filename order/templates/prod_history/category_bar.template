@@ -1,0 +1,17 @@
+<tr class="title">
+  <td><a name="X$cat"></a>&nbsp;</td>
+  <td></td>
+  <td><h2 style="margin: 0; text-align: center;">$Name</h2></td>
+  <td colspan="6"></td>
+</tr>
+<tr class="title">
+    <td class="ttlprice">Product</td>
+    <td class="ttlqty">Wh code</td>
+    <td class="ttldsc">$Description</td>
+    <td class="ttlqty">Members</td>
+    <td class="ttlqty">Ordered</td>
+    <td class="ttlqty">Adjusted</td>
+    <td class="ttlqty">Received</td>
+    <td class="ttlqty">Dropped</td>
+    <td class="ttlprc">Cost</td>
+</tr>  

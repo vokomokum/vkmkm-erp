@@ -1,0 +1,11 @@
+
+<div align="center">
+Column 'Members'  gives the number of members who have ever ordered this product<br>
+Column 'Ordered'  gives the total number of items ordered for this product<br>
+Column 'Adjusted' gives the total number of items ordered after shortage adjustments<br>
+Column 'Received' gives the total number of items actually received by members (reflects delivery shortages)<br>
+Column 'Dropped'  gives the total number of items ordered by member but dropped during the shortage adjustment stage<br>
+Column "Cost"     gives the total amount paid by members for this product (based on the received amounts)<br>
+</div>
+
+<table class="main">
