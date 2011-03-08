@@ -3,17 +3,39 @@
 <head>
   <title>Vokomokum Members Application</title>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-  <meta name="keywords" content="python web application" />
-  <meta name="description" content="pyramid web application" />
+  <meta name="description" content="Vokomokum Members web application" />
   <link rel="shortcut icon" href="${request.static_url('members:static/favicon.ico')}" />
-  <link rel="stylesheet" href="${request.static_url('members:static/pylons.css')}" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="${request.static_url('members:static/members.css')}" type="text/css" media="screen" charset="utf-8" />
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton|Nobile:regular,i,b,bi&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-  <!--[if lte IE 6]>
-  <link rel="stylesheet" href="${request.static_url('members:static/ie6.css')}" type="text/css" media="screen" charset="utf-8" />
-  <![endif]-->
 </head>
 <body>
 
+<tal:block tal:condition="not logged_in">
+    <form action="login">
+        <table>
+            <tr>
+                <td>Username:</td>
+                <td>
+                    <input type="hidden" name="came_from" length="30" value="${came_from}"/><br/>
+                    <input type="text" name="login" length="30"/><br/>
+                </td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td>
+                    <input type="password" name="passwd" length="30"/><br/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="Login"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</tal:block>
+
+<tal:block tal:condition="logged_in">
     <h1>Members</h1>
     <ul tal:repeat="mem members">
         <li>${mem.mem_fname} ${mem.id} ${mem.workgroups}</li>
@@ -28,7 +50,7 @@
     <ul tal:repeat="shift shifts">
         <li tal:content="shift.year, shift.month, shift.day, shift.mem_fname"></li>
     </ul>
-
+</tal:block>
 
 
 </body>

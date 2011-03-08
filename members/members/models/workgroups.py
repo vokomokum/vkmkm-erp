@@ -15,12 +15,12 @@ membership = Table(
 
 class Workgroup(Base):
     __tablename__ = 'workgroups'
-    
+
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(255))
     desc = Column(Unicode(255))
     leader_id = Column(Integer)
- 
+
     def __init__(self, name, desc):
         self.name = name
         self.desc = desc

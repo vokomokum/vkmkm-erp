@@ -20,7 +20,7 @@ class Member(Base):
     Data model
     '''
     __tablename__ = 'members'
-    
+
     id = Column(Integer, primary_key=True)
     mem_fname = Column(Unicode(255))
     mem_prefix = Column(Unicode(255))
@@ -33,8 +33,8 @@ class Member(Base):
     mem_home_tel = Column(Unicode(25))
     mem_mobile = Column(Unicode(25))
     mem_email = Column(Unicode(255))
-    #mem_enc_pwd = Column(Unicode(255))
-    #mem_pwd_url = Column(Unicode(255))
+    mem_enc_pwd = Column(Unicode(255))
+    mem_pwd_url = Column(Unicode(255))
     mem_active = Column(Boolean())
     mem_cookie = Column(Unicode(255))
     mem_ip = Column(Unicode(255))
@@ -43,8 +43,8 @@ class Member(Base):
     mem_work_tel = Column(Unicode(255))
     mem_bank_no = Column(Unicode(255))
     mem_adm_comment = Column(Unicode(255))
-    #mem_message = Column(Unicode(255))
-    #mem_news = Column(Unicode(255))
+    mem_message = Column(Unicode(255))
+    mem_news = Column(Unicode(255))
     mem_message_auth = Column(Integer())
     mem_message_date = Column(DateTime()) #timestamp
     mem_membership_paid = Column(Boolean())

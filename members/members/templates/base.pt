@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:define-macro="master"
+      tal:define="portal_url request.application_url">
+
+    <head profile="http://www.w3.org/2005/10/profile">
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="shortcut icon" href="${portal_url}favicon.ico" type="image/x-icon" />
+        <!--link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato:regular,regularitalic" /-->
+        <link rel="stylesheet" type="text/css" href="${portal_url}/members.css" />
+        <!-- Internet Explorer Fixes -->
+        <tal:iefixstart replace="structure string:&lt;!--[if IE]&gt;" />
+        <link rel="stylesheet" type="text/css" href="${portal_url}/ie.css" />
+        <tal:iefixend replace="structure string:&lt;![endif]--&gt;" />
+        <!--title tal:content="view.title | title | 'Vokomokum Members'">Vokomokum Members</title-->
+        <link rel="shortcut icon" type="image/x-icon" href="${portal_url}favicon.ico" />
+ 
+    </head>
+
+    <body>
+
+        <div id="header">
+
+            <ul id="personaltools" tal:condition="logged_in">
+                <li>
+                    <a href="${portal_url}/account" title="My Account">Account</a>
+                </li>
+                <li>
+                    <a href="${portal_url}/logout" title="Log out">Log Out</a>
+                </li>
+            </ul>
+
+            <ul id="personaltools" tal:condition="not logged_in">
+                <li>
+                    <a href="/login">Log In</a>
+                </li>
+            </ul>
+
+            <ul id="globalnav" tal:condition="tab and logged_in" tal:define="tab view.tab | None">
+                <li tal:attributes="class python: tab == 'members' and 'selected' or ''">
+                    <a tal:attributes="href string:${portal_url}/members">Members</a>
+                </li>
+                <li tal:attributes="class python: tab == 'workgroups' and 'selected' or ''">
+                    <a tal:attributes="href string:${portal_url}/workgroups">Workgroups</a>
+                </li>
+                <li tal:attributes="class python: tab == 'shifts' and 'selected' or ''">
+                    <a tal:attributes="href string:${portal_url}/shifts">Shifts</a>
+                </li>
+            </ul>
+
+        </div>
+
+        <div id="content">
+            <metal:block define-slot="content">
+                <div metal:define-macro="content" />
+            </metal:block>
+        </div>
+
+        <div id="footer">
+            <a href="http://vokomokum.nl"
+                alt="Vokomokum Food Cooperative"
+                title="Go to Vokomokum Food Cooperative">
+                    <img src="${portal_url}voko_footer.png" />
+            </a>
+        </div>
+
+    </body>
+
+</html>

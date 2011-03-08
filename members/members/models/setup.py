@@ -19,6 +19,19 @@ def initialize_sql(engine):
     Base.metadata.create_all(engine)
     try:
         session = DBSession()
+
+        # start test for authentication development
+        import md5
+        import transaction
+        test_member = Member(fname=u'Peter', prefix=u'de', lname='Pan')
+        # TODO: this causes a db problem (only on sqlite when testing?)
+        #test_member.mem_enc_pwd = md5.new('PASSWORD').digest()
+        test_member.mem_enc_pwd = 'PASSWORD'
+        session.add(test_member)
+        session.flush()
+        transaction.commit()
+        # end test
+
     except IntegrityError:
         DBSession.rollback()
     return session

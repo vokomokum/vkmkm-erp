@@ -1,0 +1,23 @@
+<!--metal:block metal:use-macro="view.main.macros['master']">
+
+<metal:main fill-slot="content">
+    <tal:main-macro metal:define-macro="content">
+    
+        Bla:
+        <div tal:content="bla"></div> 
+
+    </tal:main-macro>
+</metal:main>
+
+</metal:block-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+            Bla:
+            <div tal:content="bla"></div> 
+        </div>
+    </div>
+</html>

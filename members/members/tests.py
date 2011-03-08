@@ -1,6 +1,5 @@
 import unittest
 import transaction
-from pyramid.config import Configurator
 from pyramid import testing
 
 from members.models.member import Member
@@ -45,7 +44,7 @@ class TestModel(unittest.TestCase):
         self.session.flush()
         transaction.commit()
         testing.tearDown()
-    
+
     def test_member_query(self):
         peter = self.session.query(Member).filter(Member.mem_fname==u'Peter').first()
         self.assertEqual(peter.mem_lname, 'Pan')
@@ -54,7 +53,7 @@ class TestModel(unittest.TestCase):
         wgs = self.session.query(Workgroup).order_by(Workgroup.name).all()
         self.assertEqual(len(wgs), 2)
         self.assertEqual(wgs[0].name, 'Besteling')
-    
+
     def test_member(self):
         peter = self.session.query(Member).filter(Member.mem_fname==u'Peter').first()
         def get_shifts():
@@ -70,7 +69,7 @@ class TestModel(unittest.TestCase):
         self.session.flush()
         shifts = get_shifts()
         self.assertEqual(shift.day, 3)
-    
+
     '''
     # TODO: test some view and template, maybe in another test case
     def test_it(self):
