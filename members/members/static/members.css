@@ -1,1 +1,53 @@
-body{margin:0;padding:0;background-color:#ffffff;position:relative;font:16px/24px "Nobile","Lucida Grande",Lucida,Verdana,sans-serif;}
+body{
+    margin:0;padding:0;
+    background-color:#ffffff;
+    font:16px/24px "Nobile","Lucida Grande",Lucida,Verdana,sans-serif;
+}
+
+
+a {
+    text-decoration: none;
+    color: #231f20;
+    outline: none;
+    padding: 1px 3px;
+}
+
+a:hover {
+    background-color: #231f20;
+    color: #fff;
+}
+
+#main-menu {
+    margin: 0;
+}
+#main-menu li {
+    list-style: none;
+    display: inline;
+    margin-right: 20px;
+    line-height: 170%;
+}
+	
+.blue {
+    color: #0000ff;
+}
+.red {
+    color: #ff0000;
+}
+.bold {
+    font-weight: bold;
+}
+.italic {
+    font-style: italic;
+}
+
+/* Tables */
+table.main   {border:thin solid black; padding-right:3px; padding-left:3px;}
+tr.title     {background-color:#a0a0a0; color:black; border: solid black; }
+tr.subtitle  {background-color:#c0c0c0; color:black; border: solid black; line-height:100%;}
+tr.common    {background-color:#c0c0ff; color:black; border: solid black; }
+tr.special   {background-color:#b0ffb0; color:black; border: solid black; }
+td.space4    {text-align:right;width:4em;}
+td.descr     {text-align:left; width:60em;} 
+td.number    {text-align:right;width:6em;}
+
+

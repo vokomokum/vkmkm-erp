@@ -12,24 +12,24 @@ from members.views.base import BaseView
 class Login(BaseView):
 
     def __call__(self):
+        print "LOGIN"
         login_url = route_url('login', self.request)
         referrer = self.request.url
         if referrer == login_url:
             referrer = '/' # never use the login form itself as came_from
         came_from = self.request.params.get('came_from', referrer)
         message = ''
-        login = ''
-        password = ''
         if 'form.submitted' in self.request.params:
             login = self.request.params['login']
             passwd = self.request.params['passwd']
             member = get_member(login)
-            #import md5
-            #if member.mem_enc_pwd == md5.new(passwd).digest():
-            if member.mem_enc_pwd == passwd:
-                headers = remember(self.request, login)
-                return HTTPFound(location = came_from,
-                    headers = headers)
+            if member:
+                #import md5
+                #if member.mem_enc_pwd == md5.new(passwd).digest():
+                if member.mem_enc_pwd == passwd:
+                    headers = remember(self.request, login)
+                    return HTTPFound(location = came_from,
+                        headers = headers)
             message = 'Failed login'
 
         return dict(message = message,
@@ -39,10 +39,12 @@ class Login(BaseView):
                    )
 
 
-@view_config(renderer='../templates/mytemplate.pt', route_name='logout')
+@view_config(renderer='../templates/base.pt', route_name='logout')
 class Logout(BaseView):
 
     def __call__(self):
         headers = forget(self.request)
-        return HTTPFound(location = route_url('home', self.request),
-                         headers = headers)
+        #return HTTPFound(location = route_url('home', self.request),
+        #                 headers = headers)
+        return dict(logged_in = False,
+                    message = 'You have been logged out')

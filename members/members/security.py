@@ -3,25 +3,28 @@ from members.models.workgroups import Workgroup
 from members.models.setup import DBSession
 
 
-def get_member(mem_id, request):
+def get_member(login):
     mem = None
     session = DBSession()
-    if userid:
-        try:
-            mem = session.query(Member).filter(Member.mem_id == mem_id).first()
-        except:
-            pass
+    try:
+        if "@" in login: # email address
+            mem = session.query(Member).filter(Member.mem_email == login).first()
+        else: # then assume id
+            mem = session.query(Member).filter(Member.id == login).first()
+    except Exception, e:
+        print e
     return mem
 
 
-def groupfinder(userid, request):
+def groupfinder(memid, request):
+    session = DBSession()
     groups = ['group:members']
     wg_id = request.params.get('wg_id', -1)
     if wg_id >= 0:
-        session = get_dbsession()
-        wg = session.query(Workgroup).filter(Workgroup.id == wg_id and Workgroup.leader_id == userid).all()
+        wg = session.query(Workgroup).filter(Workgroup.id == wg_id and Workgroup.leader_id == memid).all()
         if len(wgs) > 0:
             groups.append('group:leader')
-    if userid in ['nic', 'jes']:
+    admins = session.query(Member).filter(Member.mem_admin == True).all()
+    if memid in [m.id for m in admins]:
         groups.append('group:admins')
     return groups

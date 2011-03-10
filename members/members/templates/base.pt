@@ -10,7 +10,7 @@
         <link rel="shortcut icon" href="${portal_url}favicon.ico" type="image/x-icon" />
         <!--link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato:regular,regularitalic" /-->
-        <link rel="stylesheet" type="text/css" href="${portal_url}/members.css" />
+        <link rel="stylesheet" type="text/css" href="${portal_url}/static/members.css" />
         <!-- Internet Explorer Fixes -->
         <tal:iefixstart replace="structure string:&lt;!--[if IE]&gt;" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/ie.css" />
@@ -23,20 +23,23 @@
     <body>
 
         <div id="header">
+            <h3>Vokomokum Member Application</h3>
 
-            <ul id="personaltools" tal:condition="logged_in">
+            <ul id="main-menu">
+                <tal:block tal:condition="logged_in">
                 <li>
                     <a href="${portal_url}/account" title="My Account">Account</a>
                 </li>
                 <li>
                     <a href="${portal_url}/logout" title="Log out">Log Out</a>
                 </li>
-            </ul>
+                </tal:block>
 
-            <ul id="personaltools" tal:condition="not logged_in">
+                <tal:block id="personaltools" tal:condition="not logged_in">
                 <li>
                     <a href="/login">Log In</a>
                 </li>
+                </tal:block>
             </ul>
 
             <ul id="globalnav" tal:condition="tab and logged_in" tal:define="tab view.tab | None">
@@ -52,6 +55,9 @@
             </ul>
 
         </div>
+
+        <!--h1 tal:content="title"></h1-->
+        <h4 tal:content="message"></h4>
 
         <div id="content">
             <metal:block define-slot="content">

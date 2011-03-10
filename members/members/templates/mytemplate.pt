@@ -10,6 +10,8 @@
 </head>
 <body>
 
+<h4 tal:content="message"></h4>
+
 <tal:block tal:condition="not logged_in">
     <form action="login">
         <table>
@@ -28,7 +30,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="submit" name="Login"/>
+                    <input type="submit" name="form.submitted"/>
                 </td>
             </tr>
         </table>

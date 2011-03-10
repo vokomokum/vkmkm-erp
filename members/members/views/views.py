@@ -30,6 +30,7 @@ class DirView(BaseView):
                     members = members,
                     workgroups = wgs,
                     came_from = '/',
+                    message = '',
                     shifts = shifts)
 
 
