@@ -8,10 +8,6 @@ from zope.sqlalchemy import ZopeTransactionExtension
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
-from member import Member
-from shift import Shift
-from workgroups import Workgroup
-
 
 def initialize_sql(engine):
     DBSession.configure(bind=engine)
@@ -21,6 +17,11 @@ def initialize_sql(engine):
         session = DBSession()
 
         # start test for authentication development
+        from member import Member
+        from shift import Shift
+        from workgroups import Workgroup
+
+
         import md5
         import transaction
         test_member = Member(fname=u'Peter', prefix=u'de', lname='Pan')

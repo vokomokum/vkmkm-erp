@@ -1,0 +1,170 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+
+<form action="member/edit" method="post">
+
+    <input tal:condition="m.exists"
+           type="hidden" name="id" value="${m.id}">
+    </input>
+    
+    <!-- Name & email -->
+    <span class="bold">
+    <table class="main" width="100%">
+      <tr class="special">
+        <td align="center" colspan="4">Name and Email Adress <font color="red">(All fields  are required)</font></td>
+      </tr>
+      <tr class="special">
+        <td align="left" width="25%">Forename:</td> 
+        <td align="left" width="10%">Prefix:</td>
+        <td align="left" width="25%">Last Name:</td>
+        <td align="left" width="40%">Email:</td>
+      </tr>
+      <tr class="special">
+        <td><input type="text" align="left" size="20" name="Forename"
+                   value="${m.mem_fname}" maxlength="20"></input></td> 
+        <td><input type="text" align="left" size="10" name="Prefix"
+                   value="${m.mem_prefix}" maxlength="10"></input></td>
+        <td><input type="text" align="left" size="20" name="Lastname"
+                   value="${m.mem_lname}" maxlength="20"></input></td>
+        <td><input type="text" align="left" size="50" name="Email"
+                   value="${m.mem_email}" maxlength="50"></input></td>
+      </tr>
+    </table>
+    </span>
+    <!--input type="hidden" name="selected" value="1"></input>
+    <input type="hidden" name="one_row" value="1"></input>
+    <p/><p/-->
+
+
+    <!-- Addres -->
+    <table class="main" width="100%"> 
+      <tr class="special">
+        <td align="center" colspan="5"><big>Address <font color="red">(fields with * are required)</font></big></td>
+      </tr>
+      <tr class="special">
+        <td align="left" width="50%"><font color="red">*</font> Street:</td>
+        <td align="left" width="105%"><font color="red">*</font> House No.:</td>
+        <td align="left" width="10%">Hs./Apt. No:</td>
+        <td align="left" width="5%"><font color="red">*</font> Postcode:</td>
+        <td align="left" width="25%"><font color="red">*</font> City:</td>
+      </tr>
+      <tr class="special">
+        <td><input type="text" align="left" size="30" name="Street"
+                 Value="${m.mem_street}" maxlength="60"></input></td>
+        <td><input type="text" align="left" size="7" name="Houseno"
+                 Value="${m.mem_house}" maxlength="7"></input></td>
+        <td><input type="text" align="left" size="7" name="Apt"
+                 Value="${m.mem_flatno}" maxlength="7"></input></td>
+        <td><input type="text" align="left" size="7" name="Postcode"
+                 Value="${m.mem_postcode}" maxlength="7"></input></td>
+        <td><input type="text" align="left" size="30" name="City"
+                Value="${m.mem_city}" maxlength="60"></input></td>
+      </tr>
+    </table>
+
+
+    <!-- Phone -->
+
+    <table class="main" width="100%"> 
+      <tr class="special">
+        <td align="center" colspan="3">Telephone <font color="red">(At least one is required)</font></td>
+      </tr>
+      <tr class="special">
+        <td align="left" width="33%">Home:</td> 
+        <td align="left" width="33%">Work:</td>
+        <td align="left" width="33%">Mobile:</td> 
+      </tr>
+      <tr class="special">
+        <td><input type="text" align="left" size="20" name="Homeph"
+                 Value="${m.mem_home_tel}" maxlength="20"></input></td>
+        <td><input type="text" align="left" size="20" name="Workph"
+                 Value="${m.mem_work_tel}" maxlength="20"></input></td>
+        <td><input type="text" align="left" size="20" name="Mobile"
+                 Value="${m.mem_mobile}" maxlength="20"></input></td>
+      </tr>
+    </table>
+
+
+    <!-- Bank details -->
+
+    <table class="main" width="100%">
+       <tr class="special" align="center">
+         <td colspan="2">Bank Account <font
+         color="red">(required)</font> Use '12345678' if not known</td>
+       </tr>
+       <tr class="special" align="center">
+         <td><input type="text" align="left" size="12" name="Account"
+                 Value="${m.mem_bank_no}" maxlength="12"></input></td>
+      </tr>
+    </table>
+
+
+    <!-- Password -->
+    <tal:block tal:condition="m.exists">
+    <table class="main" width="100%"> 
+      <tr class="special">
+        <td align="center" colspan="2">Password (6 to 30 characters)</td>
+      </tr>
+      <tr class="special">
+        <td align="left">Password:</td> 
+        <td><input type="password" align="left" size="30" name="Pwd0" maxlength="30"/></td>
+      </tr>
+      <tr class="special">
+        <td align="left">Retype:</td> 
+        <td><input type="password" align="left" size="30" name="Pwd1" maxlength="30"/></td>
+      </tr>
+    </table>
+    </tal:block>
+
+
+    <!-- Account Settings -->
+
+    <table class="main"> 
+       <tr class="special">
+         <td align="center" colspan="2">Account Settings</td>
+       </tr>
+       <tr class="special">
+         <td align="right">
+            <input type="checkbox" id="Active" name="Active" checked="${m.mem_active}" /></td>
+         <td align="left"><label for="Active">Member is active and can log in and order goods</label></td>
+       </tr>
+       <tr class="special">
+         <td align="right">
+            <input type="checkbox" id="Mem_Paid" name="Mem_Paid" checked="${m.mem_membership_paid}" /></td>
+         <td align="left"><label for="Mem_Paid">Membership fee is paid</label></td>
+       </tr>
+       <tr class="special">
+         <td align="right"> 
+            <input type="checkbox" id="Admin" name="Admin" checked="${m.mem_admin}" /></td>
+         <td align="left"><label for="Admin">Member has administrator privileges</label></td>
+       </tr>
+       <tr class="special">
+         <td align="right"> 
+            <input type="checkbox" id="Spclacct" name="Spclacct" checked="${m.mem_adm_adj}" /></td>
+         <td align="left"><label for="Spclacct">Administrator's account - can order goods after commits are closed</label></td>
+       </tr>
+    </table>
+
+    <!-- Submit -->
+
+    <table width="100%">
+        <tr align="center">
+            <tal:block tal:condition="not m.exists">
+            <td><input type="submit" value="Create" name="create"></input></td>
+            </tal:block>
+            <tal:block tal:condition="m.exists">
+            <td align="center"><input type="submit" value="Save" name="save"></input></td>
+            </tal:block>
+        </tr>
+    </table>
+
+</form>
+
+
+        </div>
+    </div>
+</html>

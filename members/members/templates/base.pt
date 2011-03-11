@@ -26,7 +26,7 @@
             <h3>Vokomokum Member Application</h3>
 
             <ul id="main-menu">
-                <tal:block tal:condition="logged_in">
+                <tal:block tal:condition="view.logged_in">
                 <li>
                     <a href="${portal_url}/account" title="My Account">Account</a>
                 </li>
@@ -35,14 +35,14 @@
                 </li>
                 </tal:block>
 
-                <tal:block id="personaltools" tal:condition="not logged_in">
+                <tal:block id="personaltools" tal:condition="not view.logged_in">
                 <li>
                     <a href="/login">Log In</a>
                 </li>
                 </tal:block>
             </ul>
 
-            <ul id="globalnav" tal:condition="tab and logged_in" tal:define="tab view.tab | None">
+            <ul id="globalnav" tal:condition="tab and view.logged_in" tal:define="tab view.tab | None">
                 <li tal:attributes="class python: tab == 'members' and 'selected' or ''">
                     <a tal:attributes="href string:${portal_url}/members">Members</a>
                 </li>
@@ -57,7 +57,7 @@
         </div>
 
         <!--h1 tal:content="title"></h1-->
-        <h4 tal:content="message"></h4>
+        <h4 tal:content="msg"></h4>
 
         <div id="content">
             <metal:block define-slot="content">

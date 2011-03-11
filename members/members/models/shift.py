@@ -5,7 +5,7 @@ from setup import Base
 
 class Shift(Base):
     __tablename__ = 'wg_shifts'
-    
+
     id = Column(Integer, primary_key=True)
     year = Column(Integer)
     month = Column(Integer)

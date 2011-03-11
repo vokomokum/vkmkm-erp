@@ -30,10 +30,13 @@ def main(global_config, **settings):
     config.add_route('home', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
+    config.add_route('member', '/member')
     config.add_route('test', '/test')
     config.scan()
     #config.add_route('home', '/', view='members.views.views.TestView',
     #                 view_renderer='templates/mytemplate.pt')
+
+
     return config.make_wsgi_app()
 
 

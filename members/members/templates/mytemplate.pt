@@ -12,7 +12,7 @@
 
 <h4 tal:content="message"></h4>
 
-<tal:block tal:condition="not logged_in">
+<tal:block tal:condition="not view.logged_in">
     <form action="login">
         <table>
             <tr>
@@ -37,7 +37,7 @@
     </form>
 </tal:block>
 
-<tal:block tal:condition="logged_in">
+<tal:block tal:condition="view.logged_in">
     <h1>Members</h1>
     <ul tal:repeat="mem members">
         <li>${mem.mem_fname} ${mem.id} ${mem.workgroups}</li>

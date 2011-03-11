@@ -26,11 +26,10 @@ class DirView(BaseView):
                                  .filter(Shift.mem_id == peter.id)
         else:
             shifts = []
-        return dict(logged_in = self.logged_in,
-                    members = members,
+        return dict(members = members,
                     workgroups = wgs,
                     came_from = '/',
-                    message = '',
+                    msg = '',
                     shifts = shifts)
 
 

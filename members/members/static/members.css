@@ -41,7 +41,7 @@ a:hover {
 }
 
 /* Tables */
-table.main   {border:thin solid black; padding-right:3px; padding-left:3px;}
+table.main   {border:thin solid black; padding-right:3px; padding-left:3px; margin-bottom:10px;}
 tr.title     {background-color:#a0a0a0; color:black; border: solid black; }
 tr.subtitle  {background-color:#c0c0c0; color:black; border: solid black; line-height:100%;}
 tr.common    {background-color:#c0c0ff; color:black; border: solid black; }
