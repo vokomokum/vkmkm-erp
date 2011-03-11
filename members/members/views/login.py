@@ -8,7 +8,7 @@ from members.security import get_member
 from members.views.base import BaseView
 
 
-@view_config(renderer='../templates/mytemplate.pt', route_name='login')
+@view_config(renderer='../templates/base.pt', route_name='login')
 class Login(BaseView):
 
     def __call__(self):
@@ -27,15 +27,15 @@ class Login(BaseView):
                 #import md5
                 #if member.mem_enc_pwd == md5.new(passwd).digest():
                 if member.mem_enc_pwd == passwd:
+                    self.logged_in = True
                     headers = remember(self.request, login)
                     return HTTPFound(location = came_from,
                         headers = headers)
             message = 'Failed login'
 
-        return dict(message = message,
+        return dict(msg = message,
                     url = self.request.application_url + '/login',
                     came_from = came_from,
-                    logged_in = False,
                    )
 
 
@@ -46,5 +46,7 @@ class Logout(BaseView):
         headers = forget(self.request)
         #return HTTPFound(location = route_url('home', self.request),
         #                 headers = headers)
+        self.logged_in = False
+
         return dict(logged_in = False,
-                    message = 'You have been logged out')
+                    msg = 'You have been logged out')

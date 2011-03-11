@@ -10,7 +10,10 @@
 </head>
 <body>
 
-<h4 tal:content="message"></h4>
+<h4 tal:condition="msg | False"
+            tal:content="msg">
+</h4>
+
 
 <tal:block tal:condition="not view.logged_in">
     <form action="login">

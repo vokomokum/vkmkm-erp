@@ -15,7 +15,7 @@
         <tal:iefixstart replace="structure string:&lt;!--[if IE]&gt;" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/ie.css" />
         <tal:iefixend replace="structure string:&lt;![endif]--&gt;" />
-        <!--title tal:content="view.title | title | 'Vokomokum Members'">Vokomokum Members</title-->
+        <title tal:content="view.title | title | 'Vokomokum Members'">Vokomokum Members</title>
         <link rel="shortcut icon" type="image/x-icon" href="${portal_url}favicon.ico" />
  
     </head>
@@ -56,8 +56,9 @@
 
         </div>
 
-        <!--h1 tal:content="title"></h1-->
-        <h4 tal:content="msg"></h4>
+        <h4 tal:condition="msg | False"
+            tal:content="msg">
+        </h4>
 
         <div id="content">
             <metal:block define-slot="content">
