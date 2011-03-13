@@ -5,12 +5,17 @@
         <div metal:fill-slot="content">
 
 
-<form action="member/edit" method="post">
+
+<form tal:attributes="action python: '%s/member/%d' % (portal_url, m.id if m.id else -1)" method="post"
+      tal:condition="m">
+    <div tal:content="m.id"></div>
+
+    <h1>Editing Member Details</h1>
 
     <input tal:condition="m.exists"
            type="hidden" name="id" value="${m.id}">
     </input>
-    
+
     <!-- Name & email -->
     <span class="bold">
     <table class="main" width="100%">
@@ -24,13 +29,13 @@
         <td align="left" width="40%">Email:</td>
       </tr>
       <tr class="special">
-        <td><input type="text" align="left" size="20" name="Forename"
+        <td><input type="text" align="left" size="20" name="mem_fname"
                    value="${m.mem_fname}" maxlength="20"></input></td> 
-        <td><input type="text" align="left" size="10" name="Prefix"
+        <td><input type="text" align="left" size="10" name="mem_prefix"
                    value="${m.mem_prefix}" maxlength="10"></input></td>
-        <td><input type="text" align="left" size="20" name="Lastname"
+        <td><input type="text" align="left" size="20" name="mem_lname"
                    value="${m.mem_lname}" maxlength="20"></input></td>
-        <td><input type="text" align="left" size="50" name="Email"
+        <td><input type="text" align="left" size="50" name="mem_email"
                    value="${m.mem_email}" maxlength="50"></input></td>
       </tr>
     </table>
@@ -53,15 +58,15 @@
         <td align="left" width="25%"><font color="red">*</font> City:</td>
       </tr>
       <tr class="special">
-        <td><input type="text" align="left" size="30" name="Street"
+        <td><input type="text" align="left" size="30" name="mem_street"
                  Value="${m.mem_street}" maxlength="60"></input></td>
-        <td><input type="text" align="left" size="7" name="Houseno"
+        <td><input type="text" align="left" size="7" name="mem_house"
                  Value="${m.mem_house}" maxlength="7"></input></td>
-        <td><input type="text" align="left" size="7" name="Apt"
+        <td><input type="text" align="left" size="7" name="mem_flatno"
                  Value="${m.mem_flatno}" maxlength="7"></input></td>
-        <td><input type="text" align="left" size="7" name="Postcode"
+        <td><input type="text" align="left" size="7" name="mem_postcode"
                  Value="${m.mem_postcode}" maxlength="7"></input></td>
-        <td><input type="text" align="left" size="30" name="City"
+        <td><input type="text" align="left" size="30" name="mem_city"
                 Value="${m.mem_city}" maxlength="60"></input></td>
       </tr>
     </table>
@@ -79,11 +84,11 @@
         <td align="left" width="33%">Mobile:</td> 
       </tr>
       <tr class="special">
-        <td><input type="text" align="left" size="20" name="Homeph"
+        <td><input type="text" align="left" size="20" name="mem_home_tel"
                  Value="${m.mem_home_tel}" maxlength="20"></input></td>
-        <td><input type="text" align="left" size="20" name="Workph"
+        <td><input type="text" align="left" size="20" name="mem_work_tel"
                  Value="${m.mem_work_tel}" maxlength="20"></input></td>
-        <td><input type="text" align="left" size="20" name="Mobile"
+        <td><input type="text" align="left" size="20" name="mem_mobile"
                  Value="${m.mem_mobile}" maxlength="20"></input></td>
       </tr>
     </table>
@@ -97,7 +102,7 @@
          color="red">(required)</font> Use '12345678' if not known</td>
        </tr>
        <tr class="special" align="center">
-         <td><input type="text" align="left" size="12" name="Account"
+         <td><input type="text" align="left" size="12" name="mem_bank_no"
                  Value="${m.mem_bank_no}" maxlength="12"></input></td>
       </tr>
     </table>
@@ -111,11 +116,11 @@
       </tr>
       <tr class="special">
         <td align="left">Password:</td> 
-        <td><input type="password" align="left" size="30" name="Pwd0" maxlength="30"/></td>
+        <td><input type="password" align="left" size="30" name="pwd0" maxlength="30"/></td>
       </tr>
       <tr class="special">
         <td align="left">Retype:</td> 
-        <td><input type="password" align="left" size="30" name="Pwd1" maxlength="30"/></td>
+        <td><input type="password" align="left" size="30" name="pwd1" maxlength="30"/></td>
       </tr>
     </table>
     </tal:block>
@@ -129,22 +134,22 @@
        </tr>
        <tr class="special">
          <td align="right">
-            <input type="checkbox" id="Active" name="Active" checked="${m.mem_active}" /></td>
+            <input type="checkbox" name="mem_active" checked="${m.mem_active}" /></td>
          <td align="left"><label for="Active">Member is active and can log in and order goods</label></td>
        </tr>
        <tr class="special">
          <td align="right">
-            <input type="checkbox" id="Mem_Paid" name="Mem_Paid" checked="${m.mem_membership_paid}" /></td>
+            <input type="checkbox" name="mem_membership_paid" checked="${m.mem_membership_paid}" /></td>
          <td align="left"><label for="Mem_Paid">Membership fee is paid</label></td>
        </tr>
        <tr class="special">
          <td align="right"> 
-            <input type="checkbox" id="Admin" name="Admin" checked="${m.mem_admin}" /></td>
+            <input type="checkbox" name="mem_admin" checked="${m.mem_admin}" /></td>
          <td align="left"><label for="Admin">Member has administrator privileges</label></td>
        </tr>
        <tr class="special">
          <td align="right"> 
-            <input type="checkbox" id="Spclacct" name="Spclacct" checked="${m.mem_adm_adj}" /></td>
+            <input type="checkbox" name="mem_adm_adj" checked="${m.mem_adm_adj}" /></td>
          <td align="left"><label for="Spclacct">Administrator's account - can order goods after commits are closed</label></td>
        </tr>
     </table>
@@ -153,12 +158,11 @@
 
     <table width="100%">
         <tr align="center">
-            <tal:block tal:condition="not m.exists">
-            <td><input type="submit" value="Create" name="create"></input></td>
-            </tal:block>
-            <tal:block tal:condition="m.exists">
-            <td align="center"><input type="submit" value="Save" name="save"></input></td>
-            </tal:block>
+            <td width="80%"></td>
+            <td width="20%" align="center">
+                <input type="submit" value="save" name="action"></input>
+                <input type="submit" value="delete" name="action"></input>
+            </td>
         </tr>
     </table>
 

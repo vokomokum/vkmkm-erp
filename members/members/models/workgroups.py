@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, Integer, Unicode, Boolean
 from sqlalchemy.orm import relationship
-from sqlalchemy import ForeignKey 
+from sqlalchemy import ForeignKey
 
 from setup import Base
 from member import Member

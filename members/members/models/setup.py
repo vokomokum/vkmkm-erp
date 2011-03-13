@@ -21,7 +21,6 @@ def initialize_sql(engine):
         from shift import Shift
         from workgroups import Workgroup
 
-
         import md5
         import transaction
         test_member = Member(fname=u'Peter', prefix=u'de', lname='Pan')
