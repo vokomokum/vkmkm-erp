@@ -174,7 +174,7 @@ sub process {
 	    ($aant, $inh) = ($inh, $aant) 
 	};
 	$aant = int($aant);
-	$h{omschrijving} .= " $inh $h{eenheid} ($aant per wholesale order)";
+	$h{omschrijving} .= " $inh $h{eenheid} ($aant per omdoos)";
 	$h{btw} = $btws[$h{btw}];
 	$sth = prepare("SELECT put_dnb(?, " .  # prcode
                                  "?,  ?, " .   # supplier   barcode

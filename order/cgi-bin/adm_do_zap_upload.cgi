@@ -161,7 +161,7 @@ sub process {
 	$h{inkoopprijs} =~ s/,/./;
 	my $aant = int($h{aantal});
 	$h{wh_pri} = int(100 * $aant * $h{inkoopprijs});
-	$h{omschrijving} .= " ($aant per wholesale order)";
+	$h{omschrijving} .= " ($aant per omdoos)";
 	$h{btw} =~ s/,/./;
 	$sth = prepare("SELECT put_zap(?, " .  # prcode
                                  "?, " .       # descr
