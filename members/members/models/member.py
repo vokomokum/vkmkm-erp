@@ -54,10 +54,11 @@ class Member(Base):
         self.mem_fname = fname
         self.mem_prefix = prefix
         self.mem_lname = lname
+        self.mem_active = True
         self.exists = False
 
     def __repr__(self):
-        return self.fullname()
+        return str(self.id)
 
     def fullname(self):
         return "%s %s %s" % (self.mem_fname, self.mem_prefix, self.mem_lname)

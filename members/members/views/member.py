@@ -29,7 +29,6 @@ class MemberView(BaseView):
             return dict(m = None, msg = 'Invalid ID.')
         self.session = DBSession()
         member = self.mkmember(self.request)
-        print "==============================", member
         if not member:
             return dict(m=None, msg="No member with id %d" % id)
         if not self.request.params.has_key('action'):
@@ -95,6 +94,8 @@ class MemberView(BaseView):
 
 @view_config(renderer='../templates/list-members.pt', route_name='memberlist')
 class MemberlistView(BaseView):
+
+    tab = 'members'
 
     def __call__(self):
         dbsession = DBSession()

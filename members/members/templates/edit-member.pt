@@ -6,9 +6,8 @@
 
 
 
-<form tal:attributes="action python: '%s/member/%d' % (portal_url, m.id if m.id else -1)" method="post"
-      tal:condition="m">
-    <div tal:content="m.id"></div>
+<form tal:attributes="action python: '%s/member/%d' % (portal_url, m.id if m.id else -1)"
+      method="post" tal:condition="m">
 
     <h1>Editing Member Details</h1>
 
@@ -153,6 +152,9 @@
          <td align="left"><label for="Spclacct">Administrator's account - can order goods after commits are closed</label></td>
        </tr>
     </table>
+
+    <!-- TODO: workgroup memberships here -->
+
 
     <!-- Submit -->
 

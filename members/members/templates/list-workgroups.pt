@@ -10,21 +10,17 @@
             <table class="main" width="100%">
                 <tr>
                     <th width="5%">ID</th>
-                    <th width="17%">Name</th>
-                    <th width="20%">Email</th>
-                    <th width="38%">Street</th>
-                    <th width="20%">City</th>
+                    <th width="25%">Name</th>
+                    <th width="70%">Description</th>
                 </tr>
-                <tr tal:repeat="m members" class="special">
+                <tr tal:repeat="wg workgroups" class="special">
                     <td>
-                        <a href="member/${m.id}" tal:content="m.id" title="show/edit"></a>
+                        <a href="workgroup/${wg.id}" tal:content="wg.id" title="show/edit"></a>
                     </td>
                      <td>
-                        <a href="member/${m.id}" tal:content="m.fullname()" title="show/edit"></a>
+                        <a href="workgroup/${wg.id}" tal:content="wg.name" title="show/edit"></a>
                     </td>
-                    <td><span tal:content="m.mem_email" tal:condition="m.mem_email"></span></td>
-                    <td tal:content="m.add_street()"></td>
-                    <td tal:content="m.add_city()"></td>
+                    <td tal:content="wg.desc"></td>
                 </tr>
             </table>
 

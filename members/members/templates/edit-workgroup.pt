@@ -1,0 +1,70 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+
+<form tal:attributes="action python: '%s/workgroup/%d' % (portal_url, wg.id if wg.id else -1)"
+      method="post" tal:condition="wg">
+
+    <h1>Editing Workgroup Details</h1>
+
+    <input tal:condition="wg.exists"
+           type="hidden" name="id" value="${wg.id}">
+    </input>
+   
+    <!-- Data -->
+    <table class="main" width="90%" align="center">
+      <tr class="special">
+        <td align="center" width="25%">Name:</td> 
+        <td align="center" width="45%">Description:</td>
+        <td align="center" width="20%">Leader:</td>
+        <td align="center" width="20%">Members:</td>
+      </tr>
+      <tr class="special">
+        <td><input type="text" align="left" size="40" name="name"
+                   value="${wg.name}" maxlength="255">
+            </input>
+        </td> 
+        <td><textarea tal:content="wg.desc" rows="10" cols="80" name="desc"></textarea></td>
+        <td>
+            <select name="leader_id" size="1" tal:define="lid python: str(wg.leader_id)">
+                    <tal:block tal:repeat="pm view.possible_members">
+                    <option tal:condition="python: str(pm.id) == lid"
+                            tal:content="pm.fullname()" selected="selected"
+                            value="${pm.id}">
+                    </option>
+                    <option tal:condition="python: str(pm.id) != lid"
+                            tal:content="pm.fullname()" value="${pm.id}">
+                    </option>
+                </tal:block>
+            </select>
+        </td>
+        <td>
+            <select name="wg_members" size="1" multiple="multiple">
+                <tal:block tal:repeat="pm view.possible_members">
+                    <option tal:condition="python:pm in wg.members" tal:content="pm.fullname()" value="${pm.id}" selected="selected"></option>
+                    <option tal:condition="python:pm not in wg.members" tal:content="pm.fullname()" value="${pm.id}"></option>
+                </tal:block>
+            </select>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Submit -->
+    <table width="80%">
+        <tr align="center">
+            <td width="80%"></td>
+            <td width="20%" align="center">
+                <input type="submit" value="save" name="action"></input>
+                <input type="submit" value="delete" name="action"></input>
+            </td>
+        </tr>
+    </table>
+
+</form>
+
+        </div>
+    </div>
+</html>

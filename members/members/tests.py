@@ -21,6 +21,7 @@ class TestModel(unittest.TestCase):
         self.config = testing.setUp()
         self.session = _initTestingDB()
         test_member = Member(fname=u'Peter', prefix=u'de', lname='Pan')
+        test_member2 = Member(fname=u'Hans', prefix=u'de', lname='Wit')
         self.session.add(test_member)
         test_workgroup = Workgroup(name=u'Systems', desc=u'IT stuff')
         self.session.add(test_workgroup)
@@ -28,6 +29,8 @@ class TestModel(unittest.TestCase):
         self.session.add(test_workgroup2)
         self.session.flush() # flush now to get member and workgroup IDs
         test_member.workgroups.append(test_workgroup)
+        test_workgroup2.members.append(test_member)
+        test_workgroup2.members.append(test_member2)
         test_shift = Shift(wg_id=test_workgroup.id, mem_id=test_member.id, year=2011, month=2)
         self.session.add(test_shift)
         self.session.flush()
@@ -36,6 +39,7 @@ class TestModel(unittest.TestCase):
     def tearDown(self):
         s = self.session
         s.delete(s.query(Member).filter(Member.mem_fname == 'Peter').first())
+        s.delete(s.query(Member).filter(Member.mem_fname == 'Hans').first())
         for wg_name in ['Systems', 'Besteling']:
             wg = s.query(Workgroup).filter(Workgroup.name == wg_name).first()
             for shift in s.query(Shift).filter(Shift.wg_id == wg.id).all():
@@ -69,6 +73,15 @@ class TestModel(unittest.TestCase):
         self.session.flush()
         shifts = get_shifts()
         self.assertEqual(shift.day, 3)
+
+    def test_membership(self):
+        peter = self.session.query(Member).filter(Member.mem_fname==u'Peter').first()
+        hans = self.session.query(Member).filter(Member.mem_fname==u'Hans').first()
+        wg1 = self.session.query(Workgroup).filter(Workgroup.name==u'Systems').first()
+        wg2 = self.session.query(Workgroup).filter(Workgroup.name==u'Besteling').first()
+        self.failUnless(peter in wg1.members)
+        self.failUnless(peter in wg2.members)
+        self.failUnless(hans in wg2.members)
 
     '''
     # TODO: test some view and template, maybe in another test case

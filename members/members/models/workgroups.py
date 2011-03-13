@@ -24,9 +24,10 @@ class Workgroup(Base):
     def __init__(self, name, desc):
         self.name = name
         self.desc = desc
+        self.exists = False
 
     def __repr__(self):
-        return self.name
+        return str(self.id)
 
     def set_leader(self, leader_id):
         self.leader_id = leader_id
