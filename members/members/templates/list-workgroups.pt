@@ -7,6 +7,11 @@
             <!--a href="members/new" tal:condition="">
                 Create new member
             </a-->
+            <!--span Sort:
+                <span tal:content="sort_alt"></span>
+                <a href="workgroups?sort=${sort_alt}" tal:content="sort_alt"></a>
+            </span-->
+
             <table class="main" width="100%">
                 <tr>
                     <th width="5%">ID</th>

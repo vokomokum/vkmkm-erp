@@ -26,12 +26,15 @@ class Login(BaseView):
             if member:
                 #import md5
                 #if member.mem_enc_pwd == md5.new(passwd).digest():
+                print member.mem_enc_pwd, passwd
                 if member.mem_enc_pwd == passwd:
                     self.logged_in = True
                     headers = remember(self.request, login)
                     return HTTPFound(location = came_from,
                         headers = headers)
-            message = 'Failed login'
+            else:
+                message = 'Member not found. '
+            message += 'The Login failed.'
 
         return dict(msg = message,
                     url = self.request.application_url + '/login',

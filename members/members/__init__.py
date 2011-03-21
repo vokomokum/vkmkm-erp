@@ -24,8 +24,10 @@ def main(global_config, **settings):
         authentication_policy = authn_policy,
         authorization_policy = authz_policy)
 
+    config.add_view(context='pyramid.exceptions.NotFound',
+                    view='pyramid.view.append_slash_notfound_view')
 
-    config.add_renderer('.pt', 'pyramid.chameleon_zpt.renderer_factory')
+    #config.add_renderer('.pt', 'pyramid.chameleon_zpt.renderer_factory')
     config.add_static_view('static', 'members:static')
     config.add_route('home', '/')
     config.add_route('login', '/login')
@@ -36,7 +38,6 @@ def main(global_config, **settings):
     config.add_route('workgrouplist', '/workgroups')
     config.add_route('new_workgroup', '/workgroups/new')
     config.add_route('workgroup', '/workgroup/{id}')
-    config.add_route('test', '/test')
     config.scan()
     #config.add_route('home', '/', view='members.views.views.TestView',
     #                 view_renderer='templates/mytemplate.pt')

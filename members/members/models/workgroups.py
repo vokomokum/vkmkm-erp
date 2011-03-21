@@ -27,7 +27,7 @@ class Workgroup(Base):
         self.exists = False
 
     def __repr__(self):
-        return str(self.id)
+        return self.name
 
     def set_leader(self, leader_id):
         self.leader_id = leader_id

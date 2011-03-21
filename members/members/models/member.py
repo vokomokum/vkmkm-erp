@@ -58,13 +58,13 @@ class Member(Base):
         self.exists = False
 
     def __repr__(self):
-        return str(self.id)
+        return self.fullname()
 
     def fullname(self):
         return "%s %s %s" % (self.mem_fname, self.mem_prefix, self.mem_lname)
 
-    def add_street(self):
+    def addr_street(self):
         return "%s %s%s" % (self.mem_street, self.mem_house, self.mem_flatno)
 
-    def add_city(self):
+    def addr_city(self):
         return "%s %s" % (self.mem_postcode, self.mem_city)

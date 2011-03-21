@@ -1,0 +1,10 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+        Welcome to the Vokomokum Members application.
+        For help or questions, please contact <a href="mailto:nhoening@gmail.com">Nicolas</a>.
+        </div>
+    </div>
+</html>

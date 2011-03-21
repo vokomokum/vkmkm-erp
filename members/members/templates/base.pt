@@ -28,7 +28,7 @@
             <ul id="main-menu">
                 <tal:block tal:condition="view.logged_in">
                 <li>
-                    <a href="${portal_url}/account" title="My Account">Account</a>
+                    <a href="${portal_url}/account" title="My Account" tal:content="user.fullname()">Account</a>
                 </li>
                 <li>
                     <a href="${portal_url}/logout" title="Log out">Log Out</a>
@@ -61,16 +61,44 @@
         </h4>
 
         <div id="content">
-            <metal:block define-slot="content">
-                <div metal:define-macro="content" />
-            </metal:block>
+            <tal:block tal:condition="not view.logged_in">
+                <form action="${portal_url}/login" method="post">
+                    <table>
+                        <tr>
+                            <td>Username:</td>
+                            <td>
+                                <input tal:define="origin came_from | None" type="hidden" name="came_from" length="30" value="${origin}"/><br/>
+                                <input type="text" name="login" length="30"/><br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Password:</td>
+                            <td>
+                                <input type="password" name="passwd" length="30"/><br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="submit" name="form.submitted"/>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </tal:block>
+
+            <tal:block tal:condition=" not view.logged_in">
+
+                <metal:block define-slot="content">
+                    <div metal:define-macro="content" />
+                </metal:block>
+            </tal:block>
         </div>
 
         <div id="footer">
             <a href="http://vokomokum.nl"
                 alt="Vokomokum Food Cooperative"
                 title="Go to Vokomokum Food Cooperative">
-                    <img src="${portal_url}voko_footer.png" />
+                    <img src="${portal_url}/voko_footer.png" />
             </a>
         </div>
 

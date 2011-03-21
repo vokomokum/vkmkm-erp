@@ -3,10 +3,22 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal">
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
-           
-            <!--a href="members/new" tal:condition="">
-                Create new member
-            </a-->
+            
+            <!-- TODO: --> 
+            <form option="${portal_url}/members" method="post" id="list-options">
+                <span class="list-option"> Sort by:
+                    <input type="radio" name="order_by" value="${order_by}" tal:content="order_by" checked="checked"/>
+                    <input type="radio" name="order_by" value="${order_alt}" tal:content="order_alt"/>
+                </span>
+                <span class="list-option">-
+                    <input type="radio" name="include_inactive"></input>               
+                    Include inactive
+                </span>
+                <input type="submit" value="List"/>
+                <a href="members/new" tal:condition="1==1">
+                    Create new
+                </a>
+            </form>
             <table class="main" width="100%">
                 <tr>
                     <th width="5%">ID</th>
@@ -23,8 +35,8 @@
                         <a href="member/${m.id}" tal:content="m.fullname()" title="show/edit"></a>
                     </td>
                     <td><span tal:content="m.mem_email" tal:condition="m.mem_email"></span></td>
-                    <td tal:content="m.add_street()"></td>
-                    <td tal:content="m.add_city()"></td>
+                    <td tal:content="m.addr_street()"></td>
+                    <td tal:content="m.addr_city()"></td>
                 </tr>
             </table>
 

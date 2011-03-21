@@ -51,3 +51,7 @@ td.descr     {text-align:left; width:60em;}
 td.number    {text-align:right;width:6em;}
 
 
+/* Forms */
+#list-options  {padding:3px; border: 1px solid black; display:table;}
+#list-options a{padding-right:4px; color: #b0ffb0;}
+.list-option   {padding-right:4px; color: #c0c0c0;}
