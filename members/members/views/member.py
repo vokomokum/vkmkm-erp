@@ -45,7 +45,10 @@ class MemberView(BaseView):
                     self.checkmember(member)
                     if id == 'fresh':
                         self.checkpwd(self.request)
-                        member.mem_enc_pwd = self.request.params['pwd1']
+                        import md5
+                        enc_pwd = md5.new(self.request.params['pwd1']).digest()
+                        member.mem_enc_pwd = enc_pwd.decode('iso-8859-1')
+                        #member.mem_enc_pwd = self.request.params['pwd1']
                     if not member.mem_enc_pwd:
                         raise MemberCreationException('Member has no password.')
                     self.session.add(member)

@@ -21,13 +21,11 @@ class Login(BaseView):
         if 'form.submitted' in self.request.params:
             login = self.request.params['login']
             passwd = self.request.params['passwd']
-            if passwd == "":
-                passwd = None
             member = get_member(login)
             if member:
-                #import md5
-                #if member.mem_enc_pwd == md5.new(passwd).digest():
-                if member.mem_enc_pwd == passwd:
+                import md5
+                enc_pwd = md5.new(passwd).digest().decode('iso-8859-1')
+                if member.mem_enc_pwd == enc_pwd:
                     self.logged_in = True
                     headers = remember(self.request, member.id)
                     return HTTPFound(location = came_from,

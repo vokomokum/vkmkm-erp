@@ -11,7 +11,6 @@ def main(global_config, **settings):
     """
     This function returns a Pyramid WSGI application.
     """
-    print "WAAAH"
     engine = engine_from_config(settings, 'sqlalchemy.')
     initialize_sql(engine)
     f = open('auth.key', 'r')
@@ -39,8 +38,6 @@ def main(global_config, **settings):
     config.add_route('new_workgroup', '/workgroups/new')
     config.add_route('workgroup', '/workgroup/{id}')
     config.scan()
-    #config.add_route('home', '/', view='members.views.views.TestView',
-    #                 view_renderer='templates/mytemplate.pt')
 
 
     return config.make_wsgi_app()
