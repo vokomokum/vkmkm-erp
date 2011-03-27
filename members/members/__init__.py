@@ -4,7 +4,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from sqlalchemy import engine_from_config
 
 from members.models.setup import initialize_sql
-from security import groupfinder
+from members.security import groupfinder
 
 
 def main(global_config, **settings):

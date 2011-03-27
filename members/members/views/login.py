@@ -12,7 +12,6 @@ from members.views.base import BaseView
 class Login(BaseView):
 
     def __call__(self):
-        print "LOGIN"
         login_url = route_url('login', self.request)
         referrer = self.request.url
         if referrer == login_url:
@@ -22,19 +21,22 @@ class Login(BaseView):
         if 'form.submitted' in self.request.params:
             login = self.request.params['login']
             passwd = self.request.params['passwd']
+            if passwd == "":
+                passwd = None
             member = get_member(login)
             if member:
                 #import md5
                 #if member.mem_enc_pwd == md5.new(passwd).digest():
-                print member.mem_enc_pwd, passwd
                 if member.mem_enc_pwd == passwd:
                     self.logged_in = True
-                    headers = remember(self.request, login)
+                    headers = remember(self.request, member.id)
                     return HTTPFound(location = came_from,
                         headers = headers)
+                else:
+                    message += 'The password is not correct.'
             else:
-                message = 'Member not found. '
-            message += 'The Login failed.'
+                message += ' Member not found. '
+            message += ' The Login failed.'
 
         return dict(msg = message,
                     url = self.request.application_url + '/login',
@@ -47,9 +49,5 @@ class Logout(BaseView):
 
     def __call__(self):
         headers = forget(self.request)
-        #return HTTPFound(location = route_url('home', self.request),
-        #                 headers = headers)
-        self.logged_in = False
-
-        return dict(logged_in = False,
-                    msg = 'You have been logged out')
+        return HTTPFound(location = route_url('home', self.request),
+                         headers = headers)

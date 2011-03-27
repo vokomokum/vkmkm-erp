@@ -37,7 +37,7 @@ class MemberView(BaseView):
         if not member:
            return dict(m=None, msg="No member with id %d" % id)
         if not self.request.params.has_key('action'):
-            return dict(m = member, msg='')
+            return dict(m = member, msg='', came_from='/member/%d' % member.id)
         else:
             action = self.request.params['action']
             if action == "save":
@@ -45,6 +45,9 @@ class MemberView(BaseView):
                     self.checkmember(member)
                     if id == 'fresh':
                         self.checkpwd(self.request)
+                        member.mem_enc_pwd = self.request.params['pwd1']
+                    if not member.mem_enc_pwd:
+                        raise MemberCreationException('Member has no password.')
                     self.session.add(member)
                     self.session.flush()
                     new_id = member.id
@@ -120,13 +123,13 @@ class MemberView(BaseView):
             raise MemberCreationException('We still require you to fill in: %s'\
                                     % ', '.join([m[4:] for m in missing]))
         # TODO check email
-        if 1 == 2:
+        if not '@' in m.mem_email:
             raise MemberCreationException('The email address does not seem to be valid.')
         # check postcode
         if not (m.mem_postcode[:4].isdigit() and m.mem_postcode[-2:].isalpha()):
             raise MemberCreationException('The email postcode does not seem to be valid (should be NNNNLL, where N=number and L=letter).')
         # check house no
-        if not m.mem_house_no.isdigit():
+        if not m.mem_house.isdigit():
             raise MemberCreationException('House number should just be a number.')
         # check bank no
         if len(m.mem_bank_no) < 7 or len(m.mem_bank_no) > 8:
@@ -164,6 +167,6 @@ class MemberlistView(BaseView):
 
         #TODO: check if non-active members should be here, filter them out in the first place
 
-        return dict(members = m_query.all(), msg='', order_by=order_by, order_alt=order_alt)
+        return dict(members = m_query.all(), msg='', order_by=order_by, order_alt=order_alt, came_from='/members')
 
 
