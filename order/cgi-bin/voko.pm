@@ -273,7 +273,7 @@ sub test_cookie {
     $sth->execute($mem_id);
     my $href = $sth->fetchrow_hashref;
     $sth->finish;
-    if(not defined($href) or not $href->{mem_id}) {
+    if(not defined($href) or not $href->{mem_id} or not $href->{mem_active}) {
 	return -3;
     }
     $href->{mem_cookie} =~ s/^\s*([^\s]*)\s*/$1/ 
@@ -341,7 +341,8 @@ sub handle_cookie {
 
     if(not defined($href->{mem_cookie}) or
        $href->{mem_cookie} ne $key or 
-       $href->{mem_ip} ne $ENV{REMOTE_ADDR}) {
+       $href->{mem_ip} ne $ENV{REMOTE_ADDR} or
+	not $href->{mem_active}) {
 	force_login($config, $cgi, $dbh);
     }
     $config->{mem_name} = escapeHTML(sprintf "%s %s%s", 
