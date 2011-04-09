@@ -156,7 +156,7 @@ sub doit {
     my ($config, $cgi, $dbh) = @_;
 
     my $vars = $cgi->Vars;
-    dump_stuff("vars", "", "", $vars);
+    #dump_stuff("vars", "", "", $vars);
     if(defined($vars->{"Delete"})) {
 	my $sth = prepare("DELETE FROM default_order WHERE mem_id = ?", $dbh);
 	$sth->execute($mem_id);

@@ -249,9 +249,9 @@ sub get_wholesale_data {
     $mem_sth->finish;
     $sth->finish;
     $dbh->commit;
-    dump_stuff("wh_tots", "", "", \%wh_tots);
+    #dump_stuff("wh_tots", "", "", \%wh_tots);
     $kassa_list->{wholesalers} = \%wh_tots;
-    dump_stuff("kassa_list", "", "", $kassa_list);
+    #dump_stuff("kassa_list", "", "", $kassa_list);
     return $kassa_list;
 }
 
