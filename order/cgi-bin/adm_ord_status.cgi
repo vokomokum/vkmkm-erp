@@ -508,7 +508,7 @@ EOS
 	    email_chunk($fh, "shortage_2_html.template", $href, $config);
 	}
 	email_chunk($fh, "shortage_3_html.template", $rows[0], $config);
-	email_chunk($fh, "sig_txt.template", {}, $config);
+	email_chunk($fh, "sig_html.template", {}, $config);
 	close($fh);
     }
 }
