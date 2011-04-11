@@ -28,9 +28,11 @@ class Workgroup(Base):
                 (Allow, 'group:wg-leaders', ('view', 'edit')),
                 (Allow, 'group:wg-members', 'view'), DENY_ALL ]
 
-    def __init__(self, request):
+    def __init__(self, request=None, name='', desc=''):
         ''' receiving request makes this class a factory for views '''
         self.exists = False
+        self.name = name
+        self.desc = desc
 
     def __repr__(self):
         return self.name

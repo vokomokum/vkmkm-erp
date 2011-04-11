@@ -51,21 +51,17 @@ class Member(Base):
     #mem_message_auth = Column(Integer())
     #mem_message_date = Column(DateTime()) #timestamp
 
-    __acl__ = [ (Allow, 'group:admins', 'edit'),
-                (Allow, 'group:admins', 'view'),
+    __acl__ = [ (Allow, 'group:admins', ('view', 'edit')),
+                (Allow, 'group:this-member', ('view', 'edit')),
                 DENY_ALL]
-    '''
-    def __init__(self, fname, prefix, lname):
-        self.mem_fname = fname
-        self.mem_prefix = prefix
-        self.mem_lname = lname
-        self.mem_active = True
-        self.exists = False
-    '''
-    def __init__(self, request):
+
+    def __init__(self, request=None, fname='', prefix='', lname=''):
         ''' receiving request makes this class a factory for views '''
         self.mem_active = True
         self.exists = False
+        self.mem_fname = fname
+        self.mem_prefix = prefix
+        self.mem_lname = lname
 
     def __repr__(self):
         return self.fullname()

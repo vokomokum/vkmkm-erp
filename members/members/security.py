@@ -39,8 +39,12 @@ def groupfinder(memid, request):
     groups = ['group:members']
     context = request.context
     print "GROUPFINDER"
-    #TODO: use id of context object to check workgroup
+    #TODO: use id of context object to check workgroup and member
     #if context.__class__ == Workgroup
+    #    groups.append('wg-members')
+    print request.params.keys()
+    if context.__class__ == Member and context.id == memid:
+        groups.append('this-member')
 
     wg_id = request.params.get('wg_id', -1)
     if wg_id >= 0:
