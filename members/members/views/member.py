@@ -6,7 +6,9 @@ from members.models.setup import DBSession
 from members.views.base import BaseView
 
 
-@view_config(renderer='../templates/edit-member.pt', route_name='new_member')
+@view_config(renderer='../templates/edit-member.pt',
+             route_name='new_member',
+             permission='edit')
 class NewMemberView(BaseView):
 
     tab = 'members'
@@ -19,7 +21,9 @@ class MemberCreationException(Exception):
     pass
 
 
-@view_config(renderer='../templates/edit-member.pt', route_name='member')
+@view_config(renderer='../templates/edit-member.pt',
+             route_name='member',
+             permission='edit')
 class MemberView(BaseView):
 
     tab = 'members'

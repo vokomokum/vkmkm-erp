@@ -11,7 +11,9 @@ def get_possible_members(session):
     return session.query(Member).filter(Member.mem_active==True).all()
 
 
-@view_config(renderer='../templates/edit-workgroup.pt', route_name='new_workgroup')
+@view_config(renderer='../templates/edit-workgroup.pt',
+             route_name='new_workgroup',
+             permission='edit')
 class NewWorkgroupView(BaseView):
 
     tab = 'workgroups'
@@ -21,7 +23,9 @@ class NewWorkgroupView(BaseView):
         return dict(wg = Workgroup('', ''), msg='')
 
 
-@view_config(renderer='../templates/edit-workgroup.pt', route_name='workgroup')
+@view_config(renderer='../templates/edit-workgroup.pt',
+             route_name='workgroup',
+             permission='edit')
 class WorkgroupView(BaseView):
 
     tab = 'workgroups'
@@ -43,6 +47,7 @@ class WorkgroupView(BaseView):
             action = self.request.params['action']
             if action == "save":
                 if self.request.params.has_key('wg_members'):
+                    wg.members = []
                     for mid in self.request.POST.getall('wg_members'):
                         m = self.session.query(Member).filter(Member.id == mid).first()
                         wg.members.append(m)

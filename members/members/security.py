@@ -37,12 +37,18 @@ def authenticated_user(request):
 def groupfinder(memid, request):
     session = DBSession()
     groups = ['group:members']
+    context = request.context
+    print "GROUPFINDER"
+    #TODO: use id of context object to check workgroup
+    #if context.__class__ == Workgroup
+
     wg_id = request.params.get('wg_id', -1)
     if wg_id >= 0:
         wg = session.query(Workgroup).filter(Workgroup.id == wg_id and Workgroup.leader_id == memid).all()
         if len(wgs) > 0:
-            groups.append('group:leader')
+            groups.append('group:wg-leaders')
     admins = session.query(Member).filter(Member.mem_admin == True).all()
     if memid in [m.id for m in admins]:
         groups.append('group:admins')
+    print "User is in groups:", groups
     return groups

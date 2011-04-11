@@ -12,6 +12,8 @@ from sqlalchemy import Unicode
 from sqlalchemy import Boolean
 from sqlalchemy import DateTime
 
+from pyramid.security import Allow, DENY_ALL
+
 from setup import Base
 
 
@@ -49,11 +51,19 @@ class Member(Base):
     #mem_message_auth = Column(Integer())
     #mem_message_date = Column(DateTime()) #timestamp
 
-
+    __acl__ = [ (Allow, 'group:admins', 'edit'),
+                (Allow, 'group:admins', 'view'),
+                DENY_ALL]
+    '''
     def __init__(self, fname, prefix, lname):
         self.mem_fname = fname
         self.mem_prefix = prefix
         self.mem_lname = lname
+        self.mem_active = True
+        self.exists = False
+    '''
+    def __init__(self, request):
+        ''' receiving request makes this class a factory for views '''
         self.mem_active = True
         self.exists = False
 

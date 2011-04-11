@@ -4,7 +4,6 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
             
-            <!-- TODO: --> 
             <form option="${portal_url}/members" method="post" id="list-options">
                 <span class="list-option"> Sort by:
                     <input type="radio" name="order_by" value="${order_by}" tal:content="order_by" checked="checked"/>

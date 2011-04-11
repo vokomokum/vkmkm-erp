@@ -4,26 +4,22 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
            
-            <!--a href="members/new" tal:condition="">
-                Create new member
-            </a-->
-            <!--span Sort:
-                <span tal:content="sort_alt"></span>
-                <a href="workgroups?sort=${sort_alt}" tal:content="sort_alt"></a>
-            </span-->
-
             <table class="main" width="100%">
                 <tr>
                     <th width="5%">ID</th>
-                    <th width="25%">Name</th>
-                    <th width="70%">Description</th>
+                    <th width="15%">Name</th>
+                    <th width="20%">LeaderName</th>
+                    <th width="65%">Description</th>
                 </tr>
                 <tr tal:repeat="wg workgroups" class="special">
                     <td>
                         <a href="workgroup/${wg.id}" tal:content="wg.id" title="show/edit"></a>
                     </td>
-                     <td>
+                    <td>
                         <a href="workgroup/${wg.id}" tal:content="wg.name" title="show/edit"></a>
+                    </td>
+                    <td tal:define="l wg.leader">
+                        <a href="member/${l.id}" tal:content="l.fullname()" title="This member is registered leader of this workgroup"></a>
                     </td>
                     <td tal:content="wg.desc"></td>
                 </tr>

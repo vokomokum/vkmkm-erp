@@ -168,6 +168,28 @@
 
 </form>
 
+<h3 tal:condition="not m.workgroups"
+    tal:content="python: m.fullname() + ' is not member of any workgroup.'">
+</h3>
+<h3 tal:condition="m.workgroups"
+    tal:content="python: m.fullname() + ' is member of these workgroups:'">
+</h3>
+
+<ul>
+    <li tal:repeat="wg m.workgroups">
+        <a href="${portal_url}/workgroup/${wg.id}" tal:content="wg.name"></a>
+    </li>
+</ul>
+
+
+<h3 tal:condition="m.led_wgs"
+    tal:content="python: m.fullname() + ' leads these workgroups:'">
+</h3>
+<ul>
+    <li tal:repeat="wg m.led_wgs">
+        <a href="${portal_url}/workgroup/${wg.id}" tal:content="wg.name"></a>
+    </li>
+</ul>
 
         </div>
     </div>
