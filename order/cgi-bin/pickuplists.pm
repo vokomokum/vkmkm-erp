@@ -1,9 +1,10 @@
 #!/usr/bin/perl
 
-# --------------------------------------
-# Call this script to generate pickup lists
-# (in your browsaer and for our files)
-# --------------------------------------
+# ---------------------------------------------------
+# Call this script to generate pickup lists:
+#  - in your browser, use Portrait mode and 80% scale
+#  - there will be a file created for backup
+# ---------------------------------------------------
 
 package voko;
 use strict;
@@ -42,7 +43,7 @@ our @EXPORT_OK;
 sub print_pickup_lists{
     my ($config, $dbh) = @_;
 
-    # we believe this many lines can fit vertically on DIN A4, scaled 50%
+    # we believe this many lines can fit vertically on a Portrait DIN A4 page, scaled 80%
     my $line_limit_vertical = 30;
     my $base_lines = 2; # we're always starting with two headlines
 
