@@ -43,7 +43,7 @@ sub print_pickup_lists{
     my ($config, $dbh) = @_;
 
     # we believe this many lines can fit vertically on DIN A4, scaled 50%
-    my $line_limit_vertical = 60;
+    my $line_limit_vertical = 30;
     my $base_lines = 2; # we're always starting with two headlines
 
     # check if actually the order status is 7 (order finished, invoices can be prepared)
@@ -62,7 +62,7 @@ sub print_pickup_lists{
         .pickup-list {
             float: left;
             width: 45%;
-            min-height: 695pt; /*best fit for half a page height for me in */
+            min-height: 245pt; /*best fit for half a page height for me in */
             padding: 2%;       /* FF at 50% print preview*/
             border: 1px solid black;
         }
@@ -112,7 +112,7 @@ sub print_pickup_lists{
    
     # find members and the number of their order items we need to list
     my $st = 'SELECT m.mem_id, join_name(m.mem_fname, m.mem_prefix, '.
-        'm.mem_lname) as mem_name, 10 + COUNT(*) as amount FROM members m, '.
+        'm.mem_lname) as mem_name, 4 + COUNT(*) as amount FROM members m, '.
         'mem_line ml WHERE ml.ord_no = ? AND m.mem_id = ml.mem_id '.
         'AND ml.meml_pickup > 0 '.
         'GROUP BY m.mem_id, m.mem_fname, m.mem_prefix, m.mem_lname '.
@@ -197,14 +197,14 @@ sub print_pickup_lists{
         #my $row = $sth3->fetchrow_hashref;
 	$list .= sprintf "\t\t\t\t<tr><td colspan='3'/><td class='res_col eur_col'>%.2f</td></tr>\n", $full_eur[0];
         #$list .= "\t\t\t\t<tr><td>incl. BTW:</td><td>$row->{total_inc_btw}</td><td colspan="2"/></tr>\n";
-        $list .= "\t\t\t\t<tr><td/><td colspan='2'>Statiegeld:</td><td/></tr>\n";
-        $list .= "\t\t\t\t<tr><td/><td colspan='2'>&nbsp;</td><td class='res_col'>&nbsp;</td></tr>\n";
-        $list .= "\t\t\t\t<tr><td/><td colspan='2'>Retour:</td></tr><td/>\n";
-        $list .= "\t\t\t\t<tr><td/><td colspan='2'>&nbsp;</td><td class='res_col'>&nbsp;</td></tr>\n";
-        $list .= "\t\t\t\t<tr><td colspan='4'>Notes:</td></tr>\n";
-        $list .= "\t\t\t\t<tr><td/><td colspan='2'>&nbsp;</td></tr>\n";
-        $list .= "\t\t\t\t<tr><td/><td colspan='2'>&nbsp;</td></tr>\n";
-        $lines_on_page += 8;       
+        #$list .= "\t\t\t\t<tr><td/><td colspan='2'>Statiegeld:</td><td/></tr>\n";
+        #$list .= "\t\t\t\t<tr><td/><td colspan='2'>&nbsp;</td><td class='res_col'>&nbsp;</td></tr>\n";
+        #$list .= "\t\t\t\t<tr><td/><td colspan='2'>Retour:</td></tr><td/>\n";
+        ##$list .= "\t\t\t\t<tr><td/><td colspan='2'>&nbsp;</td><td class='res_col'>&nbsp;</td></tr>\n";
+        #$list .= "\t\t\t\t<tr><td colspan='4'>Notes:</td></tr>\n";
+        #$list .= "\t\t\t\t<tr><td/><td colspan='2'>&nbsp;</td></tr>\n";
+        #$list .= "\t\t\t\t<tr><td/><td colspan='2'>&nbsp;</td></tr>\n";
+        $lines_on_page += 2;       
         $sth2->finish;
         $list .= "\t\t\t</table>\n";
         $list .= "\t\t</div>\n";
@@ -235,7 +235,7 @@ sub tableHead {
         $out .= "\t\t\t<br/>\n";
     }
     $out .= "\t\t\t<table class='pickup-table'>\n";
-    $out .= "\t\t\t\t<thead class='pickup-table-head'><td>Product</td><td>Quantity</td><td class='lesser'>Price</td><td>Sum</td></thead>\n";
+    $out .= "\t\t\t\t<thead class='pickup-table-head'><td>Product</td><td>Qiy</td><td class='lesser'>Price</td><td>Sum</td></thead>\n";
 }
 
 # return day-month-year as a string
