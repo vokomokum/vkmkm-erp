@@ -65,40 +65,22 @@ sub get_ss_vars {
     foreach my $l (@data) {
 	++$line_no;
 	$l =~ s/\s+$//;	next if($l =~ /^$/);
-	if($state == 0) {
-	    # do the bestelling line
-	    $state = 1;
-	    if($l !~ /.*[^0-9,.-]([0-9,.-]+)\s+Bestelling$/) {
-		$err_msgs = err_msg_2_html((sprintf 
-		    "Row %d does not end with a price and the word Bestelling - update rejected\n", 
-		    $line_no), $err_msgs, $config);
-		return ({}, "");
-	    }
-
-	    if($l !~ /^(\d+)/) {
-		$state = 2;
-		$err_msgs = err_msg_2_html((sprintf
-		    "Row %d does not begin with a member number, this row not processed\n",
-		    $line_no), $err_msgs, $config);
-		next;
-	    }
-	    $mem_no = $1;
+	if($l !~ /^(\d+)/) {
+	    $err_msgs = err_msg_2_html((sprintf
+					"Row %d does not begin with a member number, this row not processed\n",
+					$line_no), $err_msgs, $config);
 	    next;
 	}
-	
+	$mem_no = $1;
+		
 	# do the afgewogen line
-	if($l !~ /.*[^0-9,.-]([0-9.,-]+)\s+Afgewogen$/) {
+	if($l !~ /.*[^0-9,.-]([0-9.,-]+)\s+Afgewogen$/i) {
 	    $err_msgs = err_msg_2_html((sprintf 
 		"Row %d does not end with a price and the word Afgewogen - update rejected\n", 
 				       $line_no), $err_msgs, $config);
 	    return ({}, "");
 	}
-	# do nothing if we're skipping this line
-	if($state == 2) {
-	    $state = 0;
-	    next;
-	}
-	$state = 0;
+
 	$amount = $1;
 	$amount =~ s/,/./;
 	$amount = int(100 * $amount);
