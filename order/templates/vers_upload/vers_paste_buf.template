@@ -7,28 +7,19 @@ place the mouse in the text box below and press Control-V or right
 click and select Plakken (Paste). Then press the submit for the type
 of spreadsheet (Groente, Kaas or Miscellaneous. The
 site will check the data to be sure that all the member numbers are
-valid and that there is a number in the Afgewogen and Bestelling
-Columns.
+valid and that there is a valid number before the Afgewogen columns
 </p><br>Not all the data will be imported if:
 <ul><li>There is a member number which is not an active member of
 Vokomokum - no data will be imported at all</li>
 <li>The line with the member number does not end with the word
-'Bestelling' - no data will be imported at all</li>
-<li>The line following the member number does not end with the word
-'Afgewogen' - no data will be imported at all</li>
+'afgewogen - no data will be imported at all</li>
 <li>There isn't a valid number, greater than or equal to zero in the
-cells before 'Bestelling' and Afgewogen' - no data will be imported at all
-<li>If there is no member number at the start of the 'Bestelling'
-row, this row and its 'Afgewogen' line will be ignored</li>
+cell before Afgewogen' - no data will be imported at all
+<li>If there is no member number at the start of the 'afgewogen'
+row, this row will be ignored</li>
 <li>If the member has already checked out and this upload would change
 their vers amount, the data for that member will not be changed</li>
 </ul>
-<br><p>If the Afgewogen quantity is zero, then the value in Bestelling
-will be placed in the 'Vers' field of the member's order. If there is
-a number in the 'Afgewogen' field, then that one will be used
-instead. This allows the Kassa screen to have an approximate value for
-the Vers purchases before all the products have been sorted and
-prepared for pickup.
 <br><br>
 
 <br><h3 align="center">Paste the spreadsheet data here</h3>
