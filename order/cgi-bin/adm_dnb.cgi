@@ -116,7 +116,7 @@ sub get_stats {
 	 	}
 		# in voko list, but not active, keep the maybe/never status
 		push @dnb_maybe, $h if(not $h->{is_skipped});
-		push @dnb_all, $h if($h->{is_skipped});
+		push @dnb_all, $h;
 		next;
 	    }
 	    # it's in the voko product list, but no longer a dnb product
@@ -151,14 +151,13 @@ sub get_stats {
 	# dnb product not in the voko list. Skip if no longer a dnb product
 	next if($h->{wh_last_seen} lt $newest);
 
+	push @dnb_all, $h;
 	# display as new product unless already classified
 	if($h->{wh_last_seen} eq $newest and $h->{wh_prev_seen} eq $newest
 	    and not $h->{is_seen}) {
 	    push @new_dnb, $h;
-	    next;
 	}
 	next if($h->{is_seen});
-	push @dnb_all, $h;
 	push @dnb_maybe, $h if(not $h->{is_skipped});
     }
     $sth->finish;
@@ -528,7 +527,9 @@ sub mode_1 {
 sub mode_2 {
     my ($new_vals, $new_dnb, $config, $cgi, $dbh) = @_;
 
-    do_header_234("adm_dnb/adm_dnb_m2_title.template", $config, $cgi, $dbh);
+    do_header_234("adm_dnb/adm_dnb_m2_title.template", 
+		  "New Products in the  DNB Product List",
+		  $config, $cgi, $dbh);
     if($config->{choice} & 8) {
 	modes_101112($new_vals, $new_dnb, $config, $cgi, $dbh);
     }
@@ -538,7 +539,9 @@ sub mode_2 {
 sub mode_3 {
     my ($new_vals, $dnb_maybe, $config, $cgi, $dbh) = @_;
 
-    do_header_234("adm_dnb/adm_dnb_m3_title.template", $config, $cgi, $dbh);
+    do_header_234("adm_dnb/adm_dnb_m3_title.template", 
+		  "Possibly Interesting Products in the DNB Product List",
+		  $config, $cgi, $dbh);
     if($config->{choice} & 8) {
 	modes_101112($new_vals, $dnb_maybe, $config, $cgi, $dbh);
     }
@@ -548,7 +551,9 @@ sub mode_3 {
 sub mode_4 {
     my ($new_vals, $dnb_all, $config, $cgi, $dbh) = @_;
 
-    do_header_234("adm_dnb/adm_dnb_m4_title.template", $config, $cgi, $dbh);
+    do_header_234("adm_dnb/adm_dnb_m4_title.template", 
+		  "All Products in the DNB Product List",
+		  $config, $cgi, $dbh);
     if($config->{choice} & 8) {
 	modes_101112($new_vals, $dnb_all, $config, $cgi, $dbh);
     }
@@ -556,8 +561,8 @@ sub mode_4 {
 }
 
 sub do_header_234 {
-    my ($template,  $config, $cgi, $dbh) = @_;
-    html_header("New Products in the  DNB Product List",
+    my ($template,  $title, $config, $cgi, $dbh) = @_;
+    html_header($title,
 		"adm_dnb/adm_dnb_mode_1.template", $config, $cgi, $dbh);
 
 
