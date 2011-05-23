@@ -65,6 +65,7 @@ sub get_ss_vars {
     foreach my $l (@data) {
 	++$line_no;
 	$l =~ s/\s+$//;	next if($l =~ /^$/);
+	next if($l !~ /\s+afgewogen/i);
 	if($l !~ /^(\d+)/) {
 	    $err_msgs = err_msg_2_html((sprintf
 					"Row %d does not begin with a member number, this row not processed\n",
@@ -84,9 +85,13 @@ sub get_ss_vars {
 	$amount = $1;
 	$amount =~ s/,/./;
 	$amount = int(100 * $amount);
-	$update{$mem_no}->{amt} = $amount;
-	# remember the spreadshhet ordering of rows
-	$update{$mem_no}->{ordinal} = $count++;
+	if(not defined($update{$mem_no})) {
+	    $update{$mem_no}->{amt} = $amount;
+	    # remember the spreadshhet ordering of rows
+	    $update{$mem_no}->{ordinal} = $count++;
+	} else {
+	    $update{$mem_no}->{amt} += $amount;
+	}
     }
     if($state != 0) {
 	$err_msgs = err_msg_2_html((sprintf "Missing the Afgewogen line at end of data row %d\n", 

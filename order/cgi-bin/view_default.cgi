@@ -128,6 +128,7 @@ sub print_html {
 	    $url_temp = "common/zap_url.template";
 	    $h->{wh_url} = $config->{ZAPATISTA}->{$h->{pr_id}};
 	} else {
+	    $url_temp = "common/no_url.template";
 	    $h->{URL} = "";
 	}
 
