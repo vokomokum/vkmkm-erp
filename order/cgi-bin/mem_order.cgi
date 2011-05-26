@@ -247,6 +247,38 @@ sub do_changes {
 	}
     }
 
+    # now handle button updates - do commit if pressed and confirmed
+    if(defined($buttons->{CommitYes}) and defined($buttons->{Commit}) and
+       $buttons->{Commit} eq 'Commit' ) {
+	my $sth = prepare('SELECT commit_order(?)', $dbh);
+	eval {
+	    $sth->execute($mem_id);
+	    $sth->fetchrow_arrayref;
+	};
+	if($@) {
+	    my $e = $@;
+	    $e =~ s/.*ERROR: *//;
+	    $e =~ s/\sat \/.*$//;
+
+	    if(length($err_msgs) == 0) {
+		my $tpl = new CGI::FastTemplate($config->{templates});
+		$tpl->strict();
+		$tpl->define( emsg  => "common/err_pr_title.template");
+		my %em = (err_msg => $e);
+		$tpl->assign(\%em);
+		$tpl->parse(MAIN => "emsg");
+		my $e = $tpl->fetch("MAIN");
+		$err_msgs = $$e;
+		$tpl = undef;
+	    }
+
+	    $dbh->rollback();
+	} else {
+	    $config->{committed} = 1;
+	    $dbh->commit;
+	}
+    }
+
     if(not defined($buttons->{Reload}) and
        (($status == 2 and not $config->{committed}) or 
 	# changed or not, not committed, commit pressed but not confirmed
@@ -315,37 +347,6 @@ sub do_changes {
 	    }
 	}
 
-    }
-    # now handle button updates - do commit if pressed and confirmed
-    if(defined($buttons->{CommitYes}) and defined($buttons->{Commit}) and
-       $buttons->{Commit} eq 'Commit' ) {
-	my $sth = prepare('SELECT commit_order(?)', $dbh);
-	eval {
-	    $sth->execute($mem_id);
-	    $sth->fetchrow_arrayref;
-	};
-	if($@) {
-	    my $e = $@;
-	    $e =~ s/.*ERROR: *//;
-	    $e =~ s/\sat \/.*$//;
-
-	    if(length($err_msgs) == 0) {
-		my $tpl = new CGI::FastTemplate($config->{templates});
-		$tpl->strict();
-		$tpl->define( emsg  => "common/err_pr_title.template");
-		my %em = (err_msg => $e);
-		$tpl->assign(\%em);
-		$tpl->parse(MAIN => "emsg");
-		my $e = $tpl->fetch("MAIN");
-		$err_msgs = $$e;
-		$tpl = undef;
-	    }
-
-	    $dbh->rollback();
-	} else {
-	    $config->{committed} = 1;
-	    $dbh->commit;
-	}
     }
 
     # set default orders
