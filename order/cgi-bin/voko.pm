@@ -582,7 +582,8 @@ sub order_selector {
     
     my ($ord_no, $this_order, $dbh) = @_;
     my  %labels;
-    my $res = '<select name="order_no" id="order_no">' . "\n";
+    my $res = '<select name="order_no" id="order_no">' . "\n" .
+	"<option selected value=\"$ord_no\">Current</option>\n";
     
     my $sth = prepare("SELECT DISTINCT ord_no, ord_label FROM wh_order ".
 			  "ORDER BY ord_no DESC", $dbh);
@@ -590,7 +591,7 @@ sub order_selector {
     
     while ( my $h = $sth->fetchrow_hashref ) {
 	
-	$h->{ord_label} = "Current" if ( $h->{ord_no} == $ord_no );
+	next if ( $h->{ord_no} == $ord_no );
 	$labels{$h->{ord_no}} = escapeHTML( $h->{ord_label} );
 	
 	if ( $h->{ord_no} == $this_order ) {

@@ -123,6 +123,8 @@ sub get_vars {
     }
     $dump_data->{none} = "";
     $dump_data->{some} = "";
+    $dump_data->{cur_no} = $current_no;
+    $dump_data->{ord_no} = $ord_no;
 
     if(defined($vals->{order_no})) {
 	# we want a specific order
@@ -132,6 +134,7 @@ sub get_vars {
 	$status = 7 if($ord_no != $current_no);
     }
 
+    $dump_data->{status} = $status;
     # inputs are - buttons: IncAll, IncOrd, Save, CommitOrd, CommitYes Reload
     # qty_nn qty
     # copy the buttons
@@ -299,7 +302,7 @@ sub do_changes {
     }
 
     if(not defined($buttons->{Reload}) and
-       (($status == 2 and not $config->{committed}) or 
+       (($status == 2 and not $config->{committed} and $changes) or 
 	# changed or not, not committed, commit pressed but not confirmed
 	(not $config->{committed} and defined($buttons->{Commit})
 	    and ($buttons->{Commit} eq 'Commit')
@@ -347,6 +350,7 @@ sub do_changes {
 			    $err_msgs = $$e;
 			    $tpl = undef;
 		        }
+			syslog(LOG_ERR, sprintf("add_order_to member(%s, %s, %s) failed with message %s, rolling back", $pr_id, $new_vals->{$pr_id}, $mem_id, $e));
 		        $dbh->rollback();
 			#dump_stuff("errors", "$old_val", "$h->{order}", $h);
 			#dump_stuff("", "", "", $new_vals->{$pr_id});			
@@ -386,10 +390,11 @@ sub do_changes {
 		my %em = (err_msg => $e);
 		$tpl->assign(\%em);
 		$tpl->parse(MAIN => "emsg");
-		my $e = $tpl->fetch("MAIN");
-		$err_msgs = $$e;
+		my $em = $tpl->fetch("MAIN");
+		$err_msgs = $$em;
 		$tpl = undef;
 	    }
+	    syslog(LOG_ERR, "create_default_order($mem_id, $ord_no) failed with message $e, rolling back");
 
 	    $dbh->rollback();
 	} else {
@@ -534,6 +539,7 @@ sub print_html {
 
     # use the view_member.pm routines if it's not editable
     # (assures one code source for all non-editing routines)
+
     if($status == 7 and not $config->{all}) {
 	$config->{status} = $status;
 	$config->{ord_no} = $ord_no;
@@ -633,7 +639,6 @@ sub doit {
 sub main {
     my $program = $0;
     $program =~ s/.*\///;
-    syslog(LOG_ERR, "$program");
     $config = read_conf($conf);
     $config->{caller} = $program;
     $config->{program} = $program;
@@ -641,6 +646,8 @@ sub main {
     syslog(LOG_ERR, "$program");
 
     my ($cgi, $dbh) = open_cgi($config);
+    my $vals = $cgi->Vars;
+
     ($status, $ord_no) = ($config->{status}, $config->{ord_no});
 
     if($program =~ /login/) {
