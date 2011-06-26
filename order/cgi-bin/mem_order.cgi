@@ -108,7 +108,8 @@ sub get_vars {
     my %buttons;
 
     my $dump_data = {ip => $ENV{REMOTE_ADDR}, name => $config->{mem_name},
-		     id => $mem_id, commit => $config->{committed}};
+		     id => $mem_id, commit => $config->{committed},
+		     time => scalar(localtime(time)) };
 
     if(not defined($vals) or not defined($vals->{order_no})) {
 	# first entry, no selector, default is current order
