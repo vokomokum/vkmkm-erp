@@ -770,8 +770,8 @@ sub get_ord_totals {
 # debugging dump of some information
 sub dump_stuff {
     my ($where, $what, $str, $ref) = @_;
-    open(FRED, ">> /tmp/fred");
-    chmod 0666, "/tmp/FRED";
+    open(FRED, ">> /var/www/voko/data/dump.out");
+    chmod 0666, "/var/www/voko/data/dump.out";
     print FRED "$where begin $what\n";
     print FRED "$str\n" if(defined($str));
     print FRED Dumper($ref) if(defined($ref));

@@ -107,13 +107,21 @@ sub get_vars {
     my %new_vals;
     my %buttons;
 
+    my $dump_data = {ip => $ENV{REMOTE_ADDR}, name => $config->{mem_name},
+		     id => $mem_id, commit => $config->{committed}};
+
     if(not defined($vals) or not defined($vals->{order_no})) {
 	# first entry, no selector, default is current order
 	($config->{labels}, $config->{selector}) =
 	    order_selector($ord_no, $ord_no, $dbh);
-	return (\%new_vals, \%buttons) if(not defined($vals));
+	if(not defined($vals)) {
+	    dump_stuff("get_vars", "no_vals", "", $dump_data);
+	    return (\%new_vals, \%buttons);
+	}
 	$vals->{order_no} = $current_no;
     }
+    $dump_data->{none} = "";
+    $dump_data->{some} = "";
 
     if(defined($vals->{order_no})) {
 	# we want a specific order
@@ -127,6 +135,9 @@ sub get_vars {
     # qty_nn qty
     # copy the buttons
     foreach my $but ( qw( IncAll IncOrd Save Commit SetDef CommitYes Reload)) {
+	$dump_data->{$but} = (defined($vals->{$but})) ?
+	    $vals->{$but} : "undef";
+			      
 	if (defined($vals->{$but})) {
 	    $config->{all} = 0 if($but eq 'Reload');
 	    $buttons{$but} = $vals->{$but};
@@ -136,15 +147,22 @@ sub get_vars {
 
 	foreach my $p (keys %{$vals}) {
 	    my $q = $vals->{$p};
+	    my $v = sprintf "%s:%s ", $p, $q;
 	    next if($p !~ /^qty_\d+$/);
 	    $p =~ s/qty_(\d+)/$1/;
 	    $q =~ s/^\s*//;
 	    $q =~ s/\s*$//;
 	    $q = '0' if($q eq '');
+	    if($q != 0) {
+		$dump_data->{some} .= $v;
+	    } else {
+		$dump_data->{none} .= $v;
+	    }
 	    next if($q !~ /^\d+$/);
 	    $new_vals{$p} = $q;
 	}
     }
+    dump_stuff("get_vars", "", "", $dump_data);
     return (\%new_vals, \%buttons);
 }
 
