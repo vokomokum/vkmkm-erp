@@ -1,5 +1,5 @@
 #! /usr/bin/perl -w
-# $Rev$
+# 
 ######################################################################
 # This file is part of the Vokomokum Food Cooperative Administration.
 #
