@@ -167,13 +167,13 @@ sub get_vars {
 	}
     }
     dump_stuff("get_vars", "", "", $dump_data);
+
     return (\%new_vals, \%buttons);
 }
 
-# return an array of all voko products susbtitue quantities from
-# new_vals where defined
+# return an array of all voko products susbtitute quantities from
+# new_vals where defined.
 sub get_products {
-
     my ($new_vals, $cgi, $dbh) = @_;
     my $pids = my_pids($dbh);
     my ($shorts, $ordered, $cost, $price) = get_shorts($dbh);
@@ -195,14 +195,14 @@ sub get_products {
     	   $h->{order} = "0";
     	}
 
-    	if ( defined( $new_vals->{$pr_no} ) and $status < 3 ) {
-    	    if ( $h->{order} != $new_vals->{$pr_no}
-    	         and $ord_no == $current_no )  {
+        if ( defined( $new_vals->{$pr_no} ) and $status < 3 ) {
+            if ( $h->{order} != $new_vals->{$pr_no}
+                 and $ord_no == $current_no )  {
 		$h->{RowClass} = "editok";
 		$new_vals->{unsaved} = 1;
-    	    }
-    	    $h->{order} = $new_vals->{$pr_no};
-    	}
+            }
+            $h->{order} = $new_vals->{$pr_no};
+        }
 
     	$h->{pr_mem_price} =
             ( defined($price->{$pr_no})
@@ -257,8 +257,10 @@ sub do_changes {
     my ($new_vals, $buttons) = get_vars($cgi, $dbh);
     # call get_products without passing new_vals, so we get the db values
     my ($pr_ar, $pr_hr) = get_products({}, $cgi, $dbh);
-    my $changes = 0;
 
+    # if new_vals is not empty, then we want to set the quantity of any item in 
+    # 
+    my $changes = 0;
     foreach my $pr_id (keys %{$new_vals}) {
 	if(defined($pr_hr->{$pr_id})) {
 	    my $h = $pr_hr->{$pr_id};
@@ -268,6 +270,25 @@ sub do_changes {
 	    }
 	}
     }
+
+    # $zeroise will be true if there are any entries in new_vals hash
+    my $zeroise = scalar(keys (%{$new_vals}));
+
+    # check that every product in db order with a non-zero quantity
+    # has an entry from the submitted form. If not, create a dummy
+    # form entry with a quantity of zero - this ensures all products
+    # not displayed are being removed from the order
+    if($status < 3  and $zeroise and ($ord_no == $current_no)) {
+	foreach my $pr_id (keys %{$pr_hr}) {
+	    my $h = $pr_hr->{$pr_id};
+	    if(($h->{order} != 0) and
+	       not defined($new_vals->{$pr_id})) {
+		   $new_vals->{$pr_id} = 0;
+		   $changes = 1;
+	    }
+	}
+    }
+
 
     # now handle button updates - do commit if pressed and confirmed
     if(defined($buttons->{CommitYes}) and defined($buttons->{Commit}) and
