@@ -23,7 +23,7 @@ class NewWorkgroupView(BaseView):
         return dict(wg = Workgroup('', ''), msg='')
 
 @view_config(renderer='../templates/edit-workgroup.pt',
-             route_name='workgroup-view',
+             route_name='workgroup',
              permission='view')
 class WorkgroupView(BaseView):
 

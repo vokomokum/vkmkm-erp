@@ -7,6 +7,7 @@ from members.models.setup import initialize_sql
 from members.security import groupfinder
 from members.models.member import Member
 from members.models.workgroups import Workgroup
+#from members.models.shift import Shift
 
 
 def main(global_config, **settings):
@@ -45,8 +46,10 @@ def main(global_config, **settings):
     config.add_route('member', '/member/{id}', factory=Member)
     config.add_route('workgrouplist', '/workgroups', factory=Workgroup)
     config.add_route('new_workgroup', '/workgroups/new', factory=Workgroup)
-    config.add_route('workgroup-view', '/workgroup/{id}', factory=Workgroup)
+    config.add_route('workgroup', '/workgroup/{id}', factory=Workgroup)
     config.add_route('workgroup-edit', '/workgroup/{id}/edit', factory=Workgroup)
+    config.add_route('new_shift', '/workgroups/{id}/new-shift/for/{mem_id}/during/{year}/{month}', factory=Workgroup)
+    config.add_route('edit_shift', '/workgroups/{id}/edit-shift/{s_id}', factory=Workgroup)
 
     config.scan()
 

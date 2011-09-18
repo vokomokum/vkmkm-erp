@@ -4,6 +4,11 @@ from setup import Base
 
 
 class Shift(Base):
+    '''
+    A shift is not identifiable by any number of its attributes, as
+    anyone can do more than one shift in the same workgroup in the
+    same month and day. This is why they have their own id.
+    '''
     __tablename__ = 'wg_shifts'
 
     id = Column(Integer, primary_key=True)
@@ -15,10 +20,11 @@ class Shift(Base):
     state = Column(Unicode(255), default='assigned')
 
     def __init__(self, wg_id, mem_id, year, month):
-        self.year = year
-        self.month = month
         self.wg_id = wg_id
         self.mem_id = mem_id
+        self.year = year
+        self.month = month
+        self.day = 1
 
     def __repr__(self):
         return "%d/%d/%s member: %d, group: %d, state: %s" %\
