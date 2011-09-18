@@ -22,9 +22,27 @@ class NewWorkgroupView(BaseView):
         self.possible_members = get_possible_members(DBSession())
         return dict(wg = Workgroup('', ''), msg='')
 
+@view_config(renderer='../templates/edit-workgroup.pt',
+             route_name='workgroup-view',
+             permission='view')
+class WorkgroupView(BaseView):
+
+    tab = 'workgroups'
+
+    def __call__(self):
+        id = self.request.matchdict['id']
+        try:
+            id = int(id)
+        except:
+            return dict(m = None, msg = 'Invalid ID.')
+        self.session = DBSession()
+        wg = self.mkworkgroup(self.request)
+        if not wg:
+            return dict(wg=None, msg="No workgroup with id %d" % id)
+
 
 @view_config(renderer='../templates/edit-workgroup.pt',
-             route_name='workgroup',
+             route_name='workgroup-edit',
              permission='edit')
 class WorkgroupView(BaseView):
 

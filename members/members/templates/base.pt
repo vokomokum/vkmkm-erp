@@ -35,7 +35,7 @@
                 </li>
                 </tal:block>
 
-                <tal:block id="personaltools" tal:condition="not view.logged_in">
+                <tal:block tal:condition="not view.logged_in">
                 <li>
                     <a href="/login">Log In</a>
                 </li>

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Unicode, ForeignKey 
+from sqlalchemy import Column, Integer, Unicode, ForeignKey
 
 from setup import Base
 
@@ -25,6 +25,7 @@ class Shift(Base):
                 (self.year, self.month, str(self.day), self.mem_id, self.wg_id, self.state)
 
     def set_day(self, day):
+        ''' more like these? '''
         assert(day in xrange(1, 25, 1))
         self.day = day
 

@@ -16,7 +16,7 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     initialize_sql(engine)
 
-    # authentication setup
+    # authentication setup TODO: use order app cookies
     f = open('auth.key', 'r')
     authkey = f.readline()
     authn_policy = AuthTktAuthenticationPolicy(
@@ -45,7 +45,8 @@ def main(global_config, **settings):
     config.add_route('member', '/member/{id}', factory=Member)
     config.add_route('workgrouplist', '/workgroups', factory=Workgroup)
     config.add_route('new_workgroup', '/workgroups/new', factory=Workgroup)
-    config.add_route('workgroup', '/workgroup/{id}', factory=Workgroup)
+    config.add_route('workgroup-view', '/workgroup/{id}', factory=Workgroup)
+    config.add_route('workgroup-edit', '/workgroup/{id}/edit', factory=Workgroup)
 
     config.scan()
 
