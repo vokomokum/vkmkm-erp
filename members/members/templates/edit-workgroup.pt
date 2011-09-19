@@ -5,7 +5,7 @@
         <div metal:fill-slot="content">
 
 
-<form tal:attributes="action python: '%s/workgroup/%d' % (portal_url, wg.id if wg.id else -1)"
+<form tal:attributes="action python: '%s/workgroup/%s' % (portal_url, str(wg.id) if wg.id else 'fresh')"
       method="post" tal:condition="wg">
 
     <h1>Editing Workgroup Details</h1>
@@ -42,7 +42,9 @@
             </select>
         </td>
         <td>
-            <select name="wg_members" size="1" multiple="multiple">
+            <select name="wg_members"
+                    size="${python:len(view.possible_members)}"
+                    multiple="multiple">
                 <tal:block tal:repeat="pm view.possible_members">
                     <option tal:condition="python:pm in wg.members" tal:content="pm.fullname()" value="${pm.id}" selected="selected"></option>
                     <option tal:condition="python:pm not in wg.members" tal:content="pm.fullname()" value="${pm.id}"></option>

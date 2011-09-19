@@ -54,6 +54,7 @@ class MemberView(BaseView):
                         member.mem_enc_pwd = enc_pwd.decode('iso-8859-1')
                         #member.mem_enc_pwd = self.request.params['pwd1']
                     if not member.mem_enc_pwd:
+                        #TODO: if this happens, we still saves other changed attributes that come in the request?
                         raise MemberCreationException('Member has no password.')
                     self.session.add(member)
                     self.session.flush()
@@ -84,7 +85,7 @@ class MemberView(BaseView):
         if id:
             theid = id
         if theid == 'fresh':
-            member = Member(fname=u'', prefix=u'', lname='')
+            member = Member(fname=u'', prefix=u'', lname=u'')
         elif int(theid) > 0:
             member = self.session.query(Member).filter(Member.id==theid).first()
             if member:
@@ -162,15 +163,15 @@ class MemberlistView(BaseView):
             if self.request.params['active'] != 0:
                 m_query = m_query.filter(Member.active==True)
 
+        # ordering
         # key is what the outside world see, value is what SQLAlchemy uses
-        order_indices = {'id': Member.id, 'name': Member.mem_lname}
+        order_idxs = {'id': Member.id, 'name': Member.mem_lname}
         order_by = 'id'
-        order_alt = 'name'
         if self.request.params.has_key('order_by')\
-          and order_indices.has_key(self.request.params['order_by']):
+          and order_idxs.has_key(self.request.params['order_by']):
             order_by = self.request.params['order_by']
-            order_alt = order_indices.keys()[(order_indices.keys().index(self.request.params['order_by']) - 1) * -1]
-            m_query = m_query.order_by(order_indices[order_by])
+        order_alt = (order_by=='id') and 'name' or 'id'
+        m_query = m_query.order_by(order_idxs[order_by])
 
         #TODO: check if non-active members should be here, filter them out in the first place
 

@@ -14,7 +14,7 @@
                     Include inactive
                 </span>
                 <input type="submit" value="List"/>
-                <a href="members/new" tal:condition="1==1">
+                <a href="members/new" tal:condition="1==1"><!-- TODO: auth -->
                     Create new
                 </a>
             </form>

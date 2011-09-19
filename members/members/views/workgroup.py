@@ -49,11 +49,14 @@ class WorkgroupView(BaseView):
     tab = 'workgroups'
 
     def __call__(self):
+        print 'wg view called.'
         id = self.request.matchdict['id']
-        try:
-            id = int(id)
-        except:
-            return dict(m = None, msg = 'Invalid ID.')
+        if id != 'fresh':
+            try:
+                id = int(id)
+            except:
+                return dict(m = None, msg = 'Invalid ID.')
+
         self.session = DBSession()
         wg = self.mkworkgroup(self.request)
         if not wg:
@@ -120,7 +123,18 @@ class WorkgrouplistView(BaseView):
 
     def __call__(self):
         dbsession = DBSession()
-        wgs = dbsession.query(Workgroup).all()
-        return dict(workgroups = wgs, msg='')
+        wg_query = dbsession.query(Workgroup)
+
+        # ordering
+        # key is what the outside world see, value is what SQLAlchemy uses
+        order_idxs = {'id': Workgroup.id, 'name': Workgroup.name}
+        order_by = 'id'
+        if self.request.params.has_key('order_by')\
+          and order_idxs.has_key(self.request.params['order_by']):
+            order_by = self.request.params['order_by']
+        order_alt = (order_by=='id') and 'name' or 'id'
+        wg_query = wg_query.order_by(order_idxs[order_by])
+
+        return dict(workgroups=wg_query.all(), msg='', order_by=order_by, order_alt=order_alt, came_from='/workgroups')
 
 

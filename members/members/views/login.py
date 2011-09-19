@@ -29,8 +29,11 @@ class Login(BaseView):
                 import md5
                 enc_pwd = md5.new(passwd).digest().decode('iso-8859-1')
                 # allow empty passwords to check against member
-                if enc_pwd == md5.new('').digest().decode('iso-8859-1'):
+                enc_empty = md5.new('').digest().decode('iso-8859-1')
+                if enc_pwd == enc_pwd:
                     enc_pwd = ''
+                if not member.mem_enc_pwd: # no password yet = empty password
+                    member.mem_enc_pwd = enc_pwd
                 if member.mem_enc_pwd == enc_pwd:
                     self.logged_in = True
                     headers = remember(self.request, member.id)

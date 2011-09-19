@@ -3,7 +3,17 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal">
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
-           
+            
+            <form option="${portal_url}/workgroups" method="post" id="list-options">
+                <span class="list-option"> Sort by:
+                    <input type="radio" name="order_by" value="${order_by}" tal:content="order_by" checked="checked"/>
+                    <input type="radio" name="order_by" value="${order_alt}" tal:content="order_alt"/>
+                </span>
+                <input type="submit" value="List"/>
+                <a href="workgroups/new" tal:condition="1==1"><!-- TODO: auth -->
+                    Create new
+                </a>
+            </form>          
             <table class="main" width="100%">
                 <tr>
                     <th width="5%">ID</th>

@@ -28,7 +28,7 @@
             <ul id="main-menu">
                 <tal:block tal:condition="view.logged_in">
                 <li>
-                    <a href="${portal_url}/account" title="My Account" tal:content="view.user.fullname()">Account</a>
+                    <a href="${portal_url}/member/${view.user.id}" title="My Account" tal:content="view.user.fullname()">Account</a>
                 </li>
                 <li>
                     <a href="${portal_url}/logout" title="Log out">Log Out</a>

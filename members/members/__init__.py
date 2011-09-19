@@ -48,8 +48,8 @@ def main(global_config, **settings):
     config.add_route('new_workgroup', '/workgroups/new', factory=Workgroup)
     config.add_route('workgroup', '/workgroup/{id}', factory=Workgroup)
     config.add_route('workgroup-edit', '/workgroup/{id}/edit', factory=Workgroup)
-    config.add_route('new_shift', '/workgroups/{id}/new-shift/for/{mem_id}/during/{year}/{month}', factory=Workgroup)
-    config.add_route('edit_shift', '/workgroups/{id}/edit-shift/{s_id}', factory=Workgroup)
+    config.add_route('new_shift', '/workgroup/{id}/new-shift/for/{mem_id}/during/{year}/{month}', factory=Workgroup)
+    config.add_route('edit_shift', '/workgroup/{id}/edit-shift/{s_id}', factory=Workgroup)
 
     config.scan()
 

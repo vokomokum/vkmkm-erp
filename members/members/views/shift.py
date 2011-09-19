@@ -25,12 +25,12 @@ class NewShiftView(BaseView):
         year = self.request.matchdict['year']
         month = self.request.matchdict['month']
         shift = Shift(wg_id, mem_id, year, month)
-
-        self.session = DBSession()
-        self.session.add(shift)
-        self.session.flush()
-        new_id = shift.id
-        transaction.commit()
+        try:
+            self.session = DBSession()
+            self.session.add(shift)
+            self.session.flush()
+            new_id = shift.id
+            transaction.commit()
         except ShiftCreationException, e:
             return dict(s=shift, msg=e)
         except Exception, e:
