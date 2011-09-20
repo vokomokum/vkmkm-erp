@@ -98,7 +98,8 @@
             <a href="http://vokomokum.nl"
                 alt="Vokomokum Food Cooperative"
                 title="Go to Vokomokum Food Cooperative">
-                    <img src="${portal_url}/voko_footer.png" />
+                    <img
+                    src="${portal_url}/static/img/logo-vokomokum-big.jpg" />
             </a>
         </div>
 

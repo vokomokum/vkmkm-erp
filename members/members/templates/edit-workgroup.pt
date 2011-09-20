@@ -5,15 +5,20 @@
         <div metal:fill-slot="content">
 
 
-<form tal:attributes="action python: '%s/workgroup/%s' % (portal_url, str(wg.id) if wg.id else 'fresh')"
+<form tal:attributes="action python: '%s/workgroup/%s/edit' % (portal_url, str(wg.id) if wg.id else 'fresh')"
       method="post" tal:condition="wg">
 
-    <h1>Editing Workgroup Details</h1>
+    <h1 tal:condition="wg">Editing Workgroup ${wg.name}</h1>
+    <h1 tal:condition="not:wg">Workgroup-Editor</h1>
+
+    <div>
+        <a href="${portal_url}/workgroup/${wg.id}">view this group</a>
+    </div>    
 
     <input tal:condition="wg.exists"
            type="hidden" name="id" value="${wg.id}">
     </input>
-   
+
     <!-- Data -->
     <table class="main" width="90%" align="center">
       <tr class="special">

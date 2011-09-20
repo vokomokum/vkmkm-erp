@@ -26,7 +26,9 @@ a:hover {
     margin-right: 20px;
     line-height: 170%;
 }
-	
+
+
+/* base styles */
 .blue {
     color: #0000ff;
 }
@@ -50,8 +52,12 @@ td.space4    {text-align:right;width:4em;}
 td.descr     {text-align:left; width:60em;} 
 td.number    {text-align:right;width:6em;}
 
-
 /* Forms */
 #list-options  {padding:3px; border: 1px solid black; display:table;}
 #list-options a{padding-right:4px; color: #b0ffb0;}
 .list-option   {padding-right:4px; color: #c0c0c0;}
+
+/* classes */
+.description {
+    border: 1px solid black;
+}

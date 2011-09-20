@@ -11,6 +11,26 @@ def get_possible_members(session):
     return session.query(Member).filter(Member.mem_active==True).all()
 
 
+def mkworkgroup(session, request=None, id=None):
+    ''' make a WorkGroup object, use request if possible '''
+    if (request and request.matchdict.has_key('id') and
+            request.matchdict['id'] != 'fresh') or id:
+        if not id:
+            id = request.matchdict['id']
+        wg = session.query(Workgroup).filter(Workgroup.id==id).first()
+        if wg:
+            wg.exists = True
+    else:
+        wg = Workgroup('', '')
+    if request and wg:
+        # overwrite workgroup properties from request
+        for attr in ['name', 'desc', 'leader_id']:
+            if request.params.has_key(attr):
+                wg.__setattr__(attr, request.params[attr])
+    return wg
+
+
+
 @view_config(renderer='../templates/edit-workgroup.pt',
              route_name='new_workgroup',
              permission='edit')
@@ -22,7 +42,7 @@ class NewWorkgroupView(BaseView):
         self.possible_members = get_possible_members(DBSession())
         return dict(wg = Workgroup('', ''), msg='')
 
-@view_config(renderer='../templates/edit-workgroup.pt',
+@view_config(renderer='../templates/workgroup.pt',
              route_name='workgroup',
              permission='view')
 class WorkgroupView(BaseView):
@@ -31,14 +51,15 @@ class WorkgroupView(BaseView):
 
     def __call__(self):
         id = self.request.matchdict['id']
-        #try:
-        #    id = int(id)
-        #except:
-        #    return dict(m = None, msg = 'Invalid ID.')
-        #self.session = DBSession()
-        #wg = self.mkworkgroup(self.request)
-        #if not wg:
-        #    return dict(wg=None, msg="No workgroup with id %d" % id)
+        try:
+            id = int(id)
+        except:
+            return dict(m = None, msg = 'Invalid ID.')
+        wg = mkworkgroup(DBSession(), self.request, id=id)
+        print "Workgroup View has: ", wg
+        if not wg:
+            return dict(wg=None, msg="No workgroup with id %d" % id)
+        return dict(wg=wg)
 
 
 @view_config(renderer='../templates/edit-workgroup.pt',
@@ -58,7 +79,7 @@ class WorkgroupEditView(BaseView):
                 return dict(m = None, msg = 'Invalid ID.')
 
         self.session = DBSession()
-        wg = self.mkworkgroup(self.request)
+        wg = mkworkgroup(self.session, self.request)
         if not wg:
             return dict(wg=None, msg="No workgroup with id %d" % id)
         if not self.request.params.has_key('action'):
@@ -81,7 +102,7 @@ class WorkgroupEditView(BaseView):
                 except Exception, e:
                     return dict(wg = None, msg=u'Something went wrong: %s' % e)
                 self.possible_members = get_possible_members(self.session)
-                return dict(wg = self.mkworkgroup(self.request, id=new_id), msg='Workgroup has been saved.')
+                return dict(wg = mkworkgroup(self.session, self.request, id=new_id), msg='Workgroup has been saved.')
 
             elif action == 'delete':
                 try:
@@ -93,24 +114,6 @@ class WorkgroupEditView(BaseView):
                 except Exception, e:
                     return dict(wg = None, msg=u'Something went wrong: %s' % e)
                 return dict(wg = None, msg='Workgroup %s has been deleted.' % wg)
-
-
-    def mkworkgroup(self, request=None, id=None):
-        if (request and request.matchdict.has_key('id') and\
-            int(request.matchdict['id']) >= 0) or id:
-                if not id:
-                    id = request.matchdict['id']
-                wg = self.session.query(Workgroup).filter(Workgroup.id==id).first()
-                if wg:
-                    wg.exists = True
-        else:
-            wg = Workgroup('', '')
-        if request and wg:
-            # overwrite workgroup properties from request
-            for attr in ['name', 'desc', 'leader_id']:
-                if request.params.has_key(attr):
-                    wg.__setattr__(attr, request.params[attr])
-        return wg
 
 
 
