@@ -31,20 +31,20 @@ class WorkgroupView(BaseView):
 
     def __call__(self):
         id = self.request.matchdict['id']
-        try:
-            id = int(id)
-        except:
-            return dict(m = None, msg = 'Invalid ID.')
-        self.session = DBSession()
-        wg = self.mkworkgroup(self.request)
-        if not wg:
-            return dict(wg=None, msg="No workgroup with id %d" % id)
+        #try:
+        #    id = int(id)
+        #except:
+        #    return dict(m = None, msg = 'Invalid ID.')
+        #self.session = DBSession()
+        #wg = self.mkworkgroup(self.request)
+        #if not wg:
+        #    return dict(wg=None, msg="No workgroup with id %d" % id)
 
 
 @view_config(renderer='../templates/edit-workgroup.pt',
              route_name='workgroup-edit',
              permission='edit')
-class WorkgroupView(BaseView):
+class WorkgroupEditView(BaseView):
 
     tab = 'workgroups'
 
