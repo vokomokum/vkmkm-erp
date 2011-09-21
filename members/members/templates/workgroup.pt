@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+
+<!--form tal:attributes="action python: '%s/workgroup/%s' % (portal_url, str(wg.id) if wg.id else 'fresh')"
+      method="post" tal:condition="wg"-->
+
+      <h1>The ${wg.name} Workgroup</h1>
+
+    <div>
+        Admin: <span tal:content="wg.leader.fullname()"></span>
+    </div>
+    <div tal:condition="python: view.user.id == wg.leader.id or
+        view.user.mem_admin">
+        <a href="${portal_url}/workgroup/${wg.id}/edit">edit this group</a>
+    </div>
+    
+    <div class="description" tal:content="wg.desc"></div>
+
+    Members:
+    <ul>
+        <li tal:repeat="m wg.members">
+            <a tal:content="m.fullname()" href="${portal_url}/member/${m.id}"></a>
+        </li>
+    </ul>
+
+        </div>
+    </div>
+</html>
