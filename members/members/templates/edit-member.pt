@@ -6,10 +6,16 @@
 
 
 
-<form tal:attributes="action python: '%s/member/%s' % (portal_url, str(m.id) if m.id else 'fresh')"
+<form tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.id) if m.id else 'fresh')"
       method="post" tal:condition="m">
 
     <h1>Editing Member Details</h1>
+
+    <div>
+        <a href="${portal_url}/member/${m.id}">view this member</a>
+    </div>
+ 
+
     <font color="red">(fields with * are required)</font>
 
     <input tal:condition="m.exists"
@@ -151,9 +157,6 @@
         </table>
     </table>
 
-    <!-- TODO: workgroup memberships here -->
-
-
     <!-- Submit -->
 
     <table width="100%">
@@ -168,28 +171,6 @@
 
 </form>
 
-<h3 tal:condition="not m.workgroups"
-    tal:content="python: m.fullname() + ' is not member of any workgroup.'">
-</h3>
-<h3 tal:condition="m.workgroups"
-    tal:content="python: m.fullname() + ' is member of these workgroups:'">
-</h3>
-
-<ul>
-    <li tal:repeat="wg m.workgroups">
-        <a href="${portal_url}/workgroup/${wg.id}" tal:content="wg.name"></a>
-    </li>
-</ul>
-
-
-<h3 tal:condition="m.led_wgs"
-    tal:content="python: m.fullname() + ' leads these workgroups:'">
-</h3>
-<ul>
-    <li tal:repeat="wg m.led_wgs">
-        <a href="${portal_url}/workgroup/${wg.id}" tal:content="wg.name"></a>
-    </li>
-</ul>
 
         </div>
     </div>

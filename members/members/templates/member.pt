@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+
+    <h1>Member: ${m.fullname()}</h1>
+
+    <div tal:condition="view.user_can_edit">
+        <a href="${portal_url}/member/${m.id}/edit">edit this member</a>
+    </div>
+    
+    <h2>Name/Email</h2>
+    <div class="data">
+        <div>${m.fullname()}</div>
+        <div>${m.mem_email}</div>
+    </div>
+
+    <h2>Address</h2>
+    <div class="data">
+        <div>${m.addr_street()}</div>
+        <div>${m.addr_city()}</div>
+    </div>
+
+    <h2>Phones</h2>
+    <div class="data">
+        <div>Home: ${m.mem_home_tel}</div>
+        <div>Work: ${m.mem_work_tel}</div>
+        <div>Mobile: ${m.mem_mobile}</div>
+    </div>
+
+
+    <h2>Workgroup Actvities</h2>
+
+    <h3 tal:condition="not m.workgroups"
+        tal:content="python: m.fullname() + ' is not member of any workgroup.'">
+    </h3>
+    <h3 tal:condition="m.workgroups"
+        tal:content="python: m.fullname() + ' is member of these workgroups:'">
+    </h3>
+    <ul>
+        <li tal:repeat="wg m.workgroups">
+            <a href="${portal_url}/workgroup/${wg.id}" tal:content="wg.name"></a>
+        </li>
+    </ul>
+    
+    <h3 tal:condition="m.led_wgs"
+        tal:content="python: m.fullname() + ' leads these workgroups:'">
+    </h3>
+    <ul>
+        <li tal:repeat="wg m.led_wgs">
+            <a href="${portal_url}/workgroup/${wg.id}" tal:content="wg.name"></a>
+        </li>
+    </ul>
+
+
+    <h2>Recent Shifts</h2>
+    TODO
+
+    <h2>Upcoming Shifts</h2>
+    TODO
+
+
+        </div>
+    </div>
+</html>

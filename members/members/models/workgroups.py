@@ -22,6 +22,7 @@ class Workgroup(Base):
     name = Column(Unicode(255))
     desc = Column(Unicode(255))
     leader_id = Column('leader_id', Integer, ForeignKey('members.id'))
+
     leader = relationship(Member, backref='led_wgs')
 
     __acl__ = [ (Allow, 'group:admins', ('view', 'edit')),

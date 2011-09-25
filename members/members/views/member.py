@@ -6,6 +6,38 @@ from members.models.setup import DBSession
 from members.views.base import BaseView
 
 
+def mkmember(session, request=None, id=None):
+    theid = -1
+    member = None
+    if request and request.matchdict.has_key('id'):
+        theid = request.matchdict['id']
+    if id:
+        theid = id
+    if theid == 'fresh':
+        member = Member(fname=u'', prefix=u'', lname=u'')
+    elif int(theid) > 0:
+        member = session.query(Member).filter(Member.id==theid).first()
+        if member:
+            member.exists = True
+    if request and member:
+        # overwrite member properties from request
+        for attr in [a for a in Member.__dict__.keys() if a.startswith('mem_')]:
+            type = str(member.__mapper__.columns._data[attr].type)
+            if request.params.has_key(attr):
+                v = request.params[attr]
+                if type == 'BOOLEAN':
+                    v = {'on':1, '':0}[v]
+                member.__setattr__(attr, v)
+            else:
+                if type == 'BOOLEAN' and member.__dict__.has_key(attr)\
+                   and member.__dict__[attr] is True\
+                   and request.params.has_key('action')\
+                   and request.params['action'] == 'save':
+                    v = False
+                    member.__setattr__(attr, v)
+    return member
+
+
 @view_config(renderer='../templates/edit-member.pt',
              route_name='new_member',
              permission='edit')
@@ -21,10 +53,30 @@ class MemberCreationException(Exception):
     pass
 
 
-@view_config(renderer='../templates/edit-member.pt',
+@view_config(renderer='../templates/member.pt',
              route_name='member',
-             permission='edit')
+             permission='view')
 class MemberView(BaseView):
+
+    tab = 'members'
+
+    def __call__(self):
+        id = self.request.matchdict['id']
+        try:
+            id = int(id)
+        except:
+            return dict(m = None, msg = 'Invalid ID.')
+        m = mkmember(DBSession(), self.request, id=id)
+        if not m:
+            return dict(m=None, msg="No member with id %d" % id)
+        self.user_can_edit = self.user.id == m.id or self.user.mem_admin
+        return dict(m=m, msg='')
+
+
+@view_config(renderer='../templates/edit-member.pt',
+             route_name='member-edit',
+             permission='edit')
+class MemberEditView(BaseView):
 
     tab = 'members'
 
@@ -37,7 +89,7 @@ class MemberView(BaseView):
                 id = int(id)
             except:
                 return dict(m = None, msg = 'Invalid ID.')
-        member = self.mkmember(self.request)
+        member = mkmember(self.session, self.request)
         if not member:
            return dict(m=None, msg="No member with id %d" % id)
         if not self.request.params.has_key('action'):
@@ -66,7 +118,7 @@ class MemberView(BaseView):
                     return dict(m=member, msg=u'Something went wrong: %s' % e)
                 # getting member fresh, old one is now detached or sthg
                 # after transaction is comitted
-                return dict(m = self.mkmember(self.request, id=new_id), msg='Member has been saved.')
+                return dict(m = mkmember(self.session, self.request, id=new_id), msg='Member has been saved.')
 
             elif action == 'delete':
                 try:
@@ -77,36 +129,6 @@ class MemberView(BaseView):
                     return dict(m=None, msg=u'Something went wrong: %s' % e)
                 return dict(m = None, msg='Member %s has been deleted.' % member)
 
-    def mkmember(self, request=None, id=None):
-        theid = -1
-        member = None
-        if request and request.matchdict.has_key('id'):
-            theid = request.matchdict['id']
-        if id:
-            theid = id
-        if theid == 'fresh':
-            member = Member(fname=u'', prefix=u'', lname=u'')
-        elif int(theid) > 0:
-            member = self.session.query(Member).filter(Member.id==theid).first()
-            if member:
-                member.exists = True
-        if request and member:
-            # overwrite member properties from request
-            for attr in [a for a in Member.__dict__.keys() if a.startswith('mem_')]:
-                type = str(member.__mapper__.columns._data[attr].type)
-                if request.params.has_key(attr):
-                    v = request.params[attr]
-                    if type == 'BOOLEAN':
-                        v = {'on':1, '':0}[v]
-                    member.__setattr__(attr, v)
-                else:
-                    if type == 'BOOLEAN' and member.__dict__.has_key(attr)\
-                       and member.__dict__[attr] is True\
-                       and self.request.params.has_key('action')\
-                       and self.request.params['action'] == 'save':
-                        v = False
-                        member.__setattr__(attr, v)
-        return member
 
     def checkpwd(self, req):
         if not req.params.has_key('pwd1'):

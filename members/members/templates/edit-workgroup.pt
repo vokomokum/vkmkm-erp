@@ -9,9 +9,9 @@
       method="post" tal:condition="wg">
 
     <h1 tal:condition="wg">Editing Workgroup ${wg.name}</h1>
-    <h1 tal:condition="not:wg">Workgroup-Editor</h1>
+    <h1 tal:condition="not wg">Workgroup-Editor</h1>
 
-    <div>
+    <div tal:condition="wg.exists">
         <a href="${portal_url}/workgroup/${wg.id}">view this group</a>
     </div>    
 

@@ -53,6 +53,7 @@ class Member(Base):
 
     __acl__ = [ (Allow, 'group:admins', ('view', 'edit')),
                 (Allow, 'group:this-member', ('view', 'edit')),
+                (Allow, 'group:members', ('view')),
                 DENY_ALL]
 
     def __init__(self, request=None, fname='', prefix='', lname=''):

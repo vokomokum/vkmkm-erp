@@ -5,10 +5,7 @@
         <div metal:fill-slot="content">
 
 
-<!--form tal:attributes="action python: '%s/workgroup/%s' % (portal_url, str(wg.id) if wg.id else 'fresh')"
-      method="post" tal:condition="wg"-->
-
-      <h1>The ${wg.name} Workgroup</h1>
+    <h1>The ${wg.name} Workgroup</h1>
 
     <div>
         Admin: <span tal:content="wg.leader.fullname()"></span>
@@ -20,12 +17,38 @@
     
     <div class="description" tal:content="wg.desc"></div>
 
-    Members:
+    <div class="heading">Members:</div>
     <ul>
         <li tal:repeat="m wg.members">
             <a tal:content="m.fullname()" href="${portal_url}/member/${m.id}"></a>
         </li>
     </ul>
+
+    <div class="heading">
+        Shifts in ${view.month + 1}/${view.year}:
+        <!--select> TODO: month/year selector form 
+            <option tal:repeat="num python:range(12)"-->
+        <!--form tal:attributes="action python: '%s/workgroup/%s' % (portal_url, str(wg.id) if wg.id else 'fresh')"
+            method="post" tal:condition="wg"-->
+    </div>
+    
+    <table>
+        <tr>
+            <th>Day</th>
+            <th>Member</th>
+            <th>Status</th>
+        </tr> 
+        <tr tal:repeat="s shifts">
+            <tal:block tal:condition="view.user_is_wgleader">
+                <td>is leader</td>
+            </tal:block>
+            <tal:block tal:condition="not view.user_is_wgleader">
+                <td tal:content="s.day"></td>
+                <td><a tal:content="s.member.fullname()" href="${portal_url}/member/${s.member.id}"></a></td>
+                <td tal:content="s.state"></td>
+            </tal:block>
+        </tr>
+    </table>
 
         </div>
     </div>

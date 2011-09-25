@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Integer, Unicode, ForeignKey
+from sqlalchemy.orm import relationship
 
 from setup import Base
+from member import Member
 
 
 class Shift(Base):
@@ -18,6 +20,8 @@ class Shift(Base):
     wg_id = Column(Integer, ForeignKey('workgroups.id'))
     mem_id = Column(Integer, ForeignKey('members.id'))
     state = Column(Unicode(255), default='assigned')
+
+    member = relationship(Member, backref='scheduled_shifts')
 
     def __init__(self, wg_id, mem_id, year, month):
         self.wg_id = wg_id

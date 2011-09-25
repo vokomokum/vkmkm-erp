@@ -1,9 +1,12 @@
 import transaction
 from pyramid.view import view_config
 
+from datetime import datetime
+
 from members.models.workgroups import Workgroup
 from members.models.member import Member
 from members.models.setup import DBSession
+from members.models.shift import Shift
 from members.views.base import BaseView
 
 
@@ -30,7 +33,6 @@ def mkworkgroup(session, request=None, id=None):
     return wg
 
 
-
 @view_config(renderer='../templates/edit-workgroup.pt',
              route_name='new_workgroup',
              permission='edit')
@@ -40,7 +42,8 @@ class NewWorkgroupView(BaseView):
 
     def __call__(self):
         self.possible_members = get_possible_members(DBSession())
-        return dict(wg = Workgroup('', ''), msg='')
+        return dict(wg = Workgroup('', ''), msg="You're about to make a new workgroup.")
+
 
 @view_config(renderer='../templates/workgroup.pt',
              route_name='workgroup',
@@ -54,12 +57,25 @@ class WorkgroupView(BaseView):
         try:
             id = int(id)
         except:
-            return dict(m = None, msg = 'Invalid ID.')
+            return dict(wg = None, msg = 'Invalid ID.')
         wg = mkworkgroup(DBSession(), self.request, id=id)
-        print "Workgroup View has: ", wg
         if not wg:
-            return dict(wg=None, msg="No workgroup with id %d" % id)
-        return dict(wg=wg)
+            return dict(wg=None, shifts=None, msg="No workgroup with id %d" % id)
+
+
+        self.user_is_wgleader = wg.leader_id == self.user.id
+
+        now = datetime.now()
+        self.month = self.request.params.has_key('month') and self.request.params['month']\
+            or now.month
+        self.year = self.request.params.has_key('year') and self.request.params['year']\
+            or now.year
+        self.session = DBSession()
+        shifts = self.session.query(Shift).filter(Shift.id==wg.id\
+                                             and Shift.month==self.month\
+                                             and Shift.year==self.year)\
+                                     .all()
+        return dict(wg=wg, shifts=shifts)
 
 
 @view_config(renderer='../templates/edit-workgroup.pt',

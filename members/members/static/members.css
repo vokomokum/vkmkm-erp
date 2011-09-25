@@ -42,6 +42,10 @@ a:hover {
     font-style: italic;
 }
 
+/* Data Fields */
+div.data   {border:thin solid black; background-color: #b0ffb0; padding-right:3px; padding-left:3px; margin-bottom:10px;}
+
+
 /* Tables */
 table.main   {border:thin solid black; padding-right:3px; padding-left:3px; margin-bottom:10px;}
 table.main th{background-color:#a0a0a0; color:black;  }

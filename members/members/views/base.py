@@ -13,8 +13,6 @@ class BaseView(object):
         self.context = context
         self.request = request
         self.logged_in = authenticated_userid(request)
-
-        print "BASEVIEW init: ", self.logged_in
         self.layout = get_renderer('../templates/base.pt').implementation()
 
     @property
