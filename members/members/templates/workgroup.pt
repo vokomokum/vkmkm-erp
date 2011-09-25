@@ -24,31 +24,100 @@
         </li>
     </ul>
 
-    <div class="heading">
-        Shifts in ${view.month + 1}/${view.year}:
-        <!--select> TODO: month/year selector form 
-            <option tal:repeat="num python:range(12)"-->
-        <!--form tal:attributes="action python: '%s/workgroup/%s' % (portal_url, str(wg.id) if wg.id else 'fresh')"
-            method="post" tal:condition="wg"-->
+    <h2>Shifts in ${view.month}/${view.year}:</h2>
+    <div>Select other month:
+        <form action="${portal_url}/workgroup/${wg.id}" method="post">
+            <select name="month"> 
+                <tal:block tal:repeat="month python:range(1, 13)">
+                    <option tal:condition="month == view.month" value="${month}" selected="selected">${month}</option>
+                    <option tal:condition="month != view.month" value="${month}">${month}</option>
+                </tal:block>
+            </select>
+            <select name="year"> 
+                <tal:block tal:repeat="year python:range(2011, 2016)">
+                    <option tal:condition="year == view.year" value="${year}" selected="selected">${year}</option>
+                    <option tal:condition="year != view.year" value="${year}">${year}</option>
+                </tal:block>
+            </select>
+            <input type="submit" name="action" value="show"/>
+        </form>
     </div>
     
-    <table>
+    <table tal:condition="view.user_is_wgleader">
         <tr>
             <th>Day</th>
             <th>Member</th>
             <th>Status</th>
-        </tr> 
+            <th>Action</th>
+        </tr>
+        <!-- edit existing shifts form -->
         <tr tal:repeat="s shifts">
-            <tal:block tal:condition="view.user_is_wgleader">
-                <td>is leader</td>
-            </tal:block>
-            <tal:block tal:condition="not view.user_is_wgleader">
-                <td tal:content="s.day"></td>
-                <td><a tal:content="s.member.fullname()" href="${portal_url}/member/${s.member.id}"></a></td>
-                <td tal:content="s.state"></td>
-            </tal:block>
+            <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${s.id}" method="post">
+                <td>
+                    <select name="day">
+                        <tal:block tal:repeat="d view.days_in_month">
+                            <option tal:condition="d == s.day" value="${d}" selected="selected">${d}</option>
+                            <option tal:condition="d != s.day" value="${d}">${d}</option>
+                        </tal:block>
+                    </select>
+                </td>
+                <td>
+                    <select name="mem_id">
+                        <tal:block tal:repeat="m wg.members">
+                            <option tal:condition="m.id == s.mem_id" value="${m.id}" selected="selected">${m.fullname()}</option>
+                            <option tal:condition="m.id != s.mem_id" value="${m.id}">${m.fullname()}</option>
+                        </tal:block>
+                    </select>
+                </td>
+                <td>
+                    <select name="state">
+                        <tal:block tal:repeat="st ['assigned', 'worked']">
+                            <option tal:condition="st == s.state" value="${st}" selected="selected">${st}</option>
+                            <option tal:condition="st != s.state" value="${st}">${st}</option>
+                        </tal:block>
+                    </select>
+                </td>
+                <td>
+                    <input type="submit" name="action" value="save"/>
+                    <input type="submit" name="action" value="delete"/>
+                </td>
+            </form>
+        </tr>
+        <!-- new shift form -->
+        <tr>
+            <form action="${portal_url}/workgroup/${wg.id}/new-shift/in/${view.month}/${view.year}" method="post">
+                <td>
+                    <select name="day">
+                        <option value="--">--</option>
+                        <option tal:repeat="d view.days_in_month" value="${d}">${d}</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="mem_id">
+                        <option value="--">--</option>
+                        <option tal:repeat="m wg.members" value="${m.id}">${m.fullname()}</option>
+                    </select>
+                </td>
+                <td/>
+                <td>
+                    <input type="submit" value="Create new shift"/>
+                </td>
+            </form>
         </tr>
     </table>
+    <table tal:condition="not view.user_is_wgleader">
+        <tr>
+            <th>Day</th>
+            <th>Member</th>
+            <th>Status</th>
+        </tr>
+        <tr tal:repeat="s shifts">
+            <td tal:content="s.day"></td>
+            <td><a tal:content="s.member.fullname()" href="${portal_url}/member/${s.member.id}"></a></td>
+            <td tal:content="s.state"></td>
+        </tr>
+    </table>
+
 
         </div>
     </div>

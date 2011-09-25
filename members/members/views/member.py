@@ -11,8 +11,8 @@ from members.views.base import BaseView
 def mkmember(session, request=None, id=None):
     theid = -1
     member = None
-    if request and request.matchdict.has_key('id'):
-        theid = request.matchdict['id']
+    if request and request.matchdict.has_key('mem_id'):
+        theid = request.matchdict['mem_id']
     if id:
         theid = id
     if theid == 'fresh':
@@ -63,14 +63,14 @@ class MemberView(BaseView):
     tab = 'members'
 
     def __call__(self):
-        id = self.request.matchdict['id']
+        mem_id = self.request.matchdict['mem_id']
         try:
-            id = int(id)
+            mem_id = int(mem_id)
         except:
             return dict(m = None, msg = 'Invalid ID.')
-        m = mkmember(DBSession(), self.request, id=id)
+        m = mkmember(DBSession(), self.request, id=mem_id)
         if not m:
-            return dict(m=None, msg="No member with id %d" % id)
+            return dict(m=None, msg="No member with id %d" % mem_id)
         self.user_can_edit = self.user.id == m.id or self.user.mem_admin
         # past and future shifts
         past = []; future = []
@@ -93,7 +93,7 @@ class MemberEditView(BaseView):
     def __call__(self):
 
         self.session = DBSession()
-        id = self.request.matchdict['id']
+        id = self.request.matchdict['mem_id']
         if id != 'fresh':
             try:
                 id = int(id)

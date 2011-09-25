@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from setup import Base
 from member import Member
+from workgroups import Workgroup
 
 
 class Shift(Base):
@@ -22,17 +23,18 @@ class Shift(Base):
     state = Column(Unicode(255), default='assigned')
 
     member = relationship(Member, backref='scheduled_shifts')
+    workgroup = relationship(Workgroup)
 
-    def __init__(self, wg_id, mem_id, year, month):
+    def __init__(self, wg_id, mem_id, year, month, day):
         self.wg_id = wg_id
         self.mem_id = mem_id
         self.year = year
         self.month = month
-        self.day = 1
+        self.day = day
 
     def __repr__(self):
-        return "%d/%d/%s member: %d, group: %d, state: %s" %\
-                (self.year, self.month, str(self.day), self.mem_id, self.wg_id, self.state)
+        return "Shift on %d/%d/%s by member %s in group: %s [state: %s]" %\
+                (self.year, self.month, str(self.day), self.member.fullname(), self.workgroup, self.state)
 
     def set_day(self, day):
         ''' more like these? '''
