@@ -56,10 +56,44 @@
 
 
     <h2>Recent Shifts</h2>
-    TODO
+
+    <table tal:condition="past_shifts">
+        <tr>
+            <th>Year</th>
+            <th>Month</th>
+            <th>Day</th>
+            <th>Status</th>
+        </tr> 
+        <tr tal:repeat="s past_shifts">
+            <td tal:content="s.year"></td>
+            <td tal:content="s.month"></td>
+            <td tal:content="s.day"></td>
+            <td tal:content="s.state"></td>
+        </tr>
+    </table>
+    <div tal:condition="not past_shifts">
+        No recent shifts for this member.
+    </div>
 
     <h2>Upcoming Shifts</h2>
-    TODO
+
+    <table tal:condition="future_shifts">
+        <tr>
+            <th>Year</th>
+            <th>Month</th>
+            <th>Day</th>
+            <th>Status</th>
+        </tr> 
+        <tr tal:repeat="s future_shifts">
+            <td tal:content="s.year"></td>
+            <td tal:content="s.month"></td>
+            <td tal:content="s.day"></td>
+            <td tal:content="s.state"></td>
+        </tr>
+    </table>
+    <div tal:condition="not future_shifts">
+        No upcoming shifts for this member.
+    </div>
 
 
         </div>

@@ -8,7 +8,7 @@
     <h1>The ${wg.name} Workgroup</h1>
 
     <div>
-        Admin: <span tal:content="wg.leader.fullname()"></span>
+        Admin: <a tal:content="wg.leader.fullname()" href="${portal_url}/member/${wg.leader.id}">></a>
     </div>
     <div tal:condition="python: view.user.id == wg.leader.id or
         view.user.mem_admin">

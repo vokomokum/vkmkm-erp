@@ -1,6 +1,8 @@
 import transaction
 from pyramid.view import view_config
 
+from datetime import datetime
+
 from members.models.member import Member
 from members.models.setup import DBSession
 from members.views.base import BaseView
@@ -70,7 +72,15 @@ class MemberView(BaseView):
         if not m:
             return dict(m=None, msg="No member with id %d" % id)
         self.user_can_edit = self.user.id == m.id or self.user.mem_admin
-        return dict(m=m, msg='')
+        # past and future shifts
+        past = []; future = []
+        now = datetime.now()
+        for s in m.scheduled_shifts:
+            if s.month >= now.month and s.day >= now.day:
+                future.append(s)
+            else:
+                past.append(s)
+        return dict(m=m, msg='', past_shifts=past, future_shifts=future)
 
 
 @view_config(renderer='../templates/edit-member.pt',
