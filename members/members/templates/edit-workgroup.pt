@@ -12,7 +12,7 @@
     <h1 tal:condition="not wg">Workgroup-Editor</h1>
 
     <div tal:condition="wg.exists">
-        <a href="${portal_url}/workgroup/${wg.id}">view this group</a>
+        <a class="view_link" href="${portal_url}/workgroup/${wg.id}">view this group</a>
     </div>    
 
     <input tal:condition="wg.exists"
@@ -22,9 +22,9 @@
     <!-- Data -->
     <table class="list" width="100%">
       <tr class="list-content">
-        <td align="center" width="40%">Name:</td> 
-        <td align="center" width="30%">Admin:</td>
-        <td align="center" width="30%">Members:</td>
+        <td align="center" width="40%">Name</td> 
+        <td align="center" width="30%">Admin</td>
+        <td align="center" width="30%">Members</td>
       </tr>
       <tr class="list-content">
         <td align="center"><input type="text" align="left" size="40" name="name"
@@ -56,7 +56,7 @@
         </td>
       </tr>
       <tr class="list-content">
-        <td colspan="3" align="center">Description:</td>
+        <td colspan="3" align="center">Description</td>
       </tr>
       <tr>
         <td colspan="3" align="center"><textarea tal:content="wg.desc" rows="10" cols="80" name="desc"></textarea></td>
@@ -68,8 +68,8 @@
         <tr align="center">
             <td width="80%"></td>
             <td width="20%" align="center">
-                <input type="submit" value="save" name="action"></input>
-                <input type="submit" value="delete" name="action"></input>
+                <input type="image" src="${portal_url}/static/img/icons/save.png" title="save" value="save" name="action"></input>
+                <input type="image" src="${portal_url}/static/img/icons/delete.gif" title="delete" value="delete" name="action"></input>
             </td>
         </tr>
     </table>

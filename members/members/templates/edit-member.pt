@@ -12,7 +12,7 @@
     <h1>Editing Member Details</h1>
 
     <div>
-        <a href="${portal_url}/member/${m.id}">view this member</a>
+        <a class="view_link" href="${portal_url}/member/${m.id}">view this member</a>
     </div>
  
 
@@ -163,8 +163,8 @@
         <tr align="center">
             <td width="80%"></td>
             <td width="20%" align="center">
-                <input type="submit" value="save" name="action"></input>
-                <input type="submit" value="delete" name="action"></input>
+                <input type="image" src="${portal_url}/static/img/icons/save.png" title="save" value="save" name="action"></input>
+                <input type="image" src="${portal_url}/static/img/icons/delete.gif" title="delete" value="delete" name="action"></input>
             </td>
         </tr>
     </table>

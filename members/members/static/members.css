@@ -138,6 +138,12 @@ a:hover {
     float:right;
 }
 
+.view_link {
+    background: #ffffff url(img/icons/view.gif) no-repeat;
+    background-position: 4px 3px;
+    padding: 2px 24px;
+    float:right;
+}
 
 /* base styles */
 .blue {

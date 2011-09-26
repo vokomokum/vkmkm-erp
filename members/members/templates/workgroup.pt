@@ -70,8 +70,10 @@
                     </select>
                 </td>
                 <td>
-                    <input type="submit" name="action" value="save"/>
-                    <input type="submit" name="action" value="delete"/>
+                    <div align="center">
+                        <input type="image" src="${portal_url}/static/img/icons/save.png" title="save" value="save" name="action"></input>
+                        <input type="image" src="${portal_url}/static/img/icons/delete.gif" title="delete" value="delete" name="action"></input>
+                    </div>
                 </td>
             </form>
         </tr>
