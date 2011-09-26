@@ -29,8 +29,8 @@
                     <th width="38%">Street</th>
                     <th width="20%">City</th>
                 </tr>
-                <tr tal:repeat="m members" class="special">
-                    <td>
+                <tr tal:repeat="m members" class="list-content">
+                    <td align="center">
                         <a href="member/${m.id}" tal:content="m.id" title="show/edit"></a>
                     </td>
                      <td>

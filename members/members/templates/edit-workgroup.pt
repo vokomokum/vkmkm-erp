@@ -21,12 +21,12 @@
 
     <!-- Data -->
     <table class="list" width="100%">
-      <tr class="special">
+      <tr class="list-content">
         <td align="center" width="40%">Name:</td> 
         <td align="center" width="30%">Admin:</td>
         <td align="center" width="30%">Members:</td>
       </tr>
-      <tr class="special">
+      <tr class="list-content">
         <td align="center"><input type="text" align="left" size="40" name="name"
                    value="${wg.name}" maxlength="255">
             </input>
@@ -55,7 +55,7 @@
             </select>
         </td>
       </tr>
-      <tr class="special">
+      <tr class="list-content">
         <td colspan="3" align="center">Description:</td>
       </tr>
       <tr>

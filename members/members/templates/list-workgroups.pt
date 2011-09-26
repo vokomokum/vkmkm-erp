@@ -23,7 +23,7 @@
                     <th width="20%">Admin</th>
                     <th width="65%">Description</th>
                 </tr>
-                <tr tal:repeat="wg workgroups" class="special">
+                <tr tal:repeat="wg workgroups" class="list-content">
                     <td>
                         <a href="workgroup/${wg.id}" tal:content="wg.id" title="show/edit"></a>
                     </td>

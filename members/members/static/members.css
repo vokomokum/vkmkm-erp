@@ -28,7 +28,7 @@ p, h1, pre {
 /* header */
 
 #title {
-  font-size: 30px;
+  font-size: 40px;
   text-transform:uppercase;
   color: #564b47;
   margin-top: 10px;
@@ -74,12 +74,12 @@ p, h1, pre {
 }
 
 #menu-items li a:link, #menu-items li a:visited{
-    color: navy;
+    color: #181;
 }
 
 #menu-items li a:hover{
-    color: black;
-    border-color: navy;
+    color: #050;
+    border-color: black;
 }
 
 #menu-items li.current a{
@@ -110,6 +110,9 @@ a {
     color: #231f20;
     outline: none;
 }
+a:hover {
+    color: black;
+}
 
 
 #profile_link {
@@ -128,6 +131,13 @@ a {
     padding: 2px 24px;
 }
 
+.edit_link {
+    background: #ffffff url(img/icons/edit.gif) no-repeat;
+    background-position: 4px 3px;
+    padding: 2px 24px;
+    float:right;
+}
+
 
 /* base styles */
 .blue {
@@ -143,18 +153,15 @@ a {
     font-style: italic;
 }
 
-/* Data Fields */
-div.data   {border:thin solid black; background-color: #b0ffb0; padding-right:3px; padding-left:3px; margin-bottom:10px;}
-
 
 /* Tables */
-table.list    {padding-right:3px; padding-left:3px; margin-bottom:10px;clear:right;}
+table.list    {padding-right:3px; padding-left:3px; margin-bottom:10px; margin-top:10px; clear:right;}
 table.list th {background-color:#a0a0a0; color:black; }
 table.list td:hover {background-color:#c0c0c0;}
 table.list td:hover a {color:white !important; }
 tr.subtitle   {background-color:#c0c0c0; color:black; border: solid black; line-height:100%;}
 tr.common     {background-color:#c0c0ff; color:black; border: solid black; }
-tr.special    {background-color:#b0ffb0; color:black; border: solid black; }
+tr.list-content, td.list-content{background-color:#b0ffb0; color:black; }
 td.space4     {text-align:right;width:4em;}
 td.descr      {text-align:left; width:60em;} 
 td.number     {text-align:right;width:6em;}
@@ -164,7 +171,8 @@ td.number     {text-align:right;width:6em;}
 #list-options a{padding-right:4px; color: #b0ffb0;}
 .list-option   {padding-right:4px; color: #c0c0c0;}
 
-/* classes */
-.description {
-    border: 1px solid black;
+/* other */
+.wg-description {
+    color: #70cc70;
+    font-style:italic;
 }
