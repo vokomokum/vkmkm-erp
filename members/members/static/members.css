@@ -1,30 +1,131 @@
-body{
-    margin:0;padding:0;
-    background-color:#ffffff;
-    font:16px/24px "Nobile","Lucida Grande",Lucida,Verdana,sans-serif;
+body {
+  background-color: #e1ddd9;
+  /*font:16px/24px "Nobile","Lucida Grande",Lucida,Verdana,sans-serif;*/
+  font-family: Verdana, Arial, Helvetica, SunSans-Regular, Sans-Serif;
+  color:#564b47;  
+  padding: 30px;
+  margin.0;
+  text-align: center;
 }
 
+/* container: 1 flexible box in the middle, centered 
+   container layout from intensivstation.ch 
+*/
+#container { 
+    width: 800px;
+    background: #ffffff url(img/food.png) no-repeat;
+    background-position: 5px 5px;
+	border: 1px solid #564b47;
+	padding: 5px;
+    margin: 0 auto;
+}
+
+p, h1, pre {
+  margin: 0px; 
+  padding: 10px; 
+}
+
+/* header */
+
+#title {
+  font-size: 30px;
+  text-transform:uppercase;
+  color: #564b47;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  padding-left: 120px;
+}
+
+#menu-actions {
+    margin: 0;
+}
+#menu-actions li {
+    font-size: 10px;
+    list-style: none;
+    display: inline;
+    float:right;
+    margin-right: 20px;
+    height: 26px;
+}
+
+#menu-items{
+    clear:right;
+    padding: 3px 0;
+    margin-left: 0;
+    margin-bottom: 0;
+    margin-top: 0.1em;
+    font: bold 12px Verdana;
+    border-bottom: 1px solid gray;
+}
+
+#menu-items li{
+    list-style: none;
+    display: inline;
+    margin: 0;
+}
+
+#menu-items li a{
+    text-decoration: none;
+    padding: 3px 0.5em;
+    margin-right: 3px;
+    border: 1px solid #778;
+    border-bottom: none;
+    background: white;
+}
+
+#menu-items li a:link, #menu-items li a:visited{
+    color: navy;
+}
+
+#menu-items li a:hover{
+    color: black;
+    border-color: navy;
+}
+
+#menu-items li.current a{
+    border-bottom: 1px solid white;
+}
+
+
+/* content */
+
+#content {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-height: 300px;
+}
+
+
+/* footer */
+
+#footer{
+    border-top: 1px solid gray;
+    padding-top: 10px;
+}
+
+/* links */ 
 
 a {
     text-decoration: none;
     color: #231f20;
     outline: none;
-    padding: 1px 3px;
 }
 
-a:hover {
-    background-color: #231f20;
-    color: #fff;
+
+#profile_link {
+    background: #ffffff url(img/icons/profile.png) no-repeat;
+    padding: 2px 20px;
 }
 
-#main-menu {
-    margin: 0;
+#logout_link {
+    background: #ffffff url(img/icons/logout.png) no-repeat;
+    padding: 2px 20px;
 }
-#main-menu li {
-    list-style: none;
-    display: inline;
-    margin-right: 20px;
-    line-height: 170%;
+
+.add_link {
+    background: #ffffff url(img/icons/add.gif) no-repeat;
+    background-position: 4px 3px;
+    padding: 2px 24px;
 }
 
 
@@ -47,17 +148,19 @@ div.data   {border:thin solid black; background-color: #b0ffb0; padding-right:3p
 
 
 /* Tables */
-table.main   {border:thin solid black; padding-right:3px; padding-left:3px; margin-bottom:10px;}
-table.main th{background-color:#a0a0a0; color:black;  }
-tr.subtitle  {background-color:#c0c0c0; color:black; border: solid black; line-height:100%;}
-tr.common    {background-color:#c0c0ff; color:black; border: solid black; }
-tr.special   {background-color:#b0ffb0; color:black; border: solid black; }
-td.space4    {text-align:right;width:4em;}
-td.descr     {text-align:left; width:60em;} 
-td.number    {text-align:right;width:6em;}
+table.list    {padding-right:3px; padding-left:3px; margin-bottom:10px;clear:right;}
+table.list th {background-color:#a0a0a0; color:black; }
+table.list td:hover {background-color:#c0c0c0;}
+table.list td:hover a {color:white !important; }
+tr.subtitle   {background-color:#c0c0c0; color:black; border: solid black; line-height:100%;}
+tr.common     {background-color:#c0c0ff; color:black; border: solid black; }
+tr.special    {background-color:#b0ffb0; color:black; border: solid black; }
+td.space4     {text-align:right;width:4em;}
+td.descr      {text-align:left; width:60em;} 
+td.number     {text-align:right;width:6em;}
 
 /* Forms */
-#list-options  {padding:3px; border: 1px solid black; display:table;}
+#list-options  {padding:3px; display:table; float:right;}
 #list-options a{padding-right:4px; color: #b0ffb0;}
 .list-option   {padding-right:4px; color: #c0c0c0;}
 

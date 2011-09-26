@@ -14,11 +14,14 @@
                     Include inactive
                 </span>
                 <input type="submit" value="List"/>
-                <a href="members/new" tal:condition="1==1"><!-- TODO: auth -->
-                    Create new
-                </a>
+                
             </form>
-            <table class="main" width="100%">
+
+            <a class="add_link" href="members/new" tal:condition="view.user.mem_admin">
+                    New member
+            </a>
+            
+            <table class="list" width="100%">
                 <tr>
                     <th width="5%">ID</th>
                     <th width="17%">Name</th>

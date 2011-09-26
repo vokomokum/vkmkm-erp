@@ -20,20 +20,18 @@
     </input>
 
     <!-- Data -->
-    <table class="main" width="90%" align="center">
+    <table class="list" width="100%">
       <tr class="special">
-        <td align="center" width="25%">Name:</td> 
-        <td align="center" width="45%">Description:</td>
-        <td align="center" width="20%">Admin:</td>
-        <td align="center" width="20%">Members:</td>
+        <td align="center" width="40%">Name:</td> 
+        <td align="center" width="30%">Admin:</td>
+        <td align="center" width="30%">Members:</td>
       </tr>
       <tr class="special">
-        <td><input type="text" align="left" size="40" name="name"
+        <td align="center"><input type="text" align="left" size="40" name="name"
                    value="${wg.name}" maxlength="255">
             </input>
         </td> 
-        <td><textarea tal:content="wg.desc" rows="10" cols="80" name="desc"></textarea></td>
-        <td>
+        <td align="center">
             <select name="leader_id" size="1" tal:define="lid python: str(wg.leader_id)">
                     <tal:block tal:repeat="pm view.possible_members">
                     <option tal:condition="python: str(pm.id) == lid"
@@ -46,7 +44,7 @@
                 </tal:block>
             </select>
         </td>
-        <td>
+        <td align="center">
             <select name="wg_members"
                     size="${python:len(view.possible_members)}"
                     multiple="multiple">
@@ -56,6 +54,12 @@
                 </tal:block>
             </select>
         </td>
+      </tr>
+      <tr class="special">
+        <td colspan="3" align="center">Description:</td>
+      </tr>
+      <tr>
+        <td colspan="3" align="center"><textarea tal:content="wg.desc" rows="10" cols="80" name="desc"></textarea></td>
       </tr>
     </table>
 

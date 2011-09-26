@@ -7,7 +7,7 @@ from members.security import authenticated_user
 
 class BaseView(object):
 
-    tab = 'members'
+    tab = 'home'
 
     def __init__(self, context, request):
         self.context = context

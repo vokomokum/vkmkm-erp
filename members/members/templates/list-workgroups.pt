@@ -10,11 +10,13 @@
                     <input type="radio" name="order_by" value="${order_alt}" tal:content="order_alt"/>
                 </span>
                 <input type="submit" value="List"/>
-                <a href="workgroups/new" tal:condition="1==1"><!-- TODO: auth -->
-                    Create new
-                </a>
             </form>          
-            <table class="main" width="100%">
+            
+            <a class="add_link" href="workgroups/new" tal:condition="view.user.mem_admin">
+                New workgroup
+            </a>
+            
+            <table class="list" width="100%">
                 <tr>
                     <th width="5%">ID</th>
                     <th width="15%">Name</th>

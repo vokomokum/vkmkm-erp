@@ -59,16 +59,18 @@
 
     <table tal:condition="past_shifts">
         <tr>
+            <th>Workgroup</th>
             <th>Year</th>
             <th>Month</th>
             <th>Day</th>
             <th>Status</th>
         </tr> 
         <tr tal:repeat="s past_shifts">
-            <td tal:content="s.year"></td>
-            <td tal:content="s.month"></td>
-            <td tal:content="s.day"></td>
-            <td tal:content="s.state"></td>
+            <td><a href="${portal_url}/workgroup/${s.wg_id}">${s.workgroup}</a></td>
+            <td>${s.year}</td>
+            <td>${s.month}</td>
+            <td>${s.day}</td>
+            <td>${s.state}</td>
         </tr>
     </table>
     <div tal:condition="not past_shifts">
@@ -79,16 +81,18 @@
 
     <table tal:condition="future_shifts">
         <tr>
+            <th>Workgroup</th>
             <th>Year</th>
             <th>Month</th>
             <th>Day</th>
             <th>Status</th>
         </tr> 
         <tr tal:repeat="s future_shifts">
-            <td tal:content="s.year"></td>
-            <td tal:content="s.month"></td>
-            <td tal:content="s.day"></td>
-            <td tal:content="s.state"></td>
+            <td><a href="${portal_url}/workgroup/${s.wg_id}">${s.workgroup}</a></td>
+            <td>${s.year}</td>
+            <td>${s.month}</td>
+            <td>${s.day}</td>
+            <td>${s.state}</td>
         </tr>
     </table>
     <div tal:condition="not future_shifts">

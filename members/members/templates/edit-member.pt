@@ -24,7 +24,7 @@
 
     <!-- Name & email -->
     <span class="bold">
-    <table class="main" width="100%">
+    <table class="list" width="100%">
       <tr class="special">
         <td align="center" colspan="4">Name and Email</td>
       </tr>
