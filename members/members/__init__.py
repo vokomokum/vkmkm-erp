@@ -35,9 +35,15 @@ def main(global_config, **settings):
         authorization_policy = authz_policy)
 
     # TODO: custom not found view
-    config.add_view(context='pyramid.exceptions.NotFound',
-                    view='pyramid.view.append_slash_notfound_view')
-    #config.add_renderer('.pt', 'pyramid.chameleon_zpt.renderer_factory')
+    from pyramid.exceptions import NotFound 
+    #from pyramid.httpexceptions import HTTPNotFound 
+    #from pyramid.view import AppendSlashNotFoundViewFactory
+    #def notfound_view(context, request):
+    #    return HTTPNotFound('It aint there, stop trying!')
+    #custom_append_slash = AppendSlashNotFoundViewFactory(notfound_view)
+    #config.add_view(custom_append_slash, context=NotFound)
+    from  members.views.base import NotFoundView
+    config.add_view(NotFoundView, context=NotFound)
 
     # routes to be used by views
     config.add_static_view('static', 'members:static')

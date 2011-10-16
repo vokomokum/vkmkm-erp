@@ -13,6 +13,7 @@ class BaseView(object):
         self.context = context
         self.request = request
         self.logged_in = authenticated_userid(request)
+        # every template asks for the layout to look for the macros
         self.layout = get_renderer('../templates/base.pt').implementation()
 
     @property
