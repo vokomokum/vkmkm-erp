@@ -21,14 +21,14 @@ def mkshift(session, request=None, s_id=None):
         int(request.matchdict['s_id']) >= 0) or s_id:
             if not s_id:
                 s_id = request.matchdict['s_id']
-            shift = session.query(Shift).filter(Shift.id==s_id).first()
+            shift = session.query(Shift).get(s_id)
             if shift:
                 shift.exists = True
     else:
         raise ShiftValidationException
     if request and shift:
         # overwrite shift properties from request
-        for attr in ['o_id', 't_id', 'wg_id', 'mem_id']:
+        for attr in ['order_id', 'task_id', 'wg_id', 'mem_id']:
             if request.params.has_key(attr):
                 shift.__setattr__(attr, request.params[attr])
         if request.params.has_key('state'):
@@ -44,22 +44,22 @@ def checkshift(shift, in_future=True):
     pass
 
 
-def redir_to_wg(wg_id, user_id, request, msg):
+def redir_to_wg(wg_id, user_id, request, msg, order_id):
     headers = remember(request, user_id)
-    return HTTPFound(location = '/workgroup/%s?msg=%s' % (str(wg_id), msg), headers = headers)
+    return HTTPFound(location = '/workgroup/%s?msg=%s&order_id=%s' % (str(wg_id), msg, str(order_id)), headers = headers)
 
 
 @view_config(renderer='../templates/workgroup.pt',
              route_name='new_shift',
              permission='edit')
 class NewShiftView(BaseView):
-    '''this newX view is called with data already, so it actually saves'''
+    '''this view is called with data already, so it actually inserts'''
     tab = 'workgroups'
 
     def __call__(self):
         session = DBSession()
         wg_id = self.request.matchdict['wg_id']
-        task_id = self.request.params['t_id']
+        task_id = self.request.params['task_id']
         order_id = self.request.matchdict['o_id']
         mem_id = self.request.params['mem_id']
         shift = Shift(wg_id, mem_id, order_id, task_id)
@@ -70,13 +70,13 @@ class NewShiftView(BaseView):
             new_id = shift.id
             transaction.commit()
         except ShiftValidationException, e:
-            return redir_to_wg(wg_id, self.user.id, self.request, msg=e)
+            return redir_to_wg(wg_id, self.user.id, self.request, e, order_id)
         except Exception, e:
-            return redir_to_wg(wg_id, self.user.id, self.request, msg=u'Something went wrong: %s' % e)
+            return redir_to_wg(wg_id, self.user.id, self.request, 'Something went wrong: %s' % e, order_id)
         # getting shift fresh, old one is now detached or sthg
         # after transaction is comitted
         shift = mkshift(session, self.request, s_id=new_id)
-        return redir_to_wg(wg_id, self.user.id, self.request, msg='Succesfully added shift')
+        return redir_to_wg(wg_id, self.user.id, self.request, 'Succesfully added shift', order_id)
 
 
 class ShiftValidationException(Exception):
@@ -86,7 +86,7 @@ class ShiftValidationException(Exception):
 @view_config(renderer='../templates/workgroup.pt',
              route_name='edit_shift',
              permission='edit')
-class ShiftView(BaseView):
+class EditShift(BaseView):
 
     tab = 'workgroups'
 
@@ -94,9 +94,9 @@ class ShiftView(BaseView):
 
         session = DBSession()
         wg_id = self.request.matchdict['wg_id']
-        wg = session.query(Workgroup).filter(Workgroup.id==wg_id).first()
+        wg = session.query(Workgroup).get(wg_id)
         if not wg:
-            return redir_to_wg(wg.id, self.user.id, self.request, msg=u"Don't know which workgroup this is supposed to be.")
+            return redir_to_wg(wg.id, self.user.id, self.request, u"Don't know which workgroup this is supposed to be.", '')
 
         s_id = self.request.matchdict['s_id']
         if s_id != 'fresh':
@@ -105,11 +105,12 @@ class ShiftView(BaseView):
             except:
                 return dict(m = None, msg = 'Invalid ID.')
         shift = mkshift(session, self.request)
+        order_id = shift.order_id
         if not shift:
-            return redir_to_wg(wg.id, self.user.id, self.request, msg="No shift with id %d" % s_id)
+            return redir_to_wg(wg.id, self.user.id, self.request, "No shift with id %d" % s_id, '')
 
         if not self.request.params.has_key('action'):
-            return redir_to_wg(wg.id, self.user.id, self.request, msg='No action given.')
+            return redir_to_wg(wg.id, self.user.id, self.request, 'No action given.', order_id)
         else:
             action = self.request.params['action']
             if action == "save":
@@ -120,10 +121,10 @@ class ShiftView(BaseView):
                     new_id = shift.id
                     transaction.commit()
                 except ShiftValidationException, e:
-                    return redir_to_wg(wg_id, self.user.id, self.request, msg=e)
+                    return redir_to_wg(wg_id, self.user.id, self.request, e, order_id)
                 except Exception, e:
-                    return redir_to_wg(wg_id, self.user.id, self.request, msg=u'Something went wrong: %s' % e)
-                return redir_to_wg(wg_id, self.user.id, self.request, msg='Shift has been saved.')
+                    return redir_to_wg(wg_id, self.user.id, self.request, u'Something went wrong: %s' % e, order_id)
+                return redir_to_wg(wg_id, self.user.id, self.request, 'Shift has been saved.', order_id)
 
             elif action == 'delete':
                 try:
@@ -131,7 +132,7 @@ class ShiftView(BaseView):
                     session.flush()
                     transaction.commit()
                 except Exception, e:
-                    return redir_to_wg(wg_id, self.user.id, self.request, msg=u'Something went wrong: %s' % e)
-                return redir_to_wg(wg_id, self.user.id, self.request, msg='Shift has been deleted.')
+                    return redir_to_wg(wg_id, self.user.id, self.request, u'Something went wrong: %s' % e, order_id)
+                return redir_to_wg(wg_id, self.user.id, self.request, 'Shift has been deleted.', order_id)
 
 

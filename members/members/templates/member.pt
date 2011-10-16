@@ -62,48 +62,40 @@
         </tr>
     </table>
 
-    <h2>Recent Shifts</h2>
+    <h2>Assigned Shifts</h2>
 
-    <table class="list" align="center" tal:condition="past_shifts">
+    <table class="list" align="center" tal:condition="assigned_shifts">
         <tr>
+            <th>Task</th>
+            <th>Order</th>
             <th>Workgroup</th>
-            <th>Year</th>
-            <th>Month</th>
-            <th>Day</th>
-            <th>Status</th>
         </tr> 
-        <tr class="list-content" tal:repeat="s past_shifts">
+        <tr class="list-content" tal:repeat="s assigned_shifts">
+            <td>${s.task}</td>
+            <td>${s.order}</td>
             <td><a href="${portal_url}/workgroup/${s.wg_id}">${s.workgroup}</a></td>
-            <td>${s.year}</td>
-            <td>${s.month}</td>
-            <td>${s.day}</td>
-            <td>${s.state}</td>
         </tr>
     </table>
-    <div tal:condition="not past_shifts">
-        No recent shifts.
+    <div tal:condition="not assigned_shifts">
+        No assigned shifts.
     </div>
 
-    <h2>Upcoming Shifts</h2>
+    <h2>Worked Shifts</h2>
 
-    <table class="list" align="center" tal:condition="future_shifts">
+    <table class="list" align="center" tal:condition="worked_shifts">
         <tr>
+            <th>Task</th>
+            <th>Order</th>
             <th>Workgroup</th>
-            <th>Year</th>
-            <th>Month</th>
-            <th>Day</th>
-            <th>Status</th>
         </tr> 
-        <tr class="list-content" tal:repeat="s future_shifts">
+        <tr class="list-content" tal:repeat="s worked_shifts">
+            <td>${s.task}</td>
+            <td>${s.order}</td>
             <td><a href="${portal_url}/workgroup/${s.wg_id}">${s.workgroup}</a></td>
-            <td>${s.year}</td>
-            <td>${s.month}</td>
-            <td>${s.day}</td>
-            <td>${s.state}</td>
         </tr>
     </table>
-    <div tal:condition="not future_shifts">
-        No upcoming shifts.
+    <div tal:condition="not worked_shifts">
+        No worked shifts.
     </div>
 
 

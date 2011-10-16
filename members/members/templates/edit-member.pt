@@ -163,8 +163,12 @@
         <tr align="center">
             <td width="80%"></td>
             <td width="20%" align="center">
-                <input type="image" src="${portal_url}/static/img/icons/save.png" title="save" value="save" name="action"></input>
-                <input type="image" src="${portal_url}/static/img/icons/delete.gif" title="delete" value="delete" name="action"></input>
+                <input type="image" src="${portal_url}/static/img/icons/save.png"
+                       title="save" value="save" name="action">
+                </input>
+                <input type="image" src="${portal_url}/static/img/icons/delete.gif" tal:condition="m.exists"
+                        title="delete" value="delete" name="action">
+                </input>
             </td>
         </tr>
     </table>

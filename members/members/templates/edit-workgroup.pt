@@ -68,8 +68,12 @@
         <tr align="center">
             <td width="80%"></td>
             <td width="20%" align="center">
-                <input type="image" src="${portal_url}/static/img/icons/save.png" title="save" value="save" name="action"></input>
-                <input type="image" src="${portal_url}/static/img/icons/delete.gif" title="delete" value="delete" name="action"></input>
+                <input type="image" src="${portal_url}/static/img/icons/save.png" 
+                       title="save" value="save" name="action">
+                </input>
+                <input tal:condition="wg.exists" type="image" src="${portal_url}/static/img/icons/delete.gif"
+                        title="delete" value="delete" name="action">
+                </input>
             </td>
         </tr>
     </table>
@@ -78,7 +82,7 @@
 
 
 
-<tal:block tal:condition="wg">
+<tal:block tal:condition="wg.exists">
     <h2>Tasks in this workgroups:</h2>
 
     <table class="list" align="center">
@@ -93,16 +97,16 @@
                 <td>
                     <tal:block tal:condition="t.active">
                         <span>yes</span>
-                        <input type="submit" title="no" value="toggle-task-activity" name="action"></input>   
+                        <button type="submit" value="toggle-task-activity" name="action">no</button>   
                     </tal:block>
                     <tal:block tal:condition="not t.active">
                         <span>no</span>
-                        <input type="submit" title="yes" value="toggle-task-activity" name="action"></input>   
+                        <button type="submit" value="toggle-task-activity" name="action">yes</button>   
                     </tal:block>
                 </td>
                 <td>
                     <div align="center">
-                        <input type="image" src="${portal_url}/static/img/icons/delete.gif" title="delete" value="delete" name="action"></input>
+                        <input type="image" src="${portal_url}/static/img/icons/delete.gif" title="delete" value="delete-task" name="action"></input>
                         <input type="hidden" value="${t.id}" name="task_id"></input>
                     </div>
                 </td>
@@ -116,7 +120,7 @@
                 </td>
                 <td/>
                 <td>
-                    <input type="submit" value="add-task" name="action"/>
+                    <button type="submit" value="add-task" name="action">Create new task</button>
                 </td>
             </form>
         </tr>

@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, Unicode, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.schema import UniqueConstraint
 
 from setup import Base
 from member import Member
@@ -18,8 +19,10 @@ class Task(Base):
     wg_id = Column(Integer, ForeignKey('workgroups.id'), nullable=False)
     active = Column(Boolean(), default=True)
 
-    workgroup = relationship(Workgroup, backref='tasks')
+    workgroup = relationship(Workgroup, backref=backref('tasks', cascade='all,delete,delete-orphan'))
 
+    # no task can exist twice within one group
+    __table_args__ = (UniqueConstraint('label', 'wg_id'), {})
 
     def __init__(self, label, wg_id):
         self.label = label
@@ -27,5 +30,4 @@ class Task(Base):
 
     def __repr__(self):
         return self.label
-
 

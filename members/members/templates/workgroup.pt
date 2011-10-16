@@ -46,10 +46,10 @@
         <tr tal:repeat="s shifts" class="list-content">
             <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${s.id}" method="post">
                 <td>
-                    <select name="task">
+                    <select name="task_id">
                         <tal:block tal:repeat="t view.tasks">
-                            <option tal:condition="t == s.task" value="${t}" selected="selected">${t}</option>
-                            <option tal:condition="t != s.task" value="${t}">${t}</option>
+                            <option tal:condition="t == s.task" value="${t.id}" selected="selected">${t}</option>
+                            <option tal:condition="t != s.task" value="${t.id}">${t}</option>
                         </tal:block>
                     </select>
                 </td>
@@ -81,9 +81,9 @@
         <tr class="list-content">
             <form action="${portal_url}/workgroup/${wg.id}/new-shift/in-order/${view.order.id}" method="post">
                 <td>
-                    <select name="t_id">
+                    <select name="task_id">
                         <option value="--">--</option>
-                        <option tal:repeat="t view.tasks" value="{t}">${t}</option>
+                        <option tal:repeat="t view.tasks" value="{t.id}">${t}</option>
                     </select>
                 </td>
                 <td>
@@ -94,6 +94,7 @@
                 </td>
                 <td/>
                 <td>
+                    <input type="hidden" name="order_id" value="${view.order.id}"/>
                     <input type="submit" value="Create new shift"/>
                 </td>
             </form>

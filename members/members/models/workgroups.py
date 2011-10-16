@@ -41,5 +41,6 @@ class Workgroup(Base):
     def set_leader(self, leader_id):
         self.leader_id = leader_id
 
+
 Workgroup.members = relationship('Member', secondary=membership)
 Member.workgroups = relationship('Workgroup', secondary=membership)
