@@ -162,7 +162,8 @@ a:hover {
 
 /* Tables */
 table.list    {padding-right:3px; padding-left:3px; margin-bottom:10px; margin-top:10px; clear:right;}
-table.list th {background-color:#a0a0a0; color:black; }
+table.list th {background-color:#a0a0a0; color:black; padding:2px;}
+table.list td {padding:2px;}
 table.list td:hover {background-color:#c0c0c0;}
 table.list td:hover a {color:white !important; }
 tr.subtitle   {background-color:#c0c0c0; color:black; border: solid black; line-height:100%;}

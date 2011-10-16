@@ -28,7 +28,7 @@ class Login(BaseView):
             if member:
                 import md5
                 enc_pwd = md5.new(passwd).digest().decode('iso-8859-1')
-                # allow empty passwords to check against member
+                # ATTENTION: allowing empty passwords to check against member
                 enc_empty = md5.new('').digest().decode('iso-8859-1')
                 if enc_pwd == enc_pwd:
                     enc_pwd = ''

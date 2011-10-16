@@ -76,6 +76,55 @@
 
 </form>
 
+
+
+<tal:block tal:condition="wg">
+    <h2>Tasks in this workgroups:</h2>
+
+    <table class="list" align="center">
+        <tr>
+            <th>Task</th>
+            <th>active</th>
+        </tr>
+        <!-- edit existing tasks form -->
+        <tr tal:repeat="t wg.tasks" class="list-content">
+            <form action="${portal_url}/workgroup/${wg.id}/edit" method="post">
+                <td tal:content="t"></td>
+                <td>
+                    <tal:block tal:condition="t.active">
+                        <span>yes</span>
+                        <input type="submit" title="no" value="toggle-task-activity" name="action"></input>   
+                    </tal:block>
+                    <tal:block tal:condition="not t.active">
+                        <span>no</span>
+                        <input type="submit" title="yes" value="toggle-task-activity" name="action"></input>   
+                    </tal:block>
+                </td>
+                <td>
+                    <div align="center">
+                        <input type="image" src="${portal_url}/static/img/icons/delete.gif" title="delete" value="delete" name="action"></input>
+                        <input type="hidden" value="${t.id}" name="task_id"></input>
+                    </div>
+                </td>
+            </form>
+        </tr>
+        <!-- new task form -->
+        <tr class="list-content">
+            <form action="${portal_url}/workgroup/${wg.id}/edit" method="post">
+                <td>
+                    <input type="text" size="100" name="task_label"></input>
+                </td>
+                <td/>
+                <td>
+                    <input type="submit" value="add-task" name="action"/>
+                </td>
+            </form>
+        </tr>
+    </table>
+</tal:block>
+
+
+
         </div>
     </div>
 </html>

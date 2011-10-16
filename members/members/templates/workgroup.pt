@@ -33,11 +33,11 @@
     </table>
 
     
-    <h2>Shifts in ${view.month}/${view.year}:</h2>
+    <h2>Shifts in ${view.order.label}:</h2>
     
     <table class="list" align="center" tal:condition="view.user_is_wgleader">
         <tr>
-            <th>Day</th>
+            <th>Task</th>
             <th>Member</th>
             <th>Status</th>
             <th>Action</th>
@@ -46,10 +46,10 @@
         <tr tal:repeat="s shifts" class="list-content">
             <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${s.id}" method="post">
                 <td>
-                    <select name="day">
-                        <tal:block tal:repeat="d view.days_in_month">
-                            <option tal:condition="d == s.day" value="${d}" selected="selected">${d}</option>
-                            <option tal:condition="d != s.day" value="${d}">${d}</option>
+                    <select name="task">
+                        <tal:block tal:repeat="t view.tasks">
+                            <option tal:condition="t == s.task" value="${t}" selected="selected">${t}</option>
+                            <option tal:condition="t != s.task" value="${t}">${t}</option>
                         </tal:block>
                     </select>
                 </td>
@@ -79,11 +79,11 @@
         </tr>
         <!-- new shift form -->
         <tr class="list-content">
-            <form action="${portal_url}/workgroup/${wg.id}/new-shift/in/${view.month}/${view.year}" method="post">
+            <form action="${portal_url}/workgroup/${wg.id}/new-shift/in-order/${view.order.id}" method="post">
                 <td>
-                    <select name="day">
+                    <select name="t_id">
                         <option value="--">--</option>
-                        <option tal:repeat="d view.days_in_month" value="${d}">${d}</option>
+                        <option tal:repeat="t view.tasks" value="{t}">${t}</option>
                     </select>
                 </td>
                 <td>
@@ -101,29 +101,23 @@
     </table>
     <table class="list" align="center" tal:condition="not view.user_is_wgleader">
         <tr>
-            <th>Day</th>
+            <th>Task</th>
             <th>Member</th>
             <th>Status</th>
         </tr>
         <tr class="list-content" tal:repeat="s shifts">
-            <td tal:content="s.day"></td>
+            <td tal:content="s.task"></td>
             <td><a tal:content="s.member.fullname()" href="${portal_url}/member/${s.member.id}"></a></td>
             <td tal:content="s.state"></td>
         </tr>
     </table>
 
-    <div id="shift-month-selector">Select other month:
+    <div id="shift-order-selector">Select other order:
         <form action="${portal_url}/workgroup/${wg.id}" method="post">
-            <select name="month"> 
-                <tal:block tal:repeat="month python:range(1, 13)">
-                    <option tal:condition="month == view.month" value="${month}" selected="selected">${month}</option>
-                    <option tal:condition="month != view.month" value="${month}">${month}</option>
-                </tal:block>
-            </select>
-            <select name="year"> 
-                <tal:block tal:repeat="year python:range(2011, 2016)">
-                    <option tal:condition="year == view.year" value="${year}" selected="selected">${year}</option>
-                    <option tal:condition="year != view.year" value="${year}">${year}</option>
+            <select name="order_id"> 
+                <tal:block tal:repeat="o view.orders">
+                    <option tal:condition="o.id == view.order.id" value="${o.id}" selected="selected">${o}</option>
+                    <option tal:condition="o.id != view.order.id" value="${o.id}">${o}</option>
                 </tal:block>
             </select>
             <input type="submit" name="action" value="show"/>

@@ -6,8 +6,10 @@ import calendar
 
 from members.models.workgroups import Workgroup
 from members.models.member import Member
-from members.models.setup import DBSession
+from members.models.setup import DBSession, get_connection
 from members.models.shift import Shift
+from members.models.task import Task
+from members.models.others import Order
 from members.views.base import BaseView
 
 
@@ -67,22 +69,25 @@ class WorkgroupView(BaseView):
         session = DBSession()
         wg = mkworkgroup(session, self.request, wg_id=wg_id)
         if not wg:
+            #TODO: redirect to custom 404 view
             return dict(wg=None, shifts=None, msg=msg+" No workgroup with id %d" % wg_id)
 
         self.user_is_wgleader = wg.leader_id == self.user.id
 
-        now = datetime.now()
-        self.month = self.request.params.has_key('month') and int(self.request.params['month'])\
-                        or now.month
-        self.year = self.request.params.has_key('year') and int(self.request.params['year'])\
-                        or now.year
-        self.days_in_month = range(1, calendar.monthrange(self.year, self.month)[1] +1)
+        # look up the order and then the shifts of this group in that order
+        order_header = get_connection().execute("""SELECT * FROM order_header;""")
+        order_id = self.request.params.has_key('order_id') and int(self.request.params['order_id'])\
+                        or list(order_header)[0].ord_no
 
-        print "WORKGROUP:", self.month, self.year
+        self.order = session.query(Order).filter(Order.id==order_id).first()
+        self.orders = session.query(Order).all()
+
         shifts = session.query(Shift).filter(Shift.wg_id==wg.id)\
-                                     .filter(Shift.month==self.month)\
-                                     .filter(Shift.year==self.year)\
+                                     .filter(Shift.order_id==order_id)\
                                           .all()
+
+        self.tasks = [t for t in wg.tasks if t.active]
+
         return dict(wg=wg, shifts=shifts, msg=msg)
 
 
@@ -102,12 +107,13 @@ class WorkgroupEditView(BaseView):
             except:
                 return dict(m = None, msg = 'Invalid ID.')
 
-        self.session = DBSession()
-        wg = mkworkgroup(self.session, self.request)
+        session = DBSession()
+        wg = mkworkgroup(session, self.request)
         if not wg:
             return dict(wg=None, msg="No workgroup with id %d" % id)
+
+        self.possible_members = get_possible_members(session)
         if not self.request.params.has_key('action'):
-            self.possible_members = get_possible_members(self.session)
             return dict(wg = wg, msg='')
         else:
             action = self.request.params['action']
@@ -115,31 +121,52 @@ class WorkgroupEditView(BaseView):
                 if self.request.params.has_key('wg_members'):
                     wg.members = []
                     for mid in self.request.POST.getall('wg_members'):
-                        m = self.session.query(Member).filter(Member.id == mid).first()
+                        m = session.query(Member).filter(Member.id == mid).first()
                         wg.members.append(m)
                 try:
-                    self.session.add(wg)
-                    self.session.flush()
+                    session.add(wg)
+                    session.flush()
                     new_id = wg.id
                     transaction.commit()
-                    self.session = DBSession()
+                    session = DBSession()
                 except Exception, e:
                     return dict(wg = None, msg=u'Something went wrong: %s' % e)
-                self.possible_members = get_possible_members(self.session)
-                return dict(wg = mkworkgroup(self.session, self.request, wg_id=new_id), msg='Workgroup has been saved.')
+                self.possible_members = get_possible_members(session)
+                return dict(wg = mkworkgroup(session, self.request, wg_id=new_id), msg='Workgroup has been saved.')
 
             elif action == 'delete':
                 try:
-                    self.session.delete(self.session.query(Workgroup)\
+                    session.delete(session.query(Workgroup)\
                         .filter(Workgroup.id == wg.id).first()\
                     )
-                    self.session.flush()
+                    session.flush()
                     transaction.commit()
                 except Exception, e:
                     return dict(wg = None, msg=u'Something went wrong: %s' % e)
                 return dict(wg = None, msg='Workgroup %s has been deleted.' % wg)
 
-
+            elif "task" in action:
+                print action, "11111111112"
+                msg = ''
+                try:
+                    if action == "add-task":
+                        task = Task(self.request.params['task_label'], wg.id)
+                        session.add(task)
+                    elif action == 'toggle-task-activity':
+                        task = session.query(Task).filter(Task.id==self.request.params['task_id']).first()
+                        task.active = not task.active
+                        session.add(task)
+                    elif action == 'delete-task':
+                        task = session.query(Task).filter(Task.id==self.request.params['task_id']).first()
+                        session.delete(task)
+                    session.flush()
+                    transaction.commit()
+                except Exception, e:
+                    #TODO: redirect to custom 404 view?
+                    msg = ' Could not perform %s: %s' % (action, e)
+                    #TODO: re-initiating this too often (after each commit), there must be a more elegant way
+                    self.possible_members = get_possible_members(session)
+                return dict(wg = mkworkgroup(session, self.request), msg = msg)
 
 
 

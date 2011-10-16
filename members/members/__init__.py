@@ -5,9 +5,12 @@ from sqlalchemy import engine_from_config
 
 from members.models.setup import initialize_sql
 from members.security import groupfinder
+# import all our types here once, important
 from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
+from members.models.task import Task
+from members.models.others import Order
 
 
 def main(global_config, **settings):
@@ -49,7 +52,7 @@ def main(global_config, **settings):
     config.add_route('new_workgroup', '/workgroups/new', factory=Workgroup)
     config.add_route('workgroup', '/workgroup/{wg_id}', factory=Workgroup)
     config.add_route('workgroup-edit', '/workgroup/{wg_id}/edit', factory=Workgroup)
-    config.add_route('new_shift', '/workgroup/{wg_id}/new-shift/in/{month}/{year}', factory=Workgroup)
+    config.add_route('new_shift', '/workgroup/{wg_id}/new-shift/in-order/{o_id}', factory=Workgroup)
     config.add_route('edit_shift', '/workgroup/{wg_id}/edit-shift/{s_id}', factory=Workgroup)
 
     config.scan()

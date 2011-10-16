@@ -1,4 +1,4 @@
-- carry month and year through the Shift views
+- carry selected order through the Shift views
 - changed attrs are saved, even if sthg went wrong (i.e. no action passed to save-shift)
 - could I pass msg to redir_to_wg, but not in the URL?
 - do I still need 'fresh' IDs now that view and edit views are distinct?

@@ -28,20 +28,20 @@ def mkshift(session, request=None, s_id=None):
         raise ShiftValidationException
     if request and shift:
         # overwrite shift properties from request
-        for attr in ['year', 'month', 'day', 'wg_id', 'mem_id', 'state']:
+        for attr in ['o_id', 't_id', 'wg_id', 'mem_id']:
             if request.params.has_key(attr):
                 shift.__setattr__(attr, request.params[attr])
+        if request.params.has_key('state'):
+            shift.set_state(request.params['state'])
     return shift
 
 
 def checkshift(shift, in_future=True):
     '''
-    TODO: check valid date and member, wg?
-    throws ShiftValidationException
+    TODO: anything to do here? All content is foreign keys, so the db will check
     '''
-    print "CHECKSHIFT:", shift.day
-    if shift.mem_id == '--' or shift.day == '--':
-        raise ShiftValidationException('Please enter a day and choose a member for the new shift.')
+    #raise ShiftValidationException('...')
+    pass
 
 
 def redir_to_wg(wg_id, user_id, request, msg):
@@ -59,15 +59,10 @@ class NewShiftView(BaseView):
     def __call__(self):
         session = DBSession()
         wg_id = self.request.matchdict['wg_id']
-        wg = session.query(Workgroup).filter(Workgroup.id==wg_id).first()
-        if not wg:
-            return redir_to_wg(wg_id, self.user.id, self.request, msg=u"Don't know which workgroup this is supposed to be.")
-
-        year = self.request.matchdict['year']
-        month = self.request.matchdict['month']
-        day = self.request.params['day']
+        task_id = self.request.params['t_id']
+        order_id = self.request.matchdict['o_id']
         mem_id = self.request.params['mem_id']
-        shift = Shift(wg_id, mem_id, year, month, day)
+        shift = Shift(wg_id, mem_id, order_id, task_id)
         try:
             checkshift(shift)
             session.add(shift)
@@ -81,7 +76,7 @@ class NewShiftView(BaseView):
         # getting shift fresh, old one is now detached or sthg
         # after transaction is comitted
         shift = mkshift(session, self.request, s_id=new_id)
-        return redir_to_wg(wg_id, self.user.id, self.request, msg='New %s has been added.' % shift)
+        return redir_to_wg(wg_id, self.user.id, self.request, msg='Succesfully added shift')
 
 
 class ShiftValidationException(Exception):
@@ -138,6 +133,5 @@ class ShiftView(BaseView):
                 except Exception, e:
                     return redir_to_wg(wg_id, self.user.id, self.request, msg=u'Something went wrong: %s' % e)
                 return redir_to_wg(wg_id, self.user.id, self.request, msg='Shift has been deleted.')
-
 
 
