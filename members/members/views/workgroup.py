@@ -1,4 +1,3 @@
-import transaction
 from pyramid.view import view_config
 
 from datetime import datetime
@@ -17,19 +16,21 @@ def get_possible_members(session):
     return session.query(Member).filter(Member.mem_active==True).all()
 
 
-def mkworkgroup(session, request=None, wg_id=None):
+def get_wg(session, request):
     ''' make a WorkGroup object, use request if possible '''
     if (request and request.matchdict.has_key('wg_id') and
-            request.matchdict['wg_id'] != 'fresh') or wg_id:
-        if not wg_id:
-            wg_id = request.matchdict['wg_id']
-        wg = session.query(Workgroup).get(wg_id)
+            request.matchdict['wg_id'] != 'fresh'):
+        wg = session.query(Workgroup).get(request.matchdict['wg_id'])
         if wg:
             wg.exists = True
     else:
         wg = Workgroup('', '')
+    return wg
+
+
+def fill_wg_from_request(wg, request):
+    '''overwrite workgroup properties from request'''
     if request and wg:
-        # overwrite workgroup properties from request
         for attr in ['name', 'desc', 'leader_id']:
             if request.params.has_key(attr):
                 wg.__setattr__(attr, request.params[attr])
@@ -61,16 +62,10 @@ class WorkgroupView(BaseView):
         else:
             msg = ''
 
-        wg_id = self.request.matchdict['wg_id']
-        try:
-            wg_id = int(wg_id)
-        except:
-            return dict(wg=None, msg=msg+'Invalid ID.')
         session = DBSession()
-        wg = mkworkgroup(session, self.request, wg_id=wg_id)
+        wg = get_wg(session, self.request)
         if not wg:
-            #TODO: redirect to custom 404 view
-            return dict(wg=None, shifts=None, msg=msg+" No workgroup with id %d" % wg_id)
+            raise Exception(msg+" No workgroup with id %s" % self.request.matchdict['wg_id'])
 
         self.user_is_wgleader = wg.leader_id == self.user.id
 
@@ -99,23 +94,13 @@ class WorkgroupEditView(BaseView):
     tab = 'workgroups'
 
     def __call__(self):
-        print 'wg view called.'
-        id = self.request.matchdict['wg_id']
-        if id != 'fresh':
-            try:
-                id = int(id)
-            except:
-                return dict(m = None, msg = 'Invalid ID.')
-
         session = DBSession()
-        wg = mkworkgroup(session, self.request)
+        wg = get_wg(session, self.request)
         if not wg:
-            return dict(wg=None, msg="No workgroup with id %d" % id)
+            return dict(wg=None, msg="No workgroup with %d" % self.request.matchdict['wg_id'])
 
         self.possible_members = get_possible_members(session)
-        if not self.request.params.has_key('action'):
-            return dict(wg = wg, msg='')
-        else:
+        if self.request.params.has_key('action'):
             action = self.request.params['action']
             if action == "save":
                 if self.request.params.has_key('wg_members'):
@@ -123,56 +108,40 @@ class WorkgroupEditView(BaseView):
                     for mid in self.request.POST.getall('wg_members'):
                         m = session.query(Member).get(mid)
                         wg.members.append(m)
-                try:
-                    session.add(wg)
-                    session.flush()
-                    new_id = wg.id
-                    transaction.commit()
-                except Exception, e:
-                    return dict(wg = None, msg=u'Something went wrong: %s' % e)
-                self.possible_members = get_possible_members(session)
-                return dict(wg = mkworkgroup(session, self.request, wg_id=new_id), msg='Workgroup has been saved.')
+                wg = fill_wg_from_request(wg, self.request)
+                session.add(wg) # necessary if new
+                return dict(wg=wg, msg='Workgroup has been saved.')
 
             elif action == 'delete':
                 wg_name = wg.name
-                try:
-                    session.delete(session.query(Workgroup).get(wg.id))
-                    session.flush()
-                    transaction.commit()
-                except Exception, e:
-                    return dict(wg = None, msg=u'Something went wrong: %s' % e)
+                session.delete(wg)
                 return dict(wg = None, msg='Workgroup %s has been deleted.' % wg.name)
 
             elif "task" in action:
-                print action, " =========================================================================="
                 msg = ''
-                try:
-                    if action == 'add-task':
-                        task = Task(self.request.params['task_label'], wg.id)
-                        wg.tasks.append(task)
-                        session.add(task)
-                        msg = 'Added task.'
-                    elif action == 'toggle-task-activity':
-                        task = session.query(Task).get(self.request.params['task_id'])
-                        task.active = not task.active
-                        session.add(task)
-                        msg = 'changed activity status of the task.'
-                    elif action == 'delete-task':
-                        task = session.query(Task).get(self.request.params['task_id'])
-                        shifts = session.query(Shift).filter(Shift.task_id==task.id).all()
-                        if len(shifts) == 0:
-                            session.delete(task)
-                            msg = 'Deleted task.'
-                        else:
-                            msg = 'Cannot delete task, as there are shifts in the history with this task.'
-                    session.flush()
-                    transaction.commit()
-                except Exception, e:
-                    #TODO: redirect to custom 404 view?
-                    msg = ' Could not perform %s: %s' % (action, e)
-                    #TODO: re-initiating this too often (after each commit), there must be a more elegant way
+                if action == 'add-task':
+                    task = Task(self.request.params['task_label'], wg.id)
+                    wg.tasks.append(task)
+                    session.add(task)
+                    msg = 'Added task.'
+                elif action == 'toggle-task-activity':
+                    task = session.query(Task).get(self.request.params['task_id'])
+                    task.active = not task.active
+                    msg = 'Changed activity status of the task.'
+                elif action == 'delete-task':
+                    task = session.query(Task).get(self.request.params['task_id'])
+                    shifts = session.query(Shift).filter(Shift.task_id==task.id).all()
+                    if len(shifts) == 0:
+                        session.delete(task)
+                        msg = 'Deleted task.'
+                    else:
+                        msg = 'Cannot delete task, as there are shifts in the history with this task.'
+                # committing, so tasks are fresh
+                import transaction
+                transaction.commit()
                 self.possible_members = get_possible_members(session)
-                return dict(wg = mkworkgroup(session, self.request), msg = msg)
+                return dict(wg = get_wg(session, self.request), msg = msg)
+        return dict(wg=wg, msg='')
 
 
 

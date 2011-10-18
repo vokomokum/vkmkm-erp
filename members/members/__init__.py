@@ -2,9 +2,12 @@ from pyramid.config import Configurator
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from sqlalchemy import engine_from_config
+from pyramid.exceptions import NotFound
 
 from members.models.setup import initialize_sql
 from members.security import groupfinder
+from members.views.base import NotFoundView
+from members.views.base import ErrorView
 # import all our types here once, important
 from members.models.member import Member
 from members.models.workgroups import Workgroup
@@ -34,18 +37,7 @@ def main(global_config, **settings):
         authentication_policy = authn_policy,
         authorization_policy = authz_policy)
 
-    # TODO: custom not found view
-    from pyramid.exceptions import NotFound 
-    #from pyramid.httpexceptions import HTTPNotFound 
-    #from pyramid.view import AppendSlashNotFoundViewFactory
-    #def notfound_view(context, request):
-    #    return HTTPNotFound('It aint there, stop trying!')
-    #custom_append_slash = AppendSlashNotFoundViewFactory(notfound_view)
-    #config.add_view(custom_append_slash, context=NotFound)
-    from  members.views.base import NotFoundView
-    config.add_view(NotFoundView, context=NotFound)
-
-    # routes to be used by views
+    # routes to our views
     config.add_static_view('static', 'members:static')
     config.add_route('home', '/')
     config.add_route('login', '/login')
@@ -60,6 +52,10 @@ def main(global_config, **settings):
     config.add_route('workgroup-edit', '/workgroup/{wg_id}/edit', factory=Workgroup)
     config.add_route('new_shift', '/workgroup/{wg_id}/new-shift/in-order/{o_id}', factory=Workgroup)
     config.add_route('edit_shift', '/workgroup/{wg_id}/edit-shift/{s_id}', factory=Workgroup)
+
+    # custom error views
+    config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')
+    config.add_view(ErrorView, context=Exception, renderer='templates/base.pt')
 
     config.scan()
 

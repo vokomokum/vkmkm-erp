@@ -24,8 +24,20 @@ class BaseView(object):
         return authenticated_user(self.request)
 
 
-def NotFoundView(request):
+class NotFoundView(BaseView):
 
-    return Response(status = 404)
+    tab = 'home'
+
+    def __call__(self):
+        return dict(msg="Sorry, I could not find this location.")
+
+
+class ErrorView(BaseView):
+
+    tab = 'home'
+
+    def __call__(self):
+        return dict(msg="Sorry, something went wrong - maybe you should contact an admin about this. Error message: '%s'" % str(self.context) )
+
 
 

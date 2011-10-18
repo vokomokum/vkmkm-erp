@@ -6,14 +6,27 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 import transaction
 
+
 # for raw SQL queries
 DBEngine = []
-# for working with SQLAlchemy models (strictly preferrable)
-DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
+def get_connection():
+    ''' :returns: a connection to execute("""SELECT ...;""") a raw SQL query on'''
+    return DBEngine[0].connect()
+
+
+# The DBSession is for working with SQLAlchemy models (strictly preferrable)
+# The autoflush and autocommit settings are like default, bit good to have explicit
+# (see http://mapfish.org/doc/tutorials/sqlalchemy.html#create-the-session)
+# Note:
+# pyramid commits all changed objects in the session after the request
+# has successfully been processed. This is by design, to simplify and
+# reduce transaction handling (see e.g. http://comments.gmane.org/gmane.comp.web.pylons.general/15295)
+DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension(), autoflush=False, autocommit=False))
 Base = declarative_base()
 
 
 def initialize_sql(engine):
+    ''':returns: a session object to work with'''
     DBEngine.append(engine)
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
@@ -24,10 +37,6 @@ def initialize_sql(engine):
     except IntegrityError:
         DBSession.rollback()
     return session
-
-
-def get_connection():
-    return DBEngine[0].connect()
 
 
 def test_setup(session, engine):

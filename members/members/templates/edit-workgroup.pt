@@ -82,7 +82,7 @@
 
 
 
-<tal:block tal:condition="wg.exists">
+<tal:block tal:condition="wg">
     <h2>Tasks in this workgroups:</h2>
 
     <table class="list" align="center">
