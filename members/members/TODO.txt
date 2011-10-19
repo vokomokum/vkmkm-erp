@@ -4,9 +4,11 @@ PRIO1
 
 
 PRIO2
-- shared login
-- could I pass msg and order_id to redir_to_wg, but not in the URL?
+- shared login with order app
+- could I pass msg and order_id to redir_to_wg, but not in the URL via GET?
 - I18N
+- enable members to have picture (to begin with, only look in static files, but we still need to take care of different sizes)
+
 
 PRIO3
 - slash at the end of URL: problem. look up solution in handbook
