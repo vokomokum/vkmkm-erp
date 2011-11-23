@@ -122,7 +122,7 @@ sub get_kassa_list_data{
 		and $statiegeld_in_sum == 0 and $statiegeld_out_sum == 0 and
 		$misc_in_sum == 0 and $misc_out_sum == 0 and $membership_sum == 0 and
 		$mem_vers_g_sum == 0 and $mem_vers_k_sum == 0 and $mem_vers_m_sum == 0);
-        $kassa_list{mems}->{$mem->{mem_lname}} = {
+        $kassa_list{mems}->{$mem->{mem_id}} = {
 	    ord_num        => $config->{ord_no},
 	    mem_id         => $mem->{mem_id},
 	    name           => $mem->{mem_name}, 
@@ -301,7 +301,7 @@ sub print_html_kassa_list{
     print $fh_com $pr;
 
     # now the member lines to both the csv files and the browser
-    foreach my $key (sort {lc($a) cmp lc($b)} (keys (%{$kassa->{mems}}))) {
+    foreach my $key (sort {int($a) <=> int($b)}(keys %{$kassa->{mems}})) {
         $value = $kassa->{mems}->{$key};
 	foreach my $f (qw(wh_exbtw wh_btw wh_tot missing damaged statiegeld_in
 			  statiegeld_out crates_in crates_out misc_in misc_out membership
