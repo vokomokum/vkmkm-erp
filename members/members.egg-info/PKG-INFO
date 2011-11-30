@@ -1,17 +1,17 @@
 Metadata-Version: 1.0
 Name: members
-Version: 0.0
+Version: 0.1
 Summary: members
 Home-page: UNKNOWN
-Author: UNKNOWN
-Author-email: UNKNOWN
+Author: Nicolas Honing
+Author-email: nhoening@gmail.com
 License: UNKNOWN
 Description: members app README
         
         
         
         
-Keywords: web wsgi bfg pylons pyramid
+Keywords: vokomokum food cooperative members shifts
 Platform: UNKNOWN
 Classifier: Programming Language :: Python
 Classifier: Framework :: Pylons

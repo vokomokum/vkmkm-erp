@@ -19,7 +19,7 @@ if sys.version_info[:3] < (2,5,0):
     requires.append('pysqlite')
 
 setup(name='members',
-      version='0.0',
+      version='0.1',
       description='members',
       long_description=README,
       classifiers=[
@@ -28,10 +28,10 @@ setup(name='members',
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         ],
-      author='',
-      author_email='',
+      author='Nicolas Honing',
+      author_email='nhoening@gmail.com',
       url='',
-      keywords='web wsgi bfg pylons pyramid',
+      keywords='vokomokum food cooperative members shifts',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,

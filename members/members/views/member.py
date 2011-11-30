@@ -69,7 +69,7 @@ class MemberView(BaseView):
         m = get_member(DBSession(), self.request)
         if not m:
             raise Exceptions("No member with id %d" % self.request.matchdict['mem_id'])
-        self.user_can_edit = self.user.id == m.id or self.user.mem_admin
+        self.user_can_edit = self.user.mem_id == m.mem_id or self.user.mem_admin
         # assigned and worked shifts
         assigned = [s for s in m.scheduled_shifts if s.state == 'assigned']
         worked = [s for s in m.scheduled_shifts if s.state == 'worked']
@@ -105,7 +105,7 @@ class MemberEditView(BaseView):
                     #TODO: if this happens, we still saves other changed attributes that come in the request?
                     raise MemberValidationExceptions('Member has no password.')
                 session.add(member)
-                new_id = member.id
+                new_id = member.mem_id
                 return dict(m = member, msg='Member has been saved.')
 
             elif action == 'delete':
@@ -170,8 +170,8 @@ class MemberlistView(BaseView):
                 m_query = m_query.filter(Member.active==True)
 
         # ordering
-        # key is what the outside world see, value is what SQLAlchemy uses
-        order_idxs = {'id': Member.id, 'name': Member.mem_lname}
+        # key is what the outside world sees, value is what SQLAlchemy uses
+        order_idxs = {'id': Member.mem_id, 'name': Member.mem_lname}
         order_by = 'id'
         if self.request.params.has_key('order_by')\
           and order_idxs.has_key(self.request.params['order_by']):

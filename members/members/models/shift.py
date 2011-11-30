@@ -5,7 +5,6 @@ from setup import Base
 from member import Member
 from task import Task
 from workgroups import Workgroup
-from others import Order
 
 
 class Shift(Base):
@@ -18,13 +17,12 @@ class Shift(Base):
 
     id = Column(Integer, primary_key=True)
     wg_id = Column(Integer, ForeignKey('workgroups.id'), nullable=False)
-    mem_id = Column(Integer, ForeignKey('members.id'), nullable=False)
-    order_id = Column(Integer, ForeignKey('wh_order.ord_no'), nullable=False)
+    mem_id = Column(Integer, ForeignKey('members.mem_id'), nullable=False)
+    order_id = Column(Integer, nullable=False)
     task_id = Column(Integer, ForeignKey('wg_tasks.id'), nullable=False)
     state = Column(Unicode(255), default='assigned')
 
     member = relationship(Member, backref='scheduled_shifts')
-    order = relationship(Order)
     workgroup = relationship(Workgroup)
     task = relationship(Task)
 
@@ -35,8 +33,8 @@ class Shift(Base):
         self.task_id = t_id
 
     def __repr__(self):
-        return "Shift - task '%s' in order '%s' by member %s in the '%s'-group [state is %s]" %\
-                (str(self.task), self.order.label, self.member.fullname(), self.workgroup, self.state)
+        return "Shift - task '%s' in order '%d' by member %s in the '%s'-group [state is %s]" %\
+                (str(self.task), self.order_id, self.member.fullname(), self.workgroup, self.state)
 
     def set_state(self, state):
         assert(state in ['assigned', 'worked'])

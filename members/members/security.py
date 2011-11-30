@@ -17,7 +17,7 @@ def get_member(login):
         if "@" in str(login): # email address given as login?
             mem = session.query(Member).filter(Member.mem_email == login).first()
         else: # then assume id
-            mem = session.query(Member).filter(Member.id == login).first()
+            mem = session.query(Member).filter(Member.mem_id == login).first()
     except Exception, e:
         print "Exception while getting a member: %s" % e
     return mem
@@ -42,7 +42,7 @@ def groupfinder(memid, request):
     #TODO: use id of context object to check workgroup and member
     #if context.__class__ == Workgroup
     #    groups.append('wg-members')
-    if context.__class__ == Member and context.id == memid:
+    if context.__class__ == Member and context.mem_id == memid:
         groups.append('this-member')
 
     wg_id = request.params.get('wg_id', -1)
@@ -53,7 +53,7 @@ def groupfinder(memid, request):
         if len(wgs) > 0:
             groups.append('group:wg-leaders')
     admins = session.query(Member).filter(Member.mem_admin == True).all()
-    if memid in [m.id for m in admins]:
+    if memid in [m.mem_id for m in admins]:
         groups.append('group:admins')
     print "User is in groups:", groups
     return groups

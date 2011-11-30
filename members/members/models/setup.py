@@ -36,7 +36,7 @@ def initialize_sql(engine):
     Base.metadata.create_all(engine)
     try:
         session = DBSession()
-        test_setup(session, engine)
+        #test_setup(session, engine)
     except IntegrityError:
         DBSession.rollback()
     return session

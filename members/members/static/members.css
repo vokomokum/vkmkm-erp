@@ -183,3 +183,8 @@ td.number     {text-align:right;width:6em;}
     color: #70cc70;
     font-style:italic;
 }
+
+/* Specific styling */
+#wg_table #wg_members {
+   max-height:200px;
+}

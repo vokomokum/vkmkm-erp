@@ -23,7 +23,7 @@ class Member(Base):
     '''
     __tablename__ = 'members'
 
-    id = Column(Integer, primary_key=True)
+    mem_id = Column(Integer, primary_key=True)
     mem_fname = Column(Unicode(255), default='')
     mem_prefix = Column(Unicode(255), default='')
     mem_lname = Column(Unicode(255), default='')

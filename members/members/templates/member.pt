@@ -8,7 +8,7 @@
     <h1>${m.fullname()}</h1>
 
     <div tal:condition="view.user_can_edit">
-        <a class="edit_link" href="${portal_url}/member/${m.id}/edit">edit this member</a>
+        <a class="edit_link" href="${portal_url}/member/${m.mem_id}/edit">edit this member</a>
     </div>
    
     <table class="list" width="100%">

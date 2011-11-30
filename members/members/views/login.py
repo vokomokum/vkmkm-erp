@@ -5,6 +5,7 @@ from pyramid.url import route_url
 from pyramid.view import view_config
 
 from members.security import get_member
+from members.md5crypt import md5crypt
 from members.views.base import BaseView
 
 
@@ -26,19 +27,14 @@ class Login(BaseView):
             passwd = self.request.params['passwd']
             member = get_member(login)
             if member:
-                import md5
-                enc_pwd = md5.new(passwd).digest().decode('iso-8859-1')
-                # ATTENTION: allowing empty passwords to check against member
-                enc_empty = md5.new('').digest().decode('iso-8859-1')
-                if enc_pwd == enc_pwd:
-                    enc_pwd = ''
+                enc_pwd = md5crypt(str(passwd), str(member.mem_enc_pwd)) # jim uses encrypted pwd as salt
                 if not member.mem_enc_pwd: # no password yet = empty password
-                    member.mem_enc_pwd = enc_pwd
-                if member.mem_enc_pwd == enc_pwd:
+                    member.mem_enc_pwd = md5crypt('', '')
+                    enc_pwd = md5crypt(passwd, '') # let empty pwd go through
+                if str(member.mem_enc_pwd) == enc_pwd:
                     self.logged_in = True
-                    headers = remember(self.request, member.id)
-                    return HTTPFound(location = came_from,
-                        headers = headers)
+                    headers = remember(self.request, member.mem_id)
+                    return HTTPFound(location = came_from, headers = headers)
                 else:
                     message += 'The password is not correct.'
             else:

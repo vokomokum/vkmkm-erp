@@ -11,7 +11,7 @@ from member import Member
 membership = Table(
     'wg_membership', Base.metadata,
     Column('wg_id', Integer, ForeignKey('workgroups.id')),
-    Column('mem_id', Integer, ForeignKey('members.id'))
+    Column('mem_id', Integer, ForeignKey('members.mem_id'))
     )
 
 
@@ -21,7 +21,7 @@ class Workgroup(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(255))
     desc = Column(Unicode(255))
-    leader_id = Column('leader_id', Integer, ForeignKey('members.id'))
+    leader_id = Column('leader_id', Integer, ForeignKey('members.mem_id'))
 
     leader = relationship(Member, backref='led_wgs')
 

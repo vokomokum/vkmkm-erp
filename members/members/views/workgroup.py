@@ -67,7 +67,7 @@ class WorkgroupView(BaseView):
         if not wg:
             raise Exception(msg+" No workgroup with id %s" % self.request.matchdict['wg_id'])
 
-        self.user_is_wgleader = wg.leader_id == self.user.id
+        self.user_is_wgleader = wg.leader_id == self.user.mem_id
 
         # look up the order and then the shifts of this group in that order
         order_header = get_connection().execute("""SELECT * FROM order_header;""")
@@ -75,8 +75,7 @@ class WorkgroupView(BaseView):
                         or list(order_header)[0].ord_no
 
         self.order = session.query(Order).get(order_id)
-        self.orders = session.query(Order).all()
-
+        self.orders = session.query(distinct(Order.id, Order.label)).all()
         shifts = session.query(Shift).filter(Shift.wg_id==wg.id)\
                                      .filter(Shift.order_id==order_id)\
                                           .all()
