@@ -19,7 +19,7 @@ def get_possible_members(session):
 def get_wg(session, request):
     ''' make a WorkGroup object, use request if possible '''
     if (request and request.matchdict.has_key('wg_id') and
-            request.matchdict['wg_id'] != 'fresh'):
+            request.matchdict['wg_id'] != '-1'):
         wg = session.query(Workgroup).get(request.matchdict['wg_id'])
         if wg:
             wg.exists = True

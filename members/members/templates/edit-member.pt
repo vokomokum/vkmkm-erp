@@ -6,7 +6,7 @@
 
 
 
-<form tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else 'fresh')"
+<form tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else -1)"
       method="post" tal:condition="m">
 
     <h1>Editing Member Details</h1>

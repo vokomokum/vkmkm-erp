@@ -1,6 +1,7 @@
 from pyramid.view import view_config
 
 from datetime import datetime
+import random, string
 
 from members.models.member import Member
 from members.models.setup import DBSession
@@ -12,11 +13,11 @@ def get_member(session, request):
     ''' make a Member object, use request if possible '''
     member = None
     if (request and request.matchdict.has_key('mem_id') and
-            request.matchdict['mem_id'] != 'fresh'):
+            request.matchdict['mem_id'] != '-1'):
         member = session.query(Member).get(request.matchdict['mem_id'])
         if member:
             member.exists = True
-    elif request.matchdict['mem_id'] == 'fresh':
+    elif request.matchdict['mem_id'] == '-1':
         member = Member(fname=u'', prefix=u'', lname=u'')
     return member
 
@@ -26,20 +27,20 @@ def fill_member_from_request(member, request):
     '''overwrite member properties from request'''
     if request and member:
         # overwrite member properties from request
-        for attr in [a for a in Member.__dict__.keys() if a.startswith('mem_')]:
+        for attr in [a for a in Member.__dict__.keys()\
+                     if a.startswith('mem_') and not a in ['mem_id']]:
             type = str(member.__mapper__.columns._data[attr].type)
             if request.params.has_key(attr):
                 v = request.params[attr]
                 if type == 'BOOLEAN':
-                    v = {'on':1, '':0}[v]
+                    v = {'on':True, '':False}[v]
                 member.__setattr__(attr, v)
             else:
                 if type == 'BOOLEAN' and member.__dict__.has_key(attr)\
                    and member.__dict__[attr] is True\
                    and request.params.has_key('action')\
                    and request.params['action'] == 'save':
-                    v = False
-                    member.__setattr__(attr, v)
+                    member.__setattr__(attr, False)
     return member
 
 
@@ -95,14 +96,14 @@ class MemberEditView(BaseView):
                 member = fill_member_from_request(member, self.request)
                 session.add(member)
                 self.checkmember(member)
-                if self.request.matchdict['mem_id'] == 'fresh':
+                if self.request.matchdict['mem_id'] == '-1':
                     self.checkpwd(self.request)
-                    member.mem_enc_pwd = md5crypt(str(self.request.params['pwd1'])) # TODO: voko.pm uses encrypted pwd as salt, what about that hen/egg problem?
-                if not member.mem_enc_pwd:
-                    #TODO: if this happens, we still saves other changed attributes that come in the request?
+                    salt = ''.join(random.choice(string.letters) for i in xrange(8))
+                    member.mem_enc_pwd = md5crypt(str(self.request.params['pwd1']), salt)
+                if not member.mem_enc_pwd or member.mem_enc_pwd == '':
+                    #TODO: if this happens, we still save other changed attributes that come in the request?
                     raise MemberValidationExceptions('Member has no password.')
                 session.add(member)
-                new_id = member.mem_id
                 return dict(m = member, msg='Member has been saved.')
 
             elif action == 'delete':
@@ -143,9 +144,10 @@ class MemberEditView(BaseView):
         if not m.mem_house.isdigit():
             raise MemberValidationExceptions('House number should just be a number.')
         # check bank no
-        if len(m.mem_bank_no) < 7 or len(m.mem_bank_no) > 8:
-            raise MemberValidationExceptions('Bank number needs to consist of 7 or 8 numbers.')
-        if not m.mem_bank_no.isdigit():
+        bank_no_clean = m.mem_bank_no.replace(' ', '').replace('-', '')
+        if len(bank_no_clean) < 7 or len(bank_no_clean) > 9:
+            raise MemberValidationExceptions('Bank number needs to consist of 7 (postbank) or 9 numbers.')
+        if not bank_no_clean.isdigit():
             raise MemberValidationExceptions('Bank number needs to consist of only numbers.')
         # at least one telephone number
         ks = m.__dict__.keys()

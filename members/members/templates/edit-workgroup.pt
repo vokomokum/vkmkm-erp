@@ -5,7 +5,7 @@
         <div metal:fill-slot="content">
 
 
-<form tal:attributes="action python: '%s/workgroup/%s/edit' % (portal_url, str(wg.id) if wg.id else 'fresh')"
+<form tal:attributes="action python: '%s/workgroup/%s/edit' % (portal_url, str(wg.id) if wg.id else -1)"
       method="post" tal:condition="wg">
 
     <h1 tal:condition="wg">Editing Workgroup ${wg.name}</h1>

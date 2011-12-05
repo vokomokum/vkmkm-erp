@@ -56,8 +56,8 @@
                 <td>
                     <select name="mem_id">
                         <tal:block tal:repeat="m wg.members">
-                            <option tal:condition="m.id == s.mem_id" value="${m.id}" selected="selected">${m.fullname()}</option>
-                            <option tal:condition="m.id != s.mem_id" value="${m.id}">${m.fullname()}</option>
+                            <option tal:condition="m.mem_id == s.mem_id" value="${m.mem_id}" selected="selected">${m.fullname()}</option>
+                            <option tal:condition="m.mem_id != s.mem_id" value="${m.mem_id}">${m.fullname()}</option>
                         </tal:block>
                     </select>
                 </td>
@@ -93,7 +93,7 @@
                 <td>
                     <select name="mem_id">
                         <option value="--">--</option>
-                        <option tal:repeat="m wg.members" value="${m.id}">${m.fullname()}</option>
+                        <option tal:repeat="m wg.members" value="${m.mem_id}">${m.fullname()}</option>
                     </select>
                 </td>
                 <td/>
