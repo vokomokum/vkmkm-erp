@@ -68,12 +68,12 @@
         <tr align="center">
             <td width="80%"></td>
             <td width="20%" align="center">
-                <input type="image" src="${portal_url}/static/img/icons/save.png" 
-                       title="save" value="save" name="action">
-                </input>
-                <input tal:condition="wg.exists" type="image" src="${portal_url}/static/img/icons/delete.gif"
-                        title="delete" value="delete" name="action">
-                </input>
+                <button type="submit" title="save" value="save" name="action">
+                    <img src="${portal_url}/static/img/icons/save.png"/>
+                </button>
+                <button tal:condition="wg.exists" type="image" title="delete" value="delete" name="action">
+                    <img src="${portal_url}/static/img/icons/delete.gif"/>
+                </button>
             </td>
         </tr>
     </table>

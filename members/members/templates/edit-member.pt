@@ -6,20 +6,20 @@
 
 
 
-<form tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.id) if m.id else 'fresh')"
+<form tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else 'fresh')"
       method="post" tal:condition="m">
 
     <h1>Editing Member Details</h1>
 
     <div>
-        <a class="view_link" href="${portal_url}/member/${m.id}">view this member</a>
+        <a class="view_link" href="${portal_url}/member/${m.mem_id}">view this member</a>
     </div>
  
 
     <font color="red">(fields with * are required)</font>
 
     <input tal:condition="m.exists"
-           type="hidden" name="id" value="${m.id}">
+           type="hidden" name="id" value="${m.mem_id}">
     </input>
 
     <!-- Name & email -->
@@ -60,7 +60,7 @@
         <td align="left" width="25%"><font color="red">*</font> City:</td>
       </tr>
       <tr class="list-content">
-        <td><input type="text" align="left" size="60" name="mem_street"
+        <td><input type="text" align="left" size="40" name="mem_street"
                  Value="${m.mem_street}" maxlength="60"></input></td>
         <td><input type="text" align="left" size="7" name="mem_house"
                  Value="${m.mem_house}" maxlength="7"></input></td>
@@ -163,12 +163,12 @@
         <tr align="center">
             <td width="80%"></td>
             <td width="20%" align="center">
-                <input type="image" src="${portal_url}/static/img/icons/save.png"
-                       title="save" value="save" name="action">
-                </input>
-                <input type="image" src="${portal_url}/static/img/icons/delete.gif" tal:condition="m.exists"
-                        title="delete" value="delete" name="action">
-                </input>
+                <button name="action" type="submit" value="save">
+                    <img src="${portal_url}/static/img/icons/save.png"/>
+                </button>
+                <button tal:condition="m.exists" name="action" type="submit" value="delete">
+                    <img src="${portal_url}/static/img/icons/delete.gif"/>
+                </button>
             </td>
         </tr>
     </table>

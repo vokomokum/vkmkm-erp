@@ -71,8 +71,12 @@
                 </td>
                 <td>
                     <div align="center">
-                        <input type="image" src="${portal_url}/static/img/icons/save.png" title="save" value="save" name="action"></input>
-                        <input type="image" src="${portal_url}/static/img/icons/delete.gif" title="delete" value="delete" name="action"></input>
+                        <button name="action" type="submit" value="save">
+                            <img src="${portal_url}/static/img/icons/save.png"/>
+                        </button>
+                        <button name="action" type="submit" value="delete">
+                            <img src="${portal_url}/static/img/icons/delete.gif"/>
+                        </button>
                     </div>
                 </td>
             </form>

@@ -5,7 +5,7 @@ from datetime import datetime
 from members.models.member import Member
 from members.models.setup import DBSession
 from members.views.base import BaseView
-
+from members.md5crypt import md5crypt
 
 
 def get_member(session, request):
@@ -97,10 +97,7 @@ class MemberEditView(BaseView):
                 self.checkmember(member)
                 if self.request.matchdict['mem_id'] == 'fresh':
                     self.checkpwd(self.request)
-                    import md5
-                    enc_pwd = md5.new(self.request.params['pwd1']).digest()
-                    member.mem_enc_pwd = enc_pwd.decode('iso-8859-1')
-                    #member.mem_enc_pwd = self.request.params['pwd1']
+                    member.mem_enc_pwd = md5crypt(str(self.request.params['pwd1'])) # TODO: voko.pm uses encrypted pwd as salt, what about that hen/egg problem?
                 if not member.mem_enc_pwd:
                     #TODO: if this happens, we still saves other changed attributes that come in the request?
                     raise MemberValidationExceptions('Member has no password.')
