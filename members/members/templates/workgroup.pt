@@ -9,7 +9,7 @@
 
     <div class="wg-description" tal:content="wg.desc"></div>
  
-    <div tal:condition="python: view.user.id == wg.leader.id or
+    <div tal:condition="python: view.user.mem_id == wg.leader.mem_id or
         view.user.mem_admin">
         <a class="edit_link" href="${portal_url}/workgroup/${wg.id}/edit">edit this group</a>
     </div>
@@ -21,11 +21,11 @@
         </tr>
         <tr class="list-content">
             <td>
-                <a href="${portal_url}/member/${wg.leader.id}">${wg.leader.fullname()}</a>
+                <a href="${portal_url}/member/${wg.leader.mem_id}">${wg.leader.fullname()}</a>
             </td>
             <td>
                 <tal:block tal:repeat="m wg.members">
-                    <a tal:content="m.fullname()" href="${portal_url}/member/${m.id}"></a>
+                    <a tal:content="m.fullname()" href="${portal_url}/member/${m.mem_id}"></a>
                     <span tal:condition="not repeat.m.end">,</span>
                 </tal:block>
             </td>
@@ -33,7 +33,7 @@
     </table>
 
     
-    <h2>Shifts in ${view.order.label}:</h2>
+    <h2>Shifts in Order '${view.order.label}':</h2>
     
     <table class="list" align="center" tal:condition="view.user_is_wgleader">
         <tr>
@@ -87,7 +87,7 @@
                 <td>
                     <select name="task_id">
                         <option value="--">--</option>
-                        <option tal:repeat="t view.tasks" value="{t.id}">${t}</option>
+                        <option tal:repeat="t view.tasks" value="${t.id}">${t}</option>
                     </select>
                 </td>
                 <td>
@@ -112,7 +112,7 @@
         </tr>
         <tr class="list-content" tal:repeat="s shifts">
             <td tal:content="s.task"></td>
-            <td><a tal:content="s.member.fullname()" href="${portal_url}/member/${s.member.id}"></a></td>
+            <td><a tal:content="s.member.fullname()" href="${portal_url}/member/${s.member.mem_id}"></a></td>
             <td tal:content="s.state"></td>
         </tr>
     </table>
@@ -121,8 +121,8 @@
         <form action="${portal_url}/workgroup/${wg.id}" method="post">
             <select name="order_id"> 
                 <tal:block tal:repeat="o view.orders">
-                    <option tal:condition="o.id == view.order.id" value="${o.id}" selected="selected">${o}</option>
-                    <option tal:condition="o.id != view.order.id" value="${o.id}">${o}</option>
+                    <option tal:condition="o.id == view.order.id" value="${o.id}" selected="selected">${o.label}</option>
+                    <option tal:condition="o.id != view.order.id" value="${o.id}">${o.label}</option>
                 </tal:block>
             </select>
             <input type="submit" name="action" value="show"/>

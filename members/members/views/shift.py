@@ -27,7 +27,7 @@ def get_shift(session, request):
     return shift
 
 
-def fill_shift_from_request(wg, request):
+def fill_shift_from_request(shift, request):
     '''overwrite shift properties from request'''
     if request and shift:
         # overwrite shift properties from request
@@ -59,7 +59,7 @@ class NewShiftView(BaseView):
         mem_id = self.request.params['mem_id']
         shift = Shift(wg_id, mem_id, order_id, task_id)
         session.add(shift)
-        return redir_to_wg(wg_id, self.user.id, self.request, 'Succesfully added shift', order_id)
+        return redir_to_wg(wg_id, self.user.mem_id, self.request, 'Succesfully added shift', order_id)
 
 
 
@@ -86,13 +86,13 @@ class EditShift(BaseView):
         if self.request.params.has_key('action'):
             action = self.request.params['action']
             if action == "save":
-                shift = fill_shift_from_request(shift, request)
+                shift = fill_shift_from_request(shift, self.request)
                 session.add(shift)
-                return redir_to_wg(wg_id, self.user.id, self.request, 'Shift has been saved.', order_id)
+                return redir_to_wg(wg_id, self.user.mem_id, self.request, 'Shift has been saved.', order_id)
 
             elif action == 'delete':
                 session.delete(shift)
-                return redir_to_wg(wg_id, self.user.id, self.request, 'Shift has been deleted.', order_id)
+                return redir_to_wg(wg_id, self.user.mem_id, self.request, 'Shift has been deleted.', order_id)
         else:
             raise Exception('No action given.')
 

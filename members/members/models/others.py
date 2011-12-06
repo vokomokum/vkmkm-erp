@@ -28,6 +28,3 @@ class Order(Base):
     def __init__(self):
         raise SecondOrderModelException('Creation of an order not allowed in this application.')
 
-    def __repr__(self):
-        return self.label
-

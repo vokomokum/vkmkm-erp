@@ -116,11 +116,11 @@
         <tr class="list-content">
             <form action="${portal_url}/workgroup/${wg.id}/edit" method="post">
                 <td>
-                    <input type="text" size="100" name="task_label"></input>
+                    <input type="text" size="60" name="task_label"></input>
                 </td>
                 <td/>
                 <td>
-                    <button type="submit" value="add-task" name="action">Create new task</button>
+                    <button type="submit" class="add_button" value="add-task" name="action">Create new task</button>
                 </td>
             </form>
         </tr>

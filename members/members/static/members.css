@@ -145,6 +145,13 @@ a:hover {
     float:right;
 }
 
+.add_button {
+    background: #ffffff url(img/icons/add.gif) no-repeat;
+    background-position: 4px 3px;
+    padding: 2px 24px;
+    float:right;
+}
+
 /* base styles */
 .blue {
     color: #0000ff;
@@ -174,7 +181,7 @@ td.descr      {text-align:left; width:60em;}
 td.number     {text-align:right;width:6em;}
 
 /* Forms */
-button {border: 0; background: transparent;}
+/*button {border: 0; background: transparent;}*/
 #list-options  {padding:3px; display:table; float:right;}
 #list-options a{padding-right:4px; color: #b0ffb0;}
 .list-option   {padding-right:4px; color: #c0c0c0;}

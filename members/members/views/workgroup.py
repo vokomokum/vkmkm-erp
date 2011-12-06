@@ -1,4 +1,5 @@
 from pyramid.view import view_config
+from sqlalchemy import distinct
 
 from datetime import datetime
 import calendar
@@ -13,7 +14,10 @@ from members.views.base import BaseView
 
 
 def get_possible_members(session):
-    return session.query(Member).filter(Member.mem_active==True).all()
+    return session.query(Member)\
+            .filter(Member.mem_active==True)\
+            .order_by(Member.mem_fname)\
+            .all()
 
 
 def get_wg(session, request):
@@ -70,16 +74,17 @@ class WorkgroupView(BaseView):
         self.user_is_wgleader = wg.leader_id == self.user.mem_id
 
         # look up the order and then the shifts of this group in that order
-        order_header = get_connection().execute("""SELECT * FROM order_header;""")
+        conn = get_connection()
+        order_header = conn.execute("""SELECT * FROM order_header;""")
         order_id = self.request.params.has_key('order_id') and int(self.request.params['order_id'])\
-                        or list(order_header)[0].ord_no
+                   or list(order_header)[0].ord_no
+        order_label = list(conn.execute("""SELECT ord_label FROM order_header WHERE ord_no = %d;""" % order_id))[0][0]
 
-        self.order = session.query(Order).get(order_id)
-        self.orders = session.query(distinct(Order.id, Order.label)).all()
+        self.order = session.query(Order).get((order_id, order_label))
+        self.orders = session.query(Order.id, Order.label).distinct()
         shifts = session.query(Shift).filter(Shift.wg_id==wg.id)\
                                      .filter(Shift.order_id==order_id)\
                                           .all()
-
         self.tasks = [t for t in wg.tasks if t.active]
 
         return dict(wg=wg, shifts=shifts, msg=msg)
@@ -102,12 +107,16 @@ class WorkgroupEditView(BaseView):
         if self.request.params.has_key('action'):
             action = self.request.params['action']
             if action == "save":
+                wg = fill_wg_from_request(wg, self.request)
                 if self.request.params.has_key('wg_members'):
                     wg.members = []
                     for mid in self.request.POST.getall('wg_members'):
                         m = session.query(Member).get(mid)
                         wg.members.append(m)
-                wg = fill_wg_from_request(wg, self.request)
+                    wg_leader_ids = [m for m in wg.members if m.mem_id == wg.leader_id]
+                    # make sure leaders are members
+                    if len(wg_leader_ids) == 0:
+                        wg.members.append(session.query(Member).get(wg.leader_id))
                 session.add(wg) # necessary if new
                 return dict(wg=wg, msg='Workgroup has been saved.')
 
