@@ -9,7 +9,7 @@ from members.models.member import Member
 from members.models.setup import DBSession, get_connection
 from members.models.shift import Shift
 from members.models.task import Task
-from members.models.others import Order
+from members.models.others import Order, get_order_label
 from members.views.base import BaseView
 
 
@@ -74,13 +74,11 @@ class WorkgroupView(BaseView):
         self.user_is_wgleader = wg.leader_id == self.user.mem_id
 
         # look up the order and then the shifts of this group in that order
-        conn = get_connection()
-        order_header = conn.execute("""SELECT * FROM order_header;""")
+        order_header = get_connection().execute("""SELECT * FROM order_header;""")
         order_id = self.request.params.has_key('order_id') and int(self.request.params['order_id'])\
                    or list(order_header)[0].ord_no
-        order_label = list(conn.execute("""SELECT ord_label FROM order_header WHERE ord_no = %d;""" % order_id))[0][0]
 
-        self.order = session.query(Order).get((order_id, order_label))
+        self.order = session.query(Order).get((order_id, get_order_label(order_id)))
         self.orders = session.query(Order.id, Order.label).distinct()
         shifts = session.query(Shift).filter(Shift.wg_id==wg.id)\
                                      .filter(Shift.order_id==order_id)\

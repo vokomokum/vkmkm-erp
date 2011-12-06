@@ -5,6 +5,7 @@ from setup import Base
 from member import Member
 from task import Task
 from workgroups import Workgroup
+from others import get_order_label
 
 
 class Shift(Base):
@@ -39,4 +40,8 @@ class Shift(Base):
     def set_state(self, state):
         assert(state in ['assigned', 'worked'])
         self.state = state
+
+    @property
+    def order(self):
+        return get_order_label(self.order_id) 
 
