@@ -1,0 +1,34 @@
+drop view dnb_products;
+drop view zap_products;
+
+CREATE VIEW dnb_products AS
+    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw,
+    w.is_product, w.is_changed, w.is_seen, w.is_skipped,
+    w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc,
+    p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active,
+    p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc,
+    min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr,
+    min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS
+    over_marg FROM (dnbdata w LEFT JOIN product p ON
+    (w.wh_prcode = p.wh_prcode and p.pr_wh = 2));
+
+CREATE VIEW zap_products AS
+    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw,
+    w.is_product, w.is_changed, w.is_seen, w.is_skipped,
+    w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc,
+    p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active,
+    p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc,
+    min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr,
+    min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS
+    over_marg FROM (zapatistadata w LEFT JOIN product p ON
+    (w.wh_prcode = p.wh_prcode and p.pr_wh = 2));
+
+REVOKE ALL ON TABLE dnb_products FROM PUBLIC;
+REVOKE ALL ON TABLE dnb_products FROM jes;
+GRANT ALL ON TABLE dnb_products TO jes;
+GRANT ALL ON TABLE dnb_products TO apache;
+
+REVOKE ALL ON TABLE zap_products FROM PUBLIC;
+REVOKE ALL ON TABLE zap_products FROM jes;
+GRANT ALL ON TABLE zap_products TO jes;
+GRANT ALL ON TABLE zap_products TO apache;
