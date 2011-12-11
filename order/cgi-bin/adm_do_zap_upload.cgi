@@ -27,6 +27,8 @@ use CGI::Carp 'fatalsToBrowser';
 use Unix::Syslog qw( :macros :subs );
 use POSIX qw(strftime);
 use MIME::Base64;
+use Encode;
+use Spreadsheet::ParseExcel;
 use voko;
 
 my $conf = "../passwords/db.conf";
@@ -41,60 +43,72 @@ my $err_msgs = "";
 my $config;
 my $order_name = "";
 
-#bestelnr	omschriving	aantal	inkoopprijs	btw	url
+my $xls_date = "";
 
-#spreadsheet
-#1	rebeldia (espresso) [Café Libertad] 250gr	1	4,36	6
-# http://www.cafe-libertad.de/shop/kaffee/espresso/bio-espresso-rebeldia-250g-gemahlen.html
-
-# create a hash of column number to column name
-sub make_col_hash {
-    my ($fh, $zap) = @_;
-    my $line;
-
-    while($line = <$fh>) {
-	$line =~ s/\s+$//;
-        next if($line =~ /^$/);
-        last if($line !~ /^\#/);
+sub process {
+    my ($config, $cgi, $dbh) = @_;
+    my $count = 0;
+    my $zap = "$datadir/$datafile";
+    die("Can't find a Zapatista Coffee data file $datadir/$datafile")
+	if(not -f "$datadir/$datafile");
+    my $parser   = Spreadsheet::ParseExcel->new();
+    my $workbook = $parser->parse($zap) or 
+	die "Can't make sense of $zap as an Excel spreadsheet: $!";
+    my $ws_count = 0;
+    my %rows;
+    for my $worksheet ( $workbook->worksheets() ) {
+	last if($ws_count++ > 0);
+	my ( $row_min, $row_max ) = $worksheet->row_range();
+	my ( $col_min, $col_max ) = $worksheet->col_range();
+	my $row;
+	for($row = $row_min; $row <= $row_max; ++$row) {
+	    my $cell = $worksheet->get_cell( $row, 0);
+	    next unless $cell;
+	    next if $cell->unformatted() ne 'Date';
+	    $cell = $worksheet->get_cell( $row, 1);
+	    die "Missing Date in column 2 of row $row" unless $cell;
+	    $xls_date = $cell->unformatted();
+	    ++$row;
+	    last;
+	}
+	die "Did not find a row with 'Date' and a date and time"
+	    if($xls_date eq "");
+	# create a hash of remaining rows
+	for( ; $row <= $row_max; ++$row) {
+	    my $cell = $worksheet->get_cell($row, 0);
+	    next if(not defined($cell));
+	    my $uf = $cell->unformatted();
+	    next if($uf !~ /^\d+/ );
+	    my %hash;
+	    $hash{row} = $row + 1;
+	    $hash{wh_pr_id} = $uf;
+	    die "invalid product code on ++$row $hash{wh_pr_id}" 
+		if($hash{wh_pr_id} < 0 or $hash{wh_pr_id} != int($hash{wh_pr_id}));
+	    $cell = $worksheet->get_cell($row, 1);
+	    $hash{wh_descr} = encode('utf8', $cell->unformatted());
+	    die "Description can not be empty on ++$row" if(not $hash{wh_descr});
+	    $cell = $worksheet->get_cell($row, 2);
+	    $hash{wh_wh_q} = $cell->unformatted();
+	    die "invalid wholesale quantity  $hash{wh_wh_q} on row ++$row" 
+		if($hash{wh_wh_q} < 1 or  $hash{wh_wh_q} != int( $hash{wh_wh_q}));
+	    $cell = $worksheet->get_cell($row, 3);
+	    $hash{wh_whpri} = int(($cell->unformatted() + .005) *100);
+	    die "invalid wholesale price on row ++$row" if($hash{wh_whpri} <= 0);
+	    $cell = $worksheet->get_cell($row, 4);
+	    $hash{wh_btw} = $cell->unformatted();
+	    die "invalid btw rate on row ++$row" if($hash{wh_btw} < 0);
+	    $cell = $worksheet->get_cell($row, 5);
+	    $hash{wh_url} = encode('utf8', $cell->unformatted());
+	    die "URL can not be empty on ++$row" if(not $hash{wh_url});
+	    die "Product code $hash{wh_pr_id} appears twice, on row 1 + $hash{wh_pr_id}->{row} and ++$row"
+		if(defined($rows{$hash{wh_prid}}));
+	    $rows{$row} = \%hash;
+	}
     }
-
-    die("file $zap appears to be empty") if(not defined($line));
-    die("$zap does not look like a Zapatista Coffee Product file - no bestelnr column") 
-	if($line !~ /^bestelnr\t/);
-    my %col_names;
-    # trim any cruft off the end
-    $line =~ s/\s+$//;
-    my $i = 0;
-    my @names = split(/\t/, $line);
-    die("$zap does not look like a Zapatista Coffee Product file - wrong number of columns")
-	if(scalar(@names) != 6);
-    map { $col_names{$i++} = $_ } @names;
-    return \%col_names;
-}
-
-# get the key which identifies the file, to prevent running the same file
-# twice. It will also check that the file being run is newer than the 
-# old file
-sub get_file_key {
-    my ($fh, $zap, $config, $dbh) = @_;
-    my $line = <$fh>;
-
-    if(not defined($line)) {
-	$dbh->disconnect;
-	die("file $zap appears to be empty");
-    }
-    #dump_stuff("make_col_hash", "", "", \$line);
-
-    if($line !~ m@0\t+(\d+)[/-](\d+)[/-](\d+)\s+(\d+):(\d+):(\d+)@) {
-	$dbh->disconnect;
-	die("$zap does not look like a Zapatista Coffee Product file - missing file's datestamp");
-    }
-    #dump_stuff("get key", $line, "", [$1, $2, $3, $4, $5, $6]);
-    my($yr, $mo, $day, $hr, $min, $sec) = ($1, $2, $3, $4, $5, $6);
-    my $newkey ="$yr/$mo/$day $hr:$min:$sec";
     my $sth = prepare(
-	'SELECT wh_update FROM wholesaler WHERE wh_id = ?', $dbh);
-    $sth->execute($config->{ZAPATISTA}->{zap_wh_id});
+	'SELECT wh_update FROM wholesaler WHERE wh_id = ? and wh_update < ?', 
+	$dbh);
+    $sth->execute($config->{ZAPATISTA}->{zap_wh_id}, $xls_date);
     my $h;
     eval {
 	$h = $sth->fetchrow_hashref;
@@ -106,104 +120,86 @@ sub get_file_key {
 	$dbh->disconnect;
 	die($m);
     }
-    return $newkey if(not defined($h->{wh_update}));
-    #dump_stuff("getkey", "$newkey", "", {});
-    if($newkey eq $h->{wh_update}) {
+    if(not $h) {
 	$dbh->disconnect;
-	die ("This file has already been processed");
-    }
-    
-    if($newkey lt $h->{wh_update}) {
-	$dbh->disconnect;
-	die("This file is older than the most recently processed one ($h->{wh_update}");  
-    }
-
-    return $newkey;
-}
-
-sub process {
-    my ($config, $cgi, $dbh) = @_;
-
-    my $zap = "$datadir/$datafile";
-    die("Can't find a Zapatista Coffee data file $datadir/$datafile")
-	if(not -f "$datadir/$datafile");
-
-    my $fh;
-    open($fh, "< $zap") or die "Can't open $zap: $!";
-    my $cols = make_col_hash($fh, $zap);
-    my $newkey = get_file_key($fh, $zap, $config, $dbh);
-    my $line = 1;
-    
-    # get the timestamp we will use
-    my %h;
-    $newkey =~ /^(.*)\s+(.*)$/;
-    my $suffix = $1;
-    my $sth = prepare("SELECT (date '$1' + time '$2')", $dbh);
-    $sth->execute;
-    my $a = $sth->fetchrow_arrayref;
-    $sth->finish;
-    my $now = $a->[0];
-	
-    while(<$fh>) {
-	++$line;
-	s/\s+$//;
-	my @data = split(/\t/, $_);
-	my $items = scalar(@data);
-	next if($items < 2);
-	#print "Couldn't parse line $line, skipping it: \n$$_\n" 
-
-	next if($items < 6);
-	for(my $i = 0; $i < scalar(@data); ++$i) {
-	    $h{$cols->{$i}} = $data[$i];
-	}
-	$h{bestelnr} = int($h{bestelnr});
-	$h{aantal} =~ s/,/./;
-	$h{inkoopprijs} =~ s/,/./;
-	my $aant = int($h{aantal});
-	$h{wh_pri} = int(100 * $aant * $h{inkoopprijs});
-	$h{omschrijving} .= " ($aant per omdoos)";
-	$h{btw} =~ s/,/./;
-	$sth = prepare("SELECT put_zap(?, " .  # prcode
-                                 "?, " .       # descr
-                                 "?, " .       # wh_q
-                                 "?, " .       # whpri
-                                 "?, " .       # btw 
-                                 "?, " .       # url
-                                 "? )",        # tstamp
-		       $dbh);
-	    eval {
-		$sth->execute( $h{bestelnr},  
-			       $h{omschrijving}, 
-			       $aant,
-			       $h{wh_pri},
-			       $h{btw},
-			       $h{url},
-			       $now);
-	    };
-	    if($dbh->err) {
-		my $m = $@;
-		$dbh->rollback;
-		$dbh->disconnect;
-		die($m);
-	    }
-    }
-
-    $sth = prepare(
-	'UPDATE wholesaler SET wh_update = cast(? as timestamp) WHERE wh_id = ?', $dbh);
-    eval {
-	$sth->execute($newkey, $config->{ZAPATISTA}->{zap_wh_id});
-    };
-    if($dbh->err) {
-	my $m = $@;
-	$dbh->rollback;
-	$dbh->disconnect;
-	die($m);
+	die "This file is not newer than the current product data, it will not be processed";
     }
 
     $dbh->commit;
-    $suffix =~ s/\///g;
-    rename "$datadir/$datafile", "$datadir/zapassor.$suffix.zip";
-    return $line;
+    $sth = prepare("SELECT MAX(wh_pr_id) AS prmax FROM zapatistadata", $dbh);
+    $sth->execute;
+    $h = $sth->fetchrow_hashref;
+    my $next_pr_id = 1;
+    $next_pr_id = 1 + $h->{prmax} if(defined($h));
+    # check that there's no attempt to preset a product code
+    $sth = prepare("SELECT wh_pr_id, wh_last_seen FROM zapatistadata WHERE wh_pr_id = ?", 
+		   $dbh);
+    my $upd_sth = prepare("UPDATE zapatistadata SET wh_whpri = ?, wh_btw = ?, " .
+		       "wh_descr = ?, wh_url = ?, wh_wh_q = ?, wh_prcode = ?, ".
+		       "wh_last_seen = ?, " .
+		       "wh_prev_seen = ?  WHERE wh_pr_id = ?", $dbh);
+    my $ins_sth = prepare("INSERT INTO zapatistadata (wh_pr_id, wh_whpri, wh_btw, wh_descr, " .
+		       "wh_url, wh_wh_q, wh_last_seen, wh_prev_seen, wh_prcode) VALUES " .
+		       "(?, ?, ?, ?, ?, ?, cast(? as timestamp with time zone), " .
+			  "cast(? as timestamp with time zone), ?)", 
+		       $dbh);
+    dump_stuff("rows", "", "", \%rows);
+    foreach my $k (keys %rows) {
+	if($rows{$k}->{wh_pr_id} != 0) {
+	    $sth->execute($rows{$k}->{wh_pr_id});
+	    $h = $sth->fetchrow_hashref;
+	    dump_stuff("update", $k, "", $h);
+	    if(not defined($h) or not $h) {
+		$dbh->rollback;
+		$dbh->disconnect;
+		die "Product code $rows{$k}->{wh_pr_id} on row $k is not a product - the update file will not be processed";
+	    }
+	    eval {
+		$upd_sth->execute($rows{$k}->{wh_whpri}, $rows{$k}->{wh_btw}, 
+				  $rows{$k}->{wh_descr}, $rows{$k}->{wh_url},
+				  $rows{$k}->{wh_wh_q}, $rows{$k}->{wh_pr_id}, 
+				  $xls_date, $h->{wh_last_seen},
+				  $rows{$k}->{wh_pr_id});
+	    };
+	    if($sth->err) {
+		my $m = $@;
+		$dbh->rollback;
+		$dbh->commit;
+		die "$m";
+	    }
+	} else {
+	    dump_stuff("at row", $k, "", $rows{$k});
+	    eval {
+		$ins_sth->execute($next_pr_id, $rows{$k}->{wh_whpri},
+				  $rows{$k}->{wh_btw}, $rows{$k}->{wh_descr},
+				  $rows{$k}->{wh_url}, $rows{$k}->{wh_wh_q}, 
+				  $xls_date, , $xls_date, $next_pr_id);
+	    };
+	    if($sth->err) {
+                my $m = $@;
+                $dbh->rollback;
+                $dbh->commit;
+                die "$m";
+            }
+	    ++$next_pr_id;
+	}
+	++$count;
+    }
+    $sth = prepare("UPDATE wholesaler SET wh_update = ? WHERE wh_id = ?", $dbh);
+    eval {
+	$sth->execute($xls_date, $config->{ZAPATISTA}->{zap_wh_id});
+    };
+    if($sth->err) {
+	my $m = $@;
+	$dbh->rollback;
+	$dbh->commit;
+	die "$m";
+    }
+    $dbh->commit;
+    my $suffix = $xls_date;
+    $suffix =~ s![/:]!!g;
+    rename "$datadir/$datafile", "$datadir/zapassor$suffix.xls";
+    return $count;
 
 }
 
@@ -217,7 +213,6 @@ sub doit {
 
     open($tgt_fh, ">$tf") or die "Can't open $tf: $!"; 
     while(my $l = <$src_fh>) {
-	#dump_stuff("doit", $l, "", \$src_fh);
 	print $tgt_fh $l;
     }
     
@@ -247,8 +242,6 @@ sub doit {
     $tpl->print("MAIN");
     print '</form></body></html>';
     exit 0;
-
-
 }
 
 sub main {

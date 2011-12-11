@@ -44,8 +44,8 @@ product list</td>
  <td width="30%">&nbsp;</td>
 </tr>
 </table>
+<a href="$filename">Download</a> Right click and select Save As
+  to create a spreadsheet
 </form>
 </body>
 </html>
-   
- 

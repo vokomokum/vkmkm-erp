@@ -27,6 +27,8 @@ use CGI::Carp 'fatalsToBrowser';
 use Unix::Syslog qw( :macros :subs );
 use POSIX qw(strftime);
 use MIME::Base64;
+use Encode;
+use Spreadsheet::WriteExcel;
 use voko;
 
 my $conf = "../passwords/db.conf";
@@ -43,6 +45,75 @@ my %sc_descs;
 my $change = "#ff9090";
 my $nochange = "#boffbo";
 
+my $dir = "data";
+mkdir $dir, 0755;
+my $workbook;
+my $worksheet;
+my $fname = "zapatista/zapatista.xls";
+
+# create a new spreadsheet whenever this runs
+sub open_spreadsheet{
+    my ($config, $cgi, $dbh) = @_;
+    $workbook = Spreadsheet::WriteExcel->new("../$dir/$fname");
+    $workbook->set_properties(utf8=>1);
+    $worksheet = $workbook->add_worksheet();
+    # pr_code descr qty price btw url
+    #  A      B      C    D    E   F   
+    $worksheet->set_column('A:A', 7);
+    $worksheet->set_column('B:B', 50);
+    $worksheet->set_column('C:C', 7);
+    $worksheet->set_column('D:D', 8);
+    $worksheet->set_column('E:E', 6);
+    $worksheet->set_column('F:F', 80);
+    $worksheet->merge_range('A1:G6', 'Vertical and horizontal', $workbook->add_format());
+    my $text = "";
+    my $l;
+    open(INST, "../templates/adm_zap/spreadsheet_inst.txt") or 
+	die "Can't open templates/adm_zap/spreadsheet_inst.txt: $!";
+    $text .= $l while($l = <INST>);
+    close(INST);
+    $worksheet->write('A1', $text);
+    my $sth = prepare(
+	'SELECT wh_update FROM wholesaler WHERE wh_id = ?', $dbh);
+    $sth->execute($config->{ZAPATISTA}->{zap_wh_id});
+    my $h;
+    eval {
+	$h = $sth->fetchrow_hashref;
+	$sth->finish;
+    };
+
+    if($dbh->err) {
+	my $m = $@;
+	$dbh->disconnect;
+	die($m);
+    }
+    my $cutoff = $h->{wh_update};
+    my $fmt_date = $workbook->add_format(num_format=>'dd/mm/yyyy hh:mm:ss', align=>'center');
+    $worksheet->write('A8', 'Date');
+    $worksheet->write_date_time('B8', $cutoff, $fmt_date);
+    my $fmt_center = $workbook->add_format(align=>'center');
+    my @headings = ('Pr code', 'Description', 'Qty', 'Price', 'BTW%', 'URL'); 
+    $worksheet->write_row('A9', \@headings, $fmt_center);
+    my $row = 10;
+    my $fmt_int = $workbook->add_format(num_format=>0, align=>'center');
+    my $fmt_dec = $workbook->add_format(num_format=>'#.#0', align=>'center');
+    my $fmt_btw = $workbook->add_format(num_format=>'#.', align=>'center');
+    my $fmt_txt = $workbook->add_format(align=>'left');
+    $sth = prepare('SELECT * FROM zapatistadata WHERE wh_last_seen = ? ORDER BY wh_pr_id' , $dbh);
+    $sth->execute($cutoff);
+    while($h = $sth->fetchrow_hashref) {
+	$worksheet->write($row, 0, $h->{wh_pr_id}, $fmt_int);
+	$worksheet->write($row, 1, decode('utf8', $h->{wh_descr}), $fmt_txt);
+	$worksheet->write($row, 2, $h->{wh_wh_q}, $fmt_int);
+	$worksheet->write($row, 3, $h->{wh_whpri}/100., $fmt_dec);
+	$worksheet->write($row, 4, $h->{wh_btw}, $fmt_btw);
+	$worksheet->write($row, 5, decode('utf8',$h->{wh_url}), $fmt_txt);
+	++$row;
+    }
+    $sth->finish;
+    $workbook->close();
+}
+	
 
 # display stats and select what we want to do
 # actual updates come later
@@ -215,6 +286,7 @@ sub get_choice {
 		  new            => scalar(@{$new_zap}),
 		  maybe          => scalar(@{$zap_maybe}),
 		  all            => scalar(@{$zap_all}),
+		  filename       => "/$fname",
 	);
 
     $tpl->assign(\%hdr_h);
@@ -714,7 +786,8 @@ sub mode_5 {
 
 sub doit {
     my ($config, $cgi, $dbh) = @_;
-    get_cats(\%categories, \%cat_descs, \%sc_descs, $dbh),
+    get_cats(\%categories, \%cat_descs, \%sc_descs, $dbh);
+    open_spreadsheet($config, $cgi, $dbh);
     my $new_vals = get_vars($config, $cgi, $dbh);
 
     my ($voko_changed, $voko_dropped, $voko_same, 
