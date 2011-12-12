@@ -1,6 +1,6 @@
 drop view dnb_products;
 drop view zap_products;
-
+drop function zap_interval();
 CREATE VIEW dnb_products AS
     SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw,
     w.is_product, w.is_changed, w.is_seen, w.is_skipped,
@@ -22,6 +22,26 @@ CREATE VIEW zap_products AS
     min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS
     over_marg FROM (zapatistadata w LEFT JOIN product p ON
     (w.wh_prcode = p.wh_prcode and p.pr_wh = 2));
+
+CREATE FUNCTION zap_interval(OUT newest timestamp with time zone, OUT
+penult timestamp with time zone) RETURNS record
+    AS $$
+   DECLARE
+     zaptime CURSOR FOR 
+                SELECT DISTINCT wh_last_seen 
+                FROM  (select wh_last_seen from zapatistadata) as x
+		union (select wh_prev_seen as wh_last_seen from
+		zapatistadata as y) ORDER BY wh_last_seen DESC LIMIT 2;
+   BEGIN
+     OPEN zaptime;
+     FETCH zaptime INTO newest;
+     FETCH zaptime INTO penult;
+     CLOSE zaptime;
+END;$$
+    LANGUAGE plpgsql;
+
+
+ALTER FUNCTION public.zap_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) OWNER TO jes;
 
 REVOKE ALL ON TABLE dnb_products FROM PUBLIC;
 REVOKE ALL ON TABLE dnb_products FROM jes;

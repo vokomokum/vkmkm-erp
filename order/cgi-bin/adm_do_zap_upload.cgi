@@ -143,12 +143,11 @@ sub process {
 		       "(?, ?, ?, ?, ?, ?, cast(? as timestamp with time zone), " .
 			  "cast(? as timestamp with time zone), ?)", 
 		       $dbh);
-    dump_stuff("rows", "", "", \%rows);
+
     foreach my $k (keys %rows) {
 	if($rows{$k}->{wh_pr_id} != 0) {
 	    $sth->execute($rows{$k}->{wh_pr_id});
 	    $h = $sth->fetchrow_hashref;
-	    dump_stuff("update", $k, "", $h);
 	    if(not defined($h) or not $h) {
 		$dbh->rollback;
 		$dbh->disconnect;
@@ -161,21 +160,20 @@ sub process {
 				  $xls_date, $h->{wh_last_seen},
 				  $rows{$k}->{wh_pr_id});
 	    };
-	    if($sth->err) {
+	    if($dbh->err) {
 		my $m = $@;
 		$dbh->rollback;
 		$dbh->commit;
 		die "$m";
 	    }
 	} else {
-	    dump_stuff("at row", $k, "", $rows{$k});
 	    eval {
 		$ins_sth->execute($next_pr_id, $rows{$k}->{wh_whpri},
 				  $rows{$k}->{wh_btw}, $rows{$k}->{wh_descr},
 				  $rows{$k}->{wh_url}, $rows{$k}->{wh_wh_q}, 
 				  $xls_date, , $xls_date, $next_pr_id);
 	    };
-	    if($sth->err) {
+	    if($dbh->err) {
                 my $m = $@;
                 $dbh->rollback;
                 $dbh->commit;
@@ -189,7 +187,7 @@ sub process {
     eval {
 	$sth->execute($xls_date, $config->{ZAPATISTA}->{zap_wh_id});
     };
-    if($sth->err) {
+    if($dbh->err) {
 	my $m = $@;
 	$dbh->rollback;
 	$dbh->commit;
@@ -197,7 +195,7 @@ sub process {
     }
     $dbh->commit;
     my $suffix = $xls_date;
-    $suffix =~ s![/:]!!g;
+    $suffix =~ s![/: ]!!g;
     rename "$datadir/$datafile", "$datadir/zapassor$suffix.xls";
     return $count;
 
