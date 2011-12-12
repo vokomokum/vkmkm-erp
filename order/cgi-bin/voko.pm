@@ -443,6 +443,19 @@ sub open_cgi {
 	    $dbh->commit;
 	};
     }
+    if(defined($config->{BG})) {
+	eval {
+	    my $sth = prepare("SELECT p.pr_id, w.wh_url FROM product AS p, " .
+			      "bg_data AS w ".
+			      "where p.wh_prcode = w.wh_prcode", $dbh);
+	    $sth->execute;
+	    while(my $h = $sth->fetchrow_hashref) {
+		$config->{BG}->{$h->{pr_id}} = $h->{wh_url};
+	    }
+	    $sth->finish;
+	    $dbh->commit;
+	};
+    }
 
     return ($cgi, $dbh);
 }

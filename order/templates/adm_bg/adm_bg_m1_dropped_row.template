@@ -1,0 +1,5 @@
+  <tr class="myorder">
+    <td>$pr_id</td>
+    <td>$wh_pr_id</td>
+    <td>$wh_descr</td>
+  <tr>

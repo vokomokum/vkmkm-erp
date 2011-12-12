@@ -1,0 +1,6 @@
+After editing rows in this spreadsheet, set the data field to the current date and time 
+NEVER change the product_code
+To remove a product (because it's no longer sold), simply delete the row
+If you want to keep the product, but not offer it for sale, don't remove the row, use the Edit Product page.
+To add a new product, create a new row, set the product code to zero. The actual product code will be chosen by the database.
+All products must have all the cells in their row filled out. You can always copy from another row, then edit the description of URL to create new product.

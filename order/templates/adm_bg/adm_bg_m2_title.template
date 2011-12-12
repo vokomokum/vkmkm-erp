@@ -1,5 +1,4 @@
-<h3>These are all the products in the Zapatista Coffee Product list which are not
-currently Vokomokum products<br>
+<h3>These are new products in the latest Bijenpark Geuzenveld Product list<br>
 You can choose one of three actions:<br>
 A = add this product to the Vokomokum product list, using the values
 filled in<br>
@@ -19,5 +18,6 @@ product<br>
 </table>
 <input type="hidden" name="hidden_choice" value="$mode" />
 <table class="main">
+
 
   
