@@ -321,6 +321,10 @@ sub print_html {
 	} elsif($h->{pr_wh} == $config->{ZAPATISTA}->{zap_wh_id}) {
 	    $url_temp = "common/zap_url.template";
 	    $h->{wh_url} = $config->{ZAPATISTA}->{$h->{pr_id}};
+	} elsif($h->{pr_wh} == $config->{BG}->{bg_wh_id} and 
+		$config->{BG}->{$h->{pr_id}}) {
+	    $url_temp = "common/zap_url.template";
+	    $h->{wh_url} = $config->{BG}->{$h->{pr_id}};
 	} else {
 	    $url_temp = "common/no_url.template";
 	    $h->{URL} = "";

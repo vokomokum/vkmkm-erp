@@ -1,5 +1,5 @@
-After editing rows in this spreadsheet, set the data field to the current date and time 
-NEVER change the product_code
+After editing rows in this spreadsheet, set the date field to the current date and time (don't touch the Zapatista Coffee and date column)
+NEVER change the product_code 
 To remove a product (because it's no longer sold), simply delete the row
 If you want to keep the product, but not offer it for sale, don't remove the row, use the Edit Product page.
 To add a new product, create a new row, set the product code to zero. The actual product code will be chosen by the database.

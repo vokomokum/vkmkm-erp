@@ -57,22 +57,41 @@ sub open_spreadsheet{
     $workbook = Spreadsheet::WriteExcel->new("../$dir/$fname");
     $workbook->set_properties(utf8=>1);
     $worksheet = $workbook->add_worksheet();
+    $worksheet->protect();
+
+    my $fmt_date = $workbook->add_format(num_format=>'dd-mm-yyyy hh:mm:ss', 
+					 align=>'center', locked=>0);
+    my $fmt_int = $workbook->add_format(num_format=>0, align=>'center',
+					locked=>0);
+    my $fmt_dec = $workbook->add_format(num_format=>'#.#0', align=>'center',
+					locked=>0);
+    my $fmt_btw = $workbook->add_format(num_format=>'0.#', align=>'center',
+					locked=>0);
+    my $fmt_txt = $workbook->add_format(num_format => "@", align=>'left',
+					locked=>0);
+    my $fmt_lck = $workbook->add_format(num_format => "@", align=>'left', 
+					locked=>1);
+    my $fmt_lckmerge = $workbook->add_format(num_format => "@", align=>'left', 
+					locked=>1);
+    my $fmt_center = $workbook->add_format(num_format => "@", align=>'center',
+					   locked=>0);
     # pr_code descr qty price btw url
     #  A      B      C    D    E   F   
-    $worksheet->set_column('A:A', 7);
-    $worksheet->set_column('B:B', 50);
-    $worksheet->set_column('C:C', 7);
-    $worksheet->set_column('D:D', 8);
-    $worksheet->set_column('E:E', 6);
-    $worksheet->set_column('F:F', 80);
-    $worksheet->merge_range('A1:G6', 'Vertical and horizontal', $workbook->add_format());
+    $worksheet->set_column('A:A', 7, $fmt_int);
+    $worksheet->set_column('B:B', 50, $fmt_txt);
+    $worksheet->set_column('C:C', 7, $fmt_int);
+    $worksheet->set_column('D:D', 8, $fmt_dec);
+    $worksheet->set_column('E:E', 6, $fmt_btw);
+    $worksheet->set_column('F:F', 80, $fmt_txt);
+    $worksheet->set_column('G:J', 8,  $fmt_txt);
+    $worksheet->merge_range('A1:G6', 'Vertical and horizontal', $fmt_lckmerge);
     my $text = "";
     my $l;
     open(INST, "../templates/adm_bg/spreadsheet_inst.txt") or 
 	die "Can't open templates/adm_bg/spreadsheet_inst.txt: $!";
     $text .= $l while($l = <INST>);
     close(INST);
-    $worksheet->write('A1', $text);
+    $worksheet->write('A1', $text, $fmt_lck);
     my $sth = prepare(
 	'SELECT wh_update FROM wholesaler WHERE wh_id = ?', $dbh);
     $sth->execute($config->{BG}->{bg_wh_id});
@@ -88,17 +107,15 @@ sub open_spreadsheet{
 	die($m);
     }
     my $cutoff = $h->{wh_update};
-    my $fmt_date = $workbook->add_format(num_format=>'dd/mm/yyyy hh:mm:ss', align=>'center');
-    $worksheet->write('A8', 'Date');
+    $cutoff =~ s/[+-]\d\d$//;
+    $worksheet->write('A8', 'Date', $fmt_lck);
     $worksheet->write_date_time('B8', $cutoff, $fmt_date);
-    my $fmt_center = $workbook->add_format(align=>'center');
+    $worksheet->write('F8', "Bijenpark Geuzenveld - $cutoff", $fmt_lck);
+    $cutoff = $h->{wh_update};
+
     my @headings = ('Pr code', 'Description', 'Qty', 'Price', 'BTW%', 'URL'); 
-    $worksheet->write_row('A9', \@headings, $fmt_center);
+    $worksheet->write_row('A9', \@headings, $fmt_lck);
     my $row = 10;
-    my $fmt_int = $workbook->add_format(num_format=>0, align=>'center');
-    my $fmt_dec = $workbook->add_format(num_format=>'#.#0', align=>'center');
-    my $fmt_btw = $workbook->add_format(num_format=>'#.', align=>'center');
-    my $fmt_txt = $workbook->add_format(align=>'left');
     $sth = prepare('SELECT * FROM bg_data WHERE wh_last_seen = ? ORDER BY wh_pr_id' , $dbh);
     $sth->execute($cutoff);
     while($h = $sth->fetchrow_hashref) {
@@ -155,7 +172,9 @@ sub get_stats {
     my ($newest, $penult) = @{$a};
     if(not defined($newest)) {
 	$newest = "2009-08-31 10:47:34+02";
+	$newest =~ s/[+-]\d\d$//;
 	$penult = "2009-08-31 10:47:34+02";;
+	$penult =~ s/[+-]\d\d$//;
     }
 
     $config->{newest} = $newest;

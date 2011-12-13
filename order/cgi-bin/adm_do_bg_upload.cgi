@@ -56,6 +56,7 @@ sub process {
 	die "Can't make sense of $bg as an Excel spreadsheet: $!";
     my $ws_count = 0;
     my %rows;
+    my $id;
     for my $worksheet ( $workbook->worksheets() ) {
 	last if($ws_count++ > 0);
 	my ( $row_min, $row_max ) = $worksheet->row_range();
@@ -64,20 +65,52 @@ sub process {
 	for($row = $row_min; $row <= $row_max; ++$row) {
 	    my $cell = $worksheet->get_cell( $row, 0);
 	    next unless $cell;
-	    next if $cell->unformatted() ne 'Date';
+	    next if $cell->value() ne 'Date';
 	    $cell = $worksheet->get_cell( $row, 1);
 	    die "Missing Date in column 2 of row $row" unless $cell;
-	    $xls_date = $cell->unformatted();
+	    $xls_date = $cell->value();
+	    $xls_date =~ s/[+-]\d\d$//;
+	    $cell = $worksheet->get_cell($row, 5);
+	    $id = ($cell && $cell->value()) ? $cell->value() : "";
 	    ++$row;
 	    last;
 	}
 	die "Did not find a row with 'Date' and a date and time"
 	    if($xls_date eq "");
+	die "Missing Title and database date from spreadsheet" 
+	    if(not $id or 
+	       $id !~ /Bijenpark Geuzenveld - (\d{4,4}-\d\d-\d\d \d\d:\d\d:\d\d)/);
+	$id = $1;
+	my $sth = prepare(
+	    'SELECT wh_update FROM wholesaler WHERE wh_id = ?', $dbh);
+	$sth->execute($config->{BG}->{bg_wh_id});
+	my $h;
+	eval {
+	    $h = $sth->fetchrow_hashref;
+	    $sth->finish;
+	};
+
+	if($dbh->err) {
+	    my $m = $@;
+	    $dbh->disconnect;
+	    die($m);
+	}
+	if(not $h) {
+	    $dbh->disconnect;
+	    die "Could not find last update date for product file";
+	}
+	$h->{wh_update} =~ s/[+-]\d\d$//;
+	if($h->{wh_update} ne $id) {
+	    die "Products have been updated since this spreadsheet was " .
+		"downloaded. Download a new spreasheet and edit that one";
+	}
+	die "This file is not newer than the current product data, it will not be processed" if($xls_date le $h->{wh_update});
+
 	# create a hash of remaining rows
 	for( ; $row <= $row_max; ++$row) {
 	    my $cell = $worksheet->get_cell($row, 0);
 	    next if(not defined($cell));
-	    my $uf = $cell->unformatted();
+	    my $uf = $cell->value();
 	    next if($uf !~ /^\d+/ );
 	    my %hash;
 	    $hash{row} = $row + 1;
@@ -85,50 +118,31 @@ sub process {
 	    die "invalid product code on ++$row $hash{wh_pr_id}" 
 		if($hash{wh_pr_id} < 0 or $hash{wh_pr_id} != int($hash{wh_pr_id}));
 	    $cell = $worksheet->get_cell($row, 1);
-	    $hash{wh_descr} = encode('utf8', $cell->unformatted());
+	    $hash{wh_descr} = encode('utf8', $cell->value());
 	    die "Description can not be empty on ++$row" if(not $hash{wh_descr});
 	    $cell = $worksheet->get_cell($row, 2);
-	    $hash{wh_wh_q} = $cell->unformatted();
+	    $hash{wh_wh_q} = $cell->value();
 	    die "invalid wholesale quantity  $hash{wh_wh_q} on row ++$row" 
 		if($hash{wh_wh_q} < 1 or  $hash{wh_wh_q} != int( $hash{wh_wh_q}));
 	    $cell = $worksheet->get_cell($row, 3);
-	    $hash{wh_whpri} = int(($cell->unformatted() + .005) *100);
+	    $hash{wh_whpri} = int(($cell->value() + .005) *100);
 	    die "invalid wholesale price on row ++$row" if($hash{wh_whpri} <= 0);
 	    $cell = $worksheet->get_cell($row, 4);
-	    $hash{wh_btw} = $cell->unformatted();
+	    $hash{wh_btw} = $cell->value();
 	    die "invalid btw rate on row ++$row" if($hash{wh_btw} < 0);
 	    $cell = $worksheet->get_cell($row, 5);
-	    $hash{wh_url} = encode('utf8', $cell->unformatted());
+	    $hash{wh_url} = ($cell && $cell->unformatted()) ? encode('utf8', $cell->value()) : "";
 
 	    die "Product code $hash{wh_pr_id} appears twice, on row 1 + $hash{wh_pr_id}->{row} and ++$row"
 		if(defined($rows{$hash{wh_prid}}));
 	    $rows{$row} = \%hash;
 	}
     }
-    my $sth = prepare(
-	'SELECT wh_update FROM wholesaler WHERE wh_id = ? and wh_update < ?', 
-	$dbh);
-    $sth->execute($config->{BG}->{bg_wh_id}, $xls_date);
-    my $h;
-    eval {
-	$h = $sth->fetchrow_hashref;
-	$sth->finish;
-    };
-
-    if($dbh->err) {
-	my $m = $@;
-	$dbh->disconnect;
-	die($m);
-    }
-    if(not $h) {
-	$dbh->disconnect;
-	die "This file is not newer than the current product data, it will not be processed";
-    }
 
     $dbh->commit;
-    $sth = prepare("SELECT MAX(wh_pr_id) AS prmax FROM bg_data", $dbh);
+    my $sth = prepare("SELECT MAX(wh_pr_id) AS prmax FROM bg_data", $dbh);
     $sth->execute;
-    $h = $sth->fetchrow_hashref;
+    my $h = $sth->fetchrow_hashref;
     my $next_pr_id = 1;
     $next_pr_id = 1 + $h->{prmax} if(defined($h));
     # check that there's no attempt to preset a product code
@@ -140,8 +154,8 @@ sub process {
 		       "wh_prev_seen = ?  WHERE wh_pr_id = ?", $dbh);
     my $ins_sth = prepare("INSERT INTO bg_data (wh_pr_id, wh_whpri, wh_btw, wh_descr, " .
 		       "wh_url, wh_wh_q, wh_last_seen, wh_prev_seen, wh_prcode) VALUES " .
-		       "(?, ?, ?, ?, ?, ?, cast(? as timestamp with time zone), " .
-			  "cast(? as timestamp with time zone), ?)", 
+		       "(?, ?, ?, ?, ?, ?, cast(? as timestamp), " .
+			  "cast(? as timestamp), ?)", 
 		       $dbh);
 
     foreach my $k (keys %rows) {
