@@ -55,7 +55,7 @@ my $fname = "bg_data/bg_data.xls";
 sub open_spreadsheet{
     my ($config, $cgi, $dbh) = @_;
     $workbook = Spreadsheet::WriteExcel->new("../$dir/$fname");
-    $workbook->set_properties(utf8=>1);
+    #$workbook->set_properties(utf8=>1);
     $worksheet = $workbook->add_worksheet();
     $worksheet->protect();
 
