@@ -148,14 +148,15 @@ sub process {
     # check that there's no attempt to preset a product code
     $sth = prepare("SELECT wh_pr_id, wh_last_seen FROM bg_data WHERE wh_pr_id = ?", 
 		   $dbh);
-    my $upd_sth = prepare("UPDATE bg_data SET wh_whpri = ?, wh_btw = ?, " .
-		       "wh_descr = ?, wh_url = ?, wh_wh_q = ?, wh_prcode = ?, ".
-		       "wh_last_seen = ?, " .
-		       "wh_prev_seen = ?  WHERE wh_pr_id = ?", $dbh);
-    my $ins_sth = prepare("INSERT INTO bg_data (wh_pr_id, wh_whpri, wh_btw, wh_descr, " .
-		       "wh_url, wh_wh_q, wh_last_seen, wh_prev_seen, wh_prcode) VALUES " .
-		       "(?, ?, ?, ?, ?, ?, cast(? as timestamp), " .
-			  "cast(? as timestamp), ?)", 
+    my $upd_sth = prepare("UPDATE bg_data SET wh_whpri = ?, " .
+			  "wh_btw = cast(? as numeric(5, 2)), " .
+			  "wh_descr = ?, wh_url = ?, wh_wh_q = ?, wh_prcode = ?, ".
+			  "wh_last_seen = ?, " .
+			  "wh_prev_seen = ?  WHERE wh_pr_id = ?", $dbh);
+    my $ins_sth = prepare("INSERT INTO bg_data (wh_pr_id, wh_whpri, wh_btw, " .
+			  "wh_descr, wh_url, wh_wh_q, wh_last_seen, wh_prev_seen, " .
+			  "wh_prcode) VALUES (?, ?, cast(? as numeric(5,2)), ?, " .
+			  "?, ?, cast(? as timestamp), cast(? as timestamp), ?)", 
 		       $dbh);
 
     foreach my $k (keys %rows) {

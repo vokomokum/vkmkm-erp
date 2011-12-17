@@ -78,7 +78,7 @@ sub open_spreadsheet{
     # pr_code descr qty price btw url
     #  A      B      C    D    E   F   
     $worksheet->set_column('A:A', 7, $fmt_int);
-    $worksheet->set_column('B:B', 50, $fmt_txt);
+    $worksheet->set_column('B:B', 80, $fmt_txt);
     $worksheet->set_column('C:C', 7, $fmt_int);
     $worksheet->set_column('D:D', 8, $fmt_dec);
     $worksheet->set_column('E:E', 6, $fmt_btw);
@@ -106,6 +106,10 @@ sub open_spreadsheet{
 	$dbh->disconnect;
 	die($m);
     }
+
+    my @blanks = ('', '', '', '', '', '', '');
+    $worksheet->write_row('A9', \@blanks, $fmt_lck);
+
     my $cutoff = $h->{wh_update};
     $cutoff =~ s/[+-]\d\d$//;
     $worksheet->write('A8', 'Date', $fmt_lck);

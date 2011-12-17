@@ -78,13 +78,13 @@ sub open_spreadsheet{
     # pr_code descr qty price btw url
     #  A      B      C    D    E   F   
     $worksheet->set_column('A:A', 7, $fmt_int);
-    $worksheet->set_column('B:B', 50, $fmt_txt);
+    $worksheet->set_column('B:B', 80, $fmt_txt);
     $worksheet->set_column('C:C', 7, $fmt_int);
     $worksheet->set_column('D:D', 8, $fmt_dec);
     $worksheet->set_column('E:E', 6, $fmt_btw);
     $worksheet->set_column('F:F', 80, $fmt_txt);
     $worksheet->set_column('G:J', 8,  $fmt_txt);
-    $worksheet->merge_range('A1:G6', 'Vertical and horizontal', $fmt_lckmerge);
+    $worksheet->merge_range('A1:G6', 'Vertical and Horizontal', $fmt_lckmerge);
     my $text = "";
     my $l;
     open(INST, "../templates/adm_bg/spreadsheet_inst.txt") or 
@@ -101,11 +101,15 @@ sub open_spreadsheet{
 	$sth->finish;
     };
 
-    if($dbh->err) {
+  if($dbh->err) {
 	my $m = $@;
 	$dbh->disconnect;
 	die($m);
     }
+
+    my @blanks = ('', '', '', '', '', '', '');
+    $worksheet->write_row('A9', \@blanks, $fmt_lck);
+  
     my $cutoff = $h->{wh_update};
     $cutoff =~ s/[+-]\d\d$//;
     $worksheet->write('A8', 'Date', $fmt_lck);
