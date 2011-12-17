@@ -261,11 +261,7 @@ sub print_html {
 		};
 
 		$tpl->assign($r);
-		if($last_whn == $config->{DNB}->{dnb_wh_id}) {
-		    $tpl->parse(LINK => "link");
-		} else {
-		    $r->{LINK} = "";
-		}
+		$tpl->parse(LINK => "link");
 
 		$tpl->parse(TOTAL => "row");
 		# toggle colour
