@@ -9,7 +9,27 @@ License: UNKNOWN
 Description: members app README
         
         
+        INSTALLATION
         
+        First, we create a virtaul python environment called "lopy":
+        
+        # go to your home dir
+        $ cd
+        # install virtual environment
+        $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
+        $ python virtual-python.py lopy
+        # install some needed libraries
+        $ cd lopy/bin
+        $ ./pip install pyramid
+        
+        # enter path to lopy python 
+        $ TODO
+        
+        # do some Apache configuration
+        $ TODO
+        
+        # start the server
+        $ TODO
         
 Keywords: vokomokum food cooperative members shifts
 Platform: UNKNOWN

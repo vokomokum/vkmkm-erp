@@ -1,2 +1,2 @@
 #!/bin/bash
-~/lopy/bin/paster serve  development.ini --reload
+~/lopy/bin/pserve development.ini --reload
