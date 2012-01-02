@@ -21,7 +21,7 @@ class Shift(Base):
     mem_id = Column(Integer, ForeignKey('members.mem_id'), nullable=False)
     order_id = Column(Integer, nullable=False)
     task_id = Column(Integer, ForeignKey('wg_tasks.id'), nullable=False)
-    state = Column(Unicode(255), default='assigned')
+    state = Column(Unicode(255), default=u'assigned')
 
     member = relationship(Member, backref='scheduled_shifts')
     workgroup = relationship(Workgroup)
