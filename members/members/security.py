@@ -38,7 +38,6 @@ def groupfinder(memid, request):
     session = DBSession()
     groups = ['group:members']
     context = request.context
-    print "GROUPFINDER"
     #TODO: use id of context object to check workgroup and member
     #if context.__class__ == Workgroup
     #    groups.append('wg-members')

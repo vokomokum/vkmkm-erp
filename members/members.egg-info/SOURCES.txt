@@ -1,6 +1,7 @@
 MANIFEST.in
 README.txt
 development.ini
+install-modwsgi.txt
 production.ini
 run
 setup.cfg
@@ -55,3 +56,4 @@ members/views/login.py
 members/views/member.py
 members/views/shift.py
 members/views/workgroup.py
+modwsgi/modwsgi.conf

@@ -1,2 +1,2 @@
 #!/bin/bash
-~/lopy/bin/pserve development.ini --reload
+~/vopy/bin/pserve development.ini --reload

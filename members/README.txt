@@ -3,32 +3,62 @@ members app README
 
 INSTALLATION
 
-First, we create a virtaul python environment called "lopy":
+# -- First, we create a virtual python environment
+# (let's call it "vopy") with all needed libraries:
+# You should have a modern python (2.6+) and postgres on your system.
 
 # go to your home dir
 $ cd
-# install virtual environment (in ~/lopy)
+# install virtual environment (in ~/vopy)
 $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
-$ python virtual-python.py lopy
+$ python virtual-python.py vopy
 # install some needed libraries
-$ cd lopy/bin
-$ ./pip install pyramid
+$ cd vopy/bin
+$ ./pip install pyramid  # web framework + dependencies
+$ ./pip install psycopg2 # Postgres wrapper for Python
 
 # install subversion if needed
 TODO
 
-# check out member app
+# -- check out member app
 $ cd <location of member app>
 $ svn co TODO
 
-# develop app
-$ cd
-$ ./lopy/bin/python setup.py develop
-TODO: in production mode, what do we do there?
+# -- develop app
+$ TODO: do this in home dir 
+$ TILDE/vopy/bin/python setup.py develop
 
-# do some Apache configuration
-TODO
-
-# start the server
+# -- see if the App is served on its own server
 $ cd <location of member app>
 $ ./run 
+# The Member application should now respond under http://localhost:6543
+# do a CTRL-C to stop it, we want Apache to run it
+
+# -- install mod_wsgi
+# download the latest mod_wsgiX.X.tar.gz from http://code.google.com/p/modwsgi
+# untar it to some place, then cd into that dir 
+./configure --with-python=/Users/nic/vopy/bin/python
+make
+sudo make install
+# (you can remove the downloaded file/directory later, once mod_wsgi has been installed in Apache)
+# Now mkae sure that Apache knows about mod_wsgi:
+# Add to /etc/apache2/httpd.conf:
+LoadModule wsgi_module libexec/apache2/mod_wsgi.so
+# restart the Apache server
+sudo /usr/sbin/apachectl restart
+# in /var/log/apache2/error_log, there should be a mention of mod_wsgi being reconfigured like this:
+# [Mon Jan 02 00:06:56 2012] [notice] Apache/2.2.20 (Unix) mod_ssl/2.2.20 OpenSSL/0.9.8r DAV/2 mod_wsgi/3.3 Python/2.7.1 configured -- resumin normal operations
+
+
+# -- do some Apache configuration (this is for apache 2 on OSX, might be different on other Unix systems?)
+# in /etc/apache2/other, place the file modwsgi.conf (see members/modwsgi dir)
+# in <path-to-member-app>/modwsgi, place file called pyramid.wsgi, with contents:
+<<<
+from pyramid.paster import get_app
+application = get_app(
+    '<path-to-member-app>/production.ini', 'main')
+>>>
+# production.ini can be replaced by development.ini for easier debugging and such niceties
+
+# -- restart the Apache server
+sudo /usr/sbin/apachectl restart

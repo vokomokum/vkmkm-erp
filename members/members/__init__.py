@@ -24,8 +24,9 @@ def main(global_config, **settings):
     initialize_sql(engine)
 
     # authentication setup TODO: use order app cookies
-    f = open('auth.key', 'r')
-    authkey = f.readline()
+    #f = open('auth.key', 'r')
+    #authkey = f.readline()
+    authkey = 'pretty_secret'
     authn_policy = AuthTktAuthenticationPolicy(
             authkey,
             callback=groupfinder,
