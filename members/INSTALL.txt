@@ -1,0 +1,91 @@
+INSTALLATION
+
+
+-- First, the dependencies:
+
+You should have a modern python (2.6+) and postgres on your system.
+To update the member app code, you also need subversion (svn).
+
+
+-- To begin, we create a virtual python environment
+
+(let's call it "vopy") with all needed libraries:
+Go to your home dir
+$ cd
+Install virtual environment (in ~/vopy)
+$ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
+$ python virtual-python.py vopy
+Install some needed libraries
+$ cd vopy/bin
+$ ./pip install pyramid  # web framework + dependencies
+$ ./pip install psycopg2 # Postgres wrapper for Python
+
+
+-- Check out the member app
+
+$ cd <location of member app>
+$ svn co TODO
+
+
+-- Develop the app
+
+$ TODO: do this in app dir, replace TILDE 
+$ TILDE/vopy/bin/python setup.py develop
+
+
+-- See if the App is served through its own server
+
+$ cd <location of member app>
+$ ./run 
+The Member application should now respond under http://localhost:6543.
+Do a CTRL-C to stop it, we want Apache to run it (via mod_wsgi).
+
+
+-- Install the apache mod_wsgi module
+
+1. Download the latest mod_wsgiX.X.tar.gz from http://code.google.com/p/modwsgi (currently: X.X=3.3)
+Untar it to some place, then cd into that dir 
+$ ./configure --with-python=/Users/nic/vopy/bin/python
+$ make
+$ sudo make install
+(you can remove the downloaded file/directory later, once mod_wsgi has been installed in Apache)
+
+2. Now make sure that Apache knows about mod_wsgi - add the following line to /etc/apache2/httpd.conf:
+LoadModule wsgi_module libexec/apache2/mod_wsgi.so
+
+3. Restart the Apache server
+$ sudo /usr/sbin/apachectl restart
+In /var/log/apache2/error_log, there should be a mention of mod_wsgi being reconfigured like this:
+[Mon Jan 02 00:06:56 2012] [notice] Apache/2.2.20 (Unix) mod_ssl/2.2.20 OpenSSL/0.9.8r DAV/2 mod_wsgi/3.3 Python/2.7.1 configured -- resumin normal operations
+
+See also: http://code.google.com/p/modwsgi/wiki/QuickInstallationGuide
+
+
+-- Do some Apache configuration (this is for Apache2 on OSX, might be different on other Unix systems?)
+
+1. In the directory where your Apache looks for config files (e.g. /etc/apache2/conf.d or /etc/apache2/other), place a file with this content:
+<<<
+WSGIPythonHome /Users/nic/vopy
+
+NameVirtualHost 127.0.0.1
+<VirtualHost 127.0.0.1>
+    ServerName members.localhost
+    WSGIApplicationGroup %{GLOBAL}
+    WSGIDaemonProcess pyramid.dev display-name=%{GROUP} 
+    #   user=nic group=staff \ 
+    #   python-path=/Users/nic/vopy/lib/python2.7/site-packages
+    WSGIProcessGroup pyramid.dev
+    WSGIScriptAlias / /Users/nic/Documents/vokomokum/members/modwsgi/pyramid.wsgi
+</VirtualHost>
+>>>
+Replace ServerName with the URL you want the app to be reachable, and 127.0.0.1 with *:80. Also adapt the path the pyramid.wsgi script
+Hint 1: In pyramid.wsgi, 'production.ini' can be replaced by 'development.ini' for easier debugging and such niceties. this is useful if you are running a test or developing version.
+Hint 2: You can look for documentation on mod_wsgi directives here: http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives
+
+2. You also need to make the URL on which the app should be reachable known to the server.
+On my local machine, I want to reach it at 'members.localhost', so I add a line to /etc/hosts (in this case: "127.0.0.1      members.localhost"
+On a web server, you might need to add a DNS entry (most likely via your webhosters administration)
+
+3. Now restart the Apache server
+$ sudo /usr/sbin/apachectl restart
+
