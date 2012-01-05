@@ -75,10 +75,10 @@ NameVirtualHost 127.0.0.1
     #   user=nic group=staff \ 
     #   python-path=/Users/nic/vopy/lib/python2.7/site-packages
     WSGIProcessGroup pyramid.dev
-    WSGIScriptAlias / /Users/nic/Documents/vokomokum/members/modwsgi/pyramid.wsgi
+    WSGIScriptAlias / /Users/nic/Documents/vokomokum/members/pyramid.wsgi
 </VirtualHost>
 >>>
-Replace ServerName with the URL you want the app to be reachable, and 127.0.0.1 with *:80. Also adapt the path the pyramid.wsgi script
+Replace ServerName with the URL you want the app to be reachable, and 127.0.0.1 with *:80 if you are on a web server. Also adapt the path the pyramid.wsgi script
 Hint 1: In pyramid.wsgi, 'production.ini' can be replaced by 'development.ini' for easier debugging and such niceties. this is useful if you are running a test or developing version.
 Hint 2: You can look for documentation on mod_wsgi directives here: http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives
 
