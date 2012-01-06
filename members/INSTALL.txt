@@ -29,12 +29,12 @@ $ svn co TODO
 
 
 -- Develop the app (this also installs all needed python libs locally)
-
-$ cd vokomokum/trunk
+$ cd vokomokum/trunk/members
 $ ~/vopy/bin/python setup.py develop
 
 
--- Set which database to use in .ini file(s)
+-- Set which database to use in the .ini file(s)
+
 Here is a typical line from development.ini:
 <<<
 sqlalchemy.url = postgresql+psycopg2://user:passwd@localhost:5432/vokotest
@@ -43,7 +43,7 @@ where vokotest is the database, and user and passwd have to be set by you.
 It seems reasonable that development.ini uses a different database than production.ini
 
 
--- See if the App is served through its own server
+-- See if the App is served through its own server (if you can access localhost, e.g. on your home PC)
 
 $ ./run 
 The Member application should now respond under http://localhost:6543.
@@ -60,7 +60,7 @@ $ wget http://modwsgi.googlecode.com/files/mod_wsgi-3.3.tar.gz
 Untar it to some place, then cd into that dir 
 $ tar -zxf mod_wsgi-3.3.tar.gz
 $ cd mod_wsgi-3.3
-$ ./configure --with-python=/Users/nic/vopy/bin/python
+$ ./configure --with-python=~/vopy/bin/python
 $ make
 $ sudo make install
 (you can remove the downloaded file/directory later, once mod_wsgi has been installed in Apache)
@@ -82,22 +82,28 @@ See also: http://code.google.com/p/modwsgi/wiki/QuickInstallationGuide
 
 -- Do some Apache configuration (this is for Apache2 on OSX, might be different on other Unix systems?)
 
-1. In the directory where your Apache looks for config files (e.g. /etc/apache2/conf.d or /etc/apache2/other), place a file with this content:
+1. In the directory where your Apache looks for config files (e.g. /etc/apache2/vhosts.d or /etc/apache2/other), place a file with this content:
 <<<
-WSGIPythonHome /Users/nic/vopy
+WSGIPythonHome /home/nic/vopy
 
 NameVirtualHost 127.0.0.1
 <VirtualHost 127.0.0.1>
     ServerName members.localhost
+
+    <Directory />
+        Order allow,deny
+        Allow from all
+    </Directory>
+
     WSGIApplicationGroup %{GLOBAL}
     WSGIDaemonProcess pyramid.dev display-name=%{GROUP} 
     #   user=nic group=staff \ 
-    #   python-path=/Users/nic/vopy/lib/python2.7/site-packages
+    #   python-path=/home/nic/vopy/lib/python2.7/site-packages
     WSGIProcessGroup pyramid.dev
-    WSGIScriptAlias / /Users/nic/Documents/vokomokum/members/pyramid.wsgi
+    WSGIScriptAlias / /home/nic/Documents/vokomokum/members/pyramid.wsgi
 </VirtualHost>
 >>>
-Replace ServerName with the URL you want the app to be reachable, and 127.0.0.1 with *:80 if you are on a web server. Also adapt the path the pyramid.wsgi script
+Replace WSGIPythonHome with the path to the virtual python environment we made earlier, ServerName with the URL you want the app to be reachable, and 127.0.0.1 with *:80 if you are on a web server. Also adapt the path the pyramid.wsgi script
 Hint 1: In pyramid.wsgi, 'production.ini' can be replaced by 'development.ini' for easier debugging and such niceties. this is useful if you are running a test or developing version.
 Hint 2: You can look for documentation on mod_wsgi directives here: http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives
 
