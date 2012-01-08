@@ -45,6 +45,7 @@
             </select>
         </td>
         <td align="center">
+            <small>Hold Ctrl while (de)selecting members.</small>
             <select name="wg_members" id="wg_members"
                     size="${python:len(view.possible_members)}"
                     multiple="multiple">
