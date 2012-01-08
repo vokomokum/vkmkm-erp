@@ -1,5 +1,5 @@
 from pyramid.view import view_config
-from sqlalchemy import distinct
+from sqlalchemy import distinct, desc
 
 from datetime import datetime
 import calendar
@@ -79,7 +79,7 @@ class WorkgroupView(BaseView):
                    or list(order_header)[0].ord_no
 
         self.order = session.query(Order).get((order_id, get_order_label(order_id)))
-        self.orders = session.query(Order.id, Order.label).distinct()
+        self.orders = session.query(Order.id, Order.label).distinct().order_by(desc(Order.id))
         shifts = session.query(Shift).filter(Shift.wg_id==wg.id)\
                                      .filter(Shift.order_id==order_id)\
                                           .all()
