@@ -22,29 +22,33 @@
     <!-- Data -->
     <table class="list" width="100%" id="wg_table">
       <tr>
-        <th align="center" width="40%">Name</th> 
-        <th align="center" width="30%">Admin</th>
-        <th align="center" width="30%">Members</th>
-      </tr>
-      <tr class="list-content">
-        <td align="center"><input type="text" align="left" size="40" name="name"
+        <th align="center">Name:</th>
+        <td align="center">
+            <input type="text" align="left" size="40" name="name"
                    value="${wg.name}" maxlength="255">
             </input>
-        </td> 
-        <td align="center">
-            <select name="leader_id" size="1" tal:define="lid python: str(wg.leader_id)">
-                    <tal:block tal:repeat="pm view.possible_members">
-                    <option tal:condition="python: str(pm.mem_id) == lid"
-                            tal:content="pm.fullname()" selected="selected"
-                            value="${pm.mem_id}">
-                    </option>
-                    <option tal:condition="python: str(pm.mem_id) != lid"
-                            tal:content="pm.fullname()" value="${pm.mem_id}">
-                    </option>
-                </tal:block>
-            </select>
         </td>
-        <td align="center">
+        <td colspan="2"></td> 
+      </tr>
+      <tr>
+        <th align="center" width="50%" colspan="2">Admins:</th>
+        <th align="center" width="50%" colspan="2">Members:</th>
+      </tr>
+      <tr class="list-content">
+        <td colspan="2" align="center">
+          <select name="leader_id" size="1" tal:define="lid python: str(wg.leader_id)">
+            <tal:block tal:repeat="pm view.possible_members">
+                <option tal:condition="python: str(pm.mem_id) == lid"
+                        tal:content="pm.fullname()" selected="selected"
+                        value="${pm.mem_id}">
+                </option>
+                <option tal:condition="python: str(pm.mem_id) != lid"
+                        tal:content="pm.fullname()" value="${pm.mem_id}">
+                </option>
+            </tal:block>
+          </select>
+        </td>
+        <td colspan="2" align="center">
             <small>Hold Ctrl while (de)selecting members.</small>
             <select name="wg_members" id="wg_members"
                     size="${python:len(view.possible_members)}"
@@ -56,11 +60,11 @@
             </select>
         </td>
       </tr>
-      <tr class="list-content">
-        <td colspan="3" align="center">Description</td>
+      <tr>
+        <th align="center" colspan="4">Description:</th>
       </tr>
       <tr>
-        <td colspan="3" align="center"><textarea tal:content="wg.desc" rows="10" cols="80" name="desc"></textarea></td>
+        <td colspan="4" align="center"><textarea tal:content="wg.desc" rows="8" cols="80" name="desc"></textarea></td>
       </tr>
     </table>
 
