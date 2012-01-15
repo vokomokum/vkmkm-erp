@@ -8,16 +8,12 @@
 <form tal:attributes="action python: '%s/workgroup/%s/edit' % (portal_url, str(wg.id) if wg.id else -1)"
       method="post" tal:condition="wg">
 
-    <h1 tal:condition="wg">Editing Workgroup ${wg.name}</h1>
-    <h1 tal:condition="not wg">Workgroup-Editor</h1>
-
-    <div tal:condition="wg.exists">
+    <h1>Editing Workgroup ${wg.name}</h1>
+    
+    <tal:block tal:condition="wg.exists">
         <a class="view_link" href="${portal_url}/workgroup/${wg.id}">view this group</a>
-    </div>    
-
-    <input tal:condition="wg.exists"
-           type="hidden" name="id" value="${wg.id}">
-    </input>
+        <input type="hidden" name="id" value="${wg.id}"></input>
+    </tal:block>    
 
     <!-- Data -->
     <table class="list" width="100%" id="wg_table">
@@ -88,6 +84,7 @@
 
 
 <tal:block tal:condition="wg">
+  <tal:block tal:condition="wg.exists">
     <h2>Tasks in this workgroups:</h2>
 
     <table class="list" align="center">
@@ -111,7 +108,9 @@
                 </td>
                 <td>
                     <div align="center">
-                        <input type="image" src="${portal_url}/static/img/icons/delete.gif" title="delete" value="delete-task" name="action"></input>
+                        <button type="image" title="delete" value="delete-task" name="action">
+                            <img src="${portal_url}/static/img/icons/delete.gif"/>
+                        </button>
                         <input type="hidden" value="${t.id}" name="task_id"></input>
                     </div>
                 </td>
@@ -130,6 +129,7 @@
             </form>
         </tr>
     </table>
+  </tal:block>
 </tal:block>
 
 
