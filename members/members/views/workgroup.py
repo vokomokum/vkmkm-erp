@@ -115,6 +115,7 @@ class WorkgroupEditView(BaseView):
             action = self.request.params['action']
             if action == "save":
                 wg = fill_wg_from_request(wg, self.request)
+                wg.validate()
                 if self.request.params.has_key('wg_leaders'):
                     wg.leaders = []
                     for mid in self.request.POST.getall('wg_leaders'):
@@ -133,7 +134,7 @@ class WorkgroupEditView(BaseView):
                 if not wg.exists: # if new
                     session.add(wg)
                     # change view, bcs this wg object is not ready yet (i.e. has no ID)
-                    redir_to_wgs(self.user.mem_id, self.request, 'Workgroup was created.')
+                    return redir_to_wgs(self.user.mem_id, self.request, 'Workgroup was created.')
                 return dict(wg=wg, msg='Workgrup has been saved.')
 
             elif action == 'delete':
@@ -145,6 +146,7 @@ class WorkgroupEditView(BaseView):
                 msg = ''
                 if action == 'add-task':
                     task = Task(self.request.params['task_label'], wg.id)
+                    task.validate()
                     wg.tasks.append(task)
                     session.add(task)
                     msg = 'Added task.'

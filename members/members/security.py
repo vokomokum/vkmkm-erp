@@ -54,5 +54,5 @@ def groupfinder(memid, request):
     admins = session.query(Member).filter(Member.mem_admin == True).all()
     if memid in [m.mem_id for m in admins]:
         groups.append('group:admins')
-    print "User is in groups:", groups
+    #print "User is in groups:", groups
     return groups

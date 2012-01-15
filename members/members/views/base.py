@@ -29,6 +29,7 @@ class NotFoundView(BaseView):
     tab = 'home'
 
     def __call__(self):
+        self.request.response.status_int = 404
         return dict(msg="Sorry, I could not find this location.")
 
 

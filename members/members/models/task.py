@@ -15,7 +15,7 @@ class Task(Base):
     __tablename__ = 'wg_tasks'
 
     id = Column(Integer, primary_key=True)
-    label = Column(Unicode(255))
+    label = Column(Unicode(255), unique=True)
     wg_id = Column(Integer, ForeignKey('workgroups.id'), nullable=False)
     active = Column(Boolean(), default=True)
 
@@ -30,4 +30,10 @@ class Task(Base):
 
     def __repr__(self):
         return self.label
+
+    def validate(self):
+        ''' validate if this object is valid, raise exception otherwise '''
+        if self.label == '':
+            raise Exception('A task needs a label.')
+
 

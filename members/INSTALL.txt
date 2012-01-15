@@ -15,6 +15,7 @@ needs to be executable by the Apache user). In this tutorial, let's pretend that
 home dir (~).
 $ cd
 $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
+Here, make sure you use the python you want. This just uses the first in your path:
 $ python virtual-python.py vopy
 Install some needed libraries
 $ cd vopy/bin

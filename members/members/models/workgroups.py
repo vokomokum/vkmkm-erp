@@ -26,7 +26,7 @@ class Workgroup(Base):
     __tablename__ = 'workgroups'
 
     id = Column(Integer, primary_key=True)
-    name = Column(Unicode(255))
+    name = Column(Unicode(255), unique=True)
     desc = Column(Unicode(255))
 
     __acl__ = [ (Allow, 'group:admins', ('view', 'edit')),
@@ -44,6 +44,13 @@ class Workgroup(Base):
 
     def set_leader(self, leader_id):
         self.leader_id = leader_id
+
+    def validate(self):
+        ''' validate if this object is valid, raise exception otherwise '''
+        if self.name == '':
+            raise Exception('A workgroup needs a name.')
+        if self.desc == '':
+            raise Exception('A workgroup needs a description.')
 
 
 Workgroup.members = relationship('Member', secondary=membership)

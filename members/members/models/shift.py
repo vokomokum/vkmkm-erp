@@ -43,5 +43,5 @@ class Shift(Base):
 
     @property
     def order(self):
-        return get_order_label(self.order_id) 
+        return get_order_label(self.order_id)
 
