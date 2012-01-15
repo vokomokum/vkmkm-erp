@@ -14,6 +14,13 @@ membership = Table(
     Column('mem_id', Integer, ForeignKey('members.mem_id'))
     )
 
+leadership = Table(
+    'wg_leadership', Base.metadata,
+    Column('wg_id', Integer, ForeignKey('workgroups.id')),
+    Column('mem_id', Integer, ForeignKey('members.mem_id'))
+    )
+
+
 
 class Workgroup(Base):
     __tablename__ = 'workgroups'
@@ -21,9 +28,6 @@ class Workgroup(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(255))
     desc = Column(Unicode(255))
-    leader_id = Column('leader_id', Integer, ForeignKey('members.mem_id'))
-
-    leader = relationship(Member, backref='led_wgs')
 
     __acl__ = [ (Allow, 'group:admins', ('view', 'edit')),
                 (Allow, 'group:wg-leaders', ('view', 'edit')),
@@ -44,3 +48,5 @@ class Workgroup(Base):
 
 Workgroup.members = relationship('Member', secondary=membership)
 Member.workgroups = relationship('Workgroup', secondary=membership)
+Workgroup.leaders = relationship('Member', secondary=leadership)
+Member.led_workgroups = relationship('Workgroup', secondary=leadership)

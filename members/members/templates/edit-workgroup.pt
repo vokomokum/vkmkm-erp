@@ -31,27 +31,38 @@
         <th align="center" width="50%" colspan="2">Members:</th>
       </tr>
       <tr class="list-content">
+        <td colspan="4" align="center">
+            <small>Hold Ctrl while (de)selecting members.</small>
+        </td>
+      </tr>
+      <tr class="list-content">
         <td colspan="2" align="center">
-          <select name="leader_id" size="1" tal:define="lid python: str(wg.leader_id)">
+          <select name="wg_leaders" id="wg_leaders"
+                    size="${python:len(view.possible_members)}"
+                    multiple="multiple">
             <tal:block tal:repeat="pm view.possible_members">
-                <option tal:condition="python: str(pm.mem_id) == lid"
+                <option tal:condition="python: pm in wg.leaders"
                         tal:content="pm.fullname()" selected="selected"
                         value="${pm.mem_id}">
                 </option>
-                <option tal:condition="python: str(pm.mem_id) != lid"
+                <option tal:condition="python: not pm in wg.leaders"
                         tal:content="pm.fullname()" value="${pm.mem_id}">
                 </option>
             </tal:block>
           </select>
         </td>
         <td colspan="2" align="center">
-            <small>Hold Ctrl while (de)selecting members.</small>
             <select name="wg_members" id="wg_members"
                     size="${python:len(view.possible_members)}"
                     multiple="multiple">
                 <tal:block tal:repeat="pm view.possible_members">
-                    <option tal:condition="python:pm in wg.members" tal:content="pm.fullname()" value="${pm.mem_id}" selected="selected"></option>
-                    <option tal:condition="python:pm not in wg.members" tal:content="pm.fullname()" value="${pm.mem_id}"></option>
+                    <option tal:condition="python:pm in wg.members"
+                            tal:content="pm.fullname()" 
+                            value="${pm.mem_id}" selected="selected">
+                    </option>
+                    <option tal:condition="python:pm not in wg.members"
+                            tal:content="pm.fullname()" value="${pm.mem_id}">
+                    </option>
                 </tal:block>
             </select>
         </td>

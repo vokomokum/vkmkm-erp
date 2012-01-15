@@ -193,6 +193,6 @@ td.number     {text-align:right;width:6em;}
 }
 
 /* Specific styling */
-#wg_table #wg_members {
+#wg_table #wg_members, #wg_table #wg_leaders {
    max-height:200px;
 }

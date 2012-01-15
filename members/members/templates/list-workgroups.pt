@@ -30,8 +30,11 @@
                     <td>
                         <a href="workgroup/${wg.id}" tal:content="wg.name" title="show/edit"></a>
                     </td>
-                    <td tal:define="l wg.leader">
-                        <a href="member/${l.mem_id}" tal:content="l.fullname()" title="This member is registered leader of this workgroup"></a>
+                    <td>
+                        <tal:block tal:repeat="l wg.leaders">
+                            <a href="member/${l.mem_id}" tal:content="l.fullname()" title="This member is coordinating this workgroup"></a>
+                            <span tal:condition="not repeat.l.end">,</span>
+                        </tal:block>
                     </td>
                     <td tal:content="wg.desc"></td>
                 </tr>

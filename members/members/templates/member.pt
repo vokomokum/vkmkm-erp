@@ -54,7 +54,7 @@
                 </tal:block>
             </td>
             <td class="list-content">
-                <tal:block tal:repeat="wg m.led_wgs">
+                <tal:block tal:repeat="wg m.led_workgroups">
                     <a href="${portal_url}/workgroup/${wg.id}">${wg.name}</a>
                     <span tal:condition="not repeat.wg.end">,</span>
                 </tal:block>

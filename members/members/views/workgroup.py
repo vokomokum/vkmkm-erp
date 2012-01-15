@@ -1,4 +1,6 @@
 from pyramid.view import view_config
+from pyramid.security import remember
+from pyramid.httpexceptions import HTTPFound
 from sqlalchemy import distinct, desc
 
 from datetime import datetime
@@ -14,6 +16,7 @@ from members.views.base import BaseView
 
 
 def get_possible_members(session):
+    ''' get possible members for a(ny) workgroup '''
     return session.query(Member)\
             .filter(Member.mem_active==True)\
             .order_by(Member.mem_fname)\
@@ -21,7 +24,7 @@ def get_possible_members(session):
 
 
 def get_wg(session, request):
-    ''' make a WorkGroup object, use request if possible '''
+    ''' get a WorkGroup object from DB, try to find ID in request '''
     if (request and request.matchdict.has_key('wg_id') and
             request.matchdict['wg_id'] != '-1'):
         wg = session.query(Workgroup).get(request.matchdict['wg_id'])
@@ -35,10 +38,16 @@ def get_wg(session, request):
 def fill_wg_from_request(wg, request):
     '''overwrite workgroup properties from request'''
     if request and wg:
-        for attr in ['name', 'desc', 'leader_id']:
+        for attr in ['name', 'desc']:
             if request.params.has_key(attr):
                 wg.__setattr__(attr, request.params[attr])
     return wg
+
+
+def redir_to_wgs(user_id, request, msg):
+    headers = remember(request, user_id)
+    return HTTPFound(location = '/workgroups?msg=%s' % msg, headers = headers)
+
 
 
 @view_config(renderer='../templates/edit-workgroup.pt',
@@ -71,7 +80,7 @@ class WorkgroupView(BaseView):
         if not wg:
             raise Exception(msg+" No workgroup with id %s" % self.request.matchdict['wg_id'])
 
-        self.user_is_wgleader = wg.leader_id == self.user.mem_id
+        self.user_is_wgleader = self.user in wg.leaders
 
         # look up the order and then the shifts of this group in that order
         order_header = get_connection().execute("""SELECT * FROM order_header;""")
@@ -106,17 +115,26 @@ class WorkgroupEditView(BaseView):
             action = self.request.params['action']
             if action == "save":
                 wg = fill_wg_from_request(wg, self.request)
+                if self.request.params.has_key('wg_leaders'):
+                    wg.leaders = []
+                    for mid in self.request.POST.getall('wg_leaders'):
+                        m = session.query(Member).get(mid)
+                        wg.leaders.append(m)
+                if len(wg.leaders) == 0:
+                    raise Exception('Please select at least one coordinator for this workgroup.')
                 if self.request.params.has_key('wg_members'):
                     wg.members = []
                     for mid in self.request.POST.getall('wg_members'):
                         m = session.query(Member).get(mid)
                         wg.members.append(m)
-                    wg_leader_ids = [m for m in wg.members if m.mem_id == wg.leader_id]
-                    # make sure leaders are members
-                    if len(wg_leader_ids) == 0:
-                        wg.members.append(session.query(Member).get(wg.leader_id))
-                session.add(wg) # necessary if new
-                return dict(wg=wg, msg='Workgroup has been saved.')
+                # make sure leaders are also members
+                for m in wg.leaders:
+                    wg.members.append(m)
+                if not wg.exists: # if new
+                    session.add(wg)
+                    # change view, bcs this wg object is not ready yet (i.e. has no ID)
+                    redir_to_wgs(self.user.mem_id, self.request, 'Workgroup was created.')
+                return dict(wg=wg, msg='Workgrup has been saved.')
 
             elif action == 'delete':
                 wg_name = wg.name
@@ -142,9 +160,6 @@ class WorkgroupEditView(BaseView):
                         msg = 'Deleted task.'
                     else:
                         msg = 'Cannot delete task, as there are shifts in the history with this task.'
-                # committing, so tasks are fresh
-                import transaction
-                transaction.commit()
                 self.possible_members = get_possible_members(session)
                 return dict(wg = get_wg(session, self.request), msg = msg)
         return dict(wg=wg, msg='')
@@ -160,6 +175,11 @@ class WorkgrouplistView(BaseView):
         dbsession = DBSession()
         wg_query = dbsession.query(Workgroup)
 
+        if self.request.params.has_key('msg'):
+            msg = self.request.params['msg']
+        else:
+            msg = ''
+
         # ordering
         # key is what the outside world see, value is what SQLAlchemy uses
         order_idxs = {'id': Workgroup.id, 'name': Workgroup.name}
@@ -170,6 +190,6 @@ class WorkgrouplistView(BaseView):
         order_alt = (order_by=='id') and 'name' or 'id'
         wg_query = wg_query.order_by(order_idxs[order_by])
 
-        return dict(workgroups=wg_query.all(), msg='', order_by=order_by, order_alt=order_alt, came_from='/workgroups')
+        return dict(workgroups=wg_query.all(), msg=msg, order_by=order_by, order_alt=order_alt, came_from='/workgroups')
 
 
