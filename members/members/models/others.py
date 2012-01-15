@@ -28,4 +28,4 @@ class Order(Base):
         raise SecondOrderModelException('Creation of an order not allowed in this application.')
 
 def get_order_label(order_id):
-    return list(get_connection().execute("""SELECT ord_label FROM order_header WHERE ord_no = %d;""" % order_id))[0][0]
+    return list(get_connection().execute("""SELECT DISTINCT ord_label FROM wh_order WHERE ord_no = %d;""" % order_id))[0][0]
