@@ -45,8 +45,9 @@ def groupfinder(memid, request):
         groups.append('this-member')
 
     wg_id = request.params.get('wg_id', -1)
-    if wg_id == -1 and request.matchdict.has_key('wg_id'):
-        wg_id = request.matchdict['wg_id']
+    if request.matchdict:
+        if wg_id == -1 and request.matchdict.has_key('wg_id'):
+            wg_id = request.matchdict['wg_id']
     if wg_id >= 0:
         wgs = session.query(Workgroup).filter(Workgroup.id == wg_id and Workgroup.leader_id == memid).all()
         if len(wgs) > 0:
