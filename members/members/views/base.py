@@ -46,7 +46,7 @@ class ErrorView(BaseView):
 
     def __call__(self):
         self.request.response.status_int = 500
-        return dict(msg="Sorry, something went wrong - maybe you should contact an admin about this. Error message: '%s'" % str(self.context) )
+        return dict(msg="Sorry, something went wrong - maybe you should contact an admin about this.", info="Error message: '%s'" % str(self.context) )
 
 
 

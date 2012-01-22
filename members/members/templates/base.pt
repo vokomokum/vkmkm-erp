@@ -62,6 +62,8 @@
                 
                 <h4 tal:condition="msg | False">${msg}</h4>
 
+                <h6 tal:condition="info | False">${info}</h6>
+                
                 <tal:block tal:condition="not view.logged_in">
                     <form action="${portal_url}/login" method="post">
                         <table>
