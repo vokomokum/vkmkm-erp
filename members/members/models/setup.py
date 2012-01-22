@@ -16,15 +16,21 @@ def get_connection():
 
 # The DBSession is for working with SQLAlchemy models (strictly
 # preferrable to raw SQL).
-# read more about autoflush and autocommit settings here:
-# http://mapfish.org/doc/tutorials/sqlalchemy.html#create-the-session
 # Note:
-# pyramid commits all changed objects in the session after the request
-# has successfully been processed. This is by design, to simplify and
-# reduce transaction handling (see e.g. http://comments.gmane.org/gmane.comp.web.pylons.general/15295)
+# Pyramid (via SQLAlchemy) commits all changed objects in the session
+# after the request has successfully been processed. This is by design,
+# to simplify and reduce transaction handling (see e.g.
+# http://comments.gmane.org/gmane.comp.web.pylons.general/15295)
 # The consequence is that views should simply raise Exceptions (caught
 # by views.base.ErrorView) if anything goes wrong and can rely on a rollback.
-DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension(), autoflush=False, autocommit=False))
+# Also, views do not need to do anything with SQLAlchemy session
+# objects, but adding, deleting or changing them.
+# We set autoflush=True, because this way database errors (e.g. a
+# constraint violation) happen before the request ended, i.e. a commit
+# is tried. This way, our catch-all ErrorView can still catch it.
+# Read more about autoflush and autocommit settings here:
+# http://mapfish.org/doc/tutorials/sqlalchemy.html#create-the-session
+DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension(), autoflush=True, autocommit=False))
 Base = declarative_base()
 
 
