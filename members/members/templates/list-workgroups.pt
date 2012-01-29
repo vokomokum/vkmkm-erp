@@ -32,7 +32,7 @@
                     </td>
                     <td>
                         <tal:block tal:repeat="l wg.leaders">
-                            <a href="member/${l.mem_id}" tal:content="l.fullname()" title="This member is coordinating this workgroup"></a>
+                            <a href="member/${l.mem_id}" tal:content="l.fullname" title="This member is coordinating this workgroup"></a>
                             <span tal:condition="not repeat.l.end">,</span>
                         </tal:block>
                     </td>

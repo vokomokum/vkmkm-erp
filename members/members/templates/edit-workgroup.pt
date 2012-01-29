@@ -4,7 +4,16 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
 
+<!-- show deletion confirmation -->
+<form tal:condition="python: hasattr(view, 'confirm_deletion') and wg.id"
+      action="${portal_url}/workgroup/${wg.id}/edit" method="post">
+    <div class="warn">Really delete workgroup ${wg.name}?</div>
+    <button type="submit" value="delete-confirmed" name="action">Yes</button>
+    <button type="submit" value="donothing" name="action">No</button>
+</form>
 
+<!-- show wg form and tasks -->
+<div tal:condition="not: python: hasattr(view, 'confirm_deletion')">
 <form tal:attributes="action python: '%s/workgroup/%s/edit' % (portal_url, str(wg.id) if wg.id else 'new')"
       method="post" tal:condition="wg">
 
@@ -42,11 +51,11 @@
                     multiple="multiple">
             <tal:block tal:repeat="pm view.possible_members">
                 <option tal:condition="python: pm in wg.leaders"
-                        tal:content="pm.fullname()" selected="selected"
+                        tal:content="pm.fullname" selected="selected"
                         value="${pm.mem_id}">
                 </option>
                 <option tal:condition="python: not pm in wg.leaders"
-                        tal:content="pm.fullname()" value="${pm.mem_id}">
+                        tal:content="pm.fullname" value="${pm.mem_id}">
                 </option>
             </tal:block>
           </select>
@@ -57,11 +66,11 @@
                     multiple="multiple">
                 <tal:block tal:repeat="pm view.possible_members">
                     <option tal:condition="python:pm in wg.members"
-                            tal:content="pm.fullname()" 
+                            tal:content="pm.fullname" 
                             value="${pm.mem_id}" selected="selected">
                     </option>
                     <option tal:condition="python:pm not in wg.members"
-                            tal:content="pm.fullname()" value="${pm.mem_id}">
+                            tal:content="pm.fullname" value="${pm.mem_id}">
                     </option>
                 </tal:block>
             </select>
@@ -91,7 +100,6 @@
     </table>
 
 </form>
-
 
 
 <tal:block tal:condition="wg">
@@ -142,6 +150,8 @@
     </table>
   </tal:block>
 </tal:block>
+
+</div>
 
 
 

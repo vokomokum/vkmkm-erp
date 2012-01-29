@@ -34,7 +34,7 @@
                         <a href="member/${m.mem_id}" tal:content="m.mem_id" title="show/edit"></a>
                     </td>
                      <td>
-                        <a href="member/${m.mem_id}" tal:content="m.fullname()" title="show/edit"></a>
+                        <a href="member/${m.mem_id}" tal:content="m.fullname" title="show/edit"></a>
                     </td>
                     <td><span tal:content="m.mem_email" tal:condition="m.mem_email"></span></td>
                     <td tal:content="m.addr_street()"></td>

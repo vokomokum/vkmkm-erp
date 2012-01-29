@@ -124,7 +124,6 @@ class WorkgroupEditView(BaseView):
             if action == "save":
                 wg = fill_wg_from_request(wg, self.request, session)
                 wg.validate()
-
                 if not wg.exists:
                     session.add(wg)
                     session.flush() # flushing manually so the wg gets an ID
@@ -132,9 +131,12 @@ class WorkgroupEditView(BaseView):
                 return dict(wg=wg, msg='Workgrup has been saved.')
 
             elif action == 'delete':
-                wg_name = wg.name
+                wg = get_wg(session, self.request)
+                self.confirm_deletion = True
+                return dict(wg=wg)
+            elif action == 'delete-confirmed':
                 session.delete(wg)
-                return dict(wg = None, msg='Workgroup %s has been deleted.' % wg.name)
+                return dict(wg=None, msg='Workgroup %s has been deleted.' % wg.name)
 
             elif "task" in action:
                 msg = ''

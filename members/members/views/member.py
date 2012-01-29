@@ -102,10 +102,13 @@ class MemberEditView(BaseView):
                 if not member.mem_enc_pwd or member.mem_enc_pwd == '':
                     raise VokoValidationError('Member has no password.')
                 return dict(m = member, msg='Member has been saved.')
-
             elif action == 'delete':
+                member = get_member(session, self.request)
+                self.confirm_deletion = True
+                return dict(m=member)
+            elif action == 'delete-confirmed':
                 session.delete(member)
-                return dict(m = None, msg='Member %s has been deleted.' % member)
+                return dict(m=None, msg='Member %s has been deleted.' % member)
         return dict(m = member, msg='')
 
 

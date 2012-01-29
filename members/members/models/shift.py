@@ -35,7 +35,7 @@ class Shift(Base):
 
     def __repr__(self):
         return "Shift - task '%s' in order '%d' by member %s in the '%s'-group [state is %s]" %\
-                (str(self.task), self.order_id, self.member.fullname(), self.workgroup, self.state)
+                (str(self.task), self.order_id, self.member.fullname, self.workgroup, self.state)
 
     def set_state(self, state):
         assert(state in ['assigned', 'worked'])

@@ -5,9 +5,18 @@
         <div metal:fill-slot="content">
 
 
+<!-- show deletion confirmation -->
+<form tal:condition="python: hasattr(view, 'confirm_deletion') and m.mem_id"
+      action="${portal_url}/member/${m.mem_id}/edit" method="post">
+    <div class="warn">Really delete member ${m.fullname}?</div>
+    <button type="submit" value="delete-confirmed" name="action">Yes</button>
+    <button type="submit" value="donothing" name="action">No</button>
+</form>
 
-<form tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else 'new')"
-      method="post" tal:condition="m">
+<!-- show member form -->
+<form tal:condition="python: m and not hasattr(view, 'confirm_deletion')"
+      tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else 'new')"
+      method="post">
 
     <h1>Editing Member Details</h1>
 

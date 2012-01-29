@@ -66,8 +66,9 @@ class Member(Base):
         self.mem_lname = lname
 
     def __repr__(self):
-        return self.fullname()
+        return self.fullname
 
+    @property
     def fullname(self):
         return "%s %s %s" %\
             (self.mem_fname or '', self.mem_prefix or '', self.mem_lname or '')

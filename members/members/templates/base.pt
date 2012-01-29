@@ -31,7 +31,7 @@
                         <a id="logout_link" href="${portal_url}/logout" title="Log out">Log Out</a>
                     </li>
                     <li>
-                        <a id="profile_link" href="${portal_url}/member/${view.user.mem_id}" title="My Account" tal:content="view.user.fullname()">Account</a>
+                        <a id="profile_link" href="${portal_url}/member/${view.user.mem_id}" title="My Account" tal:content="view.user.fullname">Account</a>
                     </li>
                     </tal:block>
 
