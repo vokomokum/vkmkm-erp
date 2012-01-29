@@ -4,7 +4,7 @@ from sqlalchemy import ForeignKey
 
 from pyramid.security import Allow, DENY_ALL
 
-from setup import Base
+from setup import Base, VokoValidationError
 from member import Member
 
 
@@ -48,9 +48,11 @@ class Workgroup(Base):
     def validate(self):
         ''' validate if this object is valid, raise exception otherwise '''
         if self.name == '':
-            raise Exception('A workgroup needs a name.')
+            raise VokoValidationError('A workgroup needs a name.')
         if self.desc == '':
-            raise Exception('A workgroup needs a description.')
+            raise VokoValidationError('A workgroup needs a description.')
+        if len(self.leaders) == 0:
+            raise VokoValidationError('A workgroup needs at least one coordinator.')
 
 
 Workgroup.members = relationship('Member', secondary=membership)

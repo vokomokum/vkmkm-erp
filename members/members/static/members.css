@@ -25,6 +25,11 @@ p, h1, pre {
   padding: 10px; 
 }
 
+.warn {
+  color: #ee8833;    
+}
+
+
 /* header */
 
 #title {

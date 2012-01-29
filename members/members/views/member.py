@@ -4,29 +4,34 @@ from datetime import datetime
 import random, string
 
 from members.models.member import Member
-from members.models.setup import DBSession
+from members.models.setup import DBSession, VokoValidationError
 from members.views.base import BaseView
 from members.md5crypt import md5crypt
 
 
 def get_member(session, request):
-    ''' make a Member object, use request if possible '''
-    member = None
-    if (request and request.matchdict.has_key('mem_id') and
-            request.matchdict['mem_id'] != '-1'):
-        member = session.query(Member).get(request.matchdict['mem_id'])
+    ''' make a Member object, use ID from request if possible '''
+    member = Member(fname=u'', prefix=u'', lname=u'')
+    if request.matchdict.has_key('mem_id'):
+        m_id = request.matchdict['mem_id']
+        if m_id == 'new':
+            return member
+        try:
+            mid = int(m_id)
+        except ValueError:
+            raise Exception("No member with id %s" % m_id)
+        member = session.query(Member).get(m_id)
         if member:
             member.exists = True
-    elif request.matchdict['mem_id'] == '-1':
-        member = Member(fname=u'', prefix=u'', lname=u'')
+        else:
+            raise Exception("No member with id %s" % m_id)
     return member
-
 
 
 def fill_member_from_request(member, request):
     '''overwrite member properties from request'''
     if request and member:
-        # overwrite member properties from request
+        # overwrite member properties from request, pwds are excluded
         for attr in [a for a in Member.__dict__.keys()\
                      if a.startswith('mem_') and not a in ['mem_id']]:
             type = str(member.__mapper__.columns._data[attr].type)
@@ -55,10 +60,6 @@ class NewMemberView(BaseView):
         return dict(m = Member('', '', ''), msg='')
 
 
-class MemberValidationExceptions(Exception):
-    pass
-
-
 @view_config(renderer='../templates/member.pt',
              route_name='member',
              permission='view')
@@ -68,8 +69,6 @@ class MemberView(BaseView):
 
     def __call__(self):
         m = get_member(DBSession(), self.request)
-        if not m:
-            raise Exceptions("No member with id %d" % self.request.matchdict['mem_id'])
         self.user_can_edit = self.user.mem_id == m.mem_id or self.user.mem_admin
         # assigned and worked shifts
         assigned = [s for s in m.scheduled_shifts if s.state == 'assigned']
@@ -88,72 +87,26 @@ class MemberEditView(BaseView):
 
         session = DBSession()
         member = get_member(session, self.request)
-        if not member:
-           raise Exception("No member with id %d" % self.request.matchdict['mem_id'])
         if self.request.params.has_key('action'):
             action = self.request.params['action']
             if action == "save":
                 member = fill_member_from_request(member, self.request)
-                session.add(member)
-                self.checkmember(member)
-                if self.request.matchdict['mem_id'] == '-1':
-                    self.checkpwd(self.request)
+                member.validate()
+                if not member.exists:
+                    member.validate_pwd(self.request)
                     salt = ''.join(random.choice(string.letters) for i in xrange(8))
                     member.mem_enc_pwd = md5crypt(str(self.request.params['pwd1']), salt)
+                    session.add(member)
+                    session.flush() # flushing manually so the member gets an ID
+                    return self.redirect('/members/%d?msg=Member was created.' % wg.id)
                 if not member.mem_enc_pwd or member.mem_enc_pwd == '':
-                    #TODO: if this happens, we still save other changed attributes that come in the request?
-                    raise MemberValidationExceptions('Member has no password.')
-                session.add(member)
+                    raise VokoValidationError('Member has no password.')
                 return dict(m = member, msg='Member has been saved.')
 
             elif action == 'delete':
                 session.delete(member)
                 return dict(m = None, msg='Member %s has been deleted.' % member)
         return dict(m = member, msg='')
-
-
-    def checkpwd(self, req):
-        if not req.params.has_key('pwd1'):
-            raise MemberValidationExceptions('Please specify a password.')
-        if not req.params.has_key('pwd2'):
-            raise MemberValidationExceptions('Please confirm password.')
-        if not req.params['pwd2'] == req.params['pwd1']:
-            raise MemberValidationExceptions('Passwords do not match.')
-        if not 6 <= len(req.params['pwd1']) <= 30:
-            raise MemberValidationExceptions('The password should be between 6 and 30 characters long.')
-
-    def checkmember(self, m):
-        ''' checks on address, bank account, passwords, ... '''
-        # check missing fields
-        missing = []
-        for f in ('mem_fname', 'mem_lname', 'mem_email',
-                  'mem_street', 'mem_house', 'mem_postcode', 'mem_city',
-                  'mem_bank_no'):
-            if not m.__dict__.has_key(f) or m.__dict__[f] == '':
-                missing.append(f)
-        if len(missing) > 0:
-            raise MemberValidationExceptions('We still require you to fill in: %s'\
-                                    % ', '.join([m[4:] for m in missing]))
-        # TODO check email
-        if not '@' in m.mem_email:
-            raise MemberValidationExceptions('The email address does not seem to be valid.')
-        # check postcode
-        if not (m.mem_postcode[:4].isdigit() and m.mem_postcode[-2:].isalpha()):
-            raise MemberValidationExceptions('The email postcode does not seem to be valid (should be NNNNLL, where N=number and L=letter).')
-        # check house no
-        if not m.mem_house.isdigit():
-            raise MemberValidationExceptions('House number should just be a number.')
-        # check bank no
-        bank_no_clean = m.mem_bank_no.replace(' ', '').replace('-', '')
-        if len(bank_no_clean) < 7 or len(bank_no_clean) > 9:
-            raise MemberValidationExceptions('Bank number needs to consist of 7 (postbank) or 9 numbers.')
-        if not bank_no_clean.isdigit():
-            raise MemberValidationExceptions('Bank number needs to consist of only numbers.')
-        # at least one telephone number
-        ks = m.__dict__.keys()
-        if (not 'mem_home_tel' in ks and not 'mem_work_tel' in ks and not 'mem_mobile' in ks) or\
-           (m.mem_home_tel == "" and m.mem_work_tel == "" and m.mem_mobile == ""):
-            raise MemberValidationExceptions('Please specify at least one telephone number.')
 
 
 @view_config(renderer='../templates/list-members.pt', route_name='memberlist')

@@ -6,7 +6,7 @@
 
 
 
-<form tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else -1)"
+<form tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else 'new')"
       method="post" tal:condition="m">
 
     <h1>Editing Member Details</h1>
@@ -16,7 +16,7 @@
     </div>
  
 
-    <font color="red">(fields with * are required)</font>
+    <span class="warn">(fields with * are required)</span>
 
     <input tal:condition="m.exists"
            type="hidden" name="id" value="${m.mem_id}">
@@ -29,10 +29,10 @@
         <td align="center" colspan="4">Name and Email</td>
       </tr>
       <tr class="list-content">
-        <td align="left" width="25%"> <font color="red">*</font> Forename:</td> 
+        <td align="left" width="25%"> <span class="warn">*</span> Forename:</td> 
         <td align="left" width="10%">Prefix:</td>
-        <td align="left" width="25%"> <font color="red">*</font> Last Name:</td>
-        <td align="left" width="40%"> <font color="red">*</font> Email:</td>
+        <td align="left" width="25%"> <span class="warn">*</span> Last Name:</td>
+        <td align="left" width="40%"> <span class="warn">*</span> Email:</td>
       </tr>
       <tr class="list-content">
         <td><input type="text" align="left" size="20" name="mem_fname"
@@ -53,11 +53,11 @@
         <td align="center" colspan="5">Address</td>
       </tr>
       <tr class="list-content">
-        <td align="left" width="50%"><font color="red">*</font> Street:</td>
-        <td align="left" width="10%"><font color="red">*</font> House No.:</td>
+        <td align="left" width="50%"><span class="warn">*</span> Street:</td>
+        <td align="left" width="10%"><span class="warn">*</span> House No.:</td>
         <td align="left" width="10%">Hs./Apt. No:</td>
-        <td align="left" width="10%"><font color="red">*</font> Postcode:</td>
-        <td align="left" width="25%"><font color="red">*</font> City:</td>
+        <td align="left" width="10%"><span class="warn">*</span> Postcode:</td>
+        <td align="left" width="25%"><span class="warn">*</span> City:</td>
       </tr>
       <tr class="list-content">
         <td><input type="text" align="left" size="40" name="mem_street"
@@ -78,7 +78,7 @@
 
     <table class="main" width="100%"> 
       <tr class="list-content">
-        <td align="center" colspan="3">Telephone <font color="red">(At least one is required)</font></td>
+        <td align="center" colspan="3">Telephone <span class="warn">(At least one is required)</span></td>
       </tr>
       <tr class="list-content">
         <td align="left" width="33%">Home:</td> 
@@ -100,7 +100,7 @@
 
     <table class="main" width="100%">
        <tr class="list-content" align="center">
-         <td colspan="2">Bank Account <font color="red">*</font> Use '12345678' if not known</td>
+         <td colspan="2">Bank Account <span class="warn">*</span> Use '12345678' if not known</td>
        </tr>
        <tr class="list-content" align="center">
          <td><input type="text" align="left" size="12" name="mem_bank_no"

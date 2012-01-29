@@ -1,10 +1,5 @@
 from pyramid.view import view_config
-from pyramid.security import remember
-from pyramid.httpexceptions import HTTPFound
 from sqlalchemy import distinct, desc
-
-from datetime import datetime
-import calendar
 
 from members.models.workgroups import Workgroup
 from members.models.member import Member
@@ -22,32 +17,45 @@ def get_possible_members(session):
             .order_by(Member.mem_fname)\
             .all()
 
-
 def get_wg(session, request):
-    ''' get a WorkGroup object from DB, try to find ID in request '''
-    if (request and request.matchdict.has_key('wg_id') and
-            request.matchdict['wg_id'] != '-1'):
-        wg = session.query(Workgroup).get(request.matchdict['wg_id'])
+    ''' make a Workgroup object, use ID from request if possible '''
+    wg = Workgroup('', '')
+    if request.matchdict.has_key('wg_id'):
+        wg_id = request.matchdict['wg_id']
+        if wg_id == 'new':
+            return wg
+        try:
+            wg_id = int(wg_id)
+        except ValueError:
+                raise Exception("No workgroup with id %s" % wg_id)
+        wg = session.query(Workgroup).get(wg_id)
         if wg:
             wg.exists = True
-    else:
-        wg = Workgroup('', '')
+        else:
+            raise Exception("No workgroup with id %s" % request.matchdict['wg_id'])
     return wg
 
 
-def fill_wg_from_request(wg, request):
+def fill_wg_from_request(wg, request, session):
     '''overwrite workgroup properties from request'''
     if request and wg:
         for attr in ['name', 'desc']:
             if request.params.has_key(attr):
                 wg.__setattr__(attr, request.params[attr])
+        if request.params.has_key('wg_leaders'):
+            wg.leaders = []
+            for mid in request.POST.getall('wg_leaders'):
+                m = session.query(Member).get(mid)
+                wg.leaders.append(m)
+        if request.params.has_key('wg_members'):
+            wg.members = []
+            for mid in request.POST.getall('wg_members'):
+                m = session.query(Member).get(mid)
+                wg.members.append(m)
+        # make sure leaders are also members
+        for m in wg.leaders:
+            wg.members.append(m)
     return wg
-
-
-def redir_to_wgs(user_id, request, msg):
-    headers = remember(request, user_id)
-    return HTTPFound(location = '/workgroups?msg=%s' % msg, headers = headers)
-
 
 
 @view_config(renderer='../templates/edit-workgroup.pt',
@@ -114,27 +122,13 @@ class WorkgroupEditView(BaseView):
         if self.request.params.has_key('action'):
             action = self.request.params['action']
             if action == "save":
-                wg = fill_wg_from_request(wg, self.request)
+                wg = fill_wg_from_request(wg, self.request, session)
                 wg.validate()
-                if self.request.params.has_key('wg_leaders'):
-                    wg.leaders = []
-                    for mid in self.request.POST.getall('wg_leaders'):
-                        m = session.query(Member).get(mid)
-                        wg.leaders.append(m)
-                if len(wg.leaders) == 0:
-                    raise Exception('Please select at least one coordinator for this workgroup.')
-                if self.request.params.has_key('wg_members'):
-                    wg.members = []
-                    for mid in self.request.POST.getall('wg_members'):
-                        m = session.query(Member).get(mid)
-                        wg.members.append(m)
-                # make sure leaders are also members
-                for m in wg.leaders:
-                    wg.members.append(m)
-                if not wg.exists: # if new
+
+                if not wg.exists:
                     session.add(wg)
-                    # change view, bcs this wg object is not ready yet (i.e. has no ID)
-                    return redir_to_wgs(self.user.mem_id, self.request, 'Workgroup was created.')
+                    session.flush() # flushing manually so the wg gets an ID
+                    return self.redirect('/workgroup/%d?msg=Workgroup was created.' % wg.id)
                 return dict(wg=wg, msg='Workgrup has been saved.')
 
             elif action == 'delete':
@@ -146,9 +140,8 @@ class WorkgroupEditView(BaseView):
                 msg = ''
                 if action == 'add-task':
                     task = Task(self.request.params['task_label'], wg.id)
-                    task.validate()
+                    task.validate(wg.tasks)
                     wg.tasks.append(task)
-                    session.add(task)
                     msg = 'Added task.'
                 elif action == 'toggle-task-activity':
                     task = session.query(Task).get(self.request.params['task_id'])

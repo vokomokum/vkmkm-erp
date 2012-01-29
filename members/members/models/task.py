@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, Unicode, Boolean, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.schema import UniqueConstraint
 
-from setup import Base
+from setup import Base, VokoValidationError
 from member import Member
 from workgroups import Workgroup
 
@@ -15,7 +15,7 @@ class Task(Base):
     __tablename__ = 'wg_tasks'
 
     id = Column(Integer, primary_key=True)
-    label = Column(Unicode(255), unique=True)
+    label = Column(Unicode(255))
     wg_id = Column(Integer, ForeignKey('workgroups.id'), nullable=False)
     active = Column(Boolean(), default=True)
 
@@ -31,9 +31,10 @@ class Task(Base):
     def __repr__(self):
         return self.label
 
-    def validate(self):
+    def validate(self, tasks):
         ''' validate if this object is valid, raise exception otherwise '''
         if self.label == '':
-            raise Exception('A task needs a label.')
-
-
+            raise VokoValidationError('A task needs a label.')
+        for task in [t for t in tasks if not t.id == self.id]:
+            if task.label == self.label:
+                raise VokoValidationError('This workgroup already has a task with the label "%s".' % self.label)

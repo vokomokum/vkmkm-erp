@@ -1,8 +1,10 @@
 from webob import Response
 from pyramid.renderers import get_renderer
-from pyramid.security import authenticated_userid
+from pyramid.security import authenticated_userid, remember
+from pyramid.httpexceptions import HTTPFound
 
 from members.security import authenticated_user
+from members.models.setup import VokoValidationError
 
 
 class BaseView(object):
@@ -22,6 +24,15 @@ class BaseView(object):
         :return: Database Member Object
         """
         return authenticated_user(self.request)
+
+    def redirect(self, loc):
+        """
+        Redirect request to another location
+        :param str loc: location (path after ${portal_url})
+        :return: headers which should be returned by view
+        """
+        headers = remember(self.request, self.user.mem_id)
+        return HTTPFound(location = loc, headers = headers)
 
 
 class NotFoundView(BaseView):
@@ -46,7 +57,11 @@ class ErrorView(BaseView):
 
     def __call__(self):
         self.request.response.status_int = 500
-        return dict(msg="Sorry, something went wrong - maybe you should contact an admin about this.", info="Error message: '%s'" % str(self.context) )
+        if self.context.__class__ == VokoValidationError:
+            return dict(msg="Oops, please go back and reconsider. We don't want to save this as it is now.", info=str(self.context))
+        else:
+            return dict(msg="Sorry, something went wrong. If the error message below is not helpful, you maybe should contact an admin about this.",
+                    info="Error message: '%s'" % str(self.context) )
 
 
 
