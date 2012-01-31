@@ -1,0 +1,39 @@
+#!/bin/bash
+
+cd /var/voko
+
+if [ -e svn-install ];
+then
+  echo Updating svn ...
+  cd svn-install/vokomokum/trunk
+  svn up
+else
+  echo Checking out code ...
+  mkdir svn-install
+  cd svn-install
+  svn co http://subversion.assembla.com/svn/vokomokum/
+  cd vokomokum/trunk
+fi
+
+# do an svn export here first, so we do not copy over subversions working files
+svn export members mexport
+cd mexport
+
+echo Set ownership apache:apache, permissions 775  on everything ...
+/usr/bin/sudo /bin/chown -R apache:apache members
+/usr/bin/sudo /bin/chmod -R 775 members
+
+echo make template files group permissions 644 ...
+/usr/bin/sudo /usr/bin/find members/templates -type f -print0 | /usr/bin/xargs -0 /usr/bin/sudo /bin/chmod 644
+
+echo make all directories under members/ 775 ...
+/usr/bin/sudo /usr/bin/find members -type d -print0 | xargs -0 /usr/bin/sudo /bin/chmod 775 
+
+echo "now move everything (but the .ini files) onto the voko server ..."
+sudo cp -rp pyramid.wsgi CHANGES.txt README.txt setup.* members /var/www/members
+cd ..
+/usr/bin/sudo rm -r mexport
+
+echo develop app ...
+cd /var/www/members
+/usr/bin/sudo /var/www/vopy/bin/python setup.py develop 
