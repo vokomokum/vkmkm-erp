@@ -23,7 +23,7 @@
         <div id="container">
 
             <div id="header">
-                <div id="title"><a href="${portal_url}">Vokomokum Members</a></div>
+                <div id="title"><a href="${portal_url}">Members</a></div>
 
                 <ul id="menu-actions">
                     <tal:block tal:condition="view.logged_in">
