@@ -17,11 +17,12 @@ fi
 
 # do an svn export here first, so we do not copy over subversions working files
 svn export members mexport
-cd mexport
 
 echo Set ownership apache:apache, permissions 775  on everything ...
-/usr/bin/sudo /bin/chown -R apache:apache members
-/usr/bin/sudo /bin/chmod -R 775 members
+/usr/bin/sudo /bin/chown -R apache:apache mexport
+/usr/bin/sudo /bin/chmod -R 775 mexport
+
+cd mexport
 
 echo make template files group permissions 644 ...
 /usr/bin/sudo /usr/bin/find members/templates -type f -print0 | /usr/bin/xargs -0 /usr/bin/sudo /bin/chmod 644
