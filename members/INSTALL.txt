@@ -16,12 +16,13 @@ home dir (~).
 $ cd
 $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
 Here, make sure you use the python you want. This just uses the first in your path:
-$ python virtual-python.py vopy
+$ python virtualenv.py vopy
 Install some needed libraries
 $ cd vopy/bin
 $ ./pip install pyramid  # web framework + dependencies
 $ ./pip install psycopg2 # Postgres wrapper for Python
-$ rm  virtualenv.py
+$ cd ../..
+$ rm virtualenv.py
 
 -- Check out the member app code (if you don't have it already)
 
@@ -76,7 +77,8 @@ $ sudo /etc/init.d/apache2 restart
 Or, on OSX 10.6:
 $ sudo /usr/sbin/apachectl restart
 In /var/log/apache2/error_log, there should be a mention of mod_wsgi being reconfigured like this:
-[Mon Jan 02 00:06:56 2012] [notice] Apache/2.2.20 (Unix) mod_ssl/2.2.20 OpenSSL/0.9.8r DAV/2 mod_wsgi/3.3 Python/2.7.1 configured -- resumin normal operations
+[Mon Jan 02 00:06:56 2012] [notice] Apache/2.2.20 (Unix) mod_ssl/2.2.20
+OpenSSL/0.9.8r DAV/2 mod_wsgi/3.3 Python/2.7.1 configured -- resuming normal operations
 
 See also: http://code.google.com/p/modwsgi/wiki/QuickInstallationGuide
 
