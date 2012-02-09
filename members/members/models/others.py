@@ -5,7 +5,9 @@ Models of second order in this app
 from sqlalchemy import Column, Integer, Unicode, ForeignKey
 from sqlalchemy.orm import relationship
 
-from setup import Base, get_connection
+from setup import Base
+from members.models.setup import DBSession
+
 
 class SecondOrderModelException(Exception):
     pass
@@ -28,4 +30,5 @@ class Order(Base):
         raise SecondOrderModelException('Creation of an order not allowed in this application.')
 
 def get_order_label(order_id):
-    return list(get_connection().execute("""SELECT DISTINCT ord_label FROM wh_order WHERE ord_no = %d;""" % order_id))[0][0]
+    dbsession = DBSession()
+    return list(dbsession.execute("""SELECT DISTINCT ord_label FROM wh_order WHERE ord_no = %d;""" % order_id))[0][0]

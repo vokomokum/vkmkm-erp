@@ -3,7 +3,7 @@ from sqlalchemy import distinct, desc
 
 from members.models.workgroups import Workgroup
 from members.models.member import Member
-from members.models.setup import DBSession, get_connection
+from members.models.setup import DBSession
 from members.models.shift import Shift
 from members.models.task import Task
 from members.models.others import Order, get_order_label
@@ -91,7 +91,7 @@ class WorkgroupView(BaseView):
         self.user_is_wgleader = self.user in wg.leaders
 
         # look up the order and then the shifts of this group in that order
-        order_header = get_connection().execute("""SELECT * FROM order_header;""")
+        order_header = session.execute("""SELECT * FROM order_header;""")
         order_id = self.request.params.has_key('order_id') and int(self.request.params['order_id'])\
                    or list(order_header)[0].ord_no
 
