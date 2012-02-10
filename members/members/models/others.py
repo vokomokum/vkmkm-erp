@@ -5,8 +5,7 @@ Models of second order in this app
 from sqlalchemy import Column, Integer, Unicode, ForeignKey
 from sqlalchemy.orm import relationship
 
-from setup import Base
-from members.models.setup import DBSession
+from base import Base, DBSession
 
 
 class SecondOrderModelException(Exception):

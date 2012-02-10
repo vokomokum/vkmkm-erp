@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, Unicode, ForeignKey
 from sqlalchemy.orm import relationship
 
-from setup import Base
+from base import Base
 from member import Member
 from task import Task
 from workgroups import Workgroup

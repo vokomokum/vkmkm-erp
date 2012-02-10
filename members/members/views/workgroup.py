@@ -3,7 +3,7 @@ from sqlalchemy import distinct, desc
 
 from members.models.workgroups import Workgroup
 from members.models.member import Member
-from members.models.setup import DBSession
+from members.models.base import DBSession
 from members.models.shift import Shift
 from members.models.task import Task
 from members.models.others import Order, get_order_label

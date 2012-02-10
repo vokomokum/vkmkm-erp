@@ -4,7 +4,7 @@ from datetime import datetime
 import random, string
 
 from members.models.member import Member
-from members.models.setup import DBSession, VokoValidationError
+from members.models.base import DBSession, VokoValidationError
 from members.views.base import BaseView
 from members.md5crypt import md5crypt
 

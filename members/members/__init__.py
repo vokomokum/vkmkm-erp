@@ -4,7 +4,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from sqlalchemy import engine_from_config
 from pyramid.exceptions import NotFound
 
-from members.models.setup import initialize_sql
+from members.models.base import configure_session
 from members.security import groupfinder
 from members.views.base import NotFoundView
 from members.views.base import ErrorView
@@ -21,7 +21,7 @@ def main(global_config, **settings):
     This function returns a Pyramid WSGI application.
     """
     engine = engine_from_config(settings, 'sqlalchemy.')
-    initialize_sql(engine)
+    configure_session(engine)
 
     # authentication setup TODO: use order app cookies
     #f = open('auth.key', 'r')

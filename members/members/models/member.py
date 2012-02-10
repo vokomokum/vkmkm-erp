@@ -14,7 +14,7 @@ from sqlalchemy import DateTime
 
 from pyramid.security import Allow, DENY_ALL
 
-from setup import Base, VokoValidationError
+from base import Base, VokoValidationError
 
 
 class Member(Base):

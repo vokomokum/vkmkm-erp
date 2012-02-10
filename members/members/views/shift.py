@@ -4,7 +4,7 @@ from pyramid.security import remember
 
 from members.models.shift import Shift
 from members.models.workgroups import Workgroup
-from members.models.setup import DBSession
+from members.models.base import DBSession
 from members.views.base import BaseView
 
 '''

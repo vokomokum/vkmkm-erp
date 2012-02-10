@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, Unicode, Boolean, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.schema import UniqueConstraint
 
-from setup import Base, VokoValidationError
+from base import Base, VokoValidationError
 from member import Member
 from workgroups import Workgroup
 

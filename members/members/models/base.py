@@ -50,22 +50,22 @@ class VokoValidationError(Exception):
 #  Then our catch-all ErrorView can still catch it.
 #  Read more about autoflush and autocommit settings here:
 #  http://mapfish.org/doc/tutorials/sqlalchemy.html#create-the-session
-# 
+#
 # Raw SQL
 # ------------------
-# Raw SQL can be executed on the session, though it should only be done when 
+# Raw SQL can be executed on the session, though it should only be done when
 # not possible on the SQLAlchemy model. Here is an example:
 # res = DBSession.execute('''SELECT * from workgroups;''')
 # print list(res)[0].name
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension(), autoflush=True, autocommit=False))
+
+# this is used as base model class for SQLAlchemy models
 Base = declarative_base()
 
 
-def initialize_sql(engine):
-    ''':returns: a session object to work with'''
+def configure_session(engine):
+    ''' configure the session '''
     DBSession.configure(bind=engine)
-    #test_setup(session, engine)
-
 
 
 def test_setup(session, engine):
