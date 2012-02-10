@@ -50,7 +50,7 @@ def fill_member_from_request(member, request):
 
 
 @view_config(renderer='../templates/edit-member.pt',
-             route_name='new_member',
+             route_name='member-new',
              permission='edit')
 class NewMemberView(BaseView):
 
@@ -112,7 +112,7 @@ class MemberEditView(BaseView):
         return dict(m = member, msg='')
 
 
-@view_config(renderer='../templates/list-members.pt', route_name='memberlist')
+@view_config(renderer='../templates/list-members.pt', route_name='member-list')
 class MemberlistView(BaseView):
 
     tab = 'members'

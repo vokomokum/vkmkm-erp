@@ -59,7 +59,7 @@ def fill_wg_from_request(wg, request, session):
 
 
 @view_config(renderer='../templates/edit-workgroup.pt',
-             route_name='new_workgroup',
+             route_name='workgroup-new',
              permission='edit')
 class NewWorkgroupView(BaseView):
 
@@ -163,7 +163,7 @@ class WorkgroupEditView(BaseView):
 
 
 
-@view_config(renderer='../templates/list-workgroups.pt', route_name='workgrouplist')
+@view_config(renderer='../templates/list-workgroups.pt', route_name='workgroup-list')
 class WorkgrouplistView(BaseView):
 
     tab = 'workgroups'

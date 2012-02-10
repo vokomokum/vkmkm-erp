@@ -39,13 +39,8 @@ def fill_shift_from_request(shift, request):
     return shift
 
 
-def redir_to_wg(wg_id, user_id, request, msg, order_id):
-    headers = remember(request, user_id)
-    return HTTPFound(location = '/workgroup/%s?msg=%s&order_id=%s' % (str(wg_id), msg, str(order_id)), headers = headers)
-
-
 @view_config(renderer='../templates/workgroup.pt',
-             route_name='new_shift',
+             route_name='shift-new',
              permission='edit')
 class NewShiftView(BaseView):
     '''this view is called with data already, so it actually inserts'''
@@ -59,12 +54,12 @@ class NewShiftView(BaseView):
         mem_id = self.request.params['mem_id']
         shift = Shift(wg_id, mem_id, order_id, task_id)
         session.add(shift)
-        return redir_to_wg(wg_id, self.user.mem_id, self.request, 'Succesfully added shift', order_id)
+        return self.redirect('/workgroup/%s?msg=%s&order_id=%s' % (wg_id, 'Succesfully added shift', order_id))
 
 
 
 @view_config(renderer='../templates/workgroup.pt',
-             route_name='edit_shift',
+             route_name='shift-edit',
              permission='edit')
 class EditShift(BaseView):
 
@@ -88,11 +83,11 @@ class EditShift(BaseView):
             if action == "save":
                 shift = fill_shift_from_request(shift, self.request)
                 session.add(shift)
-                return redir_to_wg(wg_id, self.user.mem_id, self.request, 'Shift has been saved.', order_id)
+                return self.redirect('/workgroup/%s?msg=%s&order_id=%s' % (wg_id, 'Shift has been saved.', order_id))
 
             elif action == 'delete':
                 session.delete(shift)
-                return redir_to_wg(wg_id, self.user.mem_id, self.request, 'Shift has been deleted.', order_id)
+                return self.redirect('/workgroup/%s?msg=%s&order_id=%s' % (wg_id, 'Shift has been deleted.', order_id))
         else:
             raise Exception('No action given.')
 
