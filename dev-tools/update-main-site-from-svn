@@ -34,7 +34,7 @@ while [ 1 == 1 ]; do
     case $answer in 
         yes|YES)
             cd order
-            /usr/bin/sudo /bin/cp -rp cgi-bin templates /var/www/voko/
+            /usr/bin/sudo /bin/cp -rp cgi-bin templates data /var/www/voko/
             exit 0
             ;;
         no|NO)
