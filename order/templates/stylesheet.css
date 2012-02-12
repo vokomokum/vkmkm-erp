@@ -21,6 +21,7 @@ h3         {background-color:white; color:black;}
 .editoknb   {background-color:#c0c0ff; color:#909090; }
 .myordernb  {background-color:#b0ffb0; color:black;   border: solid black; }
 .myorder   {background-color:#b0ffb0; color:black;   border: solid black; }
+.newproduct {background-color:#ffd700; color:black;   border: solid black; }
 .errornb     {background-color:#ff9090; color:black;  }
 .error     {background-color:#ff9090; color:black;   border: solid black; }
 .commitmsg {background-color:#ff00ff; color:#ff0000; border: solid black; }

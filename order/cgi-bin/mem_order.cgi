@@ -186,14 +186,18 @@ sub get_products {
 
     while ( my $h = $sth->fetchrow_hashref ) {
     	my $pr_no = $h->{pr_id};
-    	$h->{RowClass} = ( $ord_no != $current_no ) ? "myorder" : "editok";
-
-    	if ( defined( $pids->{$pr_no} ) ) {
-    	    $h->{order} =  $pids->{$pr_no};
-    	    $h->{RowClass} = "myorder";
-    	} else {
-    	   $h->{order} = "0";
-    	}
+	if($ord_no != $current_no) {
+	    $h->{RowClass} = "myorder";
+	} else {
+	    $h->{RowClass} = "editok";
+	    if ( defined( $pids->{$pr_no} ) ) {
+		$h->{order} =  $pids->{$pr_no};
+		$h->{RowClass} = "myorder";
+	    } else {
+		$h->{order} = "0";
+		$h->{RowClass} = "newproduct" if($h->{age} < 3);
+	    }
+	}
 
         if ( defined( $new_vals->{$pr_no} ) and $status < 3 ) {
             if ( $h->{order} != $new_vals->{$pr_no}
