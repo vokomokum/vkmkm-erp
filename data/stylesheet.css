@@ -48,9 +48,10 @@
 .hidden    {visibility:hidden; }
 .normal    {background-color:white;   color:black;   border: solid black; }
 .title     {background-color:#a0a0a0; color:black;   border: solid black; }
-.subtitle  {background-color:#c0c0c0; color:black;   border: solid black; line-height:100%;}
+.subtitle  {background-color:#c0c0c0; color:black;   border: solid black; line-height:100%; }
 .editok    {background-color:#c0c0ff; color:black;   border: solid black; }
 .myorder   {background-color:#b0ffb0; color:black;   border: solid black; }
+.newproduct {background-color:#d8d8f8; color:black;   border: solid black; }
 .error     {background-color:#ff9090; color:black;   border: solid black; }
 .commitmsg {background-color:#ff00ff; color:#ff0000; border: solid black; }
 .quantity  {text-align:right;width:6em;}
