@@ -84,7 +84,6 @@ class MemberEditView(BaseView):
     tab = 'members'
 
     def __call__(self):
-
         session = DBSession()
         member = get_member(session, self.request)
         if self.request.params.has_key('action'):
@@ -98,7 +97,7 @@ class MemberEditView(BaseView):
                     member.mem_enc_pwd = md5crypt(str(self.request.params['pwd1']), salt)
                     session.add(member)
                     session.flush() # flushing manually so the member gets an ID
-                    return self.redirect('/members/%d?msg=Member was created.' % wg.id)
+                    return self.redirect('/members/%d?msg=Member was created.' % m.id)
                 if not member.mem_enc_pwd or member.mem_enc_pwd == '':
                     raise VokoValidationError('Member has no password.')
                 return dict(m = member, msg='Member has been saved.')
