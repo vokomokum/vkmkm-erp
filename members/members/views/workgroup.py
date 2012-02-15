@@ -135,6 +135,13 @@ class WorkgroupEditView(BaseView):
                 self.confirm_deletion = True
                 return dict(wg=wg)
             elif action == 'delete-confirmed':
+                tasks = session.query(Task).filter(Workgroup.id==wg.id).all()
+                for task in tasks:
+                    shifts = session.query(Shift).filter(Shift.task_id==task.id).all()
+                    if len(shifts) == 0:
+                        session.delete(task)
+                    else:
+                        raise Exception('Cannot delete workgroup, as there are shifts in the history for the task "%s".' % str(task))
                 session.delete(wg)
                 return dict(wg=None, msg='Workgroup %s has been deleted.' % wg.name)
 
