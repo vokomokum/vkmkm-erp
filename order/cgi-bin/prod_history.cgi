@@ -28,7 +28,6 @@ use CGI::Carp 'fatalsToBrowser';
 use Unix::Syslog qw( :macros :subs );
 use POSIX qw(strftime);
 use MIME::Base64;
-use Switch 'Perl6';
 use voko;
 use view_member;
 
