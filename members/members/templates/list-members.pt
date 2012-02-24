@@ -5,7 +5,7 @@
         <div metal:fill-slot="content">
             
             <form option="${portal_url}/members" method="post" id="list-options">
-                <span>Showing ${view.mem_count} members ...</span>
+                <span>Showing ${view.mem_count} member(s).</span>
                 <span>
                     <input tal:condition="not: show_inactive" type="checkbox" name="include_inactive"></input>               
                     <input tal:condition="show_inactive" type="checkbox" name="include_inactive" checked="checked"></input>               
@@ -20,8 +20,12 @@
             
             <table class="list" width="100%">
                 <tr>
-                    <th width="5%"><a href="${portal_url}/members?order_by=id">ID</a></th>
-                    <th width="17%"><a href="${portal_url}/members?order_by=name">Name</a></th>
+                    <th width="5%">
+                        <a href="${portal_url}/members?order_by=id&order_dir=${order_id_choice}">ID</a>
+                    </th>
+                    <th width="17%">
+                        <a href="${portal_url}/members?order_by=name&order_dir=${order_name_choice}">Name</a>
+                    </th>
                     <th width="20%">Email</th>
                     <th width="38%">Street</th>
                     <th width="20%">City</th>

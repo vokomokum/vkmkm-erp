@@ -1,5 +1,7 @@
 from pyramid.view import view_config
 
+from sqlalchemy import asc, desc
+
 from datetime import datetime
 import random, string
 
@@ -120,23 +122,44 @@ class MemberlistView(BaseView):
         dbsession = DBSession()
         m_query = dbsession.query(Member)
 
+        # show msg
+        if self.request.params.has_key('msg'):
+            msg = self.request.params['msg']
+        else:
+            msg = ''
+
+        # -- inactive members? --
         show_inactive = True
         if not self.request.params.has_key('include_inactive')\
            or not self.request.params['include_inactive']:
             show_inactive = False
             m_query = m_query.filter(Member.mem_active==True)
 
-        # ordering
+        # -- ordering --
+        # direction
+        odir = asc
+        if self.request.params.has_key('order_dir')\
+           and self.request.params['order_dir'] == 'desc':
+            odir = desc
+        # order by
         # key is what the outside world sees, value is what SQLAlchemy uses
         order_idxs = {'id': Member.mem_id, 'name': Member.mem_lname}
         order_by = 'id'
         if self.request.params.has_key('order_by')\
           and order_idxs.has_key(self.request.params['order_by']):
             order_by = self.request.params['order_by']
-        order_alt = (order_by=='id') and 'name' or 'id'
-        m_query = m_query.order_by(order_idxs[order_by])
-        ms = m_query.all()
-        self.mem_count = len(ms)
-        return dict(members = ms, msg='', order_by=order_by, show_inactive=show_inactive, came_from='/members')
+        # ordering choices
+        order_id_choice = 'asc'
+        if order_by == 'id' and odir == asc:
+            order_id_choice = 'desc'
+        order_name_choice = 'asc'
+        if order_by == 'name' and odir == asc:
+            order_name_choice = 'desc'
 
+        m_query = m_query.order_by(odir(order_idxs[order_by]))
+        members = m_query.all()
+        self.mem_count = len(members)
+        return dict(members = members, msg=msg, order_by=order_by,
+                    order_id_choice=order_id_choice, order_name_choice=order_name_choice,
+                    show_inactive=show_inactive, came_from='/members')
 

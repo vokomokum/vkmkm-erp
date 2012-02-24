@@ -10,15 +10,13 @@
             
             <table class="list" width="100%">
                 <tr>
-                    <th width="5%"><a href="${portal_url}/workgroups?order_by=id">ID</a></th>
-                    <th width="15%"><a href="${portal_url}/workgroups?order_by=name">Name</a></th>
+                    <th width="20%">
+                        <a href="${portal_url}/workgroups?order_dir=${order_name_choice}">Name</a>
+                    </th>
                     <th width="20%">Admin</th>
                     <th width="65%">Description</th>
                 </tr>
                 <tr tal:repeat="wg workgroups" class="list-content">
-                    <td>
-                        <a href="workgroup/${wg.id}" tal:content="wg.id" title="show/edit"></a>
-                    </td>
                     <td>
                         <a href="workgroup/${wg.id}" tal:content="wg.name" title="show/edit"></a>
                     </td>

@@ -1,5 +1,5 @@
 from pyramid.view import view_config
-from sqlalchemy import distinct, desc
+from sqlalchemy import distinct, asc, desc
 
 from members.models.workgroups import Workgroup
 from members.models.member import Member
@@ -179,21 +179,25 @@ class WorkgrouplistView(BaseView):
         dbsession = DBSession()
         wg_query = dbsession.query(Workgroup)
 
+        # show msg
         if self.request.params.has_key('msg'):
             msg = self.request.params['msg']
         else:
             msg = ''
 
-        # ordering
-        # key is what the outside world see, value is what SQLAlchemy uses
-        order_idxs = {'id': Workgroup.id, 'name': Workgroup.name}
-        order_by = 'id'
-        if self.request.params.has_key('order_by')\
-          and order_idxs.has_key(self.request.params['order_by']):
-            order_by = self.request.params['order_by']
-        order_alt = (order_by=='id') and 'name' or 'id'
-        wg_query = wg_query.order_by(order_idxs[order_by])
+        # -- ordering --
+        # direction
+        odir = asc
+        if self.request.params.has_key('order_dir')\
+           and self.request.params['order_dir'] == 'desc':
+            odir = desc
+        # ordering choice
+        order_name_choice = 'asc'
+        if odir == asc:
+            order_name_choice = 'desc'
 
-        return dict(workgroups=wg_query.all(), msg=msg, order_by=order_by, order_alt=order_alt, came_from='/workgroups')
+        wg_query = wg_query.order_by(odir('id'))
+        return dict(workgroups=wg_query.all(), msg=msg,
+                    order_name_choice=order_name_choice, came_from='/workgroups')
 
 
