@@ -97,7 +97,7 @@ class MemberEditView(BaseView):
                     member.mem_enc_pwd = md5crypt(str(self.request.params['pwd1']), salt)
                     session.add(member)
                     session.flush() # flushing manually so the member gets an ID
-                    return self.redirect('/members/%d?msg=Member was created.' % member.mem_id)
+                    return self.redirect('/member/%d?msg=Member was created.' % member.mem_id)
                 if not member.mem_enc_pwd or member.mem_enc_pwd == '':
                     raise VokoValidationError('Member has no password.')
                 return dict(m = member, msg='Member has been saved.')
@@ -119,9 +119,12 @@ class MemberlistView(BaseView):
     def __call__(self):
         dbsession = DBSession()
         m_query = dbsession.query(Member)
-        if self.request.params.has_key('active'):
-            if self.request.params['active'] != 0:
-                m_query = m_query.filter(Member.active==True)
+
+        show_inactive = True
+        if not self.request.params.has_key('include_inactive')\
+           or not self.request.params['include_inactive']:
+            show_inactive = False
+            m_query = m_query.filter(Member.mem_active==True)
 
         # ordering
         # key is what the outside world sees, value is what SQLAlchemy uses
@@ -132,9 +135,8 @@ class MemberlistView(BaseView):
             order_by = self.request.params['order_by']
         order_alt = (order_by=='id') and 'name' or 'id'
         m_query = m_query.order_by(order_idxs[order_by])
-
-        #TODO: check if non-active members should be here, filter them out in the first place
-
-        return dict(members = m_query.all(), msg='', order_by=order_by, order_alt=order_alt, came_from='/members')
+        ms = m_query.all()
+        self.mem_count = len(ms)
+        return dict(members = ms, msg='', order_by=order_by, show_inactive=show_inactive, came_from='/members')
 
 

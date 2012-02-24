@@ -188,8 +188,7 @@ td.number     {text-align:right;width:6em;}
 /* Forms */
 /*button {border: 0; background: transparent;}*/
 #list-options  {padding:3px; display:table; float:right;}
-#list-options a{padding-right:4px; color: #b0b0ff;}
-.list-option   {padding-right:4px; color: #c0c0c0;}
+#list-options *{padding-right:4px; color: #b0b0ff;}
 
 /* other */
 .wg-description {

@@ -5,16 +5,13 @@
         <div metal:fill-slot="content">
             
             <form option="${portal_url}/members" method="post" id="list-options">
-                <span class="list-option"> Sort by:
-                    <input type="radio" name="order_by" value="${order_by}" tal:content="order_by" checked="checked"/>
-                    <input type="radio" name="order_by" value="${order_alt}" tal:content="order_alt"/>
-                </span>
-                <span class="list-option">-
-                    <input type="radio" name="include_inactive"></input>               
+                <span>Showing ${view.mem_count} members ...</span>
+                <span>
+                    <input tal:condition="not: show_inactive" type="checkbox" name="include_inactive"></input>               
+                    <input tal:condition="show_inactive" type="checkbox" name="include_inactive" checked="checked"></input>               
                     Include inactive
                 </span>
                 <input type="submit" value="List"/>
-                
             </form>
 
             <a class="add_link" href="members/new" tal:condition="view.user.mem_admin">
@@ -23,8 +20,8 @@
             
             <table class="list" width="100%">
                 <tr>
-                    <th width="5%">ID</th>
-                    <th width="17%">Name</th>
+                    <th width="5%"><a href="${portal_url}/members?order_by=id">ID</a></th>
+                    <th width="17%"><a href="${portal_url}/members?order_by=name">Name</a></th>
                     <th width="20%">Email</th>
                     <th width="38%">Street</th>
                     <th width="20%">City</th>

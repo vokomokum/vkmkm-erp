@@ -4,22 +4,14 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
             
-            <form option="${portal_url}/workgroups" method="post" id="list-options">
-                <span class="list-option"> Sort by:
-                    <input type="radio" name="order_by" value="${order_by}" tal:content="order_by" checked="checked"/>
-                    <input type="radio" name="order_by" value="${order_alt}" tal:content="order_alt"/>
-                </span>
-                <input type="submit" value="List"/>
-            </form>          
-            
             <a class="add_link" href="workgroups/new" tal:condition="view.user.mem_admin">
                 New workgroup
             </a>
             
             <table class="list" width="100%">
                 <tr>
-                    <th width="5%">ID</th>
-                    <th width="15%">Name</th>
+                    <th width="5%"><a href="${portal_url}/workgroups?order_by=id">ID</a></th>
+                    <th width="15%"><a href="${portal_url}/workgroups?order_by=name">Name</a></th>
                     <th width="20%">Admin</th>
                     <th width="65%">Description</th>
                 </tr>
