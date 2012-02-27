@@ -42,11 +42,12 @@ def fill_wg_from_request(wg, request, session):
         for attr in ['name', 'desc']:
             if request.params.has_key(attr):
                 wg.__setattr__(attr, request.params[attr])
-        if request.params.has_key('wg_leaders'):
+        if request.POST.has_key('wg_leaders'):
             wg.leaders = []
             for mid in request.POST.getall('wg_leaders'):
                 m = session.query(Member).get(mid)
-                wg.leaders.append(m)
+                if m:
+                    wg.leaders.append(m)
         if request.params.has_key('wg_members'):
             wg.members = []
             for mid in request.POST.getall('wg_members'):
@@ -97,7 +98,7 @@ class WorkgroupView(BaseView):
         self.orders = session.query(Order.id, Order.label).distinct().order_by(desc(Order.id))
         shifts = session.query(Shift).filter(Shift.wg_id==wg.id)\
                                      .filter(Shift.order_id==order_id)\
-                                          .all()
+                                     .all()
         self.tasks = [t for t in wg.tasks if t.active]
 
         return dict(wg=wg, shifts=shifts, msg=msg)

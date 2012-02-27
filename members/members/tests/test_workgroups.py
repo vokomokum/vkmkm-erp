@@ -1,4 +1,5 @@
 from pyramid import testing
+from paste.util.multidict import MultiDict
 
 from sqlalchemy.exc import InvalidRequestError
 
@@ -6,6 +7,7 @@ from members.tests.base import VokoTestCase
 from members.views.workgroup import WorkgroupView, WorkgrouplistView, WorkgroupEditView
 from members.models.workgroups import Workgroup
 from members.models.member import Member
+from members.models.base import VokoValidationError
 
 
 class TestWorkgroups(VokoTestCase):
@@ -59,7 +61,7 @@ class TestWorkgroups(VokoTestCase):
         wg_bestel = self.DBSession.query(Workgroup).get(2)
         self.assertEqual(wg_bestel.name, 'Wholesale Besteling')
 
-    def test_invalid(self):
+    def test_invalid_edit(self):
         ''' giving no name: invalid'''
         request = testing.DummyRequest()
         request.matchdict = {'wg_id': 2}
@@ -70,9 +72,24 @@ class TestWorkgroups(VokoTestCase):
     def test_invalid_edit_noleader(self):
         request = testing.DummyRequest()
         request.matchdict = {'wg_id': 2}
-        request.params['wg_leaders'] = []
+        request.POST = MultiDict()
+        request.POST['wg_leaders'] = ''
         request.params['action'] = 'save'
-        self.assertRaises(Exception, WorkgroupEditView(None, request))
+        self.assertRaises(VokoValidationError, WorkgroupEditView(None, request))
+
+    def test_create(self):
+        request = testing.DummyRequest()
+        request.params['name'] = 'Cafe'
+        request.params['desc'] = 'Shake and Bake'
+        request.POST = MultiDict()
+        request.POST['wg_leaders'] = '1'
+        request.params['action'] = 'save'
+        view = WorkgroupEditView(None, request)
+        # raises an AttributeError when redirecting after successful
+        # save, bcs we haven't set view.user
+        self.assertRaises(AttributeError, view)
+        wg = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Cafe').first()
+        self.assertEquals(wg.desc, 'Shake and Bake')
 
     def test_delete(self):
         request = testing.DummyRequest()
@@ -85,10 +102,6 @@ class TestWorkgroups(VokoTestCase):
         view()
         self.assertTrue(view.confirm_deletion)
         request.params['action'] = 'delete-confirmed'
-        # an invalid request error is thrown when attempting to delete
-        # (object can't be deleted, this test has no persistent state), 
-        # thus deletion was attempted. Fine.
-        #self.assertRaises(InvalidRequestError, view)
         view()
         self.assertIsNone(get_sys_wg())
 
