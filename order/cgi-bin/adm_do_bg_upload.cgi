@@ -99,7 +99,13 @@ sub process {
 	    $dbh->disconnect;
 	    die "Could not find last update date for product file";
 	}
-	$h->{wh_update} =~ s/[+-]\d\d$//;
+
+        if($h->{wh_update} =~
+           m!(\d+)[/-](\d+)[/-](\d+)\s+(\d+):(\d+):(\d+).*!) {
+            $h->{wh_update} = sprintf("%02d-%02d-%02d %02d:%02d:%02d",
+				      $1, $2, $3, $4, $5, $6);
+        }
+
 	if($h->{wh_update} ne $id) {
 	    die "Products have been updated since this spreadsheet was " .
 		"downloaded. Download a new spreasheet and edit that one";

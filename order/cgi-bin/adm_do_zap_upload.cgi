@@ -99,7 +99,12 @@ sub process {
 	    $dbh->disconnect;
 	    die "Could not find last update date for product file";
 	}
-	$h->{wh_update} =~ s/[+-]\d\d$//;
+	if($h->{wh_update} =~ 
+	   m!(\d+)[/-](\d+)[/-](\d+)\s+(\d+):(\d+):(\d+).*!) {
+	    $h->{wh_update} = sprintf("%02d-%02d-%02d %02d:%02d:%02d", 
+	    $1, $2, $3, $4, $5, $6);
+	}
+    
 	if($h->{wh_update} ne $id) {
 	    die "Products have been updated since this spreadsheet was " .
 		"downloaded. Download a new spreasheet and edit that one";
@@ -149,8 +154,8 @@ sub process {
     # check that there's no attempt to preset a product code
     $sth = prepare("SELECT wh_pr_id, wh_last_seen FROM zapatistadata WHERE wh_pr_id = ?", 
 		   $dbh);
-    my $upd_sth = prepare("UPDATE zapatistadata SET wh_whpri = ?, wh_btw = " /
-			  "cast(? as numeric(5,2), wh_descr = ?, wh_url = ?, " .
+    my $upd_sth = prepare("UPDATE zapatistadata SET wh_whpri = ?, wh_btw = " .
+			  "cast(? as numeric(5,2)), wh_descr = ?, wh_url = ?, " .
 			  "wh_wh_q = ?, wh_prcode = ?, wh_last_seen = ?, " .
 			  "wh_prev_seen = ?  WHERE wh_pr_id = ?", $dbh);
     my $ins_sth = prepare("INSERT INTO zapatistadata (wh_pr_id, wh_whpri, wh_btw, " .
