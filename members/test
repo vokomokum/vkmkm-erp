@@ -1,0 +1,2 @@
+#!/bin/bash
+~/vopy/bin/python setup.py test -q
