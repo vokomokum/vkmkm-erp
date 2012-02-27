@@ -42,9 +42,6 @@ class Workgroup(Base):
     def __repr__(self):
         return self.name
 
-    def set_leader(self, leader_id):
-        self.leader_id = leader_id
-
     def validate(self):
         ''' validate if this object is valid, raise exception otherwise '''
         if self.name == '':

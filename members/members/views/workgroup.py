@@ -27,12 +27,12 @@ def get_wg(session, request):
         try:
             wg_id = int(wg_id)
         except ValueError:
-                raise Exception("No workgroup with id %s" % wg_id)
+            raise Exception("No workgroup with ID %s" % wg_id)
         wg = session.query(Workgroup).get(wg_id)
         if wg:
             wg.exists = True
         else:
-            raise Exception("No workgroup with id %s" % request.matchdict['wg_id'])
+            raise Exception("No workgroup with ID %s" % wg_id)
     return wg
 
 
@@ -85,8 +85,6 @@ class WorkgroupView(BaseView):
 
         session = DBSession()
         wg = get_wg(session, self.request)
-        if not wg:
-            raise Exception(msg+" No workgroup with id %s" % self.request.matchdict['wg_id'])
 
         self.user_is_wgleader = self.user in wg.leaders
 
@@ -115,8 +113,6 @@ class WorkgroupEditView(BaseView):
     def __call__(self):
         session = DBSession()
         wg = get_wg(session, self.request)
-        if not wg:
-            return dict(wg=None, msg="No workgroup with %d" % self.request.matchdict['wg_id'])
 
         self.possible_members = get_possible_members(session)
         if self.request.params.has_key('action'):
@@ -135,7 +131,7 @@ class WorkgroupEditView(BaseView):
                 self.confirm_deletion = True
                 return dict(wg=wg)
             elif action == 'delete-confirmed':
-                tasks = session.query(Task).filter(Workgroup.id==wg.id).all()
+                tasks = session.query(Task).filter(Task.wg_id==wg.id).all()
                 for task in tasks:
                     shifts = session.query(Shift).filter(Shift.task_id==task.id).all()
                     if len(shifts) == 0:

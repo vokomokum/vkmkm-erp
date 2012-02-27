@@ -21,12 +21,12 @@ def get_member(session, request):
         try:
             mid = int(m_id)
         except ValueError:
-            raise Exception("No member with id %s" % m_id)
+            raise Exception("No member with ID %s" % m_id)
         member = session.query(Member).get(m_id)
         if member:
             member.exists = True
         else:
-            raise Exception("No member with id %s" % m_id)
+            raise Exception("No member with ID %s" % m_id)
     return member
 
 

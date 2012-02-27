@@ -66,6 +66,7 @@ Base = declarative_base()
 def configure_session(engine):
     ''' configure the session '''
     DBSession.configure(bind=engine)
+    return DBSession
 
 
 def test_setup(session, engine):

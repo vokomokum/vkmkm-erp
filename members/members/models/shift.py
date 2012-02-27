@@ -13,6 +13,9 @@ class Shift(Base):
     A shift is not identifiable by any number of its attributes, as
     anyone can do more than one shift in the same workgroup in the
     order period. This is why they have their own id.
+    
+    TODO: the task has a workgroup now, so remove it here?! 
+          (replace workgroup property, maybe add a property wg_id)
     '''
     __tablename__ = 'wg_shifts'
 

@@ -1,6 +1,5 @@
 from pyramid.httpexceptions import HTTPFound
-from pyramid.security import remember
-from pyramid.security import forget
+from pyramid.security import remember, forget
 from pyramid.url import route_url
 from pyramid.view import view_config
 
@@ -21,7 +20,8 @@ class Login(BaseView):
         came_from = self.request.params.get('came_from', referrer)
         message = ''
         if came_from != '':
-            message = 'You are not allowed to access this resource. You may want to login as a member with the sufficient access rights.'
+            message = 'You are not allowed to access this resource.\
+               You may want to login as a member with the sufficient access rights.'
         if 'form.submitted' in self.request.params:
             login = self.request.params['login']
             passwd = self.request.params['passwd']
