@@ -96,7 +96,8 @@ class WorkgroupView(BaseView):
 
         self.order = session.query(Order).get((order_id, get_order_label(order_id)))
         self.orders = session.query(Order.id, Order.label).distinct().order_by(desc(Order.id))
-        shifts = session.query(Shift).filter(Shift.wg_id==wg.id)\
+        shifts = session.query(Shift).filter(Shift.task_id==Task.id)\
+                                     .filter(Task.wg_id==wg.id)\
                                      .filter(Shift.order_id==order_id)\
                                      .all()
         self.tasks = [t for t in wg.tasks if t.active]

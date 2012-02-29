@@ -13,21 +13,16 @@ class Shift(Base):
     A shift is not identifiable by any number of its attributes, as
     anyone can do more than one shift in the same workgroup in the
     order period. This is why they have their own id.
-    
-    TODO: the task has a workgroup now, so remove it here?! 
-          (replace workgroup property, maybe add a property wg_id)
     '''
     __tablename__ = 'wg_shifts'
 
     id = Column(Integer, primary_key=True)
-    wg_id = Column(Integer, ForeignKey('workgroups.id'), nullable=False)
     mem_id = Column(Integer, ForeignKey('members.mem_id'), nullable=False)
     order_id = Column(Integer, nullable=False)
     task_id = Column(Integer, ForeignKey('wg_tasks.id'), nullable=False)
     state = Column(Unicode(255), default=u'assigned')
 
     member = relationship(Member, backref='scheduled_shifts')
-    workgroup = relationship(Workgroup)
     task = relationship(Task)
 
     def __init__(self, wg_id, mem_id, o_id, t_id):
@@ -42,6 +37,7 @@ class Shift(Base):
                 (str(self.task), self.order_id, self.member.fullname, self.workgroup, self.state)
 
     def validate(self):
+        ''' validate if this object is valid, raise VokoValidationError otherwise '''
         if self.task_id == '--':
             raise VokoValidationError('Please select a task.')
         task = DBSession.query(Task).get(self.task_id)
@@ -61,3 +57,6 @@ class Shift(Base):
     def order(self):
         return get_order_label(self.order_id)
 
+    @property
+    def workgroup(self):
+        return self.task.workgroup

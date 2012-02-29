@@ -32,7 +32,7 @@ class Task(Base):
         return self.label
 
     def validate(self, tasks):
-        ''' validate if this object is valid, raise exception otherwise '''
+        ''' validate if this object is valid, raise VokoValidationError otherwise '''
         if self.label == '':
             raise VokoValidationError('A task needs a label.')
         for task in [t for t in tasks if not t.id == self.id]:

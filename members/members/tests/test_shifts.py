@@ -27,7 +27,7 @@ class TestShifts(VokoTestCase):
         self.assertEqual(shifts.count(), 1)
         shift = shifts.one()
         self.assertEqual(shift.mem_id, peter.mem_id)
-        self.assertEqual(shift.wg_id, 2)
+        self.assertEqual(shift.task.workgroup.id, 2)
         self.assertEqual(shift.state, 'assigned')
 
     def test_setstate_on_db(self):

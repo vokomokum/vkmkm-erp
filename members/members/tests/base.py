@@ -21,7 +21,7 @@ Base class for all our Tests,
 Currently supports testing with sqlite database.
 A test database is used for each Test.
 Potentially, we'd also want to test with Postgres, but
-that is more work bcs startin Postgres up is slow, so
+that is more work bcs starting Postgres up is slow, so
 we'd use the same db, but rollback everything after each Test
 (see http://sontek.net/writing-tests-for-pyramid-and-sqlalchemy)
 '''
@@ -42,14 +42,13 @@ class VokoTestCase(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
         if db_type == 'sqlite':
-            # template db contains some order data the members app relies on
-            Popen('cp members-test-template.db members-test.db', shell=True).wait()
+            # initalise a temporary database with some order data the members app relies on
+            Popen('sqlite3 members-test.db < members/tests/setup.sql', shell=True).wait()
             self.engine = create_engine('sqlite:///members-test.db')
             self.DBSession = models.base.configure_session(self.engine)
-            # these statements create the database model from models/ via CREATE statements
-            # Interesting for when you don't use a prepared database
-            #models.base.Base.metadata.bind = self.engine
-            #models.base.Base.metadata.create_all(self.engine)
+            # create the database model from models/ via CREATE statements
+            models.base.Base.metadata.bind = self.engine
+            models.base.Base.metadata.create_all(self.engine)
             # turn on Foreign Keys in sqlite (enforcement only works from version 3.6.19 though)
             self.engine.execute('pragma foreign_keys=on')
         else:
