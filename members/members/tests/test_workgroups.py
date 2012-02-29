@@ -1,10 +1,8 @@
 from pyramid import testing
 from paste.util.multidict import MultiDict
 
-from sqlalchemy.exc import InvalidRequestError
-
 from members.tests.base import VokoTestCase
-from members.views.workgroup import WorkgroupView, WorkgrouplistView, WorkgroupEditView
+from members.views.workgroup import WorkgroupView, NewWorkgroupView, ListWorkgroupView, EditWorkgroupView
 from members.models.workgroups import Workgroup
 from members.models.member import Member
 from members.models.base import VokoValidationError
@@ -34,6 +32,11 @@ class TestWorkgroups(VokoTestCase):
         view_info = WorkgroupView(None, request)()
         self.assertEqual(view_info['wg'].id, 2)
 
+    def test_new_view(self):
+        request = testing.DummyRequest()
+        view_info = NewWorkgroupView(None, request)()
+        self.assertEquals(view_info['wg'].name, '')
+
     def test_view_noexist(self):
         request = testing.DummyRequest()
         request.matchdict = {'wg_id': 3}
@@ -42,12 +45,12 @@ class TestWorkgroups(VokoTestCase):
     def test_list(self):
         ''' simple test of list view '''
         request = testing.DummyRequest()
-        view_info = WorkgrouplistView(None, request)()
+        view_info = ListWorkgroupView(None, request)()
         self.assertEqual([wg.id for wg in view_info['workgroups']], [1,2])
         self.assertEqual(view_info['order_name_choice'], 'desc')
         # change ordering
         request.params['order_dir'] = 'desc'
-        view_info = WorkgrouplistView(None, request)()
+        view_info = ListWorkgroupView(None, request)()
         self.assertEqual([wg.id for wg in view_info['workgroups']], [2,1])
         self.assertEqual(view_info['order_name_choice'], 'asc')
 
@@ -57,7 +60,7 @@ class TestWorkgroups(VokoTestCase):
         request.matchdict = {'wg_id': 2}
         request.params['name'] = 'Wholesale Besteling'
         request.params['action'] = 'save'
-        view_info = WorkgroupEditView(None, request)()
+        view_info = EditWorkgroupView(None, request)()
         wg_bestel = self.DBSession.query(Workgroup).get(2)
         self.assertEqual(wg_bestel.name, 'Wholesale Besteling')
 
@@ -67,7 +70,7 @@ class TestWorkgroups(VokoTestCase):
         request.matchdict = {'wg_id': 2}
         request.params['name'] = ''
         request.params['action'] = 'save'
-        self.assertRaises(Exception, WorkgroupEditView(None, request))
+        self.assertRaises(Exception, EditWorkgroupView(None, request))
 
     def test_invalid_edit_noleader(self):
         request = testing.DummyRequest()
@@ -75,16 +78,17 @@ class TestWorkgroups(VokoTestCase):
         request.POST = MultiDict()
         request.POST['wg_leaders'] = ''
         request.params['action'] = 'save'
-        self.assertRaises(VokoValidationError, WorkgroupEditView(None, request))
+        self.assertRaises(VokoValidationError, EditWorkgroupView(None, request))
 
     def test_create(self):
+        '''The NewWorkgroupView only shows an empty form. Creation is done in EditWorkgroupView'''
         request = testing.DummyRequest()
         request.params['name'] = 'Cafe'
         request.params['desc'] = 'Shake and Bake'
         request.POST = MultiDict()
         request.POST['wg_leaders'] = '1'
         request.params['action'] = 'save'
-        view = WorkgroupEditView(None, request)
+        view = EditWorkgroupView(None, request)
         # raises an AttributeError when redirecting after successful
         # save, bcs we haven't set view.user
         self.assertRaises(AttributeError, view)
@@ -98,7 +102,7 @@ class TestWorkgroups(VokoTestCase):
         wg_system = get_sys_wg()
         request.matchdict = {'wg_id': wg_system.id}
         request.params['action'] = 'delete'
-        view = WorkgroupEditView(None, request)
+        view = EditWorkgroupView(None, request)
         view()
         self.assertTrue(view.confirm_deletion)
         request.params['action'] = 'delete-confirmed'
@@ -111,7 +115,7 @@ class TestWorkgroups(VokoTestCase):
         wg_bestel = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Besteling').first()
         request.matchdict = {'wg_id': wg_bestel.id}
         request.params['action'] = 'delete'
-        view = WorkgroupEditView(None, request)
+        view = EditWorkgroupView(None, request)
         view()
         self.assertTrue(view.confirm_deletion)
         request.params['action'] = 'delete-confirmed'

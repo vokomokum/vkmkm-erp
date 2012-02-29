@@ -4,7 +4,9 @@ from pyramid.security import remember
 
 from members.models.shift import Shift
 from members.models.workgroups import Workgroup
-from members.models.base import DBSession
+from members.models.member import Member
+from members.models.task import Task
+from members.models.base import DBSession, Base
 from members.views.base import BaseView
 
 '''
@@ -35,7 +37,7 @@ def fill_shift_from_request(shift, request):
             if request.params.has_key(attr):
                 shift.__setattr__(attr, request.params[attr])
         if request.params.has_key('state'):
-            shift.set_state(request.params['state'])
+            shift.state = request.params['state']
     return shift
 
 
@@ -53,15 +55,15 @@ class NewShiftView(BaseView):
         order_id = self.request.matchdict['o_id']
         mem_id = self.request.params['mem_id']
         shift = Shift(wg_id, mem_id, order_id, task_id)
+        shift.validate()
         session.add(shift)
         return self.redirect('/workgroup/%s?msg=%s&order_id=%s' % (wg_id, 'Succesfully added shift', order_id))
-
 
 
 @view_config(renderer='../templates/workgroup.pt',
              route_name='shift-edit',
              permission='edit')
-class EditShift(BaseView):
+class EditShiftView(BaseView):
 
     tab = 'workgroups'
 
@@ -82,6 +84,7 @@ class EditShift(BaseView):
             action = self.request.params['action']
             if action == "save":
                 shift = fill_shift_from_request(shift, self.request)
+                shift.validate()
                 session.add(shift)
                 return self.redirect('/workgroup/%s?msg=%s&order_id=%s' % (wg_id, 'Shift has been saved.', order_id))
 

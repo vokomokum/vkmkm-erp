@@ -69,7 +69,7 @@ class VokoTestCase(unittest.TestCase):
         2 workgroups, Systems and Besteling.
         Peter is the only member in Systems.
         Both are members in Bestel, with Hans leading that one.
-        Bestel has a task with a shift of Peter.
+        Bestel has a task ('do stuff') with a shift of Peter.
         '''
         m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
         self.DBSession.add(m1)

@@ -81,7 +81,7 @@ class MemberView(BaseView):
 @view_config(renderer='../templates/edit-member.pt',
              route_name='member-edit',
              permission='edit')
-class MemberEditView(BaseView):
+class EditMemberView(BaseView):
 
     tab = 'members'
 
@@ -114,7 +114,7 @@ class MemberEditView(BaseView):
 
 
 @view_config(renderer='../templates/list-members.pt', route_name='member-list')
-class MemberlistView(BaseView):
+class ListMemberView(BaseView):
 
     tab = 'members'
 

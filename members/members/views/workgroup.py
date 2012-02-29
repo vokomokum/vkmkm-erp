@@ -107,7 +107,7 @@ class WorkgroupView(BaseView):
 @view_config(renderer='../templates/edit-workgroup.pt',
              route_name='workgroup-edit',
              permission='edit')
-class WorkgroupEditView(BaseView):
+class EditWorkgroupView(BaseView):
 
     tab = 'workgroups'
 
@@ -168,7 +168,7 @@ class WorkgroupEditView(BaseView):
 
 
 @view_config(renderer='../templates/list-workgroups.pt', route_name='workgroup-list')
-class WorkgrouplistView(BaseView):
+class ListWorkgroupView(BaseView):
 
     tab = 'workgroups'
 
