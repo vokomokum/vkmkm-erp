@@ -69,9 +69,14 @@ class MemberView(BaseView):
 
     tab = 'members'
 
+    def user_can_edit(self):
+        if user:
+            return self.user.mem_id == m.mem_id or self.user.mem_admin
+        else:
+            return False
+
     def __call__(self):
         m = get_member(DBSession(), self.request)
-        self.user_can_edit = self.user.mem_id == m.mem_id or self.user.mem_admin
         # assigned and worked shifts
         assigned = [s for s in m.scheduled_shifts if s.state == 'assigned']
         worked = [s for s in m.scheduled_shifts if s.state == 'worked']
