@@ -39,9 +39,6 @@ my $is_error = 0;
 my $config;
 
 my %inputs = (Member   => "no_or_email",
-	      Phone    => "telno",
-	      House    => "num",
-	      Postcode => "postcode",
 	      key      => "key",
 	      pass     => "num",
 	      Pwd0     => "pwd",
@@ -74,82 +71,6 @@ sub get_email {
     return 1;
 }
 
-# canonicalise a telephone number string
-# return 1 if OK
-# o if empty
-# -1 if not Netherlands
-# -2 strange character in string
-# -3 wrong length
-# -4 dialing code not 2 or 3 digits
-# -5 wrong length
-sub telno {
-    my ($str, $where) = @_;
-    if(!defined($str) or $str eq "") {
-	$$where = "";
-	return 0;
-    }
-
-    # discard country code if found and it's NL
-    $str =~ s/^\+/00/;
-    if($str =~ /^00/) {
-	if($str !~ /0031\s*(.*)/) {
-	    return -1;   # too far away
-	}
-	$str = "0$1";    # create dialing code
-    }
-    my $digs = $str;       # make a digits only version
-    $digs =~ s/[() -]//g;
-    return -2 if($digs !~ /^\d+/); # which did not work...
-    if($digs =~ /^(06)/) {
-	if($digs =~ /^06(\d\d)(\d\d\d)(\d\d\d)$/) {
-	    $$where ="06 $1 $2 $3";
-	    return 1;
-	} else {
-	    return -3;   # too long or too short
-	}
-    }
-    $str =~ s/[ ()-]+/ /g; # collapse all separators to one
-    $str =~ s/^\s//;       # trim the result
-    $str =~ s/\s$//;
-    # does it start with a dialing code?
-    if($digs =~ /^0\d\d\d\d\d\d\d\d\d$/) {
-	# see if member gave a separator for dialing code
-	if($str =~ /^(0\d+) ([\d ]+)$/) {
-	    # yep - break number up using member's guidance
-	    my $dc = $1;
-	    $str = $2;
-	    $str =~ s/ //g;
-	    return -4 if (length($dc) < 3 or length($dc) > 4);
-	    if(length($dc) == 3) {
-		# 3 digit dialing code
-		$digs =~ /^(0\d\d)(\d\d\d)(\d\d)(\d\d)$/;
-		$$where = "($1) $2 $3 $4";
-		return 1;
-	    } 
-	    # 4 digit dialing code
-	    $digs =~ /^(0\d\d\d)(\d\d)(\d\d)(\d\d)$/;
-	    $$where = "($1) $2 $3 $4";
-	    return 1;
-	}
-	# assume 3 digit dialing code
-	$digs =~ /^(0\d\d)(\d\d\d)(\d\d)(\d\d)$/;
-	$$where = "($1) $2 $3 $4";
-	return 1;
-    }
-    # no dialing code, better be 7 digits, guess at 020
-    return -5 if($digs !~ /^(\d\d\d)(\d\d)(\d\d)$/);
-    $$where = "(020) $1 $2 $3";
-    return 1;
-}
-
-
-sub get_postcode {
-    my ($pc, $where ) = @_;
-
-    return -1 if($pc !~ /^\s*(\d\d\d\d)\s*([a-z][a-z])\s*$/i);
-    $$where = sprintf "%s %s", $1, uc $2;
-    return 1;
-}
 sub get_vars {
     my ($config, $cgi, $dbh) = @_;
     my $vals = $cgi->Vars;
@@ -159,169 +80,109 @@ sub get_vars {
     my $new_val;
     my $res;
 
-    foreach my $k (keys %inputs) {
-	if(not defined($vals->{$k})) {
-	    $parse_hash{$k} = "";
-	    $missing = 1;
-	    next;
-	}
-	my $v = $vals->{$k};
-	$v =~ s/^\s*//;
-	$v =~ s/\s+$//;
-	$parse_hash{$k} = $v;
-	if($v eq "") {
-	    $missing = 1;
-	    next;
-	}
-
-	if($inputs{$k} eq "no_or_email") {
-	    if($v =~ /^\d+$/) {
-		$parse_hash{mem_id} = $v;
-		next;
-	    }
-
-	    $res = get_email($v, \$new_val);
-	    if($res < 0 and $req) {
+    while(1) {
+	foreach my $k (keys %inputs) {
+	    if(not defined($vals->{$k})) {
+		$parse_hash{$k} = "";
 		$missing = 1;
-		$err_msgs .= '<div class="warn">This does not look like a valid email address</div>';
 		next;
 	    }
-	    $parse_hash{$k} = $parse_hash{$k} = $new_val;
-	    next;
-	}
-
-	if($inputs{$k} eq "num") {
-	    next if($v =~ /^\d+$/);
-	    $missing = 1;
-	    $err_msgs .= '<div class="warn">House number must contain only digts</div>'
-		if($req);
-	    next;
-	}
-
-	if($inputs{$k} eq "telno") {
-	    $res = telno($v, \$new_val);
-	
-	    if($res == 1) {
-		$parse_hash{$k} = escapeHTML($new_val);
-		next;
-	    }
-
-	    $missing = 1;
-	    $err_msgs .= '<div class="warn">The phone number is outside the Netherlands</div>'
-		if($res == -1);
-	    $err_msgs .= '<div class="warn">Please enter the phone number in the form (0xx) xxx xx xx</div>'
-		if($res == -2);
-	    $err_msgs .= '<div class="warn">The phone number is the wrong length</div>'
-		if($res == -3 or $res == -5); 
-	    $err_msgs .= '<div class="warn">The phone number has an unrecognised dialing code</div>' 
-		if($res == -4);
-
-	    next;
-	}
-
-	if($inputs{$k} eq "postcode") {
-	    $res = get_postcode($v, \$new_val);
-	    if($res > 0) {
-		$parse_hash{$k} = $new_val;
-		next;
-	    }
-	    $missing = 1;
-	    $err_msgs .= '<div class="warn">This does not look like a valid postcode</div>'
-		if($req);
-	    next;
-	}
-	
-	if($inputs{$k} eq "pwd") {
-	
-	    if(!defined($vals->{"Pwd1"})) {
+	    my $v = $vals->{$k};
+	    $v =~ s/^\s*//;
+	    $v =~ s/\s+$//;
+	    $parse_hash{$k} = $v;
+	    if($v eq "") {
 		$missing = 1;
-		$err_msgs .= '<div class="warn">You did not re-enter your Password</div>'
-		    if($req);
+		next;
 	    }
 
-	    my $retype = $vals->{Pwd1};
-	    $retype =~ s/^\s*//;
-	    $retype =~ s/\s+$//;
-	    if(length($v) < 6 or length($v) > 30) {
-		$missing = 1;
-		$err_msgs .= '<div class="warn">Passwords must be between 6 and 30 characters long and may not begin or end with spaces</div>';
+	    if($inputs{$k} eq "no_or_email") {
+		if($v =~ /^\d+$/) {
+		    $parse_hash{mem_id} = $v;
+		    next;
+		}
+
+		$res = get_email($v, \$new_val);
+		if($res < 0 and $req) {
+		    $missing = 1;
+		    $err_msgs .= '<div class="warn">This does not look like a valid email address</div>';
+		    next;
+		}
+		$parse_hash{$k} = $parse_hash{$k} = $new_val;
 		next;
 	    }
-	    if($v ne $retype) {
-		$missing = 1;
-		$err_msgs .= '<div class="warn">Passwords do not match</div>';
+
+	    if($inputs{$k} eq "pwd") {
+		if(!defined($vals->{"Pwd1"})) {
+		    $missing = 1;
+		    $err_msgs .= '<div class="warn">You did not re-enter your Password</div>'
+			if($req);
+		}
+
+		my $retype = $vals->{Pwd1};
+		$retype =~ s/^\s*//;
+		$retype =~ s/\s+$//;
+		if(length($v) < 6 or length($v) > 30) {
+		    $missing = 1;
+		    $err_msgs .= '<div class="warn">Passwords must be between 6 and 30 characters long and may not begin or end with spaces</div>';
+		    next;
+		}
+		if($v ne $retype) {
+		    $missing = 1;
+		    $err_msgs .= '<div class="warn">Passwords do not match</div>';
+		    next;
+		}
+		$parse_hash{pwd} = $v;
 		next;
 	    }
-	    $parse_hash{pwd} = $v;
-	    next;
-	    
+	}
+	$is_error = 1 if($missing and $req);
+	return \%parse_hash if(not $req or $missing);
+
+	# try to find a matching member record
+	my $cmd = sprintf "SELECT * FROM members WHERE %s = ?", (defined($parse_hash{mem_id})) ? 
+	    'mem_id' : 'mem_email';
+	my @execvals =  (defined($parse_hash{mem_id})) ?
+	    ($parse_hash{mem_id}) : ($parse_hash{Member});
+	my $sth = prepare($cmd, $dbh);
+	$sth->execute(@execvals);
+	my $href = $sth->fetchrow_hashref;
+	$sth->finish;
+	$is_error = 1;
+	
+	if(not defined($href)) {
+	    $err_msgs .= '<div class="warn">Could not find an account matching thiw m3mber number or email address</div>';
+	}
+
+	if ( not defined( $href->{mem_pwd_url} ) ) {
+	    $err_msgs .= '<div class="warn">This page is invalid for this account or has expired</div>';
+	    last;
 	}
 	
-    }
-    $is_error = 1 if($missing and $req);
-    return \%parse_hash if(not $req or $missing);
-
-    # try to find a matching member record
-    my $cmd = sprintf "SELECT * FROM members WHERE %s = ? AND mem_house = ? " .
-	"AND mem_postcode = ?", (defined($parse_hash{mem_id})) ? 
-	'mem_id' : 'mem_email';
-    my @execvals =  (defined($parse_hash{mem_id})) ?
-        ($parse_hash{mem_id}) : ($parse_hash{Member});
-    push @execvals, $parse_hash{House}, $parse_hash{Postcode};
-    my $sth = prepare($cmd, $dbh);
-    $sth->execute(@execvals);
-    my $href = $sth->fetchrow_hashref;
-    $sth->finish;
-    $is_error = 1;
-
-    if(not defined($href)) {
-	$err_msgs .= '<div class="warn">Could not find an account matching these details</div>';
-    }
-    while ( defined( $href ) ) {
-        # is the phone no on record?
-        foreach my $k ( qw( mem_home_tel mem_mobile mem_work_tel ) ) {
-            if ( $parse_hash{Phone} eq $href->{$k} ) {
-                $is_error = 0;
-                last;
-            }
-        }
-	
-    	if ( $is_error ) {
-    	    $err_msgs .= '<div class="warn">You must supply a telephone number</div>';
-    	    last;
-    	}
-	
-        $is_error = 1;
-    	if ( not defined( $href->{mem_pwd_url} ) ) {
-            $err_msgs .= '<div class="warn">This page is invalid for this account or has expired</div>';
-    	    last;
-    	}
-    	
-    	if ( $href->{mem_pwd_url} !~ /^([^:]*):(\d+)$/ ) {
-    	    $err_msgs .= '<div class="warn">This page is not valid for this account or has expired</div>';
-    	    last;
-    	}
- 	
-        my ($url, $tstamp) = ($1, $2);
-        # arrgh a plus sign becomes a space after going through processing
-        $url =~ s/\+/ /g;
-        if ( $url ne $vals->{key} ) {
-            $err_msgs .= '<div class="warn">This page is invalid for this account or has expired</div>';
-            last;
-        }
-        
-    	if ( ( $tstamp - time ) < 0 ) {
+	if ( $href->{mem_pwd_url} !~ /^([^:]*):(\d+)$/ ) {
 	    $err_msgs .= '<div class="warn">This page is not valid for this account or has expired</div>';
-    	    last;
-    	}
-    	
-    	$is_error = 0;
-    	last;
-    	
+	    last;
+	}
+	
+	my ($url, $tstamp) = ($1, $2);
+	# arrgh a plus sign becomes a space after going through processing
+	$url =~ s/\+/ /g;
+	if ( $url ne $vals->{key} ) {
+	    $err_msgs .= '<div class="warn">This page is invalid for this account or has expired</div>';
+	    last;
+	}
+	
+	if ( ( $tstamp - time ) < 0 ) {
+	    $err_msgs .= '<div class="warn">This page is not valid for this account or has expired</div>';
+	    last;
+	}
+	
+	$is_error = 0;
+	$parse_hash{mem_id} = $href->{mem_id} if ( not $is_error );
+	last;
     }
-    $parse_hash{mem_id} = $href->{mem_id} if ( not $is_error );
+
     return \%parse_hash;
-    
 }
 
     

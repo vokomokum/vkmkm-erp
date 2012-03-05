@@ -3,18 +3,7 @@
         <div class="center">
             <h2>Vokomokum On-Line Order Pages<br />Reset My Password</h2>
             <img src="http://vokomokum.nl/media/images/logo-vokomokum.jpg" alt="Vokomokum" />
-            <p class="bold">
-                In order to prevent unauthorised persons from changing your password,<br />we need to confirm that this is your account.
-            </p>
-        </div>
-        
-        <p>Please fill in the following fields:</p>
-        <ol>
-            <li>Your member number or email address</li>
-            <li>Your House number ( do not include apartement numbers or ‘huis’ )</li>
-            <li>Your Postcode</li>
-            <li>A telephone number registered with your account - if you have given more than one number, say a home and mobile number, then either of these will do.</li>
-        </ol>
+        <p>Please fill in the your member number or email address</p>
             
         <fieldset id="reset-password-form">
         
@@ -26,20 +15,6 @@
                 <tr>
                     <td align="right"><label for="Member">Member number or Email address:</label></td>
                     <td><input name="Member" id="Member" value="$Member" /></td>
-                <tr>
-                </tr>
-                <tr>
-                    <td align="right"><label for="House">House Number</label></td>
-                    <td><input type="text" name="House" id="House" value="$House" maxlength="20" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><label for="Postcode">Postcode</label></td>
-                    <td><input type="text" name="Postcode" id="Postcode" value="$Postcode" maxlength="10" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><label for="Phone">Telephone</label></td>
-                    <td><input type="text" name="Phone" id="Phone" value="$Phone" maxlength="15" /></td>
-                </tr>
                 <tr>
                     <td colspan="2">&nbsp;</td>
                 </tr>
