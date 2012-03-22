@@ -87,6 +87,12 @@
                             </tr>
                         </table>
                     </form>
+                    <a href="http://order.vokomokum.nl/cgi-bin/welcome.cgi?Forgot=on&Member=">
+                        Forgot Password?
+                    </a>&nbsp;&nbsp;&nbsp;
+                    <a href="http://order.vokomokum.nl/cgi-bin/forgot.cgi">
+                        Reset Password
+                    </a>
                 </tal:block>
 
                 <tal:block tal:condition="view.logged_in">

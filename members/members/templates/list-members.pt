@@ -14,7 +14,12 @@
                 <input type="submit" value="List"/>
             </form>
 
-            <a class="add_link" href="members/new" tal:condition="view.user.mem_admin">
+            <!--a class="add_link" href="members/new" tal:condition="view.user.mem_admin">
+                    New member
+            </a-->
+            <a tal:condition="view.user.mem_admin"
+                class="add_link" 
+                href="http://order.vokomokum.nl/cgi-bin/edit_member.cgi?pass=1&Create=on">
                     New member
             </a>
             
