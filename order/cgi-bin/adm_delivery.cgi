@@ -4,7 +4,7 @@
 # This file is part of the Vokomokum Food Cooperative Administration.
 #
 # Vokomokum is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
+
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
@@ -38,6 +38,9 @@ my $current_no;
 my $cur_label;
 my $status;
 my $err_msgs = "";
+my %categories;
+my %cat_descs;
+my %sc_descs;
 
 sub get_shorts {
     my ($dbh) = @_;
@@ -191,6 +194,32 @@ sub do_changes {
     $config->{nextcgi}  = "/cgi-bin/adm_delivery.cgi";
 }
 
+# output a list for setup  - passed array of hashes for items, file handle
+# sort the items by category, sub_category, description
+sub setup_sort{
+    my $aid = 100000 * $a->{pr_cat} + $a->{pr_sc};
+    my $bid = 100000 * $b->{pr_cat} + $b->{pr_sc};
+    my $cmp = ($sc_descs{$aid}->{sort_ord} <=> $sc_descs{$bid}->{sort_ord});
+    return $cmp if($cmp != 0);
+    return ($a->{descr} cmp $b->{descr});
+}
+
+sub write_setup_file {
+    my ($setup_list, $fh) = @_;
+    my @sorted = sort setup_sort @{$setup_list};
+    my $last_cat = 0;
+    my $last_sc  = 0;
+
+    foreach my $h (@sorted) {
+	if($h->{pr_cat} != $last_cat) {
+	    $last_cat = $h->{pr_cat};
+	    printf $fh "\n        %s\n\n", $categories{$last_cat};
+	}
+	printf $fh "%5d     %8s %s\n", $h->{received}, $h->{prcode},
+	$h->{descr};
+    }
+}
+
 sub print_html {
     my ($config, $cgi, $dbh) = @_;
     my $pra = get_lines($config, $cgi, $dbh);
@@ -200,8 +229,12 @@ sub print_html {
     my $fn = "";
     my $chk_fh = undef;
     my $chk_fh_nl = undef;
+    my $list_fh = undef;
     my $chk_fn = "";
     my $chk_fn_nl = "";
+    my $list_fn = "";
+
+    get_cats(\%categories, \%cat_descs, \%sc_descs, $dbh);
 
     my $tpl = new CGI::FastTemplate($config->{templates});
     $tpl->strict();
@@ -229,10 +262,11 @@ sub print_html {
     my $total_ref = 0;
     my $total_inc = 0;
     my $line = 0;
+    my @setup_list = ();
+    my $h;
 
-    foreach my $h (@{$pra}) {
+    foreach $h (@{$pra}) {
 	next if($status != 5 and  $h->{qty} == 0);
-
 	if(($line %20) == 0) {
 	    print_title("adm_delivery/adm_wh_titles.template", $line, 
 			"Description", $config);
@@ -240,13 +274,15 @@ sub print_html {
 	++$line;
 	if($h->{wh_no} != $last_whn) {
 	    if($last_whn != 0) {
+		write_setup_file(\@setup_list, $list_fh);
+		@setup_list = ();
+		close($list_fh) if(defined($list_fh));
 		close($fh) if(defined($fh));
 		$fh = undef;
 		close($chk_fh) if(defined($chk_fh));
 		$chk_fh = undef;
 		close($chk_fh_nl) if(defined($chk_fh));
 		$chk_fh_nl = undef;
-
 		$tpl = new CGI::FastTemplate($config->{templates});
 		$tpl->define(row  => "adm_delivery/adm_whtotals.template",
 		             link => "adm_delivery/adm_wh_link.template");
@@ -254,6 +290,7 @@ sub print_html {
 		    filename  => $fn,
 		    chk_filename => $chk_fn,
 		    chk_filename_nl => $chk_fn_nl,
+		    list_filename   => $list_fn,
 		    total     => sprintf("%.2f", $total), 
 		    total_inc => sprintf("%.2f", $total_inc), 
 		    total_ref => sprintf("%.2f", $total_ref),
@@ -280,15 +317,20 @@ sub print_html {
 		$fn = "/orders/WH-$h->{wh_no}-$ord_date.txt";
 		$chk_fn = "/orders/Check_WH-$h->{wh_no}-$ord_date.txt";
 		$chk_fn_nl = "/orders/Check_WH-$h->{wh_no}-$ord_date-NL.txt";
+		$list_fn = "/orders/Setup_WH-$h->{wh_no}-$ord_date.txt";
 		open($fh, "> ../data$fn") or 
 		    die "Can't open order file ../data$fn: $!";
 		open($chk_fh, "> ../data$chk_fn") or 
 		    die "Can't open order file ../data$chk_fn: $!";
-		open($chk_fh_nl, "> ../data$chk_fn_nl") or 
+		open($chk_fh_nl, "> ../data$chk_fn") or 
 		    die "Can't open order file ../data$chk_fn_nl: $!";
+		open($list_fh, "> ../data$list_fn") or 
+		    die "Can't open setup list file ../data$list_fn: $!";
+		
 	    }
 	}
 
+	push @setup_list, $h;
 	printf $fh "%s\t%d\r\n", (($h->{prcode} < 1000)  ?
 	    (sprintf "%04.4d", $h->{prcode}) : $h->{prcode}), $h->{qty}
 	    if(defined($fh) and $h->{qty} != 0);
@@ -298,7 +340,7 @@ sub print_html {
 	    $h->{price_inc_btw};	
 	print $chk_fh $a_row if(defined($chk_fh) and $h->{qty} != 0);
 	$a_row =~ s/\./,/g;
-	print $chk_fh_nl $a_row if(defined($chk_fh) and $h->{qty} != 0);
+	print $chk_fh_nl $a_row if(defined($chk_fh_nl) and $h->{qty} != 0);
 	$total += $h->{price};
 	$total_inc += $h->{price_inc_btw};
 	$h->{RowClass} = $rowclass;
@@ -311,6 +353,9 @@ sub print_html {
 	$tplr->print();
 	$tplr = undef;
     }
+
+    write_setup_file(\@setup_list, $list_fh);
+    close($list_fh) if(defined($list_fh));
     close($fh) if(defined($fh));
     close($chk_fh) if(defined($chk_fh));
     close($chk_fh_nl) if(defined($chk_fh_nl));
@@ -321,6 +366,7 @@ sub print_html {
 	filename  => $fn,
 	chk_filename => $chk_fn,
 	chk_filename_nl => $chk_fn_nl,
+	list_filename   => $list_fn,
 	total     => sprintf("%.2f", $total), 
 	total_inc => sprintf("%.2f", $total_inc), 
 	total_ref => sprintf("%.2f", $total_ref),
