@@ -9,7 +9,7 @@
       method="post">
 
 
-        Hello, ${m}
+        Hello, ${m}. This resets your current password.
 
         <table class="main" align="center" tal:condition="not m.exists">
             <tr class="list-content">
