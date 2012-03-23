@@ -74,7 +74,7 @@
         <tr class="list-content" tal:repeat="s assigned_shifts">
             <td>${s.task}</td>
             <td>${s.order}</td>
-            <td><a href="${portal_url}/workgroup/${s.wg_id}">${s.workgroup}</a></td>
+            <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
         </tr>
     </table>
     <div tal:condition="not assigned_shifts">
@@ -92,7 +92,7 @@
         <tr class="list-content" tal:repeat="s worked_shifts">
             <td>${s.task}</td>
             <td>${s.order}</td>
-            <td><a href="${portal_url}/workgroup/${s.wg_id}">${s.workgroup}</a></td>
+            <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
         </tr>
     </table>
     <div tal:condition="not worked_shifts">
