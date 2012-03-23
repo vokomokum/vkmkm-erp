@@ -80,7 +80,7 @@ class Member(Base):
         return "%s %s" % (self.mem_postcode, self.mem_city)
 
     def validate(self):
-        ''' checks on address, bank account, passwords, ...
+        ''' checks on address, bank account, ...
         '''
         # check missing fields
         missing = []
@@ -96,22 +96,24 @@ class Member(Base):
         if not '@' in self.mem_email:
             raise VokoValidationError('The email address does not seem to be valid.')
         # check postcode
-        if not (self.mem_postcode[:4].isdigit() and self.mem_postcode[-2:].isalpha()):
+        if len(self.mem_postcode) > 0\
+                and not (self.mem_postcode[:4].isdigit()\
+                and self.mem_postcode[-2:].isalpha()):
             raise VokoValidationError('The email postcode does not seem to be valid (should be NNNNLL, where N=number and L=letter).')
-        # check house no
+        '''# check house no
         if not self.mem_house.isdigit():
-            raise VokoValidationError('House number should just be a number.')
+            raise VokoValidationError('House number should just be a number.')'''
         # check bank no
         bank_no_clean = self.mem_bank_no.replace(' ', '').replace('-', '')
-        if len(bank_no_clean) < 7 or len(bank_no_clean) > 9:
+        if not len(bank_no_clean) in [0,7,9]:
             raise VokoValidationError('Bank number needs to consist of 7 (postbank) or 9 numbers.')
-        if not bank_no_clean.isdigit():
+        if len(bank_no_clean) > 0 and not bank_no_clean.isdigit():
             raise VokoValidationError('Bank number needs to consist of only numbers.')
-        # at least one telephone number
+        '''# at least one telephone number
         ks = self.__dict__.keys()
         if (not 'mem_home_tel' in ks and not 'mem_work_tel' in ks and not 'mem_mobile' in ks) or\
            (self.mem_home_tel == "" and self.mem_work_tel == "" and self.mem_mobile == ""):
-            raise VokoValidationError('Please specify at least one telephone number.')
+            raise VokoValidationError('Please specify at least one telephone number.')'''
 
     def validate_pwd(self, req):
         '''
