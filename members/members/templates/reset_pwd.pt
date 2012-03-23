@@ -9,7 +9,7 @@
       method="post">
 
 
-        Hello, ${member}
+        Hello, ${m}
 
         <table class="main" align="center" tal:condition="not m.exists">
             <tr class="list-content">
