@@ -3,8 +3,8 @@ from pyramid.security import remember, forget
 from pyramid.url import route_url
 from pyramid.view import view_config
 
-from members.security import get_member
-from members.md5crypt import md5crypt
+from members.utils.security import get_member
+from members.utils.md5crypt import md5crypt
 from members.views.base import BaseView
 
 

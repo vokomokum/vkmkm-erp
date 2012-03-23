@@ -146,24 +146,7 @@
            </tr>
         </table>
         <!-- Password -->
-        <table class="main" align="center" tal:condition="not m.exists">
-            <tr class="list-content">
-                <td align="center" colspan="2">Password (6 to 30 characters)</td>
-            </tr>
-            <tr class="list-content" align="center">
-                <td width="50%">Password:</td>
-                <td width="50%">
-                    <input type="password" name="pwd1" />
-                </td>
-            </tr>
-            <tr class="list-content" align="center">
-                <td width="50%">Confirm:</td>
-                <td width="50%">
-                    <input type="password" name="pwd2" />
-                </td>
 
-            </tr>
-        </table>
     </table>
 
     <!-- Submit -->

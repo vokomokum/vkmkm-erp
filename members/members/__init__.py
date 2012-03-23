@@ -5,7 +5,7 @@ from sqlalchemy import engine_from_config
 from pyramid.exceptions import NotFound
 
 from members.models.base import configure_session
-from members.security import groupfinder
+from members.utils.security import groupfinder
 from members.views.base import NotFoundView
 from members.views.base import ErrorView
 # import all our types here once, important

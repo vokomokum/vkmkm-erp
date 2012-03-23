@@ -3,7 +3,7 @@ from pyramid.renderers import get_renderer
 from pyramid.security import authenticated_userid, remember
 from pyramid.httpexceptions import HTTPFound
 
-from members.security import authenticated_user
+from members.utils.security import authenticated_user
 from members.models.base import VokoValidationError
 
 

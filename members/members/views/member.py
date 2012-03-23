@@ -8,7 +8,7 @@ import random, string
 from members.models.member import Member
 from members.models.base import DBSession, VokoValidationError
 from members.views.base import BaseView
-from members.md5crypt import md5crypt
+from members.utils.md5crypt import md5crypt
 
 
 def get_member(session, request):
@@ -99,6 +99,8 @@ class EditMemberView(BaseView):
                 member = fill_member_from_request(member, self.request)
                 member.validate()
                 if not member.exists:
+                    #TODO: We'll set password in reset password view, here we do a reset_request(member)
+                    #      instead of the next three lines
                     member.validate_pwd(self.request)
                     salt = ''.join(random.choice(string.letters) for i in xrange(8))
                     member.mem_enc_pwd = md5crypt(str(self.request.params['pwd1']), salt)
@@ -116,6 +118,46 @@ class EditMemberView(BaseView):
                 session.delete(member)
                 return dict(m=None, msg='Member %s has been deleted.' % member)
         return dict(m = member, msg='')
+
+#def reset_request():
+# TODO: 
+# we set an initial random code in mem_pwd_url and send an email
+# with the reset link
+#    code = random # a random base64 string
+#    member.mem_pwd_url = code
+#    sendmail()
+
+#class ResetPasswordView(BaseView):
+# TODO:
+# - make full-class view
+# - if it is a request to change password, set send an email with a link
+#
+#    def __call__(self):
+#       has_code = False
+#       code_ok = False
+#       msg = ''
+#       if params has code:
+#           has_code = True
+#           member = find member by code
+#           if member:
+#               code_ok = True
+#               if params has no pwd:
+#                   msg = u'Please enter a new password below.'
+#                   # show form
+#               else:
+#                   # set new password
+#                   member.validate_pwd(self.request)
+#                   salt = ''.join(random.choice(string.letters) for i in xrange(8))
+#                   member.mem_enc_pwd = md5crypt(str(self.request.params['pwd1']), salt)
+#                   member.mem_pwd_url = ''
+#                   msg = u'Password has been set. Please use new password to log in.'
+#                   TODO: log out (forget headers), redirect to login view
+#           else:
+#               msg = u'code invalid'
+#       else:
+#           reset_request(member)
+#
+#       return dict(msg=msg, code=code, has_code=has_code, code_ok=code_ok)
 
 
 @view_config(renderer='../templates/list-members.pt', route_name='member-list')
