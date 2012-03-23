@@ -70,7 +70,7 @@ class TestMembers(VokoTestCase):
         request.params['mem_mobile'] = '06 12345678'
         request.params['mem_postcode'] = '1017EA'
         request.params['mem_city'] = 'Amsterdam'
-        request.params['mem_bank_no'] = '12345678'
+        request.params['mem_bank_no'] = '123456789'
         request.params['mem_enc_pwd'] = 'notsecret'
         return request
 
