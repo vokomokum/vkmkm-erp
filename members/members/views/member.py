@@ -120,7 +120,7 @@ class EditMemberView(BaseView):
         return dict(m = member, msg='')
 
 #def reset_request():
-# TODO: 
+# TODO:
 # we set an initial random code in mem_pwd_url and send an email
 # with the reset link
 #    code = random # a random base64 string
