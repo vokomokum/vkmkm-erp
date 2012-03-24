@@ -2,27 +2,26 @@
 
 cd /var/voko
 
-if [ -e svn-install ];
+if [ -e git-repo ];
 then
-  echo Updating svn ...
-  cd svn-install/vokomokum/trunk
-  svn up
+  echo Updating git-repo ...
+  cd git-repo
+  git pull
+  cd ..
 else
-  echo Checking out code ...
-  mkdir svn-install
-  cd svn-install
-  svn co http://subversion.assembla.com/svn/vokomokum/
-  cd vokomokum/trunk
+  echo Checking out code into git-repo ...
+  git clone git@git.assembla.com:vokomokum.git git-repo
 fi
 
-# do an svn export here first, so we do not copy over subversions working files
-svn export members mexport
+cp -r git-repo git-repo-tmp
+rm -r git-repo-tmp/.git
+rm -r git-repo-tmp/members/members/tests
 
 echo Set ownership apache:apache, permissions 775  on everything ...
-/usr/bin/sudo /bin/chown -R apache:apache mexport
-/usr/bin/sudo /bin/chmod -R 775 mexport
+/usr/bin/sudo /bin/chown -R apache:apache git-repo-tmp
+/usr/bin/sudo /bin/chmod -R 775 git-repo-tmp
 
-cd mexport
+cd git-repo-tmp/members
 
 echo make template files group permissions 644 ...
 /usr/bin/sudo /usr/bin/find members/templates -type f -print0 | /usr/bin/xargs -0 /usr/bin/sudo /bin/chmod 644
@@ -32,9 +31,11 @@ echo make all directories under members/ 775 ...
 
 echo "now move everything (but the .ini files) onto the voko server ..."
 sudo cp -rp pyramid.wsgi CHANGES.txt README.txt setup.* members /var/www/members
-cd ..
-/usr/bin/sudo rm -r mexport
+
+cd ../..
+/usr/bin/sudo rm -r git-repo-tmp
 
 echo develop app ...
 cd /var/www/members
 /usr/bin/sudo /var/www/vopy/bin/python setup.py develop 
+
