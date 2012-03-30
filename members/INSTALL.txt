@@ -1,18 +1,18 @@
 INSTALLATION
 
+This describes what you need to do to install the members app locally and/or on a webserver. I hope it is complete and correct, contact me if something is wrong, please. -Nic
 
 -- First, the dependencies:
 
-You should have a modern python (2.6+) and postgres on your system.
-To update the member app code, you also need subversion (svn).
+You should have a modern python (2.6+) and a database on your system.
+The production version uses postgres, locally you can also use sqlite, with probably not all features working.
+To get and update the member app code, you also need git.
+This app is meant to be run via Apache when in production (installation help for the link from Apache to this app are also below), but can be run locally with the simple, in-built server.
 
+-- To begin, we create a virtual python environment with all needed Python libraries
 
--- To begin, we create a virtual python environment
-
-(let's call it "vopy") with all needed libraries:
-Go to the directory where your local Python environment should be (it
-needs to be executable by the Apache user). In this tutorial, let's pretend that it goes in your
-home dir (~).
+Let's call it "vopy".
+Go to the directory where your local Python environment should be (when using Apache, it needs to be executable by the Apache user). In this tutorial, let's pretend that it goes in your home dir (~).
 $ cd
 $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
 Here, make sure you use the python you want. This just uses the first in your path:
@@ -20,18 +20,17 @@ $ python virtualenv.py vopy
 Install some needed libraries
 $ cd vopy/bin
 $ ./pip install pyramid  # web framework + dependencies
-$ ./pip install psycopg2 # Postgres wrapper for Python
+$ ./pip install psycopg2 # Postgres wrapper for Python, for sqlite you would install sqlite3
 $ cd ../..
 $ rm virtualenv.py
 
--- Check out the member app code (if you don't have it already)
+-- Check out the vokomokum code (if you don't have it already)
 
 $ cd <location where you want vokomokum code to go>
-$ svn co TODO
-
+$ git clone git://git.assembla.com/vokomokum.git vokomokum 
 
 -- Develop the app (this also installs all needed python libs locally)
-$ cd vokomokum/trunk/members
+$ cd vokomokum/members
 $ ~/vopy/bin/python setup.py develop
 
 
@@ -43,14 +42,14 @@ sqlalchemy.url = postgresql+psycopg2://user:passwd@localhost:5432/vokotest
 >>>
 where vokotest is the database, and user and passwd have to be set by you.
 It seems reasonable that development.ini uses a different database than production.ini
-
+If you want to use sqlite, use the commented example in development.ini 
 
 -- See if the App is served through its own server (if you can access localhost, e.g. on your home PC)
 
 $ ./run 
 The Member application should now respond under http://localhost:6543.
-(the run script loads development.ini by default, you can change that for testing)
-Do a CTRL-C to stop it, we want Apache to run it (via mod_wsgi).
+This is very useful for local testing of the app. Note that the run script loads development.ini by default, you can change that if you need production.ini.
+Do a CTRL-C to stop it, we now turn to installation for what we need to let Apache serve the app (via mod_wsgi).
 
 
 -- Install the apache mod_wsgi module
