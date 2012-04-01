@@ -25,8 +25,7 @@ class Shift(Base):
     member = relationship(Member, backref='scheduled_shifts')
     task = relationship(Task)
 
-    def __init__(self, wg_id, mem_id, o_id, t_id):
-        self.wg_id = wg_id
+    def __init__(self, mem_id, o_id, t_id):
         self.mem_id = mem_id
         self.order_id = o_id
         self.task_id = t_id

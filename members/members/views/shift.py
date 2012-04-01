@@ -54,7 +54,7 @@ class NewShiftView(BaseView):
         task_id = self.request.params['task_id']
         order_id = self.request.matchdict['o_id']
         mem_id = self.request.params['mem_id']
-        shift = Shift(wg_id, mem_id, order_id, task_id)
+        shift = Shift(mem_id, order_id, task_id)
         shift.validate()
         session.add(shift)
         return self.redirect('/workgroup/%s?msg=%s&order_id=%s' % (wg_id, 'Succesfully added shift', order_id))
