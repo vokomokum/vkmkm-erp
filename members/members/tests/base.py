@@ -87,7 +87,7 @@ class VokoTestCase(unittest.TestCase):
         t = Task('do stuff', wg2.id)
         self.DBSession.add(t)
         self.DBSession.flush()
-        s = Shift(wg2.id, m1.mem_id, 1, t.id)
+        s = Shift(m1.mem_id, 1, t.id)
         self.DBSession.add(s)
         self.DBSession.flush()
 
