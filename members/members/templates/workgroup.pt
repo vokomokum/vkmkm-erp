@@ -36,7 +36,7 @@
     </table>
 
     
-    <h2>Shifts in Order '${view.order.label}':</h2>
+    <h2>Shifts in Order '${view.cur_order_lbl}':</h2>
     
     <table class="list" align="center" tal:condition="view.user_is_wgleader">
         <tr>
@@ -120,11 +120,11 @@
         </tr>
     </table>
 
-    <div id="shift-order-selector">Select other order:
+    <div id="shift-order-selector">Select another order:
         <form action="${portal_url}/workgroup/${wg.id}" method="post">
             <select name="order_id"> 
                 <tal:block tal:repeat="o view.orders">
-                    <option tal:condition="o.id == view.order.id" value="${o.id}" selected="selected">${o.label}</option>
+                    <option tal:condition="o.id == view.order.id" value="${o.id}" selected="selected">${view.cur_order_lbl}</option>
                     <option tal:condition="o.id != view.order.id" value="${o.id}">${o.label}</option>
                 </tal:block>
             </select>
