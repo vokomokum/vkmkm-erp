@@ -5,7 +5,7 @@ use Unix::Syslog qw( :macros :subs );
 
 sub main {
     openlog("catmail", LOG_PID, LOG_USER);
-    my $fn = sprintf "/var/www/voko/mail/%d-%d", $$, time;
+    my $fn = sprintf "/var/www/vokotest/mail/%d-%d", $$, time;
     if(not open(OUT, "> $fn")) {
 	syslog(LOG_ERR, "Can't open $fn: $!");
 	exit 1;

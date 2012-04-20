@@ -39,8 +39,8 @@ my $err_msgs = "";
 
 my %status_descrs = (
     0 => "Begin New Order cycle", 
-    1 => "Members should commit their orders",
-    2 => "Uncommited orders are dropped. Members can only place orders which do not increase shortages",
+    1 => "Order is open for members",
+    2 => "Members can only place orders which do not increase shortages",
     3 => "Orders are closed, admins must adjust member orders to resolve shortages",
     4 => "All changes are complete, the order is ready for sending to the wholesalers",
     5 => "The order has been received, admins must enter any delivery shortages",
@@ -75,7 +75,7 @@ sub set_status_0 {
 
 }
 
-# allow commits - do it, period
+# same as status 0, as we no longer deal with commits
 sub set_status_1 {
     my ($vars, $config, $cgi, $dbh) = @_;
     if($status  > 1) {
@@ -96,38 +96,19 @@ sub set_status_1 {
     
 }
 
-# member shortage adjust time - close commits and allow updates
+# member shortage adjust time - allow updates
 sub set_status_2 {
     my ($vars, $config, $cgi, $dbh) = @_;
 
     my $sth;
     my $aref;
 
-    eval {
-	$sth = prepare('SELECT set_status_2(?)', $dbh);
-	$sth->execute('f');
-	$aref = $sth->fetchrow_arrayref;
-	$sth->finish;
-    };
-    if($dbh->err) {
-	$err_msgs = $dbh->errstr;
-	$dbh->rollback;
-	return;
+    if(not defined($vars->{Close})) {
+	$config->{button} = "Close";
+	$config->{reminders} = 1;
+	return; 
     }
-    if($aref->[0] != 0) {
-	my $open = $aref->[0];
-	if(not defined($vars->{Close})) {
-	    $err_msgs = sprintf("There %s still $open member order%s which %s not committed - are you sure orders should be closed?",
-				(($open == 1) ? "is" : "are"),
-				(($open == 1) ? "" : "s"),
-				(($open == 1) ? "is" : "are"));
-				
-	    $config->{text} = "Yes, uncommitted member orders will not be processed this time";
-	    $config->{button} = "Close";
-	    $config->{reminders} = 1;
-	    return; 
-	}
-    }
+
     eval {
 	$sth = prepare('SELECT set_status_2(?)', $dbh);
 	$sth->execute('t');
@@ -397,74 +378,13 @@ sub email_notice {
 
     my $sth;
     return if($status == 0 or $status > 2);
-    if($status == 1) {
-	$sth = prepare ("SELECT join_name(a.mem_fname, a.mem_prefix, " .
-			"a.mem_lname) AS fullname, a.mem_email AS email, " .
-		        "(m.memo_commit_closed is not null) as committed " .
-			"FROM members AS a, mem_order AS m WHERE ".
-			"a.mem_id = m.mem_id AND m.ord_no = ?", $dbh);
-	$sth->execute($ord_no);
-    } else {
-	# the user's order is gone at status 2, email notices tell the story
-	$sth = prepare("SELECT join_name(m.mem_fname, m.mem_prefix, " .
-		       "m.mem_lname) AS fullname, m.mem_email AS email, " .
-		       "(m.mem_id IN (SELECT DISTINCT mem_id FROM ".
-		       "carry_over)) AS has_carryover ".
-		       "FROM members AS m, email_notices AS e ".
-		       "WHERE m.mem_id = e.mem_id", $dbh);
-		       
-	$sth->execute;
-    }
     my @hrefs;
-    push @hrefs, $h while($h = $sth->fetchrow_hashref);
-    $sth->finish;
-    $dbh->commit;
+
     my $email_vals = {};
-    if(scalar(@hrefs)) {
-	if($status == 1) {
-	    $subject = ($reminder) ?
-		"Vokomokum - Reminder: last chance to commit your order" :
-		"Vokomokum - Reminder to commit your order";
-	} else {
-	    $subject = "Vokomokum - Your order will not be processed";
-	}
-
-	foreach my $h (@hrefs) {
-	    next if $h->{committed};
-	    my $fh = email_header($h->{email}, $subject, $config);
-	    if($status == 1) {
-		if($reminder) {
-		    email_chunk($fh, "commit_reminder_txt.template", $h, $config);
-		} else {
-		    email_chunk($fh, "commit_announce_txt.template", $h, $config);
-		}
-	    } else {
-		email_chunk($fh, "not_committed_txt.template", $h, $config);
-		email_chunk($fh, "carryover_txt.template", {}, $config)
-		    if($h->{has_carryover});
-	    }
-	    email_chunk($fh, "sig_txt.template", {}, $config);
-	    email_chunk($fh, "html_start.template", {}, $config);
-	    if($status == 1) {
-		if($reminder) {
-		    email_chunk($fh, "commit_reminder_html.template", $h, $config);
-		} else {
-		    email_chunk($fh, "commit_announce_html.template", $h, $config);
-		}
-	    } else {
-		email_chunk($fh, "not_committed_html.template", $h, $config);
-		email_chunk($fh, "carryover_html.template", {}, $config)
-		    if($h->{has_carryover});
-	    }
-	    email_chunk($fh, "sig_html.template", {}, $config);
-	    close($fh);
-
-	}
-    }
-    return if($status != 2);
+    return if($status < 1 or $status > 2);
     $subject = "vokomokum - Shortages in your current order";
 
-    # find users with committed orders where some of their products have
+    # find user orders where some of their products have
     # shortages and their order is not a wholesale quantity
     my %notify;
     my $st = <<EOS
@@ -540,6 +460,7 @@ sub main {
     $config->{text}  = "Yes, really change it";
     $config->{button} = "ConfirmYes";
     $config->{reminder} = 0;
+    $config->{reminder} = 1 if ($status == 1);
     doit($config, $cgi, $dbh);
 
     $dbh->disconnect;
