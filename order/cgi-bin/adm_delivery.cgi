@@ -205,12 +205,14 @@ sub setup_sort{
 }
 
 sub write_setup_file {
-    my ($setup_list, $fh) = @_;
+    my ($setup_list, $fh, $whn) = @_;
     my @sorted = sort setup_sort @{$setup_list};
     my $last_cat = 0;
     my $last_sc  = 0;
-
+    
+    printf $fh "\n\n";
     foreach my $h (@sorted) {
+	next if($h->{wh_no} != $whn);
 	if($h->{pr_cat} != $last_cat) {
 	    $last_cat = $h->{pr_cat};
 	    printf $fh "\n        %s\n\n", $categories{$last_cat};
@@ -274,9 +276,9 @@ sub print_html {
 	++$line;
 	if($h->{wh_no} != $last_whn) {
 	    if($last_whn != 0) {
-		write_setup_file(\@setup_list, $list_fh);
+		write_setup_file(\@setup_list, $list_fh, $last_whn);
 		@setup_list = ();
-		close($list_fh) if(defined($list_fh));
+		# close($list_fh) if(defined($list_fh));
 		close($fh) if(defined($fh));
 		$fh = undef;
 		close($chk_fh) if(defined($chk_fh));
@@ -317,16 +319,17 @@ sub print_html {
 		$fn = "/orders/WH-$h->{wh_no}-$ord_date.txt";
 		$chk_fn = "/orders/Check_WH-$h->{wh_no}-$ord_date.txt";
 		$chk_fn_nl = "/orders/Check_WH-$h->{wh_no}-$ord_date-NL.txt";
-		$list_fn = "/orders/Setup_WH-$h->{wh_no}-$ord_date.txt";
+		$list_fn = "/orders/Setup_WH-ALL-$ord_date.txt";
 		open($fh, "> ../data$fn") or 
 		    die "Can't open order file ../data$fn: $!";
 		open($chk_fh, "> ../data$chk_fn") or 
 		    die "Can't open order file ../data$chk_fn: $!";
 		open($chk_fh_nl, "> ../data$chk_fn") or 
 		    die "Can't open order file ../data$chk_fn_nl: $!";
-		open($list_fh, "> ../data$list_fn") or 
-		    die "Can't open setup list file ../data$list_fn: $!";
-		
+		if(not defined($list_fh)) {
+		    open($list_fh, "> ../data$list_fn") or 
+			die "Can't open setup list file ../data$list_fn: $!";
+		}
 	    }
 	}
 
@@ -354,7 +357,7 @@ sub print_html {
 	$tplr = undef;
     }
 
-    write_setup_file(\@setup_list, $list_fh);
+    write_setup_file(\@setup_list, $list_fh, $last_whn);
     close($list_fh) if(defined($list_fh));
     close($fh) if(defined($fh));
     close($chk_fh) if(defined($chk_fh));
