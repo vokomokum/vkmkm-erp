@@ -1,6 +1,8 @@
 import unittest
 import transaction
 from subprocess import Popen
+import os
+from shutil import rmtree
 
 from pyramid import testing
 
@@ -14,6 +16,7 @@ from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
 from members.models.task import Task
+from members.utils import mail
 
 
 '''
@@ -54,11 +57,16 @@ class VokoTestCase(unittest.TestCase):
         else:
             self.DBSession = models.base.configure_session(create_engine('postgres://'))
         self.fill_data()
+        self.path_to_here = '/'.join(os.path.realpath(__file__).split('/')[:-1])
+        mail.mail_folder = '{0}/.testmails'.format(self.path_to_here)
+        os.mkdir(mail.mail_folder)
 
     def tearDown(self):
         if db_type == 'sqlite':
             self.DBSession.close()
             Popen('rm members-test.db', shell=True).wait()
+        super(VokoTestCase, self).tearDown()
+        rmtree(mail.mail_folder)
         testing.tearDown()
 
     def fill_data(self):

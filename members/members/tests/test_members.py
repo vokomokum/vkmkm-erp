@@ -1,10 +1,13 @@
 from pyramid import testing
 from sqlalchemy.exc import IntegrityError
 
+import os
+
 import base
 from members.models.member import Member
 from members.models.base import VokoValidationError
 from members.views.member import MemberView, NewMemberView, ListMemberView, EditMemberView
+from members.utils import mail
 
 from members.tests.base import VokoTestCase
 
@@ -25,7 +28,7 @@ class TestMembers(VokoTestCase):
         self.assertEqual(view_info['assigned_shifts'][0].task.label, 'do stuff')
         self.assertEqual(len(view_info['worked_shifts']), 0)
 
-    def test_new_view(self):
+    def test_new_view_empty(self):
         request = testing.DummyRequest()
         view_info = NewMemberView(None, request)()
         self.assertEquals(view_info['m'].mem_fname, '')
@@ -103,13 +106,32 @@ class TestMembers(VokoTestCase):
         request.params['action'] = 'save'
         view = EditMemberView(None, request)
         request.params['mem_lname'] = 'NewLastname'
-        request.params['pwd1'] = 'notsecret'
-        request.params['pwd2'] = 'notsecret'
         # raises an AttributeError when redirecting after successful
         # save, bcs we haven't set view.user
         self.assertRaises(AttributeError, view)
         mem = self.DBSession.query(Member).filter(Member.mem_lname==u'NewLastname').first()
         self.assertIsNotNone(mem)
+        # check if member exists
+        mem = self.DBSession.query(Member).filter(Member.mem_lname==u'NewLastname').first()
+        self.assertIsNotNone(mem)
+
+        # check if password reset email was sent with expected key
+        mails = [m for m in os.listdir(mail.mail_folder) if m.endswith('.eml')]
+        f = open('%s/%s' % (mail.mail_folder, mails[0]), 'r')
+        line = ""
+        for l in f:
+            if l.strip() != '':
+                line = l
+        key = line.split('key=')[1].strip()
+        self.assertEquals(key, mem.mem_pwd_url)
+
+        # TODO: visit reset view
+        request = testing.DummyRequest()
+        request.params['pwd1'] = 'notsecret'
+        request.params['pwd2'] = 'notsecret'
+
+        # TODO: check if password was saved and encrypted correctly
+        mem = self.DBSession.query(Member).filter(Member.mem_lname==u'NewLastname').first()
 
     def test_delete(self):
         request = testing.DummyRequest()

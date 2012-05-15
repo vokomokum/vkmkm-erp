@@ -2,13 +2,17 @@ from pyramid.view import view_config
 
 from sqlalchemy import asc, desc
 
+import os
 from datetime import datetime
-import random, string
+import random
+import string
+import base64
 
 from members.models.member import Member
 from members.models.base import DBSession, VokoValidationError
 from members.views.base import BaseView
 from members.utils.md5crypt import md5crypt
+from members.utils.mail import sendmail
 
 
 def get_member(session, request):
@@ -99,14 +103,15 @@ class EditMemberView(BaseView):
                 member = fill_member_from_request(member, self.request)
                 member.validate()
                 if not member.exists:
-                    #TODO: We'll set password in reset password view, here we do a reset_request(member)
-                    #      instead of the next three lines
-                    member.validate_pwd(self.request)
-                    salt = ''.join(random.choice(string.letters) for i in xrange(8))
-                    member.mem_enc_pwd = md5crypt(str(self.request.params['pwd1']), salt)
+                    #member.validate_pwd(self.request)
+                    #salt = ''.join(random.choice(string.letters) for i in xrange(8))
+                    #member.mem_enc_pwd = md5crypt(str(self.request.params['pwd1']), salt)
                     session.add(member)
                     session.flush() # flushing manually so the member gets an ID
-                    return self.redirect('/member/%d?msg=Member was created.' % member.mem_id)
+                    pwd_reset_request(member)
+                    return self.redirect('/member/%d?msg=Member was created'\
+                                         ' and was sent a mail to set up a'\
+                                         ' password.' % member.mem_id)
                 if not member.mem_enc_pwd or member.mem_enc_pwd == '':
                     raise VokoValidationError('Member has no password.')
                 return dict(m = member, msg='Member has been saved.')
@@ -119,18 +124,34 @@ class EditMemberView(BaseView):
                 return dict(m=None, msg='Member %s has been deleted.' % member)
         return dict(m = member, msg='')
 
-#def reset_request():
-# TODO:
-# we set an initial random code in mem_pwd_url and send an email
-# with the reset link
-#    code = random # a random base64 string
-#    member.mem_pwd_url = code
-#    sendmail()
+
+def pwd_reset_request(member, first=False):
+    '''
+    sent member a mail with a temporary URL to update their password.
+    we set an initial random code in mem_pwd_url and send an email
+    with the reset link
+    
+    :param Member member: member whose password is to be reset
+    :param bool first: True if this email is the first this user gets (on
+                        account creation)
+    '''
+    code = base64.urlsafe_b64encode(os.urandom(16))
+    member.mem_pwd_url = code
+    subject = 'Set a new pasword for your Vokomokum account.'
+    if first:
+        subject = 'Welcome to Vokomokum. Please set a password.'
+    mail_templ = open('members/templates/pwdreset_txt.eml', 'r')
+    body = mail_templ.read()
+    return sendmail(member.mem_email, subject, body.format(key=code))
+
 
 #class ResetPasswordView(BaseView):
 # TODO:
-# - make full-class view
-# - if it is a request to change password, set send an email with a link
+# - make this into a full-class view:
+#   make template and routing
+# - 1. default: show a form to request a password reset (enter emial or member number)
+# - 2. if it member is identifiable, send them an email with a link
+# - 3. if correct code (from sent link) is used to come here, then we reset
 #
 #    def __call__(self):
 #       has_code = False
@@ -155,7 +176,15 @@ class EditMemberView(BaseView):
 #           else:
 #               msg = u'code invalid'
 #       else:
-#           reset_request(member)
+#           if params has email address or member number:
+#               if it is known:
+#                   pwd_reset_request(member)
+#                   msg = u'A reset link has been sent to your email
+#                   address (%s).' % email
+#               else:
+#                   msg = u'Cannot find any member with this
+#                   information: %s.' % bla
+#           else:
 #
 #       return dict(msg=msg, code=code, has_code=has_code, code_ok=code_ok)
 
