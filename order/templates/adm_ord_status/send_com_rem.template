@@ -1,7 +1,8 @@
+<table>
   <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
   <tr>
     <td>&nbsp;</td><td>&nbsp;</td>
-    <td align="left">Send a reminder email to members with uncommitted
+    <td align="left">Send an email to members with shortages for products in their order
 orders?</td>
    <td><input align="center" type="Submit" name="SendReminder" value="Email"></input>
   </tr>
