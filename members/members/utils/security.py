@@ -41,12 +41,14 @@ def groupfinder(memid, request):
     #TODO: use id of context object to check workgroup and member
     #if context.__class__ == Workgroup
     #    groups.append('wg-members')
-    if context.__class__ == Member and context.mem_id == memid:
-        groups.append('this-member')
+    if context.__class__ == Member:
+        mem_id = int(request.matchdict.get('mem_id', -1))
+        if mem_id == memid:
+            groups.append('group:this-member')
 
-    wg_id = request.params.get('wg_id', -1)
-    if request.matchdict:
-        if wg_id == -1 and request.matchdict.has_key('wg_id'):
+    wg_id = int(request.params.get('wg_id', -1))
+    if 'wg_id' in request.matchdict:
+        if wg_id == -1:
             wg_id = request.matchdict['wg_id']
     if wg_id >= 0:
         if wg_id in [wg.id for wg in session.query(Member).get(memid).led_workgroups]:
