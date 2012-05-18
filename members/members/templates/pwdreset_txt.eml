@@ -1,15 +1,15 @@
 [NL]
 Om een nieuw wachtwoord voor je rekening te plaatsen klik je op de volgende link (of knip en plak het in je adresbalk).
 
-<URL:http://members.vokomokum.nl/forgot.cgi?key={key}>
+<URL:{portal_url}/member/{mem_id}/reset-pwd/{key}>
 
-http://members.vokomokum.nl/forgot.cgi?key={key}
+{portal_url}/member/{mem_id}/reset-pwd/{key}
 
 
 [ENG]
 To set a new password on your account, click on the following link (or
 cut and paste it into your browser's address bar). 
 
-<URL:http://members.vokomokum.nl/forgot.cgi?key={key}>
+<URL:{portal_url}/member/{mem_id}/reset-pwd/{key}>
 
-http://members.vokomokum.nl/forgot.cgi?key={key}
+{portal_url}/member/{mem_id}/reset-pwd/{key}

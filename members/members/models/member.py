@@ -53,7 +53,7 @@ class Member(Base):
     #mem_message_date = Column(DateTime()) #timestamp
 
     __acl__ = [ (Allow, 'group:admins', ('view', 'edit')),
-                (Allow, 'group:this-member', ('view', 'edit')),
+                #(Allow, 'group:this-member', ('view', 'edit')),
                 (Allow, 'group:members', ('view')),
                 DENY_ALL]
 
@@ -85,8 +85,7 @@ class Member(Base):
         # check missing fields
         missing = []
         for f in ('mem_fname', 'mem_lname', 'mem_email',
-                  'mem_street', 'mem_house', 'mem_postcode', 'mem_city',
-                  'mem_bank_no'):
+                  'mem_street', 'mem_house', 'mem_postcode', 'mem_city'):
             if not self.__dict__.has_key(f) or self.__dict__[f] == '':
                 missing.append(f)
         if len(missing) > 0:
@@ -94,38 +93,71 @@ class Member(Base):
                                     % ', '.join([m[4:] for m in missing]))
         # TODO check email
         if not '@' in self.mem_email:
-            raise VokoValidationError('The email address does not seem to be valid.')
+            raise VokoValidationError('The email address does not '\
+                                      'seem to be valid.')
+        # we want one telephone number, as well
+        sd = self.__dict__
+        if ((not 'mem_home_tel' in sd and not 'mem_work_tel' in sd
+             and not 'mem_mobile' in sd)
+           or (self.mem_home_tel == "" and self.mem_work_tel == "" 
+               and self.mem_mobile == "")):
+            raise VokoValidationError('Please specify at least one telephone '\
+                                      'number.')
+
         # check postcode
         if len(self.mem_postcode) > 0\
                 and not (self.mem_postcode[:4].isdigit()\
                 and self.mem_postcode[-2:].isalpha()):
-            raise VokoValidationError('The email postcode does not seem to be valid (should be NNNNLL, where N=number and L=letter).')
-        '''# check house no
-        if not self.mem_house.isdigit():
-            raise VokoValidationError('House number should just be a number.')'''
+            raise VokoValidationError('The email postcode does not seem to be'\
+                    ' valid (should be NNNNLL, where N=number and L=letter).')
         # check bank no
         bank_no_clean = self.mem_bank_no.replace(' ', '').replace('-', '')
         if not len(bank_no_clean) in [0,7,9]:
-            raise VokoValidationError('Bank number needs to consist of 7 (postbank) or 9 numbers.')
+            raise VokoValidationError('Bank number needs to consist of 7 '\
+                                      '(postbank) or 9 numbers.')
         if len(bank_no_clean) > 0 and not bank_no_clean.isdigit():
-            raise VokoValidationError('Bank number needs to consist of only numbers.')
-        '''# at least one telephone number
-        ks = self.__dict__.keys()
-        if (not 'mem_home_tel' in ks and not 'mem_work_tel' in ks and not 'mem_mobile' in ks) or\
-           (self.mem_home_tel == "" and self.mem_work_tel == "" and self.mem_mobile == ""):
-            raise VokoValidationError('Please specify at least one telephone number.')'''
+            raise VokoValidationError('Bank number needs to consist of '\
+                                      'only numbers.')
 
     def validate_pwd(self, req):
         '''
         Check request on password(s), and also check if it is long enough
         '''
-        if not req.params.has_key('pwd1'):
+        if not 'pwd1' in req.params:
             raise VokoValidationError('Please specify a password.')
-        if not req.params.has_key('pwd2'):
+        if not 'pwd2' in req.params:
             raise VokoValidationError('Please confirm password.')
         if not req.params['pwd2'] == req.params['pwd1']:
             raise VokoValidationError('Passwords do not match.')
         if not 6 <= len(req.params['pwd1']) <= 30:
-            raise VokoValidationError('The password should be between 6 and 30 characters long.')
+            raise VokoValidationError('The password should be between '\
+                                      '6 and 30 characters long.')
+
+
+def get_member(session, request):
+    '''
+    Make a Member object, use member ID from request if possible.
+    Will return an empty object when no information is in the request,
+    or None if the information has no match.
+    '''
+    member = Member(fname=u'', prefix=u'', lname=u'')
+    m_id = None
+    if 'mem_id' in request.matchdict:
+        m_id = request.matchdict['mem_id']
+    if 'mem_id' in request.params:
+        m_id = request.params['mem_id']
+    if m_id:
+        if m_id == 'new':
+            return member
+        try:
+            mid = int(m_id)
+        except ValueError:
+            raise Exception("No member with ID {0}".format(m_id))
+        member = session.query(Member).get(m_id)
+        if member:
+            member.exists = True
+        else:
+            raise Exception("No member with ID {0}".format(m_id))
+    return member
 
 

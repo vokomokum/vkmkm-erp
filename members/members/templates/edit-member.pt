@@ -109,7 +109,7 @@
 
     <table class="main" width="100%">
        <tr class="list-content" align="center">
-         <td colspan="2">Bank Account <span class="warn">*</span> Use '12345678' if not known</td>
+         <td colspan="2">Bank Account</td>
        </tr>
        <tr class="list-content" align="center">
          <td><input type="text" align="left" size="12" name="mem_bank_no"
@@ -145,12 +145,9 @@
              <td align="left"><label for="Spclacct">Administrator's account - can order goods after commits are closed</label></td>
            </tr>
         </table>
-        <!-- Password -->
-
     </table>
 
     <!-- Submit -->
-
     <table width="100%">
         <tr align="center">
             <td width="80%"></td>

@@ -1,0 +1,74 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+    <form tal:condition="python: form=='request'"
+          tal:attributes="action python: '{0}/reset-pwd'.format(portal_url)"
+          method="post">
+
+        <h3>Here you can request to have your password reset.</h3>
+
+        You can enter either your member ID or your email address to identify.
+        <br/>
+        We will send you an email with a reset link.
+
+        <table class="main" align="center">
+            <tr class="list-content" align="center">
+                <td width="50%">Member ID:</td>
+                <td width="50%">
+                    <input type="text" size="4" name="mem_id" />
+                </td>
+            </tr>
+            <tr class="list-content" align="center">
+                <td width="50%">Email address:</td>
+                <td width="50%">
+                    <input type="text" size="50" name="email" />
+                </td>
+            </tr>
+            <tr>
+                <td width="50%"></td>
+                <td width="50%">
+                    <input type="submit" value="Send"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <form tal:condition="python: form=='reset' and m and key"
+          tal:attributes="action python:'{0}/member/{1}/reset-pwd/{2}'.format(portal_url, str(m.mem_id), key)"
+          method="post">
+
+        <h3>Here you can reset the password for ${m}. <br/>
+            Please enter a new one.
+        </h3>
+
+        <table class="main" align="center">
+            <tr class="list-content">
+                <td align="center" colspan="2">Password (6 to 30 characters)</td>
+            </tr>
+            <tr class="list-content" align="center">
+                <td width="50%">Password:</td>
+                <td width="50%">
+                    <input type="password" name="pwd1" />
+                </td>
+            </tr>
+            <tr class="list-content" align="center">
+                <td width="50%">Confirm:</td>
+                <td width="50%">
+                    <input type="password" name="pwd2" />
+                </td>
+            </tr>
+            <tr>
+                <td width="50%"></td>
+                <td width="50%">
+                    <input type="submit" name="submit" value="Send"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+        </div>
+    </div>
+</html>

@@ -7,7 +7,9 @@ import base
 from members.models.member import Member
 from members.models.base import VokoValidationError
 from members.views.member import MemberView, NewMemberView, ListMemberView, EditMemberView
+from members.views.pwdreset import ResetPasswordView, ResetPasswordRequestView
 from members.utils import mail
+from members.utils.md5crypt import md5crypt
 
 from members.tests.base import VokoTestCase
 
@@ -100,7 +102,10 @@ class TestMembers(VokoTestCase):
         self.assertRaises(VokoValidationError, EditMemberView(None, request))
 
     def test_create(self):
-        '''The NewMemberView only shows an empty form. Creation is done in EditMemberView'''
+        '''
+        The NewMemberView only shows an empty form.
+        Creation is done in EditMemberView
+        '''
         request = testing.DummyRequest()
         request = self.fillin_dummy_data(request)
         request.params['action'] = 'save'
@@ -109,29 +114,33 @@ class TestMembers(VokoTestCase):
         # raises an AttributeError when redirecting after successful
         # save, bcs we haven't set view.user
         self.assertRaises(AttributeError, view)
-        mem = self.DBSession.query(Member).filter(Member.mem_lname==u'NewLastname').first()
+        mem = self.DBSession.query(Member)\
+                            .filter(Member.mem_lname==u'NewLastname').first()
         self.assertIsNotNone(mem)
         # check if member exists
-        mem = self.DBSession.query(Member).filter(Member.mem_lname==u'NewLastname').first()
+        mem = self.DBSession.query(Member)\
+                            .filter(Member.mem_lname==u'NewLastname').first()
         self.assertIsNotNone(mem)
 
         # check if password reset email was sent with expected key
-        mails = [m for m in os.listdir(mail.mail_folder) if m.endswith('.eml')]
-        f = open('%s/%s' % (mail.mail_folder, mails[0]), 'r')
-        line = ""
-        for l in f:
-            if l.strip() != '':
-                line = l
-        key = line.split('key=')[1].strip()
+        mem_id,key = self.get_reset_info_from_mails()
+        self.assertEquals(mem_id, mem.mem_id)
         self.assertEquals(key, mem.mem_pwd_url)
 
-        # TODO: visit reset view
+        # visit password reset view with key from sent link
         request = testing.DummyRequest()
-        request.params['pwd1'] = 'notsecret'
-        request.params['pwd2'] = 'notsecret'
-
-        # TODO: check if password was saved and encrypted correctly
-        mem = self.DBSession.query(Member).filter(Member.mem_lname==u'NewLastname').first()
+        password = 'notsecret'
+        request.params['pwd1'] = password
+        request.params['pwd2'] = password
+        request.matchdict['mem_id'] = mem_id
+        request.matchdict['key'] = key
+        view = ResetPasswordView(None, request)
+        response = view()
+        self.assertTrue('Password has been set' in response['msg'])
+        # check if password was saved and encrypted correctly
+        mem = self.DBSession.query(Member).filter(Member.mem_id==mem_id).first()
+        enc_pwd = md5crypt(str(password), str(mem.mem_enc_pwd))
+        self.assertEquals(enc_pwd, mem.mem_enc_pwd)
 
     def test_delete(self):
         request = testing.DummyRequest()
@@ -152,3 +161,52 @@ class TestMembers(VokoTestCase):
             self.assertRaises(IntegrityError, view)
             self.assertIsNone(self.get_peter())
 
+    def test_reset_password(self):
+        # request a password reset, unsuccessfully
+        request = testing.DummyRequest()
+        request.params['mem_id'] = '999999999999'
+        response = ResetPasswordRequestView(None, request)()
+        self.assertTrue('Cannot find any member' in response['msg'])
+        request = testing.DummyRequest()
+        request.params['email'] = 'does@not.exist.com'
+        response = ResetPasswordRequestView(None, request)()
+        self.assertTrue('Cannot find any member' in response['msg'])
+        # now successfully
+        mem = self.DBSession.query(Member)\
+                            .filter(Member.mem_fname=='Peter').first()
+        request = testing.DummyRequest()
+        request.params['mem_id'] = mem.mem_id
+        response = ResetPasswordRequestView(None, request)()
+        self.assertTrue('A reset link has been sent' in response['msg'])
+
+        # visit password reset view with key from sent link, set new password
+        mem_id,key = self.get_reset_info_from_mails() 
+        self.assertEquals(key, mem.mem_pwd_url)
+        request = testing.DummyRequest()
+        password = 'notsecret'
+        request.params['pwd1'] = password
+        request.params['pwd2'] = password
+        request.matchdict['mem_id'] = mem_id
+        request.matchdict['key'] = key
+        view = ResetPasswordView(None, request)
+        response = view()
+        self.assertTrue('Password has been set' in response['msg'])
+        # check if password was saved and encrypted correctly
+        mem = self.DBSession.query(Member).filter(Member.mem_id==mem_id).first()
+        enc_pwd = md5crypt(str(password), str(mem.mem_enc_pwd))
+        self.assertEquals(enc_pwd, mem.mem_enc_pwd)
+
+        # the key is now not longer valid
+        self.assertNotEqual(key, mem.mem_pwd_url)
+        
+
+    def get_reset_info_from_mails(self):
+        mails = [m for m in os.listdir(mail.mail_folder) if m.endswith('.eml')]
+        f = open('%s/%s' % (mail.mail_folder, mails[0]), 'r')
+        line = ""
+        for l in f:
+            if l.strip() != '':
+                line = l
+        mem_id = int(line.split('member/')[1].split('/reset-pwd')[0].strip())
+        key = line.split('reset-pwd/')[1].strip()
+        return mem_id, key

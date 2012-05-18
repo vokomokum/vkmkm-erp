@@ -48,6 +48,8 @@ def main(global_config, **settings):
     config.add_route('member-list', '/members', factory=Member)
     config.add_route('member-new', '/members/new', factory=Member)
     config.add_route('member-edit', '/member/{mem_id}/edit', factory=Member)
+    config.add_route('reset-pwd-request', '/reset-pwd')
+    config.add_route('reset-pwd', '/member/{mem_id}/reset-pwd/{key}', factory=Member)
     config.add_route('workgroup', '/workgroup/{wg_id}', factory=Workgroup)
     config.add_route('workgroup-list', '/workgroups', factory=Workgroup)
     config.add_route('workgroup-new', '/workgroups/new', factory=Workgroup)

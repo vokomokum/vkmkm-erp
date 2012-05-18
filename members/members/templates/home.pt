@@ -5,8 +5,9 @@
         <div metal:fill-slot="content">
         
             <h4 >
-                Welcome to the Vokomokum Members application.
-                For help or questions, please contact <a href="mailto:nhoening@gmail.com">Nicolas</a>.
+                Welcome to the Vokomokum Members application.<br/>
+                For help or questions, please do <a
+href="mailto:systems@vokomokum.nl">contact the admins</a>.
             </h4>
         </div>
     </div>
