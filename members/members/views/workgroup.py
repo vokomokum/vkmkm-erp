@@ -1,7 +1,7 @@
 from pyramid.view import view_config
 from sqlalchemy import distinct, asc, desc
 
-from members.models.workgroups import Workgroup
+from members.models.workgroups import Workgroup, get_wg
 from members.models.member import Member
 from members.models.base import DBSession
 from members.models.shift import Shift
@@ -16,24 +16,6 @@ def get_possible_members(session):
             .filter(Member.mem_active==True)\
             .order_by(Member.mem_fname)\
             .all()
-
-def get_wg(session, request):
-    ''' make a Workgroup object, use ID from request if possible '''
-    wg = Workgroup('', '')
-    if request.matchdict.has_key('wg_id'):
-        wg_id = request.matchdict['wg_id']
-        if wg_id == 'new':
-            return wg
-        try:
-            wg_id = int(wg_id)
-        except ValueError:
-            raise Exception("No workgroup with ID %s" % wg_id)
-        wg = session.query(Workgroup).get(wg_id)
-        if wg:
-            wg.exists = True
-        else:
-            raise Exception("No workgroup with ID %s" % wg_id)
-    return wg
 
 
 def fill_wg_from_request(wg, request, session):

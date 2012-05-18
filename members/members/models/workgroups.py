@@ -56,3 +56,22 @@ Workgroup.members = relationship('Member', secondary=membership)
 Member.workgroups = relationship('Workgroup', secondary=membership)
 Workgroup.leaders = relationship('Member', secondary=leadership)
 Member.led_workgroups = relationship('Workgroup', secondary=leadership)
+
+
+def get_wg(session, request):
+    ''' make a Workgroup object, use ID from request if possible '''
+    wg = Workgroup('', '')
+    if request.matchdict.has_key('wg_id'):
+        wg_id = request.matchdict['wg_id']
+        if wg_id == 'new':
+            return wg
+        try:
+            wg_id = int(wg_id)
+        except ValueError:
+            raise Exception("No workgroup with ID %s" % wg_id)
+        wg = session.query(Workgroup).get(wg_id)
+        if wg:
+            wg.exists = True
+        else:
+            raise Exception("No workgroup with ID %s" % wg_id)
+    return wg

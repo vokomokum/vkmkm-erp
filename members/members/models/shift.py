@@ -59,3 +59,17 @@ class Shift(Base):
     @property
     def workgroup(self):
         return self.task.workgroup
+
+
+def get_shift(session, request):
+    ''' get shift object from id '''
+    if (request and request.matchdict.has_key('s_id') and\
+        int(request.matchdict['s_id']) >= 0):
+            shift = session.query(Shift).get(request.matchdict['s_id'])
+            if shift:
+                shift.exists = True
+    else:
+        shift = None
+    return shift
+
+

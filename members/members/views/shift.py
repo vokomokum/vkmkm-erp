@@ -2,7 +2,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember
 
-from members.models.shift import Shift
+from members.models.shift import Shift, get_shift
 from members.models.workgroups import Workgroup
 from members.models.member import Member
 from members.models.task import Task
@@ -16,17 +16,6 @@ so all access security can be done via the workgroup.
 If you have the right to a workgroup, you can edit shifts.
 The database should take care about the shift data being right.
 '''
-
-def get_shift(session, request):
-    ''' get shift object from id '''
-    if (request and request.matchdict.has_key('s_id') and\
-        int(request.matchdict['s_id']) >= 0):
-            shift = session.query(Shift).get(request.matchdict['s_id'])
-            if shift:
-                shift.exists = True
-    else:
-        shift = None
-    return shift
 
 
 def fill_shift_from_request(shift, request):
