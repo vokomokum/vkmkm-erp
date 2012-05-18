@@ -15,6 +15,9 @@ class BaseView(object):
         self.context = context
         self.request = request
         self.logged_in = authenticated_userid(request)
+        # only show content if this is Ttue or user is logged in
+        # (otherwise, show login screen)
+        self.login_necessary = True
         # every template asks for the layout to look for the macros
         self.layout = get_renderer('../templates/base.pt').implementation()
 
@@ -48,9 +51,11 @@ class ErrorView(BaseView):
     '''
     A catch-all error view.
     It will simply show the base template and excuse the eception.
-    The exception text could be shown nicer somehow, maybe we can pass sthg else in addition to msg?
-    To set the status to 500 is important, so that the WSGI stack knows the issue has not actually
-    been resolved, and rolls back any transactions for us.
+    The exception text could be shown nicer somehow, maybe we can pass
+    something else in addition to msg?
+    To set the status to 500 is important, so that the WSGI stack knows the 
+    issue has not actually been resolved, and rolls back any transactions
+    for us.
     '''
 
     tab = 'home'
@@ -58,10 +63,10 @@ class ErrorView(BaseView):
     def __call__(self):
         self.request.response.status_int = 500
         if self.context.__class__ == VokoValidationError:
-            return dict(msg="Oops, please go back and reconsider. We don't want to save this as it is now.", info=str(self.context))
+            return dict(msg="Oops, please go back and reconsider. We don't "\
+                    "want to save this as it is now.", info=str(self.context))
         else:
-            return dict(msg="Sorry, something went wrong. If the error message below is not helpful, you maybe should contact an admin about this.",
+            return dict(msg="Sorry, something went wrong. If the error "\
+                    "message below is not helpful, you maybe should contact "\
+                    "an admin about this.",
                     info="Error message: '%s'" % str(self.context) )
-
-
-

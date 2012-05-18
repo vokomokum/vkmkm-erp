@@ -64,9 +64,9 @@
 
                 <h5 class="warn" tal:condition="info | False">${info}</h5>
                 
-                <tal:block tal:condition="not view.logged_in">
+                <tal:block tal:condition="not view.logged_in and view.login_necessary">
                     <form action="${portal_url}/login" method="post">
-                        <table>
+                        <table class="main" align="center">
                             <tr>
                                 <td>Id or email-address:</td>
                                 <td>
@@ -81,22 +81,19 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2">
+                                <td></td>
+                                <td>
                                     <input type="submit" name="form.submitted" value="Login"/>
                                 </td>
                             </tr>
                         </table>
                     </form>
-                    <a href="http://order.vokomokum.nl/cgi-bin/welcome.cgi?Forgot=on&Member=">
+                    <a href="reset-pwd">
                         Forgot Password?
-                    </a>&nbsp;&nbsp;&nbsp;
-                    <a href="http://order.vokomokum.nl/cgi-bin/forgot.cgi">
-                        Reset Password
                     </a>
                 </tal:block>
 
-                <tal:block tal:condition="view.logged_in">
-
+                <tal:block tal:condition="view.logged_in or not view.login_necessary">
                     <metal:block define-slot="content">
                         <div metal:define-macro="content" />
                     </metal:block>
