@@ -42,9 +42,10 @@ def groupfinder(memid, request):
     #if context.__class__ == Workgroup
     #    groups.append('wg-members')
     if context.__class__ == Member:
-        mem_id = int(request.matchdict.get('mem_id', -1))
-        if mem_id == memid:
-            groups.append('group:this-member')
+        mem_id = request.matchdict.get('mem_id', -1)
+        if not mem_id == 'new':
+            if int(mem_id) == memid:
+                groups.append('group:this-member')
 
     wg_id = int(request.params.get('wg_id', -1))
     if 'wg_id' in request.matchdict:
