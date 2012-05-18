@@ -9,7 +9,8 @@ from members.views.base import BaseView
 
 
 @view_config(renderer='../templates/base.pt', route_name='login')
-@view_config(renderer='../templates/base.pt', context='pyramid.exceptions.Forbidden')
+@view_config(renderer='../templates/base.pt',
+             context='pyramid.exceptions.Forbidden')
 class Login(BaseView):
 
     def __call__(self):
@@ -19,24 +20,23 @@ class Login(BaseView):
             referrer = '/' # never use the login form itself as came_from
         came_from = self.request.params.get('came_from', referrer)
         message = ''
-        if came_from != '':
-            message = 'You are not allowed to access this resource.\
-               You may want to login as a member with the sufficient access rights.'
+        if came_from != '/':
+            message = 'You are not allowed to access this resource.'\
+                      ' You may want to login as a member with the'\
+                      ' sufficient access rights.'
         if 'form.submitted' in self.request.params:
             login = self.request.params['login']
             passwd = self.request.params['passwd']
             member = get_member(login)
             if member:
-                enc_pwd = md5crypt(str(passwd), str(member.mem_enc_pwd)) # jim uses encrypted pwd as salt
-                if not member.mem_enc_pwd: # no password yet = empty password
-                    member.mem_enc_pwd = md5crypt('', '')
-                    enc_pwd = md5crypt(passwd, '') # let empty pwd go through
-                if str(member.mem_enc_pwd) == enc_pwd:
+                # jim uses encrypted pwd as salt
+                enc_pwd = md5crypt(str(passwd), str(member.mem_enc_pwd))
+                if (member.mem_enc_pwd and str(member.mem_enc_pwd) == enc_pwd):
                     self.logged_in = True
                     headers = remember(self.request, member.mem_id)
                     return HTTPFound(location = came_from, headers = headers)
                 else:
-                    message += 'The password is not correct.'
+                    message += ' The password is not correct.'
             else:
                 message += ' Member not found. '
             message += ' The Login failed.'
