@@ -103,8 +103,7 @@ sub set_status_2 {
     my $sth;
     my $aref;
 
-    if(not defined($vars->{Close})) {
-	$config->{button} = "Close";
+    if(not defined($vars->{Confirm}) or not defined($vars->{ConfirmYes})) {
 	$config->{reminders} = 1;
 	return; 
     }
@@ -333,6 +332,7 @@ sub doit {
     my $vars = $cgi->Vars;
     my $sth;
 
+    #dump_stuff("status - vars", "", "", $vars);
     if ($config->{status} < 5) {
 	$sth = prepare("SELECT rebuild_all_wh_headers();", $dbh);
 	$sth->execute;
