@@ -2,19 +2,10 @@ from pyramid.view import view_config
 
 from sqlalchemy import asc, desc
 
-import os
-from datetime import datetime
-import random
-import string
-import base64
-
 from members.models.member import Member, get_member
-from members.models.base import DBSession, VokoValidationError
+from members.models.base import DBSession
 from members.views.base import BaseView
 from members.views.pwdreset import send_pwdreset_request
-from members.utils.md5crypt import md5crypt
-from members.utils.mail import sendmail
-
 
 
 def fill_member_from_request(member, request):
@@ -27,12 +18,12 @@ def fill_member_from_request(member, request):
             if attr in request.params:
                 v = request.params[attr]
                 if type == 'BOOLEAN':
-                    v = {'on':True, '':False}[v]
+                    v = {'on': True, '': False}[v]
                 member.__setattr__(attr, v)
             else:
-                if type == 'BOOLEAN' and member.__dict__.has_key(attr)\
+                if type == 'BOOLEAN' and attr in member.__dict__\
                    and member.__dict__[attr] is True\
-                   and request.params.has_key('action')\
+                   and 'action' in request.params\
                    and request.params['action'] == 'save':
                     member.__setattr__(attr, False)
     return member
@@ -46,7 +37,7 @@ class NewMemberView(BaseView):
     tab = 'members'
 
     def __call__(self):
-        return dict(m = Member('', '', ''), msg='')
+        return dict(m=Member('', '', ''), msg='')
 
 
 @view_config(renderer='../templates/member.pt',
@@ -74,7 +65,8 @@ class MemberView(BaseView):
         # assigned and worked shifts
         assigned = [s for s in m.scheduled_shifts if s.state == 'assigned']
         worked = [s for s in m.scheduled_shifts if s.state == 'worked']
-        return dict(m=m, msg=msg, assigned_shifts=assigned, worked_shifts=worked)
+        return dict(m=m, msg=msg, assigned_shifts=assigned,
+                    worked_shifts=worked)
 
 
 @view_config(renderer='../templates/edit-member.pt',
@@ -87,7 +79,7 @@ class EditMemberView(BaseView):
     def __call__(self):
         session = DBSession()
         member = get_member(session, self.request)
-        if self.request.params.has_key('action'):
+        if 'action' in self.request.params:
             action = self.request.params['action']
             if action == "save":
                 member = fill_member_from_request(member, self.request)
@@ -100,7 +92,7 @@ class EditMemberView(BaseView):
                     return self.redirect('/member/{0:d}?msg=Member has been'\
                                          ' created and got an email to set up'\
                                          ' a password.'.format(member.mem_id))
-                return dict(m = member, msg='Member has been saved.')
+                return dict(m=member, msg='Member has been saved.')
             elif action == 'delete':
                 member = get_member(session, self.request)
                 self.confirm_deletion = True
@@ -109,7 +101,7 @@ class EditMemberView(BaseView):
                 session.delete(member)
                 return dict(m=None,
                             msg='Member {!r} has been deleted.'.format(member))
-        return dict(m = member, msg='')
+        return dict(m=member, msg='')
 
 
 @view_config(renderer='../templates/list-members.pt', route_name='member-list')
@@ -122,30 +114,30 @@ class ListMemberView(BaseView):
         m_query = dbsession.query(Member)
 
         # show msg
-        if self.request.params.has_key('msg'):
+        if 'msg' in self.request.params:
             msg = self.request.params['msg']
         else:
             msg = ''
 
         # -- inactive members? --
         show_inactive = True
-        if not self.request.params.has_key('include_inactive')\
+        if not 'include_inactive' in self.request.params\
            or not self.request.params['include_inactive']:
             show_inactive = False
-            m_query = m_query.filter(Member.mem_active==True)
+            m_query = m_query.filter(Member.mem_active == True)
 
         # -- ordering --
         # direction
         odir = asc
-        if self.request.params.has_key('order_dir')\
+        if 'order_dir' in self.request.params\
            and self.request.params['order_dir'] == 'desc':
             odir = desc
         # order by
         # key is what the outside world sees, value is what SQLAlchemy uses
         order_idxs = {'id': Member.mem_id, 'name': Member.mem_lname}
         order_by = 'id'
-        if self.request.params.has_key('order_by')\
-          and order_idxs.has_key(self.request.params['order_by']):
+        if 'order_by' in self.request.params\
+          and self.request.params['order_by'] in order_idxs:
             order_by = self.request.params['order_by']
         # ordering choices
         order_id_choice = 'asc'
@@ -158,7 +150,7 @@ class ListMemberView(BaseView):
         m_query = m_query.order_by(odir(order_idxs[order_by]))
         members = m_query.all()
         self.mem_count = len(members)
-        return dict(members = members, msg=msg, order_by=order_by,
-                    order_id_choice=order_id_choice, order_name_choice=order_name_choice,
+        return dict(members=members, msg=msg, order_by=order_by,
+                    order_id_choice=order_id_choice,
+                    order_name_choice=order_name_choice,
                     show_inactive=show_inactive, came_from='/members')
-
