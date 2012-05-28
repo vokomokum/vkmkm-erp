@@ -18,7 +18,7 @@ def sendmail(to, subject, body, sender=mail_sender):
     :param string subject: subject of mail
     :param string body: content of mail
     :param string sender: senders address
-    :returns: True if mail could be sent 
+    :returns: True if mail could be sent
               (if mail process returned successfully)
     '''
     mail = """From: %s
@@ -32,15 +32,15 @@ Subject: %s
     try:
         # send mail
         mailer = subprocess.Popen([mail_exec, "-t"],
-                        stdin = subprocess.PIPE,
-                        stderr = subprocess.PIPE,
-                        stdout = subprocess.PIPE)
-        print >>mailer.stdin, mail
+                        stdin=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        stdout=subprocess.PIPE)
+        print >> mailer.stdin, mail
         mailer.stdin.close()
         result = mailer.wait()
-        error =  mailer.stderr.read()
+        error = mailer.stderr.read()
         # save a copy
-        mf = open('%s/%s.eml' % (mail_folder, mail_time) , 'w')
+        mf = open('%s/%s.eml' % (mail_folder, mail_time), 'w')
         mf.write(mail)
         mf.close()
         assert(result)
@@ -48,7 +48,8 @@ Subject: %s
     except OSError, e:
         # log that it didn't work
         log = logging.getLogger(__name__)
-        log.warn('Could not send mail to %s, subject "%s" (mail identifier is %s): %s'\
+        log.warn('Could not send mail to %s, subject "%s"'\
+                 '(mail identifier is %s): %s'\
                   % (to, subject, mail_time, error))
         print error, e
         return False
