@@ -1,5 +1,6 @@
-from pyramid.view import view_config
+from __future__ import unicode_literals
 
+from pyramid.view import view_config
 from sqlalchemy import asc, desc
 
 from members.models.member import Member, get_member
@@ -100,7 +101,7 @@ class EditMemberView(BaseView):
             elif action == 'delete-confirmed':
                 session.delete(member)
                 return dict(m=None,
-                            msg='Member {!r} has been deleted.'.format(member))
+                            msg='Member {} has been deleted.'.format(member))
         return dict(m=member, msg='')
 
 
