@@ -15,6 +15,7 @@ from sqlalchemy import DateTime
 from pyramid.security import Allow, DENY_ALL
 
 from base import Base, VokoValidationError
+from members.models.base import DBSession
 
 
 class Member(Base):
@@ -91,10 +92,19 @@ class Member(Base):
         if len(missing) > 0:
             raise VokoValidationError('We still require you to fill in: %s'\
                                     % ', '.join([m[4:] for m in missing]))
-        # TODO check email
+        # check email #TODO: better, with regex
         if not '@' in self.mem_email:
             raise VokoValidationError('The email address does not '\
                                       'seem to be valid.')
+        # check unique constraint on email address here for nicer error msg
+        session = DBSession()
+        members = session.query(Member)\
+                         .filter(Member.mem_email==self.mem_email).all()
+        if len(members) > 0:
+            if not (len(members) == 1 and members[0].mem_id == self.mem_id):
+                raise VokoValidationError('The email address already exists '\
+                                          'for a member in the database.')
+        
         # we want one telephone number, as well
         sd = self.__dict__
         if ((not 'mem_home_tel' in sd and not 'mem_work_tel' in sd
@@ -108,16 +118,17 @@ class Member(Base):
         if len(self.mem_postcode) > 0\
                 and not (self.mem_postcode[:4].isdigit()\
                 and self.mem_postcode[-2:].isalpha()):
-            raise VokoValidationError('The email postcode does not seem to be'\
+            raise VokoValidationError('The postcode does not seem to be'\
                     ' valid (should be NNNNLL, where N=number and L=letter).')
         # check bank no
-        bank_no_clean = self.mem_bank_no.replace(' ', '').replace('-', '')
-        if not len(bank_no_clean) in [0,7,9]:
-            raise VokoValidationError('Bank number needs to consist of 7 '\
-                                      '(postbank) or 9 numbers.')
-        if len(bank_no_clean) > 0 and not bank_no_clean.isdigit():
-            raise VokoValidationError('Bank number needs to consist of '\
-                                      'only numbers.')
+        if self.mem_bank_no:
+            bank_no_clean = self.mem_bank_no.replace(' ', '').replace('-', '')
+            if not len(bank_no_clean) in [0,7,9]:
+                raise VokoValidationError('Bank number needs to consist of 7 '\
+                                          '(postbank) or 9 numbers.')
+            if len(bank_no_clean) > 0 and not bank_no_clean.isdigit():
+                raise VokoValidationError('Bank number needs to consist of '\
+                                          'only numbers.')
 
     def validate_pwd(self, req):
         '''

@@ -157,7 +157,7 @@ class EditWorkgroupView(BaseView):
                         session.delete(task)
                         msg = 'Deleted task.'
                     else:
-                        msg = 'Cannot delete task, as there are shifts in the'\
+                        msg = 'Cannot delete task, as there are shifts in the '\
                               'history with this task.'
                 self.possible_members = get_possible_members(session)
                 return dict(wg=get_wg(session, req), msg=msg)

@@ -6,9 +6,14 @@ import os
 import base
 from members.models.member import Member
 from members.models.base import VokoValidationError
-from members.views.member import MemberView, NewMemberView, ListMemberView, EditMemberView
-from members.views.pwdreset import ResetPasswordView, ResetPasswordRequestView
+from members.views.member import MemberView
+from members.views.member import NewMemberView
+from members.views.member import ListMemberView
+from members.views.member import EditMemberView
+from members.views.pwdreset import ResetPasswordView
+from members.views.pwdreset import ResetPasswordRequestView
 from members.utils import mail
+from members.utils.misc import get_settings
 from members.utils.md5crypt import md5crypt
 
 from members.tests.base import VokoTestCase
@@ -201,8 +206,9 @@ class TestMembers(VokoTestCase):
         
 
     def get_reset_info_from_mails(self):
-        mails = [m for m in os.listdir(mail.mail_folder) if m.endswith('.eml')]
-        f = open('%s/%s' % (mail.mail_folder, mails[0]), 'r')
+        mail_folder = get_settings()['vokomokum.mail_folder']
+        mails = [m for m in os.listdir(mail_folder) if m.endswith('.eml')]
+        f = open('%s/%s' % (mail_folder, mails[0]), 'r')
         line = ""
         for l in f:
             if l.strip() != '':

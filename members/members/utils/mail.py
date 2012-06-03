@@ -2,14 +2,10 @@ import subprocess
 from datetime import datetime
 import logging
 
-# TODO: these settings should go in some .ini file
-#mail_exec = "/usr/sbin/exim"
-mail_exec = "/opt/local/sbin/exim"
-mail_folder = "/Users/nic/Documents/vokomokum/members/mails"
-mail_sender = 'systems@vokomokum.nl'
+from members.utils.misc import get_settings
 
 
-def sendmail(to, subject, body, sender=mail_sender):
+def sendmail(to, subject, body, sender=None):
     '''
     Send a mail using a local mail program (like exim).
     Will save a time-stamped copy in a local folder, as well.
@@ -21,6 +17,13 @@ def sendmail(to, subject, body, sender=mail_sender):
     :returns: True if mail could be sent
               (if mail process returned successfully)
     '''
+    settings = get_settings()
+    mail_exec = settings['vokomokum.mail_exec']
+    mail_folder = settings['vokomokum.mail_folder']
+    mail_sender = settings['vokomokum.mail_sender']
+
+    if not sender:
+        sender = mail_sender
     mail = """From: %s
 To: %s
 Subject: %s

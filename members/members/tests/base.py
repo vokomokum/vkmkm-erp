@@ -17,6 +17,7 @@ from members.models.workgroups import Workgroup
 from members.models.shift import Shift
 from members.models.task import Task
 from members.utils import mail
+from members.utils.misc import get_settings
 
 
 '''
@@ -56,18 +57,31 @@ class VokoTestCase(unittest.TestCase):
             self.engine.execute('pragma foreign_keys=on')
         else:
             self.DBSession = models.base.configure_session(create_engine('postgres://'))
+        self.add_custom_settings()
         self.fill_data()
-        self.path_to_here = '/'.join(os.path.realpath(__file__).split('/')[:-1])
-        mail.mail_folder = '{0}/.testmails'.format(self.path_to_here)
-        os.mkdir(mail.mail_folder)
+
 
     def tearDown(self):
         if db_type == 'sqlite':
             self.DBSession.close()
             Popen('rm members-test.db', shell=True).wait()
         super(VokoTestCase, self).tearDown()
-        rmtree(mail.mail_folder)
+        rmtree(get_settings()['vokomokum.mail_folder'])
         testing.tearDown()
+
+    def add_custom_settings(self):
+        '''
+        Add custom settings that the application expects to be in the .ini file 
+        (in app[main])
+        '''
+        # make a mail folder
+        self.path_to_here = '/'.join(os.path.realpath(__file__).split('/')[:-1])
+        mail_folder = '{0}/.testmails'.format(self.path_to_here)
+        os.mkdir(mail_folder)
+        settings = get_settings()
+        settings['vokomokum.mail_exec'] = '/opt/local/sbin/exim'
+        settings['vokomokum.mail_folder'] = mail_folder
+        settings['vokomokum.mail_sender'] = 'systems@vokomokum.nl'
 
     def fill_data(self):
         '''

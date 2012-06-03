@@ -105,9 +105,9 @@
     </table>
 
 
-    <!-- Bank details -->
+    <!-- Bank details: We actually do not need nor want this anymore -->
 
-    <table class="main" width="100%">
+    <!--table class="main" width="100%">
        <tr class="list-content" align="center">
          <td colspan="2">Bank Account</td>
        </tr>
@@ -115,7 +115,7 @@
          <td><input type="text" align="left" size="12" name="mem_bank_no"
                  Value="${m.mem_bank_no}" maxlength="12"></input></td>
       </tr>
-    </table>
+    </table-->
 
 
     <table width="100%">
