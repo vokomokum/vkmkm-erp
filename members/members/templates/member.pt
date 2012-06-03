@@ -33,6 +33,12 @@
                 <div>Mobile: ${m.mem_mobile}</div>
             </td>
         </tr>
+        <tr tal:condition="not:m.mem_active">
+            <td/><td class="warn">This member is not active.</td><td/>
+        </tr>
+        <tr tal:condition="m.mem_enc_pwd == ''">
+            <td/><td class="warn">This member has yet to set a password.</td><td/>
+        </tr>
     </table>
 
 
