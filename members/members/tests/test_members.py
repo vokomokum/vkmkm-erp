@@ -59,7 +59,7 @@ class TestMembers(VokoTestCase):
         self.assertEqual([m.mem_id for m in view_info['members']], [2,1])
         self.assertEqual(view_info['order_name_choice'], 'asc')
 
-    def test_inactive(self):
+    def test_list_inactive(self):
         ''' show only active by default '''
         request = testing.DummyRequest()
         view_info = ListMemberView(None, request)()
@@ -71,6 +71,14 @@ class TestMembers(VokoTestCase):
         request.params['include_inactive'] = True
         view_info = ListMemberView(None, request)()
         self.assertEqual([m.mem_id for m in view_info['members']], [1,2])
+
+    def login(self):
+        ''' test if basic login works '''
+        self.assertEqual(1, 2) # TODO
+
+    def test_no_login_for_inactive(self):
+        ''' inactive members are not allowed to logon anymore'''
+        self.assertEqual(1, 2) # TODO
 
     def fillin_dummy_data(self, request):
         request.params['mem_email'] = 'peter@peter.de'

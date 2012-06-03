@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
 from pyramid.url import route_url
@@ -32,9 +34,14 @@ class Login(BaseView):
                 # jim uses encrypted pwd as salt
                 enc_pwd = md5crypt(str(passwd), str(member.mem_enc_pwd))
                 if (member.mem_enc_pwd and str(member.mem_enc_pwd) == enc_pwd):
-                    self.logged_in = True
-                    headers = remember(self.request, member.mem_id)
-                    return HTTPFound(location = came_from, headers = headers)
+                    if member.mem_active:
+                        self.logged_in = True
+                        headers = remember(self.request, member.mem_id)
+                        return HTTPFound(location = came_from, headers = headers)
+                    else:
+                        message += 'Note that the account of {} has been '\
+                                   ' set to inactive. Please contact '\
+                                   ' members@vokomokum.nl.'.format(member)
                 else:
                     message += ' The password is not correct.'
             else:
