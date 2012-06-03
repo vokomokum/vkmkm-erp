@@ -5,6 +5,7 @@ member
 The member class.
 Describes all attributes of the database we need here.
 '''
+from __future__ import unicode_literals
 
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -25,31 +26,33 @@ class Member(Base):
     __tablename__ = 'members'
 
     mem_id = Column(Integer, primary_key=True)
-    mem_fname = Column(Unicode(255), default=u'')
-    mem_prefix = Column(Unicode(255), default=u'')
-    mem_lname = Column(Unicode(255), default=u'')
-    mem_email = Column(Unicode(255), default=u'')
-    mem_street =  Column(Unicode(255), default=u'')
-    mem_house = Column(Unicode(255), default=u'')
-    mem_flatno = Column(Unicode(255), default=u'')
-    mem_city = Column(Unicode(255), default=u'')
-    mem_postcode = Column(Unicode(6), default=u'')
-    mem_home_tel = Column(Unicode(25), default=u'')
-    mem_work_tel = Column(Unicode(255), default=u'')
-    mem_mobile = Column(Unicode(25), default=u'')
-    mem_bank_no = Column(Unicode(255), default=u'')
-    mem_enc_pwd = Column(Unicode(255), default=u'')
-    mem_pwd_url = Column(Unicode(255), default=u'')
-    mem_cookie = Column(Unicode(255), default=u'')
-    mem_ip = Column(Unicode(255), default=u'')
+    mem_fname = Column(Unicode(255), default='')
+    mem_prefix = Column(Unicode(255), default='')
+    mem_lname = Column(Unicode(255), default='')
+    mem_email = Column(Unicode(255), default='')
+    mem_street =  Column(Unicode(255), default='')
+    mem_house = Column(Unicode(255), default='')
+    mem_flatno = Column(Unicode(255), default='')
+    mem_city = Column(Unicode(255), default='')
+    mem_postcode = Column(Unicode(6), default='')
+    mem_home_tel = Column(Unicode(25), default='')
+    mem_work_tel = Column(Unicode(255), default='')
+    mem_mobile = Column(Unicode(25), default='')
+    mem_enc_pwd = Column(Unicode(255), default='')
+    mem_pwd_url = Column(Unicode(255), default='')
+    # tracking
+    mem_cookie = Column(Unicode(255), default='')
+    mem_ip = Column(Unicode(255), default='')
+    # admin-editable
     mem_active = Column(Boolean(), default=False)
     mem_membership_paid = Column(Boolean(), default=False)
     mem_admin = Column(Boolean(), default=False)
     mem_adm_adj = Column(Boolean(), default=False)
     # unused fields - TODO: do we need them?
-    #mem_adm_comment = Column(Unicode(255), default=u'')
-    #mem_message = Column(Unicode(255), default=u'')
-    #mem_news = Column(Unicode(255), default=u'')
+    mem_bank_no = Column(Unicode(255), default='')
+    #mem_adm_comment = Column(Unicode(255), default='')
+    #mem_message = Column(Unicode(255), default='')
+    #mem_news = Column(Unicode(255), default='')
     #mem_message_auth = Column(Integer())
     #mem_message_date = Column(DateTime()) #timestamp
 
@@ -71,14 +74,15 @@ class Member(Base):
 
     @property
     def fullname(self):
-        return "%s %s %s" %\
-            (self.mem_fname or '', self.mem_prefix or '', self.mem_lname or '')
+        return "{} {} {}".format(self.mem_fname or '',
+                                 self.mem_prefix or '',
+                                 self.mem_lname or '')
 
     def addr_street(self):
-        return "%s %s%s" % (self.mem_street, self.mem_house, self.mem_flatno)
+        return "{} {}{}".format(self.mem_street, self.mem_house, self.mem_flatno)
 
     def addr_city(self):
-        return "%s %s" % (self.mem_postcode, self.mem_city)
+        return "{} {}".format(self.mem_postcode, self.mem_city)
 
     def validate(self):
         ''' checks on address, bank account, ...
