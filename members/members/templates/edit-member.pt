@@ -5,11 +5,16 @@
         <div metal:fill-slot="content">
 
 
-<!-- show deletion confirmation -->
-<form tal:condition="python: hasattr(view, 'confirm_deletion') and m.mem_id"
+<!-- show toggle active state confirmation -->
+<form tal:condition="python: hasattr(view, 'confirm_toggle_active') and m.mem_id"
       action="${portal_url}/member/${m.mem_id}/edit" method="post">
-    <div class="warn">Really delete member ${m.fullname}?</div>
-    <button type="submit" value="delete-confirmed" name="action">Yes</button>
+    <div class="warn" tal:condition="m.mem_active">
+        Really set member ${m.fullname} to inactive?
+    </div>
+    <div class="warn" tal:condition="not:m.mem_active">
+        Really set member ${m.fullname} to active?
+    </div>
+    <button type="submit" value="toggle-active-confirmed" name="action">Yes</button>
     <button type="submit" value="donothing" name="action">No</button>
 </form>
 
@@ -23,7 +28,11 @@
     <div>
         <a class="view_link" href="${portal_url}/member/${m.mem_id}">view this member</a>
     </div>
- 
+    <button tal:condition="m.exists" name="action" type="submit" value="toggle-active"
+            class="action-button action-button-red">
+        <span tal:condition="m.mem_active">Make inactive</span>
+        <span tal:condition="not:m.mem_active">Make active</span>
+    </button>
 
     <span class="warn">(fields with * are required)</span>
 
@@ -155,9 +164,7 @@
                 <button name="action" type="submit" value="save">
                     <img src="${portal_url}/static/img/icons/save.png"/>
                 </button>
-                <button tal:condition="m.exists" name="action" type="submit" value="delete">
-                    <img src="${portal_url}/static/img/icons/delete.gif"/>
-                </button>
+
             </td>
         </tr>
     </table>

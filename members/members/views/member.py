@@ -94,14 +94,14 @@ class EditMemberView(BaseView):
                                          ' created and got an email to set up'\
                                          ' a password.'.format(member.mem_id))
                 return dict(m=member, msg='Member has been saved.')
-            elif action == 'delete':
+            elif action == 'toggle-active':
                 member = get_member(session, self.request)
-                self.confirm_deletion = True
+                self.confirm_toggle_active = True
                 return dict(m=member)
-            elif action == 'delete-confirmed':
-                session.delete(member)
-                return dict(m=None,
-                            msg='Member {} has been deleted.'.format(member))
+            elif action == 'toggle-active-confirmed':
+                member.mem_active = not member.mem_active
+                return dict(m=member, msg='Member {} is now {}active.'.\
+                         format(member, {False:'in', True:''}[member.mem_active]))
         return dict(m=member, msg='')
 
 
