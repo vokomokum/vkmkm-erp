@@ -12,7 +12,7 @@ class TestUtils(VokoTestCase):
         to = 'me@host.de'
         subject = 'A vokomokum test'
         body = 'Bla\nBla'
-        self.assertTrue(mail.sendmail(to, subject, body))
+        mail.sendmail(to, subject, body)
         # look up mail (only file in folder)
         mail_folder = get_settings()['vokomokum.mail_folder']
         mails = [m for m in os.listdir(mail_folder) if m.endswith('.eml')]

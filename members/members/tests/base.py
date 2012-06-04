@@ -93,8 +93,10 @@ class VokoTestCase(unittest.TestCase):
         Bestel has a task ('do stuff') with a shift of Peter.
         '''
         m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
+        m1.mem_email = 'peter@dePan.nl'
         self.DBSession.add(m1)
         m2 = Member(fname=u'Hans', prefix=u'de', lname='Wit')
+        m1.mem_email = 'hans@deWit.nl'
         self.DBSession.add(m2)
         wg1 = Workgroup(name=u'Systems', desc=u'IT stuff')
         self.DBSession.add(wg1)

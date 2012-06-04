@@ -46,8 +46,7 @@ Subject: %s
         mf = open('%s/%s.eml' % (mail_folder, mail_time), 'w')
         mf.write(mail)
         mf.close()
-        assert(result)
-        return True
+        assert(result == 0)
     except OSError, e:
         # log that it didn't work
         log = logging.getLogger(__name__)
@@ -55,4 +54,4 @@ Subject: %s
                  '(mail identifier is %s): %s'\
                   % (to, subject, mail_time, error))
         print error, e
-        return False
+        raise e
