@@ -155,24 +155,25 @@ class TestMembers(VokoTestCase):
         enc_pwd = md5crypt(str(password), str(mem.mem_enc_pwd))
         self.assertEquals(enc_pwd, mem.mem_enc_pwd)
 
-    def test_delete(self):
+    def test_toggle_active(self):
         request = testing.DummyRequest()
         peter = self.get_peter()
+        self.assertTrue(peter.mem_active)
         request.matchdict = {'mem_id': peter.mem_id}
-        request.params['action'] = 'delete'
+        request.params['action'] = 'toggle-active'
         view = EditMemberView(None, request)
         view()
-        self.assertTrue(view.confirm_deletion)
-        request.params['action'] = 'delete-confirmed'
-        # no idea why I have to do that, I suspect it has to do with
-        # using sqlite
-        if base.db_type == 'sqlite':
-            view()
-            self.assertRaises(IntegrityError,
-                    self.DBSession.query(Member).filter(Member.mem_fname==u'Peter').first)
-        else:
-            self.assertRaises(IntegrityError, view)
-            self.assertIsNone(self.get_peter())
+        self.assertTrue(peter.mem_active)
+        self.assertTrue(view.confirm_toggle_active)
+        request.params['action'] = 'toggle-active-confirmed'
+        view()
+        self.assertFalse(peter.mem_active)
+        # and back again ...
+        request.params['action'] = 'toggle-active'
+        view()
+        request.params['action'] = 'toggle-active-confirmed'
+        view()
+        self.assertTrue(peter.mem_active)
 
     def test_reset_password(self):
         # request a password reset, unsuccessfully
