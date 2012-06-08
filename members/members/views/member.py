@@ -9,12 +9,18 @@ from members.views.base import BaseView
 from members.views.pwdreset import send_pwdreset_request
 
 
-def fill_member_from_request(member, request):
+def fill_member_from_request(member, request, user_may_edit_admin_settings):
     '''overwrite member properties from request'''
+    admin_fields = ['mem_active', 'mem_adm_comment',
+                    'mem_membership_paid', 'mem_adm_adj',
+                    'mem_admin']
+    ignore_fields = ['mem_id', 'mem_enc_pwd', 'mem_pwd_url']
     if request and member:
         # overwrite member properties from request, pwds are excluded
         for attr in [a for a in Member.__dict__.keys()\
-                     if a.startswith('mem_') and not a in ['mem_id']]:
+                     if a.startswith('mem_') and not a in ignore_fields]:
+            if attr in admin_fields and not user_may_edit_admin_settings:
+                continue
             type = str(member.__mapper__.columns._data[attr].type)
             if attr in request.params:
                 v = request.params[attr]
@@ -22,10 +28,10 @@ def fill_member_from_request(member, request):
                     v = {'on': True, '': False}[v]
                 member.__setattr__(attr, v)
             else:
-                if type == 'BOOLEAN' and attr in member.__dict__\
-                   and member.__dict__[attr] is True\
-                   and 'action' in request.params\
-                   and request.params['action'] == 'save':
+                if (type == 'BOOLEAN' and attr in member.__dict__
+                     and member.__dict__[attr] is True
+                     and 'action' in request.params
+                     and request.params['action'] == 'save'):
                     member.__setattr__(attr, False)
     return member
 
@@ -50,23 +56,17 @@ class MemberView(BaseView):
 
     @property
     def user_can_edit(self):
-        if self.user:
-            #return self.user.mem_id == m.mem_id or self.user.mem_admin
-            # for now, users cannot edit their own data, bcs sensitive
-            # settings are also in the member table (e.g. membership fee paid)
-            return self.user.mem_admin is True
-        else:
-            return False
+        return self.user.mem_id == self.m.mem_id or self.user.mem_admin
 
     def __call__(self):
-        m = get_member(DBSession(), self.request)
+        self.m = get_member(DBSession(), self.request)
         msg = ''
         if 'msg' in self.request.params:
             msg = self.request.params['msg']
         # assigned and worked shifts
-        assigned = [s for s in m.scheduled_shifts if s.state == 'assigned']
-        worked = [s for s in m.scheduled_shifts if s.state == 'worked']
-        return dict(m=m, msg=msg, assigned_shifts=assigned,
+        assigned = [s for s in self.m.scheduled_shifts if s.state == 'assigned']
+        worked = [s for s in self.m.scheduled_shifts if s.state == 'worked']
+        return dict(m=self.m, msg=msg, assigned_shifts=assigned,
                     worked_shifts=worked)
 
 
@@ -80,10 +80,13 @@ class EditMemberView(BaseView):
     def __call__(self):
         session = DBSession()
         member = get_member(session, self.request)
+        self.user_may_edit_admin_settings = (self.user.mem_admin 
+                                    and not self.user.mem_id == member.mem_id)
         if 'action' in self.request.params:
             action = self.request.params['action']
             if action == "save":
-                member = fill_member_from_request(member, self.request)
+                member = fill_member_from_request(member, self.request, 
+                                    self.user_may_edit_admin_settings) 
                 member.validate()
                 if not member.exists:
                     session.add(member)

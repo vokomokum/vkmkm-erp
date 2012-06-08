@@ -226,6 +226,10 @@ tr.list-content, td.list-content{background-color:#d0d0ff; color:#231f20;}
 td.space4     {text-align:right;width:4em;}
 td.descr      {text-align:left; width:60em;} 
 td.number     {text-align:right;width:6em;}
+#admin-settings tr{
+    color: white;
+    background-color: #D14836;
+}
 
 /* Forms */
 /*button {border: 0; background: transparent;}*/

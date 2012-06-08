@@ -28,7 +28,8 @@
     <div>
         <a class="view_link" href="${portal_url}/member/${m.mem_id}">view this member</a>
     </div>
-    <button tal:condition="m.exists" name="action" type="submit" value="toggle-active"
+    <button tal:condition="m.exists and view.user_may_edit_admin_settings"
+            name="action" type="submit" value="toggle-active"
             class="action-button action-button-red">
         <span tal:condition="m.mem_active">Make inactive</span>
         <span tal:condition="not:m.mem_active">Make active</span>
@@ -127,9 +128,8 @@
     </table-->
 
 
-    <table width="100%">
-        <!-- Account Settings -->
-        <table class="main" style="float:left;"> 
+    <table width="100%" class="main" id="admin-settings" tal:condition="view.user_may_edit_admin_settings">
+        <!-- Admin Settings TODO: add admin comment box -->
            <tr class="list-content">
              <td align="center" colspan="2">Account Settings</td>
            </tr>
@@ -153,7 +153,6 @@
                 <input type="checkbox" name="mem_adm_adj" checked="${m.mem_adm_adj}" /></td>
              <td align="left"><label for="Spclacct">Administrator's account - can order goods after commits are closed</label></td>
            </tr>
-        </table>
     </table>
 
     <!-- Submit -->

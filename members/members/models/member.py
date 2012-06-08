@@ -48,16 +48,16 @@ class Member(Base):
     mem_membership_paid = Column(Boolean(), default=False)
     mem_admin = Column(Boolean(), default=False)
     mem_adm_adj = Column(Boolean(), default=False)
+    mem_adm_comment = Column(Unicode(255), default='')
     # unused fields - TODO: do we need them?
     mem_bank_no = Column(Unicode(255), default='')
-    #mem_adm_comment = Column(Unicode(255), default='')
     #mem_message = Column(Unicode(255), default='')
     #mem_news = Column(Unicode(255), default='')
     #mem_message_auth = Column(Integer())
     #mem_message_date = Column(DateTime()) #timestamp
 
     __acl__ = [ (Allow, 'group:admins', ('view', 'edit')),
-                #(Allow, 'group:this-member', ('view', 'edit')),
+                (Allow, 'group:this-member', ('view', 'edit')),
                 (Allow, 'group:members', ('view')),
                 DENY_ALL]
 
