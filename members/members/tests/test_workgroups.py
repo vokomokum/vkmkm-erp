@@ -90,9 +90,9 @@ class TestWorkgroups(VokoTestCase):
         request.POST['wg_leaders'] = '1'
         request.params['action'] = 'save'
         view = EditWorkgroupView(None, request)
-        # raises an AttributeError when redirecting after successful
-        # save, bcs we haven't set view.user
-        self.assertRaises(AttributeError, view)
+        peter = self.get_peter()
+        view.user = peter
+        view()
         wg = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Cafe').first()
         self.assertEquals(wg.desc, 'Shake and Bake')
 

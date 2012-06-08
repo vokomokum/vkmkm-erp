@@ -18,6 +18,7 @@ from members.models.shift import Shift
 from members.models.task import Task
 from members.utils import mail
 from members.utils.misc import get_settings
+from members.utils.md5crypt import md5crypt
 
 
 '''
@@ -94,6 +95,7 @@ class VokoTestCase(unittest.TestCase):
         '''
         m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
         m1.mem_email = 'peter@dePan.nl'
+        m1.mem_enc_pwd = md5crypt('notsecret', 'notsecret')
         self.DBSession.add(m1)
         m2 = Member(fname=u'Hans', prefix=u'de', lname='Wit')
         m1.mem_email = 'hans@deWit.nl'
@@ -114,4 +116,12 @@ class VokoTestCase(unittest.TestCase):
         s = Shift(m1.mem_id, 1, t.id)
         self.DBSession.add(s)
         self.DBSession.flush()
+
+    def get_peter(self):
+        return self.DBSession.query(Member).get(1)
+
+    def get_hans(self):
+        return self.DBSession.query(Member).get(2)
+    
+
 

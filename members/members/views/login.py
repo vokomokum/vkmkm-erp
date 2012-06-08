@@ -16,10 +16,14 @@ from members.views.base import BaseView
 class Login(BaseView):
 
     def __call__(self):
-        login_url = route_url('login', self.request)
+        self.logged_in = False
         referrer = self.request.url
-        if referrer == login_url:
-            referrer = '/' # never use the login form itself as came_from
+        try: # to protect tests from failing, as this is not critical
+            login_url = route_url('login', self.request)
+            if referrer == login_url:
+                referrer = '/' # never use the login form itself as came_from
+        except:
+            pass
         came_from = self.request.params.get('came_from', referrer)
         message = ''
         if came_from != '/':

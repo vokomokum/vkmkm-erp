@@ -6,6 +6,7 @@ import os
 import base
 from members.models.member import Member
 from members.models.base import VokoValidationError
+from members.views.login import Login
 from members.views.member import MemberView
 from members.views.member import NewMemberView
 from members.views.member import ListMemberView
@@ -20,9 +21,6 @@ from members.tests.base import VokoTestCase
 
 
 class TestMembers(VokoTestCase):
-
-    def get_peter(self):
-        return self.DBSession.query(Member).get(1)
 
     def test_getquery(self):
         self.assertEqual(self.get_peter().mem_lname, 'Pan')
@@ -72,13 +70,29 @@ class TestMembers(VokoTestCase):
         view_info = ListMemberView(None, request)()
         self.assertEqual([m.mem_id for m in view_info['members']], [1,2])
 
-    def login(self):
+    def test_login(self):
         ''' test if basic login works '''
-        self.assertEqual(1, 2) # TODO
+        request = testing.DummyRequest()
+        request.params['form.submitted'] = True
+        request.params['login'] = '1'
+        request.params['passwd'] = 'notsecret'
+        peter = self.get_peter()
+        view = Login(None, request)
+        view.user = peter
+        view()
+        self.assertTrue(view.logged_in)
 
     def test_no_login_for_inactive(self):
         ''' inactive members are not allowed to logon anymore'''
-        self.assertEqual(1, 2) # TODO
+        request = testing.DummyRequest()
+        request.params['form.submitted'] = True
+        request.params['login'] = '1'
+        request.params['passwd'] = ''
+        peter = self.get_peter()
+        peter.mem_active = False
+        view = Login(None, request)
+        view()
+        self.assertFalse(view.logged_in)
 
     def fillin_dummy_data(self, request):
         request.params['mem_email'] = 'peter@peter.de'
@@ -89,30 +103,47 @@ class TestMembers(VokoTestCase):
         request.params['mem_postcode'] = '1017EA'
         request.params['mem_city'] = 'Amsterdam'
         request.params['mem_bank_no'] = '123456789'
-        request.params['mem_enc_pwd'] = 'notsecret'
         return request
 
     def test_edit(self):
         ''' edit the name '''
         request = testing.DummyRequest()
-        request.matchdict = {'mem_id': 1}
+        request.matchdict = {'mem_id': 1} # peter
         request.params['action'] = 'save'
+        # Make hans an admin, and let him be the user executing the view
+        hans = self.get_hans()
+        hans.mem_admin = True
+        view = EditMemberView(None, request)
+        view.user = hans
         # not enough info yet
-        self.assertRaises(VokoValidationError, EditMemberView(None, request))
+        self.assertRaises(VokoValidationError, view)
         request = self.fillin_dummy_data(request)
         # and some explicit editing
         request.params['mem_lname'] = 'Petersnewlname'
-        view_info = EditMemberView(None, request)()
+        view_info = view()
         self.assertEqual(self.get_peter().mem_lname, 'Petersnewlname')
 
-    def test_invalid_edit(self):
-        ''' giving no name: invalid'''
+    def test_invalid_email_edit(self):
         request = testing.DummyRequest()
-        request.matchdict = {'mem_id': 2}
+        request.matchdict = {'mem_id': 2} # hans
+        hans = self.get_hans()
+        view = EditMemberView(None, request)
+        view.user = hans
         request = self.fillin_dummy_data(request)
         request.params['mem_email'] = 'peterATsomewhere'
         request.params['action'] = 'save'
-        self.assertRaises(VokoValidationError, EditMemberView(None, request))
+        self.assertRaises(VokoValidationError, view)
+
+    def test_invalid_attribute_edit(self):
+        ''' this test runs as non-admin user '''
+        peter = self.get_peter()
+        self.assertTrue(peter.mem_active)
+        request = testing.DummyRequest()
+        request.matchdict = {'mem_id': peter.mem_id}
+        request = self.fillin_dummy_data(request)
+        request.params['mem_active'] = '0'
+        request.params['action'] = 'save'
+        self.assertTrue(peter.mem_active)
 
     def test_create(self):
         '''
@@ -124,12 +155,11 @@ class TestMembers(VokoTestCase):
         request.params['action'] = 'save'
         view = EditMemberView(None, request)
         request.params['mem_lname'] = 'NewLastname'
-        # raises an AttributeError when redirecting after successful
-        # save, bcs we haven't set view.user
-        self.assertRaises(AttributeError, view)
-        mem = self.DBSession.query(Member)\
-                            .filter(Member.mem_lname==u'NewLastname').first()
-        self.assertIsNotNone(mem)
+        # Make peter an admin, and let him be the user executing the view
+        peter = self.get_peter()
+        peter.mem_admin = True
+        view.user = peter
+        view()
         # check if member exists
         mem = self.DBSession.query(Member)\
                             .filter(Member.mem_lname==u'NewLastname').first()
@@ -162,6 +192,7 @@ class TestMembers(VokoTestCase):
         request.matchdict = {'mem_id': peter.mem_id}
         request.params['action'] = 'toggle-active'
         view = EditMemberView(None, request)
+        view.user = peter
         view()
         self.assertTrue(peter.mem_active)
         self.assertTrue(view.confirm_toggle_active)

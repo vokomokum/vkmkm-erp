@@ -51,7 +51,8 @@ class TestShifts(VokoTestCase):
         request.matchdict['o_id'] = 1
         request.params['mem_id'] = hans.mem_id
         view = NewShiftView(None, request)
-        self.assertRaises(AttributeError, view)
+        view.user = self.get_peter()
+        view()
         self.assertEqual(self.get_shifts().count(), 2)
 
     def test_create_wrong_member(self):
@@ -70,7 +71,6 @@ class TestShifts(VokoTestCase):
         request.matchdict['o_id'] = 1
         request.params['mem_id'] = hans.mem_id
         view = NewShiftView(None, request)
-        #self.assertRaises(AttributeError, view)
         shifts = self.get_shifts(wgname='Systems')
         self.assertEqual(shifts.count(), 0)
 
@@ -82,7 +82,8 @@ class TestShifts(VokoTestCase):
         request.matchdict['s_id'] = shift.id
         request.params['action'] = 'delete'
         view = EditShiftView(None, request)
-        self.assertRaises(AttributeError, view)
+        view.user = self.get_peter()
+        view()
         self.assertEquals(self.get_shifts(mname=u'Peter').count(), 0)
 
     def test_toggle_state(self):
@@ -95,10 +96,12 @@ class TestShifts(VokoTestCase):
         request.params['action'] = 'save'
         request.params['state'] = 'worked'
         view = EditShiftView(None, request)
-        self.assertRaises(AttributeError, view)
+        view.user = self.get_peter()
+        view()
         self.assertEquals(shift.state, 'worked')
         request.params['state'] = 'assigned'
-        self.assertRaises(AttributeError, view)
+        view.user = self.get_peter()
+        view()
         self.assertEquals(shift.state, 'assigned')
         request.params['state'] = 'invalid-state'
         self.assertRaises(VokoValidationError, view)
