@@ -153,6 +153,16 @@
                 <input type="checkbox" name="mem_adm_adj" checked="${m.mem_adm_adj}" /></td>
              <td align="left"><label for="Spclacct">Administrator's account - can order goods after commits are closed</label></td>
            </tr>
+           <tr class="list-content">
+             <td colspan="2" align="center">Admin Comments for this member:</td>
+           </tr>
+           <tr class="list-content">
+             <td colspan="2" align="center"> 
+                <textarea name="mem_adm_comment"
+                       tal:content="m.mem_adm_comment" rows="7" cols="60">
+                </textarea>
+             </td>
+           </tr>
     </table>
 
     <!-- Submit -->

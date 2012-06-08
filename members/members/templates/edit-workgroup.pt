@@ -80,7 +80,9 @@
         <th align="center" colspan="4">Description:</th>
       </tr>
       <tr>
-        <td colspan="4" align="center"><textarea tal:content="wg.desc" rows="8" cols="80" name="desc"></textarea></td>
+        <td colspan="4" align="center">
+            <textarea tal:content="wg.desc" rows="8" cols="80" name="desc"></textarea>
+        </td>
       </tr>
     </table>
 

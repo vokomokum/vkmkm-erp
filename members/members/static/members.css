@@ -183,6 +183,7 @@ a:hover {
     color: #FFFFFF;
     text-shadow: 0 1px rgba(0, 0, 0, 0.1);
     text-transform: uppercase;
+    margin-right: 10px;
 }
 .action-button-red:hover {
     background-color: #C53727;
