@@ -1,2 +1,3 @@
 #!/bin/bash
-~/vopy/bin/pserve development.ini --reload
+# $VIRPY should point at your python environment (see INSTALL.txt)
+$VIRPY/bin/pserve development.ini --reload

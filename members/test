@@ -1,2 +1,3 @@
 #!/bin/bash
-~/vopy/bin/python setup.py test -q
+# $VIRPY should point at your python environment (see INSTALL.txt)
+$VIRPY/bin/python setup.py test -q
