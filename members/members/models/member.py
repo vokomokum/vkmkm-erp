@@ -30,7 +30,7 @@ class Member(Base):
     mem_prefix = Column(Unicode(255), default='')
     mem_lname = Column(Unicode(255), default='')
     mem_email = Column(Unicode(255), default='')
-    mem_street =  Column(Unicode(255), default='')
+    mem_street = Column(Unicode(255), default='')
     mem_house = Column(Unicode(255), default='')
     mem_flatno = Column(Unicode(255), default='')
     mem_city = Column(Unicode(255), default='')
@@ -56,10 +56,10 @@ class Member(Base):
     #mem_message_auth = Column(Integer())
     #mem_message_date = Column(DateTime()) #timestamp
 
-    __acl__ = [ (Allow, 'group:admins', ('view', 'edit')),
-                (Allow, 'group:this-member', ('view', 'edit')),
-                (Allow, 'group:members', ('view')),
-                DENY_ALL]
+    __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
+               (Allow, 'group:this-member', ('view', 'edit')),
+               (Allow, 'group:members', ('view')),
+               DENY_ALL]
 
     def __init__(self, request=None, fname='', prefix='', lname=''):
         ''' receiving request makes this class a factory for views '''
@@ -79,7 +79,8 @@ class Member(Base):
                                  self.mem_lname or '')
 
     def addr_street(self):
-        return "{} {}{}".format(self.mem_street, self.mem_house, self.mem_flatno)
+        return "{} {}{}".format(self.mem_street, self.mem_house,
+                                self.mem_flatno)
 
     def addr_city(self):
         return "{} {}".format(self.mem_postcode, self.mem_city)
@@ -91,7 +92,7 @@ class Member(Base):
         missing = []
         for f in ('mem_fname', 'mem_lname', 'mem_email',
                   'mem_street', 'mem_house', 'mem_postcode', 'mem_city'):
-            if not self.__dict__.has_key(f) or self.__dict__[f] == '':
+            if not f in self.__dict__ or self.__dict__[f] == '':
                 missing.append(f)
         if len(missing) > 0:
             raise VokoValidationError('We still require you to fill in: %s'\
@@ -103,17 +104,17 @@ class Member(Base):
         # check unique constraint on email address here for nicer error msg
         session = DBSession()
         members = session.query(Member)\
-                         .filter(Member.mem_email==self.mem_email).all()
+                         .filter(Member.mem_email == self.mem_email).all()
         if len(members) > 0:
             if not (len(members) == 1 and members[0].mem_id == self.mem_id):
                 raise VokoValidationError('The email address already exists '\
                                           'for a member in the database.')
-        
+
         # we want one telephone number, as well
         sd = self.__dict__
         if ((not 'mem_home_tel' in sd and not 'mem_work_tel' in sd
              and not 'mem_mobile' in sd)
-           or (self.mem_home_tel == "" and self.mem_work_tel == "" 
+           or (self.mem_home_tel == "" and self.mem_work_tel == ""
                and self.mem_mobile == "")):
             raise VokoValidationError('Please specify at least one telephone '\
                                       'number.')
@@ -127,7 +128,7 @@ class Member(Base):
         # check bank no
         if self.mem_bank_no:
             bank_no_clean = self.mem_bank_no.replace(' ', '').replace('-', '')
-            if not len(bank_no_clean) in [0,7,9]:
+            if not len(bank_no_clean) in [0, 7, 9]:
                 raise VokoValidationError('Bank number needs to consist of 7 '\
                                           '(postbank) or 9 numbers.')
             if len(bank_no_clean) > 0 and not bank_no_clean.isdigit():
@@ -174,5 +175,3 @@ def get_member(session, request):
         else:
             raise Exception("No member with ID {0}".format(m_id))
     return member
-
-

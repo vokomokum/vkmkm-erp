@@ -19,7 +19,8 @@ class Task(Base):
     wg_id = Column(Integer, ForeignKey('workgroups.id'), nullable=False)
     active = Column(Boolean(), default=True)
 
-    workgroup = relationship(Workgroup, backref=backref('tasks', cascade='all,delete,delete-orphan'))
+    workgroup = relationship(Workgroup,
+                  backref=backref('tasks', cascade='all,delete,delete-orphan'))
 
     # no task can exist twice within one group
     __table_args__ = (UniqueConstraint('label', 'wg_id'), {})
@@ -32,9 +33,12 @@ class Task(Base):
         return self.label
 
     def validate(self, tasks):
-        ''' validate if this object is valid, raise VokoValidationError otherwise '''
+        '''
+        validate if this object is valid, raise VokoValidationError otherwise
+        '''
         if self.label == '':
             raise VokoValidationError('A task needs a label.')
         for task in [t for t in tasks if not t.id == self.id]:
             if task.label == self.label:
-                raise VokoValidationError('This workgroup already has a task with the label "%s".' % self.label)
+                raise VokoValidationError('This workgroup already has a task '\
+                                    'with the label "{}".'.format(self.label))

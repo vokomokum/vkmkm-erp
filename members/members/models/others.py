@@ -26,8 +26,12 @@ class Order(Base):
     label = Column('ord_label', Unicode(255), primary_key=True)
 
     def __init__(self):
-        raise SecondOrderModelException('Creation of an order not allowed in this application.')
+        raise SecondOrderModelException('Creation of an order not '\
+                                        'allowed in this application.')
+
 
 def get_order_label(order_id):
     dbsession = DBSession()
-    return list(dbsession.execute("""SELECT DISTINCT ord_label FROM wh_order WHERE ord_no = %d;""" % order_id))[0][0]
+    query = """SELECT DISTINCT ord_label FROM wh_order WHERE ord_no = %d;"""\
+                                                         % order_id
+    return list(dbsession.execute(query))[0][0]

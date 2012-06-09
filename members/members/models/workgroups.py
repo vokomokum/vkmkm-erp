@@ -21,7 +21,6 @@ leadership = Table(
     )
 
 
-
 class Workgroup(Base):
     __tablename__ = 'workgroups'
 
@@ -29,9 +28,10 @@ class Workgroup(Base):
     name = Column(Unicode(255), unique=True)
     desc = Column(Unicode(255))
 
-    __acl__ = [ (Allow, 'group:admins', ('view', 'edit')),
-                (Allow, 'group:wg-leaders', ('view', 'edit')),
-                (Allow, 'group:wg-members', 'view'), DENY_ALL ]
+    __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
+               (Allow, 'group:wg-leaders', ('view', 'edit')),
+               (Allow, 'group:wg-members', 'view'),
+               DENY_ALL]
 
     def __init__(self, request=None, name='', desc=''):
         ''' receiving request makes this class a factory for views '''
@@ -49,7 +49,8 @@ class Workgroup(Base):
         if self.desc == '':
             raise VokoValidationError('A workgroup needs a description.')
         if len(self.leaders) == 0:
-            raise VokoValidationError('A workgroup needs at least one coordinator.')
+            raise VokoValidationError('A workgroup needs at least '\
+                                      'one coordinator.')
 
 
 Workgroup.members = relationship('Member', secondary=membership)
@@ -61,7 +62,7 @@ Member.led_workgroups = relationship('Workgroup', secondary=leadership)
 def get_wg(session, request):
     ''' make a Workgroup object, use ID from request if possible '''
     wg = Workgroup('', '')
-    if request.matchdict.has_key('wg_id'):
+    if 'wg_id' in request.matchdict:
         wg_id = request.matchdict['wg_id']
         if wg_id == 'new':
             return wg
