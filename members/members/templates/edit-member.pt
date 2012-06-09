@@ -66,8 +66,8 @@
     </table>
     </span>
 
-    <!-- Addres -->
-    <table class="main" width="100%"> 
+    <!-- Address -->
+    <table class="list" width="100%"> 
       <tr class="list-content">
         <td align="center" colspan="5">Address</td>
       </tr>
@@ -95,7 +95,7 @@
 
     <!-- Phone -->
 
-    <table class="main" width="100%"> 
+    <table class="list" width="100%"> 
       <tr class="list-content">
         <td align="center" colspan="3">Telephone <span class="warn">(At least one is required)</span></td>
       </tr>

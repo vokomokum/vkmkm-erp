@@ -53,5 +53,4 @@ Subject: %s
         log.warn('Could not send mail to %s, subject "%s"'\
                  '(mail identifier is %s): %s'\
                   % (to, subject, mail_time, error))
-        print error, e
         raise e
