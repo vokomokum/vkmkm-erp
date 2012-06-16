@@ -54,7 +54,7 @@ def main(global_config, **settings):
     config.add_route('workgroup-list', '/workgroups', factory=Workgroup)
     config.add_route('workgroup-new', '/workgroups/new', factory=Workgroup)
     config.add_route('workgroup-edit', '/workgroup/{wg_id}/edit', factory=Workgroup)
-    config.add_route('shift-new', '/workgroup/{wg_id}/new-shift/in-order/{o_id}', factory=Workgroup)
+    config.add_route('shift-new', '/workgroup/{wg_id}/new-shift', factory=Workgroup)
     config.add_route('shift-edit', '/workgroup/{wg_id}/edit-shift/{s_id}', factory=Workgroup)
 
     # custom error views, catching NotFound and all Exceptions

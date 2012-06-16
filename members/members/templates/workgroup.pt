@@ -36,13 +36,14 @@
     </table>
 
     
-    <h2>Shifts in Order '${view.cur_order_lbl}':</h2>
+    <h2>Shifts in month ${view.month}/${view.year}:</h2>
     
     <table class="list" align="center" tal:condition="view.user_is_wgleader">
         <tr>
             <th>Task</th>
             <th>Member</th>
             <th>Status</th>
+            <th>Date</th>
             <th>Action</th>
         </tr>
         <!-- edit existing shifts form -->
@@ -66,9 +67,30 @@
                 </td>
                 <td>
                     <select name="state">
-                        <tal:block tal:repeat="st ['assigned', 'worked']">
+                        <tal:block tal:repeat="st ['open', 'assigned', 'worked', 'no-show']">
                             <option tal:condition="st == s.state" value="${st}" selected="selected">${st}</option>
                             <option tal:condition="st != s.state" value="${st}">${st}</option>
+                        </tal:block>
+                    </select>
+                </td>
+                <td>
+                    <select name="day">
+                        <option value="--">--</option>
+                        <tal:block tal:repeat="d python:range(1,24,1)">
+                            <option tal:condition="d != s.day" value="${d}">${d}</option>
+                            <option tal:condition="d == s.day" value="${d}" selected="selected">${d}</option>
+                        </tal:block>
+                    </select>
+                    <select name="month">
+                        <tal:block tal:repeat="m python:range(1,12,1)">
+                            <option tal:condition="m != s.month" value="${m}">${m}</option>
+                            <option tal:condition="m == s.month" value="${m}" selected="selected">${m}</option>
+                        </tal:block>
+                    </select>
+                    <select name="year">
+                        <tal:block tal:repeat="y python:range(2012,2020,1)">
+                            <option tal:condition="y != s.year" value="${y}">${y}</option>
+                            <option tal:condition="y == s.year" value="${y}" selected="selected">${y}</option>
                         </tal:block>
                     </select>
                 </td>
@@ -86,7 +108,7 @@
         </tr>
         <!-- new shift form -->
         <tr class="list-content">
-            <form action="${portal_url}/workgroup/${wg.id}/new-shift/in-order/${view.order.id}" method="post">
+            <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post">
                 <td>
                     <select name="task_id">
                         <option value="--">--</option>
@@ -99,9 +121,26 @@
                         <option tal:repeat="m wg.members" value="${m.mem_id}">${m.fullname}</option>
                     </select>
                 </td>
-                <td/>
+                <td>open</td>
                 <td>
-                    <input type="hidden" name="order_id" value="${view.order.id}"/>
+                    <select name="day">
+                        <option value="--" selected="selected">--</option>
+                        <option tal:repeat="d python:range(1,24,1)" value="${d}">${d}</option>
+                    </select>
+                    <select name="month">
+                        <tal:block tal:repeat="m python:range(1,12,1)">
+                            <option tal:condition="m != view.month" value="${m}">${m}</option>
+                            <option tal:condition="m == view.month" value="${m}" selected="selected">${m}</option>
+                        </tal:block>
+                    </select>
+                    <select name="year">
+                        <tal:block tal:repeat="y python:range(2012,2020,1)">
+                            <option tal:condition="y != view.year" value="${y}">${y}</option>
+                            <option tal:condition="y == view.year" value="${y}" selected="selected">${y}</option>
+                        </tal:block>
+                    </select>
+                </td>
+                <td>
                     <input type="submit" value="Create new shift"/>
                 </td>
             </form>
@@ -120,13 +159,15 @@
         </tr>
     </table>
 
-    <div id="shift-order-selector">Select another order:
+    <div id="shift-month-selector">Select another month:
         <form action="${portal_url}/workgroup/${wg.id}" method="post">
-            <select name="order_id"> 
-                <tal:block tal:repeat="o view.orders">
-                    <option tal:condition="o.id == view.order.id" value="${o.id}" selected="selected">${view.cur_order_lbl}</option>
-                    <option tal:condition="o.id != view.order.id" value="${o.id}">${o.label}</option>
-                </tal:block>
+            <select name="month">
+                <option tal:repeat="m python:range(1,12,1)"
+                       value="${m}" select="${view.month}">${m}</option>
+            </select>
+            <select name="year">
+                <option tal:repeat="y python:range(2012,2020,1)"
+                                value="${y}" select="${view.year}">${y}</option>
             </select>
             <input type="submit" name="action" value="show"/>
         </form>

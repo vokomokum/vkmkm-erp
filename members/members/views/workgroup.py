@@ -1,6 +1,8 @@
 from pyramid.view import view_config
 from sqlalchemy import asc, desc
 
+from datetime import datetime
+
 from members.models.workgroups import Workgroup, get_wg
 from members.models.member import Member
 from members.models.base import DBSession
@@ -72,22 +74,18 @@ class WorkgroupView(BaseView):
 
         self.user_is_wgleader = self.user in wg.leaders
 
-        # look up the order and then the shifts of this group in that order
-        order_header = session.execute("""SELECT * FROM order_header;""")
-        order_id = ('order_id' in self.request.params
-                    and int(self.request.params['order_id'])\
-                    or list(order_header)[0].ord_no)
-
-        self.order = session.query(Order).get((order_id,
-                                               get_order_label(order_id)))
-        self.orders = session.query(Order.id, Order.label)\
-                             .distinct().order_by(desc(Order.id))
-        self.cur_order_lbl = self.order.label
-        if not self.cur_order_lbl:
-            self.cur_order_lbl = 'Current'
+        # we view shifts per-month here (for now, maybe we'll get a nicer overview)
+        sdate = datetime.now()
+        self.month = sdate.month
+        self.year = sdate.year
+        if 'month' in self.request.params:
+            self.month = int(self.request.params['month'])
+        if 'year' in self.request.params:
+            self.year = int(self.request.params['year'])
         shifts = session.query(Shift).filter(Shift.task_id == Task.id)\
                                      .filter(Task.wg_id == wg.id)\
-                                     .filter(Shift.order_id == order_id)\
+                                     .filter(Shift.month == self.month)\
+                                     .filter(Shift.year == self.year)\
                                      .all()
         self.tasks = [t for t in wg.tasks if t.active]
 
@@ -141,14 +139,23 @@ class EditWorkgroupView(BaseView):
             elif "task" in action:
                 msg = ''
                 if action == 'add-task':
-                    task = Task(req.params['task_label'], wg.id)
+                    label = req.params['task_label']
+                    task = Task(label, wg.id,
+                                num_people=req.params['task-no-people'])
                     task.validate(wg.tasks)
                     wg.tasks.append(task)
-                    msg = 'Added task.'
+                    msg = 'Added task "{}".'.format(label)
                 elif action == 'toggle-task-activity':
                     task = session.query(Task).get(req.params['task_id'])
                     task.active = not task.active
                     msg = 'Changed activity status of the task.'
+                elif action == 'set-task-no-people':
+                    task = session.query(Task).get(req.params['task_id'])
+                    if 'task-no-people' in req.params:
+                        task.num_people = req.params['task-no-people']
+                        msg = 'Number of people for task "{}" has been set'\
+                              ' (already existing shifts were not affected).'\
+                              .format(task)
                 elif action == 'delete-task':
                     task = session.query(Task).get(req.params['task_id'])
                     shifts = session.query(Shift)\

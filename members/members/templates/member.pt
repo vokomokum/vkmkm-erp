@@ -57,7 +57,7 @@
         </tr>
         <tr>
             <td class="list-content">
-                <div tal:condition="not m.workgroups"
+                <div tal:condition="not m.workgroups" class="warn" 
                     tal:content="python: m.fullname + ' is not member of any workgroup.'">
                 </div>
                 <tal:block tal:repeat="wg m.workgroups">

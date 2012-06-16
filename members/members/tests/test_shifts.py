@@ -48,7 +48,8 @@ class TestShifts(VokoTestCase):
         request = testing.DummyRequest()
         request.matchdict['wg_id'] = wg.id
         request.params['task_id'] = wg.tasks[0].id
-        request.matchdict['o_id'] = 1
+        request.params['year'] = 2012
+        request.params['month'] = 6
         request.params['mem_id'] = hans.mem_id
         view = NewShiftView(None, request)
         view.user = self.get_peter()
@@ -68,7 +69,8 @@ class TestShifts(VokoTestCase):
         request = testing.DummyRequest()
         request.matchdict['wg_id'] = wg.id
         request.params['task_id'] = t.id
-        request.matchdict['o_id'] = 1
+        request.params['year'] = 2012
+        request.params['month'] = 6
         request.params['mem_id'] = hans.mem_id
         view = NewShiftView(None, request)
         shifts = self.get_shifts(wgname='Systems')

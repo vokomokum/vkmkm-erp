@@ -22,11 +22,19 @@ def fill_shift_from_request(shift, request):
     '''overwrite shift properties from request'''
     if request and shift:
         # overwrite shift properties from request
-        for attr in ['order_id', 'task_id', 'wg_id', 'mem_id']:
-            if request.params.has_key(attr):
-                shift.__setattr__(attr, request.params[attr])
-        if request.params.has_key('state'):
+        if 'state' in request.params:
             shift.state = request.params['state']
+        for attr in ['wg_id', 'month', 'year']:
+            if attr in request.params:
+                shift.__setattr__(attr, int(request.params[attr]))
+        for attr in ['task_id', 'mem_id', 'day']:
+            if attr in request.params:
+                val = request.params[attr]
+                if val == '--':
+                    val = None
+                else:
+                    val = int(val)
+                shift.__setattr__(attr, val)
     return shift
 
 
@@ -40,13 +48,12 @@ class NewShiftView(BaseView):
     def __call__(self):
         session = DBSession()
         wg_id = self.request.matchdict['wg_id']
-        task_id = self.request.params['task_id']
-        order_id = self.request.matchdict['o_id']
-        mem_id = self.request.params['mem_id']
-        shift = Shift(mem_id, order_id, task_id)
+        shift = Shift(None, None, None, None, None)
+        shift = fill_shift_from_request(shift, self.request)
         shift.validate()
         session.add(shift)
-        return self.redirect('/workgroup/%s?msg=%s&order_id=%s' % (wg_id, 'Succesfully added shift', order_id))
+        return self.redirect('/workgroup/{}?msg={}&month={}&year={}'.format(wg_id, 
+                             'Succesfully added shift', shift.month, shift.year))
 
 
 @view_config(renderer='../templates/workgroup.pt',
@@ -67,7 +74,6 @@ class EditShiftView(BaseView):
         shift = get_shift(session, self.request)
         if not shift:
             raise Exception("No shift with id %d" % self.request.matchdict['s_id'])
-        order_id = shift.order_id
 
         if self.request.params.has_key('action'):
             action = self.request.params['action']
@@ -75,11 +81,15 @@ class EditShiftView(BaseView):
                 shift = fill_shift_from_request(shift, self.request)
                 shift.validate()
                 session.add(shift)
-                return self.redirect('/workgroup/%s?msg=%s&order_id=%s' % (wg_id, 'Shift has been saved.', order_id))
+                return self.redirect('/workgroup/{}?msg={}&month={}&year={}'\
+                                     .format(wg_id, 'Shift has been saved.', 
+                                             shift.month, shift.year))
 
             elif action == 'delete':
                 session.delete(shift)
-                return self.redirect('/workgroup/%s?msg=%s&order_id=%s' % (wg_id, 'Shift has been deleted.', order_id))
+                return self.redirect('/workgroup/{}?msg={}&month={}&year={}'\
+                                     .format(wg_id, 'Shift has been deleted.',
+                                             shift.month, shift.year))
         else:
             raise Exception('No action given.')
 

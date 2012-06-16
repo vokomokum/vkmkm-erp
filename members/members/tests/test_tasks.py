@@ -18,11 +18,13 @@ class TestTasks(VokoTestCase):
         request.matchdict = {'wg_id': wg.id}
         request.params['task_label'] = 'program assembler'
         request.params['action'] = 'add-task'
+        request.params['task-no-people'] = 2
         view = EditWorkgroupView(None, request)
         view_info = view()
         wg = view_info['wg']
         self.assertEquals(len(wg.tasks), 1)
         self.assertEquals(wg.tasks[0].label, 'program assembler')
+        self.assertEquals(wg.tasks[0].num_people, 2)
 
     def test_toggle_active(self):
         wg = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Besteling').first()

@@ -111,12 +111,17 @@
     <table class="list" align="center">
         <tr>
             <th>Task</th>
+            <th>People</th>
             <th>active</th>
         </tr>
         <!-- edit existing tasks form -->
         <tr tal:repeat="t wg.tasks" class="list-content">
             <form action="${portal_url}/workgroup/${wg.id}/edit" method="post">
                 <td tal:content="t"></td>
+                <td>
+                    <input type="text" name="task-no-people" value="${t.num_people}" size="2" maxlength="2"/>
+                    <button type="submit" value="set-task-no-people" name="action">set</button>  
+                </td>
                 <td>
                     <tal:block tal:condition="t.active">
                         <span>yes</span>
@@ -143,7 +148,9 @@
                 <td>
                     <input type="text" size="60" name="task_label"></input>
                 </td>
-                <td/>
+                <td>
+                    <input type="text" name="task-no-people" value="1" size="2" maxlength="2"/>
+                </td>
                 <td>
                     <button type="submit" class="add_button" value="add-task" name="action">Create new task</button>
                 </td>
