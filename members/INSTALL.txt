@@ -27,7 +27,7 @@ We don't need that script anymore now
 $ rm virtualenv.py
 
 Also, from here on we denote the location of this environment as «$VIRPY«, assuming that you store the location in a system variable. 
-$ export $VIRPY=~/vopy
+$ export VIRPY=~/vopy
 Note: You might want to permanently assign the location you chose to «VIRPY« in a configuration file(e.g. «~/.bashrc« or «~/.profile«).
 Another note: If you want to configure the app for being served by Apache (most likely on a production setup), contents of the «VIRPY` directory need to be executable by the Apache user. 
 
