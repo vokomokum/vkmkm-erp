@@ -94,9 +94,8 @@ class ResetPasswordView(BaseView):
         # set new password
         member.validate_pwd(self.request)
         pwd = str(self.request.params['pwd1'])
-        #salt = ''.join(random.choice(string.letters) for i in xrange(8))
-        salt = pwd # jim uses encrypted pwd as salt
-        member.mem_enc_pwd = md5crypt(pwd, salt)
+        salt = md5crypt(pwd, '') # jim uses encrypted pwd as salt
+        member.mem_enc_pwd = md5crypt(pwd, salt) 
         member.mem_pwd_url = ''
         return info(u'Password has been set.'\
                ' Please use the new password the next time you log in.')
