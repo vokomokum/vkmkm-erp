@@ -38,6 +38,8 @@ admin = Member(fname=u'Adalbert', lname='Adminovic')
 admin.mem_email = 'admin@vokomokum.nl'
 salt = md5crypt('notsecret', '') 
 admin.mem_enc_pwd = md5crypt('notsecret', salt)
+admin.mem_admin = True
+admin.mem_active = True
 DBSession.add(admin)
 DBSession.flush()
 transaction.commit()
