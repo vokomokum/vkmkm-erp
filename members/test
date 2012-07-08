@@ -1,3 +1,10 @@
 #!/bin/bash
 # $VIRPY should point at your python environment (see INSTALL.txt)
-$VIRPY/bin/python setup.py test -q
+# The setuptools environment is notorious for uninformative error messages 
+# when imports went bad. It will tell you which module is the problem, but only
+# say sthg about an AttributeError. Do this to find out what is wrong:
+# $ $VIRPY/bin/python setup.py develop
+# $ $VIRPY/bin/python -c "import members.tests.<The module in question>"
+
+$VIRPY/bin/python setup.py test -vq
+
