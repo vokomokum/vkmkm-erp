@@ -38,24 +38,23 @@ def groupfinder(memid, request):
     session = DBSession()
     groups = ['group:members']
     context = request.context
-    #TODO: use id of context object to check workgroup and member
-    #if context.__class__ == Workgroup
-    #    groups.append('wg-members')
+    
     if context.__class__ == Member:
         mem_id = request.matchdict.get('mem_id', -1)
         if not mem_id == 'new':
             if int(mem_id) == memid:
                 groups.append('group:this-member')
 
-    wg_id = int(request.params.get('wg_id', -1))
-    if 'wg_id' in request.matchdict:
-        if wg_id == -1:
+    if context.__class__ == Workgroup:
+        if 'wg_id' in request.matchdict:
             wg_id = request.matchdict['wg_id']
-    if wg_id >= 0:
-        if wg_id in [wg.id for wg in session.query(Member).get(memid).led_workgroups]:
-            groups.append('group:wg-leaders')
+            wg = session.query(Workgroup).get(wg_id)
+            if memid in [m.mem_id for m in wg.leaders]:
+                groups.append('group:wg-leaders')
+            if memid in [m.mem_id for m in wg.members]:
+                groups.append('group:wg-members')
     admins = session.query(Member).filter(Member.mem_admin == True).all()
     if memid in [m.mem_id for m in admins]:
         groups.append('group:admins')
-    #print "User is in groups:", groups
+    #print "+++++++++++++++++++++++++++++++++++++++ User is in groups:", groups
     return groups
