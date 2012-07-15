@@ -9,12 +9,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="shortcut icon" href="${portal_url}favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/static/members.css" />
+        <tal:block tal:condition='view.is_embedded'>
+            <link rel="stylesheet" type="text/css" href="${portal_url}/static/embed.css" />
+        </tal:block>
         <!-- Internet Explorer Fixes -->
         <tal:iefixstart replace="structure string:&lt;!--[if IE]&gt;" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/ie.css" />
         <tal:iefixend replace="structure string:&lt;![endif]--&gt;" />
         <title tal:content="view.title | title | 'Vokomokum Members'">Vokomokum Members</title>
-        <link rel="shortcut icon" type="image/x-icon" href="${portal_url}favicon.ico" />
+        <link rel="shortcut icon" type="image/x-icon" href="${portal_url}/static/img/favicon.ico" />
  
     </head>
 
@@ -114,6 +117,10 @@
             </div>
 
         </div>
+
+        <tal:block tal:condition='view.is_embedded'>
+            
+        </tal:block>
     </body>
 
 </html>

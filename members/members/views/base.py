@@ -10,7 +10,6 @@ from members.models.base import VokoValidationError
 class BaseView(object):
 
     tab = 'home'
-    _user = None
 
     def __init__(self, context, request):
         self.context = context
@@ -19,30 +18,24 @@ class BaseView(object):
         # only show content if this is Ttue or user is logged in
         # (otherwise, show login screen)
         self.login_necessary = True
+        self.is_embedded = False
+        if 'embed' in request.params and bool(request.params['embed']):
+            self.is_embedded = True
         # every template asks for the layout to look for the macros
         self.layout = get_renderer('../templates/base.pt').implementation()
-        self.user = authenticated_user(self.request)
 
     @property
     def user(self):
         """
-        :returns: Database Member Object
+        :return: Database Member Object
         """
-        return self._user
-    
-    @user.setter
-    def user(self, m):
-        """
-        Sets the user of the view, useful for testing
-        :param Member m: Member to be set as user
-        """
-        self._user = m
+        return authenticated_user(self.request)
 
     def redirect(self, loc):
         """
         Redirect request to another location
         :param str loc: location (path after ${portal_url})
-        :returns: headers which should be returned by view
+        :return: headers which should be returned by view
         """
         headers = remember(self.request, self.user.mem_id)
         return HTTPFound(location = loc, headers = headers)
