@@ -1,0 +1,36 @@
+.ko-calendar-widget-loading {
+	height: 100px;
+	text-align: center;
+}
+
+.ko-calendar-date {
+	margin-top: 6px;
+	font-weight: bold;
+}
+
+.ko-calendar-event-list {
+	margin: 4px;
+}
+
+.ko-calendar-entry-date-row {
+	padding-top: 6px;
+}
+
+.ko-calendar-entry-date-label {
+	font-weight: bold;
+}
+
+.ko-calendar-entry-date-text {
+}
+
+.ko-calendar-entry-location-text {
+}
+
+.ko-calendar-entry-body {
+	margin: 4px;
+}
+
+/* Indent the paragraphs, but not by much */
+.ko-calendar-entry-body  p {
+	margin: 0px 10px
+}

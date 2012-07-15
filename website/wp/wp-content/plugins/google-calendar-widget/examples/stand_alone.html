@@ -1,0 +1,37 @@
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="../ko-calendar.css" />
+</head>
+<body>
+
+	<div style="border: 3px solid #bfbfbf; padding: 5px; width: 400">
+		<div class="ko-calendar-widget-title" id="ko_calendar-widget_title">Test Calendars</div>
+		<div class="ko-calendar-widget-events" id="ko_calendar-widget_events">
+			<div class="ko-calendar-widget-loading">
+				<img
+					class="ko-calendar-widget-image"
+					src="../loading.gif"
+					alt="Loading..."/>
+			</div>
+		</div>
+	</div>
+
+	<script type='text/javascript' src='http://www.google.com/jsapi?ver=1'></script>
+	<script type='text/javascript' src='../date.js?ver=alpha-1'></script>
+	<script type='text/javascript' src='../wiky.js?ver=1.0'></script>
+	<script type='text/javascript' src='../ko-calendar.js?ver=3.1.3'></script> 
+	<script type="text/javascript" defer="defer">
+		ko_calendar.loadCalendarDefered(
+			'ko_calendar-widget_title',
+			'ko_calendar-widget_events',
+			10,
+			false,
+			'http://www.google.com/calendar/feeds/developer-calendar%40google.com/public/full',
+			'http://www.google.com/calendar/feeds/canadian%40holiday.calendar.google.com/public/full',
+			'http://www.google.com/calendar/feeds/%23stardate%40group.v.calendar.google.com/public/full',
+			'[STARTTIME - ][TITLE]'
+		);
+	</script>
+
+</body>
+</html>
