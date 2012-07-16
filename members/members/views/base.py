@@ -18,9 +18,6 @@ class BaseView(object):
         # only show content if this is Ttue or user is logged in
         # (otherwise, show login screen)
         self.login_necessary = True
-        self.is_embedded = False
-        if 'embed' in request.params and bool(request.params['embed']):
-            self.is_embedded = True
         # every template asks for the layout to look for the macros
         self.layout = get_renderer('../templates/base.pt').implementation()
 
