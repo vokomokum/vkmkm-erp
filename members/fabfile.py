@@ -3,10 +3,11 @@ from fabric.contrib.console import confirm
 
 '''
 This file is very useful in day-to-day Vokomokum development.
-It uses fabric to automate comon actions. Install fabric by 
+It uses fabric to automate common actions. Install fabric by 
 $VIRPY/bin/pip install fabric
 
 Then it suffices to issue 
+fab develop         # develop the webapp locally
 fab run             # run local dev server
 fab test            # run test
 fab commit          # commit changed code (interactively)
