@@ -5,9 +5,9 @@
 use strict;
 use Data::Dumper;
 
-my $createdb = "/usr/bin/sudo su jes -c '/usr/bin/createdb vokotest'";
-my $dropdb = "su jes -c '/usr/bin/dropdb vokotest'";
-my $loaddb = "su jes -c \'/usr/bin/psql vokotest";
+my $createdb = "/usr/bin/sudo su jes -c '/usr/bin/createdb voko'";
+my $dropdb = "su jes -c '/usr/bin/dropdb voko'";
+my $loaddb = "su jes -c \'/usr/bin/psql voko";
 my $backups = "/var/tmp/dbbackups";
 
 sub main {
@@ -15,7 +15,7 @@ sub main {
     my $file_name;
 
     while(1) {
-	print "Load a copy of the test-site database or a copy of the main site [TM]?";
+	print "Load a copy of the main-site database or a copy of the main site [TM]?";
 	my $line = <STDIN>;
 	last if($line =~ /^\s*T/i);
 	next if($line !~ /^\s*M/i);
@@ -86,7 +86,6 @@ sub main {
 	system($dropdb);
 	system($createdb);
 	system("$loaddb <$file_name\'");
-	print "$file_name\n";
 	exit (0);
     }
 }
