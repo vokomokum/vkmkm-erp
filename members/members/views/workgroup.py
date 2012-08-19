@@ -7,7 +7,6 @@ from members.models.workgroups import Workgroup, get_wg
 from members.models.member import Member
 from members.models.base import DBSession
 from members.models.shift import Shift
-from members.models.task import Task
 from members.models.others import Order, get_order_label
 from members.views.base import BaseView
 
@@ -71,25 +70,10 @@ class WorkgroupView(BaseView):
 
         session = DBSession()
         wg = get_wg(session, self.request)
-
+        now = datetime.now()
         self.user_is_wgleader = self.user in wg.leaders
 
-        # we view shifts per-month here (for now, maybe we'll get a nicer overview)
-        sdate = datetime.now()
-        self.month = sdate.month
-        self.year = sdate.year
-        if 'month' in self.request.params:
-            self.month = int(self.request.params['month'])
-        if 'year' in self.request.params:
-            self.year = int(self.request.params['year'])
-        shifts = session.query(Shift).filter(Shift.task_id == Task.id)\
-                                     .filter(Task.wg_id == wg.id)\
-                                     .filter(Shift.month == self.month)\
-                                     .filter(Shift.year == self.year)\
-                                     .all()
-        self.tasks = [t for t in wg.tasks if t.active]
-
-        return dict(wg=wg, shifts=shifts, msg=msg)
+        return dict(wg=wg, msg=msg, now=datetime.now())
 
 
 @view_config(renderer='../templates/edit-workgroup.pt',
@@ -122,52 +106,18 @@ class EditWorkgroupView(BaseView):
                 self.confirm_deletion = True
                 return dict(wg=wg)
             elif action == 'delete-confirmed':
-                tasks = session.query(Task).filter(Task.wg_id == wg.id).all()
-                for task in tasks:
-                    shifts = session.query(Shift)\
-                                    .filter(Shift.task_id == task.id).all()
-                    if len(shifts) == 0:
-                        session.delete(task)
-                    else:
-                        raise Exception('Cannot delete workgroup, as there '\
-                                        'are shifts in the history for the '\
-                                        'task "%s".' % str(task))
+                shifts = session.query(Shift)\
+                                .filter(Shift.wg_id == wg.id).all()
+                if len(shifts) == 0:
+                    session.delete(task)
+                else:
+                    raise Exception('Cannot delete workgroup, as there '\
+                                    'are shifts in the history for this '\
+                                    'workgroup.')
                 session.delete(wg)
                 return dict(wg=None, msg='Workgroup %s has been deleted.'\
                                           % wg.name)
 
-            elif "task" in action:
-                msg = ''
-                if action == 'add-task':
-                    label = req.params['task_label']
-                    task = Task(label, wg.id,
-                                num_people=req.params['task-no-people'])
-                    task.validate(wg.tasks)
-                    wg.tasks.append(task)
-                    msg = 'Added task "{}".'.format(label)
-                elif action == 'toggle-task-activity':
-                    task = session.query(Task).get(req.params['task_id'])
-                    task.active = not task.active
-                    msg = 'Changed activity status of the task.'
-                elif action == 'set-task-no-people':
-                    task = session.query(Task).get(req.params['task_id'])
-                    if 'task-no-people' in req.params:
-                        task.num_people = req.params['task-no-people']
-                        msg = 'Number of people for task "{}" has been set'\
-                              ' (already existing shifts were not affected).'\
-                              .format(task)
-                elif action == 'delete-task':
-                    task = session.query(Task).get(req.params['task_id'])
-                    shifts = session.query(Shift)\
-                                    .filter(Shift.task_id == task.id).all()
-                    if len(shifts) == 0:
-                        session.delete(task)
-                        msg = 'Deleted task.'
-                    else:
-                        msg = 'Cannot delete task, as there are shifts in the '\
-                              'history with this task.'
-                self.possible_members = get_possible_members(session)
-                return dict(wg=get_wg(session, req), msg=msg)
         return dict(wg=wg, msg='')
 
 

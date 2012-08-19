@@ -12,7 +12,6 @@ from members.views.base import ErrorView
 from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
-from members.models.task import Task
 from members.models.others import Order
 
 
@@ -54,8 +53,9 @@ def main(global_config, **settings):
     config.add_route('workgroup-list', '/workgroups', factory=Workgroup)
     config.add_route('workgroup-new', '/workgroups/new', factory=Workgroup)
     config.add_route('workgroup-edit', '/workgroup/{wg_id}/edit', factory=Workgroup)
+    config.add_route('shift-list', '/workgroup/{wg_id}/shifts/{year}/{month}', factory=Workgroup)
     config.add_route('shift-new', '/workgroup/{wg_id}/new-shift', factory=Workgroup)
-    config.add_route('shift-edit', '/workgroup/{wg_id}/edit-shift/{s_id}', factory=Workgroup)
+    config.add_route('shift-edit', '/workgroup/{wg_id}/edit-shift/{s_id}/{action}', factory=Workgroup)
 
     # custom error views, catching NotFound and all Exceptions
     config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')

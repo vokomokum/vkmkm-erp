@@ -2,7 +2,7 @@ from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import Unicode
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 from datetime import datetime
 
@@ -10,7 +10,6 @@ from base import Base
 from base import DBSession
 from base import VokoValidationError
 from member import Member
-from task import Task
 from workgroups import Workgroup
 
 
@@ -25,19 +24,23 @@ class Shift(Base):
     __tablename__ = 'wg_shifts'
 
     id = Column(Integer, primary_key=True)
+    wg_id = Column(Integer, ForeignKey('workgroups.id'), nullable=False)
     mem_id = Column(Integer, ForeignKey('members.mem_id'), nullable=True)
-    task_id = Column(Integer, ForeignKey('wg_tasks.id'), nullable=True)
     state = Column(Unicode(255), default=u'open')
+    task = Column(Unicode(255), default=u'')
     day = Column(Integer, nullable=True)
     month = Column(Integer, nullable=False)
     year = Column(Integer, nullable=False)
 
+    workgroup = relationship(Workgroup,
+                  backref=backref('shifts', cascade='all,delete,delete-orphan',
+                                           order_by='Shift.id'))
     member = relationship(Member, backref='scheduled_shifts')
-    task = relationship(Task)
 
-    def __init__(self, t_id, year, month, day=None, mem_id=None):
+    def __init__(self, wg_id, task, year, month, day=None, mem_id=None):
         self.mem_id = mem_id
-        self.task_id = t_id
+        self.wg_id = wg_id
+        self.task = task
         if mem_id:
             self.state = 'assigned'
         else:
@@ -47,10 +50,25 @@ class Shift(Base):
         self.year = year
 
     def __repr__(self):
-        return "Shift - task '%s' on '%d-%d-%d', by member %s"\
+        return "Shift - workgroup '%s' on '%d-%d-%d', by member %s"\
                " in the '%s'-group [state is %s]" %\
-                (str(self.task), str(self.day), self.month, self.year, self.member.fullname,
+                (str(self.workgroup), str(self.day), self.month, self.year, self.member.fullname,
                  self.workgroup, self.state)
+
+    def clone(self):
+        return Shift(self.wg_id, self.task, self.year, self.month,
+                  self.day, self.mem_id)
+
+    @property
+    def is_locked(self):
+        '''
+        Only the wg leader can sign off a member from a locked shift
+        '''
+        now = datetime.now()
+        #TODO: now all shifts w/o a day are locked 1 week before the month starts,
+        #      probably we want to change that, but need to discuss
+        sdate = datetime(self.year, self.month, self.day or 1)
+        return self.day and (sdate - now).days < 7
 
     def validate(self):
         '''
@@ -61,23 +79,20 @@ class Shift(Base):
             datetime(self.year, self.month, tmp_day)
         except ValueError, e:
             raise VokoValidationError('The date of this shift is not correct: %s.' % e)
+        if self.task == "":
+            raise VokoValidationError('The task should not be empty.')
         if self.state in ['assigned', 'worked', 'no-show']:
             if self.mem_id == '--':
                 raise VokoValidationError('Please select a member.')
             m = DBSession.query(Member).get(self.mem_id)
             if not m:
                 raise VokoValidationError('No member specified.')
-            task = DBSession.query(Task).get(self.task_id)
-            if not m in task.workgroup.members:
+            if not m in self.workgroup.members:
                 raise VokoValidationError('The member of this shift (%s) is not '\
-                        'a member in the workgroup %s.' % (m, task.workgroup))
+                        'a member in the workgroup %s.' % (m, self.workgroup))
         if not self.state in shift_states:
             raise VokoValidationError('The state must be either "open", "assigned", '\
                         '"worked" or "no-show". Cannot set it to %s' % (self.state))
-
-    @property
-    def workgroup(self):
-        return self.task.workgroup
 
 
 def get_shift(session, request):

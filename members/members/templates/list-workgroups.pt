@@ -4,10 +4,12 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
             
-            <a class="add_link" href="workgroups/new" tal:condition="view.user.mem_admin">
-                New workgroup
-            </a>
-            
+            <div id="action-box">
+                <a class="add-link" href="workgroups/new" tal:condition="view.user.mem_admin">
+                    New workgroup
+                </a>
+            </div>
+
             <table class="list" width="100%">
                 <tr>
                     <th width="20%">

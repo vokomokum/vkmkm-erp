@@ -14,10 +14,12 @@
                 <input type="submit" value="List"/>
             </form>
 
-            <a class="add_link" href="members/new" tal:condition="view.user.mem_admin">
+            <div id="action-box">
+                <a class="add-link" href="members/new" tal:condition="view.user.mem_admin">
                     New member
-            </a>
-            
+                </a>
+            </div>            
+
             <table class="list" width="100%">
                 <tr>
                     <th width="10%">

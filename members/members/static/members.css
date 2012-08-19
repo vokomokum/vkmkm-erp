@@ -94,6 +94,11 @@ p, h1, pre {
 
 /* content */
 
+h1 {
+    font-size: 21px;
+    color: #04176D;
+}
+
 #content {
     margin-top: 15px;
     margin-bottom: 15px;
@@ -119,42 +124,62 @@ a:hover {
     color: black;
 }
 
-
-#profile_link {
+#profile-link {
     background: #ffffff url(img/icons/profile.png) no-repeat;
     padding: 2px 20px;
 }
 
-#logout_link {
+#logout-link {
     background: #ffffff url(img/icons/logout.png) no-repeat;
     padding: 2px 20px;
 }
 
-.add_link {
+#action-box{
+    float:right;
+}
+#action-box a{
+    display: block;
+}
+
+.add-link {
     background: #ffffff url(img/icons/add.gif) no-repeat;
     background-position: 4px 3px;
     padding: 2px 24px;
 }
 
-.edit_link {
+.edit-link {
     background: #ffffff url(img/icons/edit.gif) no-repeat;
     background-position: 4px 3px;
-    padding: 2px 24px;
-    float:right;
+    padding: 4px 24px;
 }
 
-.view_link {
+.delete-link {
+    background: #ffffff url(img/icons/delete.gif) no-repeat;
+    background-position: 4px 3px;
+    padding: 2px 24px;
+}
+
+.view-link {
     background: #ffffff url(img/icons/view.gif) no-repeat;
     background-position: 4px 3px;
     padding: 2px 24px;
-    float:right;
 }
 
-.add_button {
+.shift-link {
+    background: #ffffff url(img/icons/work.png) no-repeat;
+    padding: 2px 24px;
+}
+
+#prevnext {
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+
+.add-button {
     background: #ffffff url(img/icons/add.gif) no-repeat;
     background-position: 4px 3px;
     padding: 2px 24px;
-    float:right;
 }
 
 .action-button {
@@ -218,7 +243,7 @@ a:hover {
 /* Tables */
 table.list    {padding-right:3px; padding-left:3px; margin-bottom:10px; margin-top:10px; clear:right;}
 table.list th {background-color:#a0a0a0; color:black; padding:2px;}
-table.list td {padding:2px;}
+table.list td {padding:5px;}
 table.list td:hover {background-color:#c0c0c0;}
 table.list td:hover a {color:white !important; }
 tr.subtitle   {background-color:#c0c0c0; color:black; border: solid black; line-height:100%;}
@@ -233,9 +258,67 @@ td.number     {text-align:right;width:6em;}
 }
 
 /* Forms */
-/*button {border: 0; background: transparent;}*/
+
 #list-options  {padding:3px; display:table; float:right;}
 #list-options *{padding-right:4px; color: #b0b0ff;}
+
+form {border:0; margin:0; padding:0;}
+
+.new-shift-form {
+    margin:0 auto;
+    width:600px;
+    padding:14px;
+}
+
+/* ----------- stylized-form ----------- */
+#stylized-form{
+    border:solid 2px #b7ddf2;
+    background:#ebf4fb;
+}
+#stylized-form .form-title {
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+#stylized-form p{
+    font-size:11px;
+    color:#666666;
+    margin-bottom:20px;
+    border-bottom:solid 1px #b7ddf2;
+    padding-bottom:10px;
+}
+#stylized-form label{
+    font-weight:bold;
+    text-align:right;
+    width:140px;
+}
+#stylized-form .small{
+    color:#666666;
+    font-size:11px;
+    font-weight:normal;
+    text-align:right;
+    width:140px;
+}
+#stylized-form input, #stylized-form select{
+    font-size:12px;
+    border:solid 1px #aacfe4;
+    margin:2px 0 20px 10px;
+    padding:4px 2px;
+    display: inline;
+}
+#stylized-form .form-row{
+}
+#stylized-form button{
+    margin-left:150px;
+    width:125px;
+    height:31px;
+    background:#666666 url(img/button.png) no-repeat;
+    text-align:center;
+    line-height:31px;
+    color:#FFFFFF;
+    font-size:11px;
+    font-weight:bold;
+}
 
 /* other */
 .wg-description {

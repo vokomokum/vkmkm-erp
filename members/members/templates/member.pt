@@ -7,8 +7,8 @@
 
     <h1>${m.fullname}</h1>
 
-    <div tal:condition="view.user_can_edit">
-        <a class="edit_link" href="${portal_url}/member/${m.mem_id}/edit">edit this member</a>
+    <div id="action-box">
+        <a tal:condition="view.user_can_edit" class="edit-link" href="${portal_url}/member/${m.mem_id}/edit">edit this member</a>
     </div>
    
     <table class="list" width="100%">
@@ -79,12 +79,12 @@
     <table class="list" align="center" tal:condition="assigned_shifts">
         <tr>
             <th>Task</th>
-            <th>Order</th>
+            <th>Month</th>
             <th>Workgroup</th>
         </tr> 
         <tr class="list-content" tal:repeat="s assigned_shifts">
             <td>${s.task}</td>
-            <td>${s.order}</td>
+            <td>${s.month}/${s.year}</td>
             <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
         </tr>
     </table>
@@ -97,12 +97,12 @@
     <table class="list" align="center" tal:condition="worked_shifts">
         <tr>
             <th>Task</th>
-            <th>Order</th>
+            <th>Month</th>
             <th>Workgroup</th>
         </tr> 
         <tr class="list-content" tal:repeat="s worked_shifts">
             <td>${s.task}</td>
-            <td>${s.order}</td>
+            <td>${s.month}/${s.year}</td>
             <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
         </tr>
     </table>

@@ -19,10 +19,10 @@
 
     <h1>Editing Workgroup ${wg.name}</h1>
     
-    <tal:block tal:condition="wg.exists">
-        <a class="view_link" href="${portal_url}/workgroup/${wg.id}">view this group</a>
+    <div id="action-box" tal:condition="wg.exists">
+        <a class="view-link" href="${portal_url}/workgroup/${wg.id}">view this group</a>
         <input type="hidden" name="id" value="${wg.id}"></input>
-    </tal:block>    
+    </div>    
 
     <!-- Data -->
     <table class="list" width="100%" id="wg_table">
@@ -102,63 +102,6 @@
     </table>
 
 </form>
-
-
-<tal:block tal:condition="wg">
-  <tal:block tal:condition="wg.exists">
-    <h2>Tasks in this workgroups:</h2>
-
-    <table class="list" align="center">
-        <tr>
-            <th>Task</th>
-            <th>People</th>
-            <th>active</th>
-        </tr>
-        <!-- edit existing tasks form -->
-        <tr tal:repeat="t wg.tasks" class="list-content">
-            <form action="${portal_url}/workgroup/${wg.id}/edit" method="post">
-                <td tal:content="t"></td>
-                <td>
-                    <input type="text" name="task-no-people" value="${t.num_people}" size="2" maxlength="2"/>
-                    <button type="submit" value="set-task-no-people" name="action">set</button>  
-                </td>
-                <td>
-                    <tal:block tal:condition="t.active">
-                        <span>yes</span>
-                        <button type="submit" value="toggle-task-activity" name="action">no</button>   
-                    </tal:block>
-                    <tal:block tal:condition="not t.active">
-                        <span>no</span>
-                        <button type="submit" value="toggle-task-activity" name="action">yes</button>   
-                    </tal:block>
-                </td>
-                <td>
-                    <div align="center">
-                        <button type="image" title="delete" value="delete-task" name="action">
-                            <img src="${portal_url}/static/img/icons/delete.gif"/>
-                        </button>
-                        <input type="hidden" value="${t.id}" name="task_id"></input>
-                    </div>
-                </td>
-            </form>
-        </tr>
-        <!-- new task form -->
-        <tr class="list-content">
-            <form action="${portal_url}/workgroup/${wg.id}/edit" method="post">
-                <td>
-                    <input type="text" size="60" name="task_label"></input>
-                </td>
-                <td>
-                    <input type="text" name="task-no-people" value="1" size="2" maxlength="2"/>
-                </td>
-                <td>
-                    <button type="submit" class="add_button" value="add-task" name="action">Create new task</button>
-                </td>
-            </form>
-        </tr>
-    </table>
-  </tal:block>
-</tal:block>
 
 </div>
 

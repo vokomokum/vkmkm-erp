@@ -30,7 +30,7 @@ class TestMembers(VokoTestCase):
         request.matchdict = {'mem_id': 1}
         view_info = MemberView(None, request)()
         self.assertEqual(view_info['m'].mem_id, 1)
-        self.assertEqual(view_info['assigned_shifts'][0].task.label, 'do stuff')
+        self.assertEqual(view_info['assigned_shifts'][0].task, 'do stuff')
         self.assertEqual(len(view_info['worked_shifts']), 0)
 
     def test_new_view_empty(self):

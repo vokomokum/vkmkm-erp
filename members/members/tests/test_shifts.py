@@ -4,7 +4,6 @@ from members.tests.base import VokoTestCase
 from members.models.base import VokoValidationError
 from members.models.member import Member
 from members.models.workgroups import Workgroup
-from members.models.task import Task
 from members.models.shift import Shift
 from members.views.shift import NewShiftView, EditShiftView
 
@@ -14,8 +13,7 @@ class TestShifts(VokoTestCase):
     def get_shifts(self, mname=None, wgname=u'Besteling'):
         wg = self.DBSession.query(Workgroup).filter(Workgroup.name==wgname).first()
         peter = self.DBSession.query(Member).filter(Member.mem_fname==mname).first()
-        shifts = self.DBSession.query(Shift).filter(Shift.task_id == Task.id)\
-                                            .filter(Task.wg_id == wg.id)
+        shifts = self.DBSession.query(Shift).filter(Shift.wg_id == wg.id)
         if mname:
             shifts = shifts.filter(Shift.mem_id == peter.mem_id)
         return shifts
@@ -27,7 +25,7 @@ class TestShifts(VokoTestCase):
         self.assertEqual(shifts.count(), 1)
         shift = shifts.one()
         self.assertEqual(shift.mem_id, peter.mem_id)
-        self.assertEqual(shift.task.workgroup.id, 2)
+        self.assertEqual(shift.workgroup.id, 2)
         self.assertEqual(shift.state, 'assigned')
 
     def test_setstate_on_db(self):
@@ -47,7 +45,7 @@ class TestShifts(VokoTestCase):
         self.assertEqual(self.get_shifts().count(), 1)
         request = testing.DummyRequest()
         request.matchdict['wg_id'] = wg.id
-        request.params['task_id'] = wg.tasks[0].id
+        request.params['task'] = 'some task'
         request.params['year'] = 2012
         request.params['month'] = 6
         request.params['mem_id'] = hans.mem_id
@@ -63,12 +61,9 @@ class TestShifts(VokoTestCase):
         '''
         hans = self.DBSession.query(Member).filter(Member.mem_fname==u'Hans').first()
         wg = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Systems').first()
-        t = Task('do systems stuff', wg.id)
-        self.DBSession.add(t)
-        self.DBSession.flush()
         request = testing.DummyRequest()
         request.matchdict['wg_id'] = wg.id
-        request.params['task_id'] = t.id
+        request.params['task'] = 'do system stuff'
         request.params['year'] = 2012
         request.params['month'] = 6
         request.params['mem_id'] = hans.mem_id

@@ -25,8 +25,8 @@
 
     <h1>Editing Member Details</h1>
 
-    <div>
-        <a class="view_link" href="${portal_url}/member/${m.mem_id}">view this member</a>
+    <div id="action-box">
+        <a class="view-link" href="${portal_url}/member/${m.mem_id}">view this member</a>
     </div>
     <button tal:condition="m.exists and view.user_may_edit_admin_settings"
             name="action" type="submit" value="toggle-active"

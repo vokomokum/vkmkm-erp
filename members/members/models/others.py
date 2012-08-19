@@ -18,7 +18,7 @@ class Order(Base):
     but we use two fields as combined identification.
     Instead of simply querying all orders you can do this:
     session.query(distinct(Order.id, Order.label))
-    Example-use in views/workgroup
+    Not in use right now, but might be useful some day ...
     '''
     __tablename__ = 'wh_order'
 

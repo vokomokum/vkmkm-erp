@@ -153,8 +153,7 @@ class Member(Base):
 def get_member(session, request):
     '''
     Make a Member object, use member ID from request if possible.
-    Will return an empty object when no information is in the request,
-    or None if the information has no match.
+    Will return an empty object when no information is in the request.
     '''
     member = Member(fname=u'', prefix=u'', lname=u'')
     m_id = None

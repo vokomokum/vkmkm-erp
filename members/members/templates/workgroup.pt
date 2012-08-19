@@ -9,8 +9,10 @@
 
     <div class="wg-description" tal:content="wg.desc"></div>
  
-    <div tal:condition="python: view.user_is_wgleader or view.user.mem_admin">
-        <a class="edit_link" href="${portal_url}/workgroup/${wg.id}/edit">edit this group</a>
+    <div id="action-box">
+        <a tal:condition="python: view.user_is_wgleader or view.user.mem_admin"
+            class="edit-link" href="${portal_url}/workgroup/${wg.id}/edit">Edit this group</a>
+        <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}/${now.month}">See shifts</a>
     </div>
 
     <table class="list" align="center">
@@ -35,145 +37,10 @@
         </tr>
     </table>
 
-    
-    <h2>Shifts in month ${view.month}/${view.year}:</h2>
-    
-    <table class="list" align="center" tal:condition="view.user_is_wgleader">
-        <tr>
-            <th>Task</th>
-            <th>Member</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Action</th>
-        </tr>
-        <!-- edit existing shifts form -->
-        <tr tal:repeat="s shifts" class="list-content">
-            <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${s.id}" method="post">
-                <td>
-                    <select name="task_id">
-                        <tal:block tal:repeat="t view.tasks">
-                            <option tal:condition="t == s.task" value="${t.id}" selected="selected">${t}</option>
-                            <option tal:condition="t != s.task" value="${t.id}">${t}</option>
-                        </tal:block>
-                    </select>
-                </td>
-                <td>
-                    <select name="mem_id">
-                        <tal:block tal:repeat="m wg.members">
-                            <option tal:condition="m.mem_id == s.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
-                            <option tal:condition="m.mem_id != s.mem_id" value="${m.mem_id}">${m.fullname}</option>
-                        </tal:block>
-                    </select>
-                </td>
-                <td>
-                    <select name="state">
-                        <tal:block tal:repeat="st ['open', 'assigned', 'worked', 'no-show']">
-                            <option tal:condition="st == s.state" value="${st}" selected="selected">${st}</option>
-                            <option tal:condition="st != s.state" value="${st}">${st}</option>
-                        </tal:block>
-                    </select>
-                </td>
-                <td>
-                    <select name="day">
-                        <option value="--">--</option>
-                        <tal:block tal:repeat="d python:range(1,24,1)">
-                            <option tal:condition="d != s.day" value="${d}">${d}</option>
-                            <option tal:condition="d == s.day" value="${d}" selected="selected">${d}</option>
-                        </tal:block>
-                    </select>
-                    <select name="month">
-                        <tal:block tal:repeat="m python:range(1,12,1)">
-                            <option tal:condition="m != s.month" value="${m}">${m}</option>
-                            <option tal:condition="m == s.month" value="${m}" selected="selected">${m}</option>
-                        </tal:block>
-                    </select>
-                    <select name="year">
-                        <tal:block tal:repeat="y python:range(2012,2020,1)">
-                            <option tal:condition="y != s.year" value="${y}">${y}</option>
-                            <option tal:condition="y == s.year" value="${y}" selected="selected">${y}</option>
-                        </tal:block>
-                    </select>
-                </td>
-                <td>
-                    <div align="center">
-                        <button name="action" type="submit" value="save">
-                            <img src="${portal_url}/static/img/icons/save.png"/>
-                        </button>
-                        <button name="action" type="submit" value="delete">
-                            <img src="${portal_url}/static/img/icons/delete.gif"/>
-                        </button>
-                    </div>
-                </td>
-            </form>
-        </tr>
-        <!-- new shift form -->
-        <tr class="list-content">
-            <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post">
-                <td>
-                    <select name="task_id">
-                        <option value="--">--</option>
-                        <option tal:repeat="t view.tasks" value="${t.id}">${t}</option>
-                    </select>
-                </td>
-                <td>
-                    <select name="mem_id">
-                        <option value="--">--</option>
-                        <option tal:repeat="m wg.members" value="${m.mem_id}">${m.fullname}</option>
-                    </select>
-                </td>
-                <td>open</td>
-                <td>
-                    <select name="day">
-                        <option value="--" selected="selected">--</option>
-                        <option tal:repeat="d python:range(1,24,1)" value="${d}">${d}</option>
-                    </select>
-                    <select name="month">
-                        <tal:block tal:repeat="m python:range(1,12,1)">
-                            <option tal:condition="m != view.month" value="${m}">${m}</option>
-                            <option tal:condition="m == view.month" value="${m}" selected="selected">${m}</option>
-                        </tal:block>
-                    </select>
-                    <select name="year">
-                        <tal:block tal:repeat="y python:range(2012,2020,1)">
-                            <option tal:condition="y != view.year" value="${y}">${y}</option>
-                            <option tal:condition="y == view.year" value="${y}" selected="selected">${y}</option>
-                        </tal:block>
-                    </select>
-                </td>
-                <td>
-                    <input type="submit" value="Create new shift"/>
-                </td>
-            </form>
-        </tr>
-    </table>
-    <table class="list" align="center" tal:condition="not view.user_is_wgleader">
-        <tr>
-            <th>Task</th>
-            <th>Member</th>
-            <th>Status</th>
-        </tr>
-        <tr class="list-content" tal:repeat="s shifts">
-            <td tal:content="s.task"></td>
-            <td><a tal:content="s.member.fullname" href="${portal_url}/member/${s.member.mem_id}"></a></td>
-            <td tal:content="s.state"></td>
-        </tr>
-    </table>
-
-    <div id="shift-month-selector">Select another month:
-        <form action="${portal_url}/workgroup/${wg.id}" method="post">
-            <select name="month">
-                <option tal:repeat="m python:range(1,12,1)"
-                       value="${m}" select="${view.month}">${m}</option>
-            </select>
-            <select name="year">
-                <option tal:repeat="y python:range(2012,2020,1)"
-                                value="${y}" select="${view.year}">${y}</option>
-            </select>
-            <input type="submit" name="action" value="show"/>
-        </form>
-
-
+    <div>
     </div>
+    <!-- TODO we have some space for meta-info here, maybe stats ... -->
+
         </div>
     </div>
 </html>

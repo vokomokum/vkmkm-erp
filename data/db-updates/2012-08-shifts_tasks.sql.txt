@@ -1,0 +1,14 @@
+-- this update removes the task table and we now store the task directly in the shift
+
+ALTER TABLE wg_shifts ADD COLUMN wg_id INTEGER DEFAULT NULL;
+ALTER TABLE ONLY wg_shifts ADD CONSTRAINT wg_shifts_wg_id_fkey FOREIGN KEY (wg_id) REFERENCES workgroups(id);
+
+-- now insert some dummy wg ID for the ones we already have
+UPDATE wg_shifts SET wg_id = (SELECT min(id) FROM workgroups);
+-- such that this works
+ALTER TABLE wg_shifts ALTER COLUMN wg_id SET NOT NULL;
+ALTER TABLE wg_shifts ADD COLUMN task VARCHAR(255);
+ 
+DROP table tasks CASCADE;
+ALTER TABLE wg_shifts DROP COLUMN task_id;
+

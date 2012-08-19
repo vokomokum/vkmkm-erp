@@ -11,11 +11,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError, OperationalError
 
 from members import models
-from members.models.others import Order
 from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
-from members.models.task import Task
 from members.utils import mail
 from members.utils.misc import get_settings
 from members.utils.md5crypt import md5crypt
@@ -40,6 +38,8 @@ class VokoTestCase(unittest.TestCase):
         if db_type == 'postgres':
             #TODO: where to get setting from? maybe:
             # from paste.deploy.loadwsgi import appconfig
+            from members.utils.misc import get_settings
+            settings = get_settings()
             # settings = appconfig('config:' + os.path.join(here, '../../', 'development.ini'))
             cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
             cls.Session = sessionmaker()
@@ -91,7 +91,7 @@ class VokoTestCase(unittest.TestCase):
         2 workgroups, Systems and Besteling.
         Peter is the only member in Systems.
         Both are members in Bestel, with Hans leading that one.
-        Bestel has a task ('do stuff') with a shift of Peter.
+        Bestel has a shift ('do stuff') for Peter.
         '''
         m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
         m1.mem_email = 'peter@dePan.nl'
@@ -110,10 +110,8 @@ class VokoTestCase(unittest.TestCase):
         wg2.members.append(m1)
         wg2.members.append(m2)
         wg2.leaders.append(m2)
-        t = Task('do stuff', wg2.id)
-        self.DBSession.add(t)
         self.DBSession.flush()
-        s = Shift(t.id, 2012, 6, mem_id=m1.mem_id)
+        s = Shift(1, 'do stuff', 2012, 6, mem_id=m1.mem_id)
         self.DBSession.add(s)
         self.DBSession.flush()
 
