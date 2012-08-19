@@ -35,8 +35,9 @@ class TestMembers(VokoTestCase):
 
     def test_new_view_empty(self):
         request = testing.DummyRequest()
-        view_info = NewMemberView(None, request)()
-        self.assertEquals(view_info['m'].mem_fname, '')
+        view = NewMemberView(None, request)
+        view.user = self.get_peter()
+        self.assertEquals(view()['m'].mem_fname, '')
 
     def test_view_noexist(self):
         request = testing.DummyRequest()

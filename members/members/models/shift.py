@@ -50,7 +50,7 @@ class Shift(Base):
         self.year = year
 
     def __repr__(self):
-        return "Shift - workgroup '%s' on '%d-%d-%d', by member %s"\
+        return "Shift - workgroup '%s' on '%s-%d-%d', by member %s"\
                " in the '%s'-group [state is %s]" %\
                 (str(self.workgroup), str(self.day), self.month, self.year, self.member.fullname,
                  self.workgroup, self.state)
@@ -82,11 +82,11 @@ class Shift(Base):
         if self.task == "":
             raise VokoValidationError('The task should not be empty.')
         if self.state in ['assigned', 'worked', 'no-show']:
-            if self.mem_id == '--':
-                raise VokoValidationError('Please select a member.')
+            if not self.mem_id or self.mem_id == '--':
+                raise VokoValidationError('Please select a member. We need to know a member for state "{}".'.format(self.state))
             m = DBSession.query(Member).get(self.mem_id)
             if not m:
-                raise VokoValidationError('No member specified.')
+                raise VokoValidationError('No member could be found for this ID.')
             if not m in self.workgroup.members:
                 raise VokoValidationError('The member of this shift (%s) is not '\
                         'a member in the workgroup %s.' % (m, self.workgroup))

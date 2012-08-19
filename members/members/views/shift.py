@@ -209,7 +209,7 @@ class EditShiftView(BaseShiftView):
         elif action == 'delete':
             if self.user in wg.leaders:
                 db_session.delete(shift)
-                return redir('Deleted shift')
+                return redir('Deleted shift.')
             return redir('You are not allowed to delete a shift.')
 
 

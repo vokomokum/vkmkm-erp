@@ -12,10 +12,10 @@ class TestShifts(VokoTestCase):
 
     def get_shifts(self, mname=None, wgname=u'Besteling'):
         wg = self.DBSession.query(Workgroup).filter(Workgroup.name==wgname).first()
-        peter = self.DBSession.query(Member).filter(Member.mem_fname==mname).first()
         shifts = self.DBSession.query(Shift).filter(Shift.wg_id == wg.id)
         if mname:
-            shifts = shifts.filter(Shift.mem_id == peter.mem_id)
+            member = self.DBSession.query(Member).filter(Member.mem_fname==mname).first()
+            shifts = shifts.filter(Shift.mem_id == member.mem_id)
         return shifts
 
     def test_get_data_from_db(self):
@@ -48,7 +48,7 @@ class TestShifts(VokoTestCase):
         request.params['task'] = 'some task'
         request.params['year'] = 2012
         request.params['month'] = 6
-        request.params['mem_id'] = hans.mem_id
+        request.params['day'] = 5
         view = NewShiftView(None, request)
         view.user = self.get_peter()
         view()
@@ -72,32 +72,39 @@ class TestShifts(VokoTestCase):
         self.assertEqual(shifts.count(), 0)
 
     def test_delete(self):
-        shift = self.get_shifts(mname=u'Peter').one()
-        wg = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Besteling').first()
+        ''' Hans is wg leader, only he can delete peters shift '''
+        pshifts = self.get_shifts(mname=u'Peter')
+        self.assertEquals(pshifts.count(), 1)
+        shift = pshifts.one()
+        wg = shift.workgroup
         request = testing.DummyRequest()
         request.matchdict = {'wg_id': wg.id}
         request.matchdict['s_id'] = shift.id
-        request.params['action'] = 'delete'
+        request.matchdict['action'] = 'delete'
         view = EditShiftView(None, request)
-        view.user = self.get_peter()
+        view.user = self.get_hans()
         view()
         self.assertEquals(self.get_shifts(mname=u'Peter').count(), 0)
 
     def test_toggle_state(self):
+        ''' set states of a shift (only Hans the wg-leader can do it)'''
         shift = self.get_shifts(mname=u'Peter').one()
         self.assertEquals(shift.state, 'assigned')
         wg = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Besteling').first()
         request = testing.DummyRequest()
         request.matchdict = {'wg_id': wg.id}
         request.matchdict['s_id'] = shift.id
-        request.params['action'] = 'save'
+        request.matchdict['action'] = 'setstate'
         request.params['state'] = 'worked'
         view = EditShiftView(None, request)
         view.user = self.get_peter()
         view()
-        self.assertEquals(shift.state, 'worked')
+        self.assertEquals(shift.state, 'assigned')  # peter can't do it
+        view.user = self.get_hans()
+        view()
+        self.assertEquals(shift.state, 'worked')  # hasn can
         request.params['state'] = 'assigned'
-        view.user = self.get_peter()
+        view.user = self.get_hans()
         view()
         self.assertEquals(shift.state, 'assigned')
         request.params['state'] = 'invalid-state'

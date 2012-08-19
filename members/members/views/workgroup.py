@@ -109,7 +109,7 @@ class EditWorkgroupView(BaseView):
                 shifts = session.query(Shift)\
                                 .filter(Shift.wg_id == wg.id).all()
                 if len(shifts) == 0:
-                    session.delete(task)
+                    session.delete(wg)
                 else:
                     raise Exception('Cannot delete workgroup, as there '\
                                     'are shifts in the history for this '\

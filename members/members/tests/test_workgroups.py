@@ -31,7 +31,6 @@ class TestWorkgroups(VokoTestCase):
         request.matchdict = {'wg_id': 2}
         view_info = WorkgroupView(None, request)()
         self.assertEqual(view_info['wg'].id, 2)
-        self.assertEqual(view_info['shifts'][0].task, 'do stuff')
 
     def test_new_view(self):
         request = testing.DummyRequest()
