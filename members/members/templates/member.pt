@@ -84,7 +84,7 @@
         </tr> 
         <tr class="list-content" tal:repeat="s assigned_shifts">
             <td>${s.task}</td>
-            <td>${s.month}/${s.year}</td>
+            <td><a href="${portal_url}/workgroup/${s.workgroup.id}/shifts/${s.year}/${s.month}">${s.month}/${s.year}</td>
             <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
         </tr>
     </table>
@@ -102,7 +102,7 @@
         </tr> 
         <tr class="list-content" tal:repeat="s worked_shifts">
             <td>${s.task}</td>
-            <td>${s.month}/${s.year}</td>
+            <td><a href="${portal_url}/workgroup/${s.workgroup.id}/shifts/${s.year}/${s.month}">${s.month}/${s.year}</td>
             <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
         </tr>
     </table>
