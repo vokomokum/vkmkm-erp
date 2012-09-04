@@ -8,7 +8,7 @@ $VIRPY/bin/pip install fabric
 
 Then it suffices to issue 
 fab develop         # develop the webapp locally
-fab run             # run local dev server
+fab serve           # run local dev server
 fab test            # run test
 fab commit          # commit changed code (interactively)
 fab push            # push commits
@@ -26,7 +26,7 @@ def develop():
     ''' develop the webapp locally '''
     local('$VIRPY/bin/python setup.py develop')
 
-def run():
+def serve():
     ''' run local dev server '''
     local('$VIRPY/bin/pserve development.ini --reload')
 
@@ -66,13 +66,15 @@ def deploy(user='you'):
     deploy latest code on our server and set it 'live'
     (you need admin rights for this on the server)
     '''
-    # Note: On our current server, we have to prepend "sudo" if we're not root
+    test(standalone=False)
+    env.user = user
     code_dir = '/var/voko/git-repo'
     # this is only useful when we'd run multiple server nodes
     with settings(warn_only=True):
-        if run(sudo("test -d {}".format(code_dir))).failed:
-            run(sudo("git clone git@git.assembla.com:vokomokum.git {}".format(code_dir)))
+        if run("test -d {}".format(code_dir)).failed:
+            sudo("git clone git@git.assembla.com:vokomokum.git {}".\
+                     format(code_dir), user=user)
     with cd(code_dir):
-        run(sudo("./dev-tools/update-members-site-from-git"))
-        run(sudo("touch /var/www/members/pyramid.wsgi"))
+        sudo("./dev-tools/update-members-site-from-git")
+        sudo("touch /var/www/members/pyramid.wsgi", user=user)
         #run(sudo("/etc/init.d/apache2 restart"))
