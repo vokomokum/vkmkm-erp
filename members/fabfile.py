@@ -65,6 +65,7 @@ def deploy(user='you'):
     '''
     deploy latest code on our server and set it 'live'
     (you need admin rights for this on the server)
+    TODO: do this on test or production instance ...
     '''
     test(standalone=False)
     env.user = user

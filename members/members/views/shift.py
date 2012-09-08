@@ -30,14 +30,14 @@ def fill_shift_from_request(shift, request):
         for attr in ['wg_id', 'month', 'year']:
             if attr in request.params:
                 shift.__setattr__(attr, int(request.params[attr]))
-        for attr in ['mem_id', 'day']:
-            if attr in request.params:
-                val = request.params[attr]
-                if val == '--':
-                    val = None
-                else:
-                    val = int(val)
-                shift.__setattr__(attr, val)
+        if 'mem_id' in request.params:
+            mem_id = request.params['mem_id']
+            if not mem_id == '--':
+                shift.mem_id = None
+            else:
+                shift.mem_id = int(mem_id)
+        if 'day' in request.params:
+            shift.day = request.params['day']  # brutally using the strings here
     return shift
 
 
@@ -84,7 +84,7 @@ class NewShiftView(BaseShiftView):
                 db_session.add(s)
                 self.added_shifts += 1
         day = params['day']
-        if day == '--':
+        if not str(day).isdigit():
             day = 1
         else:
             day = int(day)
@@ -100,7 +100,7 @@ class NewShiftView(BaseShiftView):
             udate = datetime.datetime(int(params['until_year']),
                                       int(params['until_month']), day)
             # not possible for any-day shifts
-            if params['day'] == '--':
+            if params['day'] == 'any day':
                 return self.redir_to_shiftlist(wg, sdate.year, sdate.month, 
                         'Cannot repeat shift with with no day set.')
             if repeat == 'weekly':
@@ -109,7 +109,6 @@ class NewShiftView(BaseShiftView):
                 pass
             elif repeat == 'monthly':
                 for year in xrange(sdate.year, udate.year + 1):
-                    print("year: {}".format(year))
                     smonth = 1
                     if year == sdate.year:
                         smonth = sdate.month
@@ -192,7 +191,7 @@ class EditShiftView(BaseShiftView):
             if self.user in wg.leaders:
                 if not 'day' in self.request.params:
                     return dict(msg='No day given.')
-                shift.day = int(self.request.params['day'])
+                shift.day = self.request.params['day']
                 shift.validate()
                 return redir('Changed day of shift to {}.'.format(shift.day))
             return redir('You are not allowed to set the day.')
@@ -227,6 +226,7 @@ class ListShiftView(BaseView):
         self.user_is_wgleader = self.user in wg.leaders
 
         # we view shifts per-month here
+        # use parameters to determine month, default is current month
         now = datetime.datetime.now()
         self.month = now.month
         self.year = now.year
@@ -234,18 +234,24 @@ class ListShiftView(BaseView):
             self.month = int(self.request.matchdict['month'])
         if 'year' in self.request.matchdict:
             self.year = int(self.request.matchdict['year'])
-        sdate = datetime.date(self.year, self.month, now.day)
+        # we take today's day for simplicity
+        schedule_date = datetime.date(self.year, self.month, now.day)
         self.days_in_month = monthrange(self.year, self.month)[1]
         lmdate = now - datetime.timedelta(days=-self.days_in_month)
         dipm = monthrange(lmdate.year, lmdate.month)[1]
-        one_month_back = sdate + datetime.timedelta(days=-dipm)
-        one_month_ahead = sdate + datetime.timedelta(days=self.days_in_month)
+        one_month_back = schedule_date + datetime.timedelta(days=-dipm)
+        one_month_ahead = schedule_date\
+                          + datetime.timedelta(days=self.days_in_month)
         self.prev_month = one_month_back.month
         self.prev_year = one_month_back.year
         self.next_month = one_month_ahead.month
         self.next_year = one_month_ahead.year
-        self.days = ['any day'] + range(1, self.days_in_month+1)
-        self.month_is_not_in_past = sdate.year >= now.year or sdate.month >= now.month 
+        q = """SELECT descr FROM shift_days_descriptions;""" 
+        day_literals = [i[0] for i in list(db_session.execute(q))]
+        self.days = day_literals + range(1, self.days_in_month + 1)
+        self.month_lies_in_past = schedule_date.year < now.year\
+                                    or (schedule_date.year == now.year 
+                                        and schedule_date.month < now.month) 
         shifts = db_session.query(Shift).filter(Shift.wg_id == wg.id)\
                                      .filter(Shift.month == self.month)\
                                      .filter(Shift.year == self.year)\

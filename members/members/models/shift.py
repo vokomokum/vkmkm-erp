@@ -28,7 +28,7 @@ class Shift(Base):
     mem_id = Column(Integer, ForeignKey('members.mem_id'), nullable=True)
     state = Column(Unicode(255), default=u'open')
     task = Column(Unicode(255), default=u'')
-    day = Column(Integer, nullable=True)
+    day = Column(Unicode(255), nullable=True)
     month = Column(Integer, nullable=False)
     year = Column(Integer, nullable=False)
 
@@ -63,18 +63,23 @@ class Shift(Base):
     def is_locked(self):
         '''
         Only the wg leader can sign off a member from a locked shift
+        TODO: now all shifts w/o a (numeric) day are locked 1 week before the
+              month starts, probably we want to change that, but need to discuss
         '''
+        day = self.day
+        if not self.day or not str(self.day).isdigit():
+            day = 1
         now = datetime.now()
-        #TODO: now all shifts w/o a day are locked 1 week before the month starts,
-        #      probably we want to change that, but need to discuss
-        sdate = datetime(self.year, self.month, self.day or 1)
+        sdate = datetime(self.year, self.month, day)
         return self.day and (sdate - now).days < 7
 
     def validate(self):
         '''
         validate if this object is valid, raise VokoValidationError otherwise
         '''
-        tmp_day = self.day or 1
+        tmp_day = self.day
+        if not self.day or not str(self.day).isdigit():
+            tmp_day = 1
         try:
             datetime(self.year, self.month, tmp_day)
         except ValueError, e:
