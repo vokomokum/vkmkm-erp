@@ -152,24 +152,35 @@
                   <label for="repeat">
                     Do this
                   </label>
-                  <select name="repeat">
-                    <option value="once">once</option>
+                  <script language="javascript">
+                    function toggleUntilSpec(){
+                        if ($('#repeat').val() == 'once')
+                            $('#until-spec').hide();
+                        else 
+                            $('#until-spec').show();
+                    }
+                  </script>
+                  <select id="repeat" name="repeat" 
+                      onchange="javascript:toggleUntilSpec();">
+                    <option value="once" selected="selected">once</option>
                     <option value="weekly">weekly</option>
                     <option value="bi-weekly">bi-weekly</option>
                     <option value="monthly">monthly</option>
                   </select>
-                  <span class="small">until</span>
-                  <select name="until_month">
-                    <tal:block tal:repeat="m python:xrange(1, 13, 1)">
-                        <option tal:condition="m == view.month" value="${m}" selected="selected">${m}</option>
-                        <option tal:condition="m != view.month" value="${m}">${m}</option>
-                    </tal:block>
-                  </select>
-                  <span>/</span>
-                  <select name="until_year">
-                    <option tal:repeat="y python:xrange(view.year,view.year+3)" value="${y}">${y}</option>
-                  </select>
-                  <!--span class="small">You can automatically create shifts that recur over time.</span-->
+                  <span id="until-spec" style="display:none;">
+                      <label for="until_month">until</label>
+                      <select name="until_month">
+                        <tal:block tal:repeat="m python:xrange(1, 13, 1)">
+                            <option tal:condition="m == view.month" value="${m}" selected="selected">${m}</option>
+                            <option tal:condition="m != view.month" value="${m}">${m}</option>
+                        </tal:block>
+                      </select>
+                      <span>/</span>
+                      <select name="until_year">
+                        <option tal:repeat="y python:xrange(view.year,view.year+3)" value="${y}">${y}</option>
+                      </select>
+                      <!--span class="small">You can automatically create shifts that recur over time.</span-->
+                  </span>
               </div>
               <button type="submit">Create</button>
       </form>

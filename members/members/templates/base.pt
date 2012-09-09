@@ -9,6 +9,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="shortcut icon" href="${portal_url}/static/img/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/static/members.css" />
+        <script type="text/javascript" src="${portal_url}/static/jquery.js"></script>
         <!-- Internet Explorer Fixes -->
         <tal:iefixstart replace="structure string:&lt;!--[if IE]&gt;" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/ie.css" />
