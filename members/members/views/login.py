@@ -45,7 +45,7 @@ class Login(BaseView):
                     else:
                         message += 'Note that the account of {} has been '\
                                    ' set to inactive. Please contact '\
-                                   ' members@vokomokum.nl.'.format(member)
+                                   ' membership@vokomokum.nl.'.format(member)
                 else:
                     message += ' The password is not correct.'
             else:
