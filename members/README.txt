@@ -8,8 +8,8 @@ see INSTALL.txt
 Starting the internal webserver 
 --------------------------------
 (use for development)
-./run
+fab serve
 
 Running tests
 -------------------------------
-./test
+fab test
