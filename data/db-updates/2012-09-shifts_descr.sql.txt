@@ -1,4 +1,5 @@
 CREATE TABLE shift_days_descriptions (id int NOT NULL, descr varchar(255), PRIMARY KEY (id));
+ALTER TABLE shift_days_descriptions OWNER TO apache;
 INSERT INTO shift_days_descriptions VALUES (0, 'any day');
 INSERT INTO shift_days_descriptions VALUES (1, 'pick-up day');
 INSERT INTO shift_days_descriptions VALUES (2, 'day before pick-up day');
