@@ -168,8 +168,11 @@ class EditShiftView(BaseShiftView):
                 member = get_member(db_session, self.request)
             if member: 
                 shift.member = member
-                shift.state = 'assigned' 
-                return redir('{} has been signed up for the shift.'.format(shift.member))
+                shift.state = 'assigned'
+                # not exactly perfect way to make Ascii from unicode,
+                # we might want to use the Unidecode module (see on pypi)
+                name = shift.member.fullname.encode('ascii', 'replace')
+                return redir(u'{} has been signed up for the shift.'.format(name))
             else:
                 if shift.is_locked and not self.user in wg.leaders:
                     return redir('Shift is already locked. Ask your workgroup admin for help.')
