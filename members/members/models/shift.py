@@ -70,7 +70,7 @@ class Shift(Base):
         if not self.day or not str(self.day).isdigit():
             day = 1
         now = datetime.now()
-        sdate = datetime(self.year, self.month, day)
+        sdate = datetime(self.year, self.month, int(day))
         return self.day and (sdate - now).days < 7
 
     def validate(self):
@@ -81,7 +81,7 @@ class Shift(Base):
         if not self.day or not str(self.day).isdigit():
             tmp_day = 1
         try:
-            datetime(self.year, self.month, tmp_day)
+            datetime(self.year, self.month, int(tmp_day))
         except ValueError, e:
             raise VokoValidationError('The date of this shift is not correct: %s.' % e)
         if self.task == "":
