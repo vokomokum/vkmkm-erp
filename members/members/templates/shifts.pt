@@ -44,12 +44,13 @@
                 <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setday" method="post">
                     <select onchange="this.form.submit()" name="day">
                         <tal:block repeat="d view.days">
-                            <option tal:condition="d != shift.day" value="${d}">${d}</option>
-                            <option tal:condition="d == shift.day" selected="selected" value="${d}">${d}</option>
+                            <option tal:condition="python: str(d) != str(shift.day)" value="${d}">${d}</option>
+                            <option tal:condition="python: str(d) == str(shift.day)" selected="selected" value="${d}">${d}</option>
                         </tal:block> 
                    </select>
                 </form>
             </td>
+            <!-- Task -->
             <td align="center">
                 <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/settask" method="post"
                        tal:condition="view.user_is_wgleader or view.user.mem_admin">
@@ -60,6 +61,7 @@
                     ${shift.task}
                 </span>
             </td>
+            <!-- Member -->
             <td>
                 <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setmember" method="post">
                     <tal:block tal:condition="view.user_is_wgleader or view.user.mem_admin">
@@ -88,6 +90,7 @@
                     </tal:block>
                 </form>
             </td>
+            <!-- State -->
             <td align="center">
                 ${shift.state}
                 <form tal:condition="view.user_is_wgleader or view.user.mem_admin"
@@ -102,6 +105,7 @@
                     </button>
                 </form>
             </td>
+            <!-- Delete-Button -->
             <td>
                 <a href="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/delete"
                     tal:condition="view.user_is_wgleader or view.user.mem_admin">
