@@ -48,11 +48,12 @@ def groupfinder(memid, request):
     if context.__class__ == Workgroup:
         if 'wg_id' in request.matchdict:
             wg_id = request.matchdict['wg_id']
-            wg = session.query(Workgroup).get(wg_id)
-            if memid in [m.mem_id for m in wg.leaders]:
-                groups.append('group:wg-leaders')
-            if memid in [m.mem_id for m in wg.members]:
-                groups.append('group:wg-members')
+            if not wg_id == 'new':
+                wg = session.query(Workgroup).get(wg_id)
+                if memid in [m.mem_id for m in wg.leaders]:
+                    groups.append('group:wg-leaders')
+                if memid in [m.mem_id for m in wg.members]:
+                    groups.append('group:wg-members')
     admins = session.query(Member).filter(Member.mem_admin == True).all()
     if memid in [m.mem_id for m in admins]:
         groups.append('group:admins')

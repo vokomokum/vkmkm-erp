@@ -54,13 +54,13 @@
         <td align="left" width="40%"> <span class="warn">*</span> Email:</td>
       </tr>
       <tr class="list-content">
-        <td><input type="text" align="left" size="20" name="mem_fname"
+        <td><input type="text" align="left" size="15" name="mem_fname"
                    value="${m.mem_fname}" maxlength="20"></input></td> 
-        <td><input type="text" align="left" size="10" name="mem_prefix"
+        <td><input type="text" align="left" size="5" name="mem_prefix"
                    value="${m.mem_prefix}" maxlength="10"></input></td>
-        <td><input type="text" align="left" size="20" name="mem_lname"
+        <td><input type="text" align="left" size="18" name="mem_lname"
                    value="${m.mem_lname}" maxlength="20"></input></td>
-        <td><input type="text" align="left" size="50" name="mem_email"
+        <td><input type="text" align="left" size="35" name="mem_email"
                    value="${m.mem_email}" maxlength="50"></input></td>
       </tr>
     </table>
@@ -80,14 +80,14 @@
       </tr>
       <tr class="list-content">
         <td><input type="text" align="left" size="40" name="mem_street"
-                 Value="${m.mem_street}" maxlength="60"></input></td>
+                 Value="${m.mem_street}" maxlength="30"></input></td>
         <td><input type="text" align="left" size="7" name="mem_house"
                  Value="${m.mem_house}" maxlength="7"></input></td>
         <td><input type="text" align="left" size="7" name="mem_flatno"
                  Value="${m.mem_flatno}" maxlength="7"></input></td>
         <td><input type="text" align="left" size="7" name="mem_postcode"
                  Value="${m.mem_postcode}" maxlength="7"></input></td>
-        <td><input type="text" align="left" size="30" name="mem_city"
+        <td><input type="text" align="left" size="15" name="mem_city"
                 Value="${m.mem_city}" maxlength="60"></input></td>
       </tr>
     </table>
