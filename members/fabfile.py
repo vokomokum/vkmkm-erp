@@ -68,6 +68,7 @@ def deploy(user='you'):
     TODO: do this on test or production instance ...
     '''
     test(standalone=False)
+    push()
     env.user = user
     code_dir = '/var/voko/git-repo'
     # this is only useful when we'd run multiple server nodes
