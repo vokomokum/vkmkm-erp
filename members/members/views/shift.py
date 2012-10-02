@@ -246,7 +246,7 @@ class ListShiftView(BaseView):
         self.prev_year = one_month_back.year
         self.next_month = one_month_ahead.month
         self.next_year = one_month_ahead.year
-        q = """SELECT descr FROM shift_days_descriptions;""" 
+        q = """SELECT descr FROM shift_days_descriptions ORDER BY id;""" 
         day_literals = [i[0] for i in list(db_session.execute(q))]
         self.days = day_literals + range(1, self.days_in_month + 1)
         self.month_lies_in_past = schedule_date.year < now.year\
