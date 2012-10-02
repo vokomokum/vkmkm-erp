@@ -77,16 +77,14 @@
                     <tal:block tal:condition="python:not(view.user_is_wgleader or view.user.mem_admin)">
                         ${shift.member}
                         <span tal:condition="not:shift.member">No one yet</span>
-                        <tal:block tal:condition="not:shift.is_locked">
-                            <button tal:condition="shift.state == 'open'"
-                                type="submit" name="mem_id" value="${view.user.mem_id}">
-                                Sign up
-                            </button>
-                            <button tal:condition="shift.mem_id == view.user.mem_id and shift.state == 'assigned'"
-                                type="submit" name="mem_id" value="--">
-                                Sign out
-                            </button>
-                        </tal:block>
+                        <button tal:condition="shift.state == 'open'"
+                            type="submit" name="mem_id" value="${view.user.mem_id}">
+                            Sign up
+                        </button>
+                        <button tal:condition="shift.mem_id == view.user.mem_id and shift.state == 'assigned' and not(shift.is_locked)"
+                            type="submit" name="mem_id" value="--">
+                            Sign out
+                        </button>
                     </tal:block>
                 </form>
             </td>
@@ -94,7 +92,6 @@
                 ${shift.state}
                 <form tal:condition="view.user_is_wgleader or view.user.mem_admin"
                        action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setstate" method="post">
-                  <tal:block tal:condition="not:shift.is_locked">
                     <button name="state" onclick="this.form.submit()"
                             tal:condition="python:shift.state in ['assigned','noshow'] " value="worked">
                         Worked
@@ -103,7 +100,6 @@
                             tal:condition="shift.state == 'assigned'" value="noshow">
                         No-show!
                     </button>
-                  </tal:block>
                 </form>
             </td>
             <td>
@@ -163,8 +159,8 @@
                   <select id="repeat" name="repeat" 
                       onchange="javascript:toggleUntilSpec();">
                     <option value="once" selected="selected">once</option>
-                    <option value="weekly">weekly</option>
-                    <option value="bi-weekly">bi-weekly</option>
+                    <!--option value="weekly">weekly</option>
+                    <option value="bi-weekly">bi-weekly</option-->
                     <option value="monthly">monthly</option>
                   </select>
                   <span id="until-spec" style="display:none;">
