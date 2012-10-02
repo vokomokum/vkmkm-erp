@@ -4,25 +4,28 @@ body {
   font-family: Verdana, Arial, Helvetica, SunSans-Regular, Sans-Serif;
   color:#231f20;  
   padding: 30px;
-  margin.0;
-  text-align: center;
+  margin: 0;
 }
 
 /* container: 1 flexible box in the middle, centered 
    container layout from intensivstation.ch 
 */
 #container { 
-    width: 800px;
-    background: #ffffff url(img/logo-vokomokum.jpg) no-repeat;
-    background-position: 5px 5px;
-	border: 1px solid #04176D;
-	padding: 5px;
-    margin: 0 auto;
+  width: 800px;
+  background: #ffffff url(img/logo-vokomokum.jpg) no-repeat;
+  background-position: 5px 5px;
+  border: 1px solid #04176D;
+  padding: 5px;
+  margin: 0 auto;
+}
+
+h1, h2, h3, h4, form, th, tr, #menu-items {
+  text-align: center;
 }
 
 p, h1, pre {
-  margin: 0px; 
-  padding: 10px; 
+    margin: 0px; 
+    padding: 10px; 
 }
 
 .warn {
@@ -35,6 +38,7 @@ p, h1, pre {
 #title {
   font-size: 50px;
   text-transform:uppercase;
+  text-align: center;
   color: #04176D;
   margin-top: 10px;
   margin-bottom: 25px;
@@ -111,6 +115,7 @@ h1 {
 #footer{
     border-top: 1px solid gray;
     padding-top: 10px;
+    text-align: center;
 }
 
 /* links */ 
@@ -157,6 +162,12 @@ a:hover {
     background: #ffffff url(img/icons/delete.gif) no-repeat;
     background-position: 4px 3px;
     padding: 2px 24px;
+}
+
+.reset-link {
+    background: #ffffff url(img/icons/reset.jpg) no-repeat;
+    background-position: 4px 3px;
+    padding: 4px 28px;
 }
 
 .view-link {

@@ -15,8 +15,9 @@
                     <th width="20%">
                         <a href="${portal_url}/workgroups?order_dir=${order_name_choice}">Name</a>
                     </th>
-                    <th width="20%">Admin</th>
-                    <th width="65%">Description</th>
+                    <th width="20%">Coordinator(s)</th>
+                    <th width="55%">Description</th>
+                    <th width="10%">Member count</th>
                 </tr>
                 <tr tal:repeat="wg workgroups" class="list-content">
                     <td>
@@ -29,6 +30,7 @@
                         </tal:block>
                     </td>
                     <td tal:content="wg.desc"></td>
+                    <td tal:content="wg.headcount"></td>
                 </tr>
             </table>
 

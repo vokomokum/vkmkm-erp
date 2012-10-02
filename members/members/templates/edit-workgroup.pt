@@ -36,12 +36,12 @@
         <td colspan="2"></td> 
       </tr>
       <tr>
-        <th align="center" width="50%" colspan="2">Admins:</th>
+        <th align="center" width="50%" colspan="2">Coordinators:</th>
         <th align="center" width="50%" colspan="2">Members:</th>
       </tr>
       <tr class="list-content">
         <td colspan="4" align="center">
-            <small>Hold Ctrl (Mac:Cmd) while (de)selecting members.</small>
+            <small class="warn">Always hold Ctrl (Mac:Cmd) while (and before) you (de)select members.</small>
         </td>
       </tr>
       <tr class="list-content">

@@ -55,8 +55,8 @@ class ResetPasswordRequestView(BaseView):
                 member = None
         if member:
             send_pwdreset_request(member, self.request.application_url)
-            return dict(msg=u'A reset link has been sent to your email'\
-                             ' address ({!s}).'.format(member.mem_email),
+            return dict(msg=u'A reset link has been sent to the email'\
+                             ' address {!s}.'.format(member.mem_email),
                         m=member, form=None, key=None)
         if (('email' in p and p['email'] != "") or
             ('mem_id' in p and p['mem_id'] != "")):
@@ -72,8 +72,8 @@ class ResetPasswordView(BaseView):
 
     def __call__(self):
         '''
-        If it member is identifiable, send them an email with a link
-        If correct key (from sent link) is used to come here, then we reset
+        Actually reset the password, if correct key (from sent link) 
+        is used to come here and member is identifiable from request.
         '''
         self.login_necessary = False
         session = DBSession()

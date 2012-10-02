@@ -9,6 +9,7 @@
 
     <div id="action-box">
         <a tal:condition="view.user_can_edit" class="edit-link" href="${portal_url}/member/${m.mem_id}/edit">edit this member</a>
+        <a tal:condition="view.user_can_edit" class="reset-link" href="${portal_url}/reset-pwd?mem_id=${m.mem_id}">send reset-password email</a>
     </div>
    
     <table class="list" width="100%">
@@ -52,8 +53,8 @@
 
     <table class="list" width="100%">
         <tr>
-            <th width="50%">Member</th>
-            <th width="50%">leading</th>
+            <th width="50%">... is a member in:</th>
+            <th width="50%">... coordinates:</th>
         </tr>
         <tr>
             <td class="list-content">

@@ -52,6 +52,9 @@ class Workgroup(Base):
             raise VokoValidationError('A workgroup needs at least '\
                                       'one coordinator.')
 
+    @property
+    def headcount(self):
+        return len(self.members)
 
 Workgroup.members = relationship('Member', secondary=membership)
 Member.workgroups = relationship('Workgroup', secondary=membership)

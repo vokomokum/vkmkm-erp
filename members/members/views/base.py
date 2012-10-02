@@ -16,7 +16,7 @@ class BaseView(object):
         self.context = context
         self.request = request
         self.logged_in = authenticated_userid(request)
-        # only show content if this is Ttue or user is logged in
+        # only show content if this is False or user is logged in
         # (otherwise, show login screen)
         self.login_necessary = True
         # every template asks for the layout to look for the macros

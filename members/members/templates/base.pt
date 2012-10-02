@@ -35,8 +35,9 @@
                         <a id="profile-link" href="${portal_url}/member/${view.user.mem_id}" title="My Account" tal:content="view.user.fullname">Account</a>
                     </li>
                     </tal:block>
-
-                    <tal:block tal:condition="not view.logged_in">
+                    
+                    <tal:block tal:condition="not view.logged_in and not view.login_necessary">
+                    <!-- If login is necessary, we show login form automatically anyway-->
                     <li>
                         <a href="/login">Log In</a>
                     </li>
@@ -88,10 +89,10 @@
                                 </td>
                             </tr>
                         </table>
+                        <a href="reset-pwd">
+                            Forgot Password?
+                        </a>
                     </form>
-                    <a href="reset-pwd">
-                        Forgot Password?
-                    </a>
                 </tal:block>
 
                 <tal:block tal:condition="view.logged_in or not view.login_necessary">
