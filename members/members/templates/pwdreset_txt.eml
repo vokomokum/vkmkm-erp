@@ -5,6 +5,8 @@ Om een nieuw wachtwoord voor je rekening te plaatsen klik je op de volgende link
 
 {portal_url}/member/{mem_id}/reset-pwd/{key}
 
+Als je niet weet waroom je deze email krijgt, hoeft je niet te reageeren. Vraag misschien je groep-coordinator of membership@vokomokum.nl, wat er an der hand is.
+
 
 [ENG]
 To set a new password on your account, click on the following link (or
@@ -13,3 +15,5 @@ cut and paste it into your browser's address bar).
 <URL:{portal_url}/member/{mem_id}/reset-pwd/{key}>
 
 {portal_url}/member/{mem_id}/reset-pwd/{key}
+
+If you don't know why you are getting this email, don't worry. You don't have to react. You might contact your coordinator or membership@vokomokum.nl, though. 
