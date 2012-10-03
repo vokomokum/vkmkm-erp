@@ -1,0 +1,12 @@
+CREATE TABLE applicants (
+	id INTEGER NOT NULL, 
+	fname VARCHAR(50), 
+	lname VARCHAR(50), 
+	month VARCHAR(5), 
+	comment VARCHAR(500), 
+	email VARCHAR(50), 
+	telnr VARCHAR(20), 
+	PRIMARY KEY (id)
+);
+ALTER TABLE applicants OWNER TO apache;
+

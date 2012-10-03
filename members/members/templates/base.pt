@@ -37,7 +37,7 @@
                     </tal:block>
                     
                     <tal:block tal:condition="not view.logged_in and not view.login_necessary">
-                    <!-- If login is necessary, we show login form automatically anyway-->
+                    <!-- Only used seldom, bcs if login is necessary, we show login form automatically anyway -->
                     <li>
                         <a href="/login">Log In</a>
                     </li>
@@ -54,6 +54,10 @@
                         </li>
                         <li tal:attributes="class python: tab == 'workgroups' and 'current' or ''">
                             <a tal:attributes="href string:${portal_url}/workgroups">Workgroups</a>
+                        </li>
+                        <li tal:attributes="class python: tab == 'applicants' and 'current' or ''"
+                            tal:condition="python: 'Membership' in [wg.name for wg in view.user.led_workgroups]">
+                            <a tal:attributes="href string:${portal_url}/applicants">Applicants</a>
                         </li>
                     </tal:block>
                 </ul>

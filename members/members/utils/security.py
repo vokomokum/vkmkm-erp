@@ -57,5 +57,10 @@ def groupfinder(memid, request):
     admins = session.query(Member).filter(Member.mem_admin == True).all()
     if memid in [m.mem_id for m in admins]:
         groups.append('group:admins')
+    # membership coordinators get this group:
+    membership = session.query(Workgroup).\
+                    filter(Workgroup.name == 'Membership').first()
+    if memid in [m.mem_id for m in membership.leaders]:
+        groups.append('group:membership')
     #print "+++++++++++++++++++++++++++++++++++++++ User is in groups:", groups
     return groups

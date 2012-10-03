@@ -252,8 +252,8 @@ class TestMembers(VokoTestCase):
         f = open('%s/%s' % (mail_folder, mails[0]), 'r')
         line = ""
         for l in f:
-            if l.strip() != '':
+            if l.startswith('<URL'):
                 line = l
         mem_id = int(line.split('member/')[1].split('/reset-pwd')[0].strip())
-        key = line.split('reset-pwd/')[1].strip()
+        key = line.split('reset-pwd/')[1].strip()[:-1]
         return mem_id, key

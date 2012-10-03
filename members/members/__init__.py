@@ -13,6 +13,7 @@ from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
 from members.models.others import Order
+from members.models.applicant import Applicant
 
 
 def main(global_config, **settings):
@@ -56,6 +57,10 @@ def main(global_config, **settings):
     config.add_route('shift-list', '/workgroup/{wg_id}/shifts/{year}/{month}', factory=Workgroup)
     config.add_route('shift-new', '/workgroup/{wg_id}/new-shift', factory=Workgroup)
     config.add_route('shift-edit', '/workgroup/{wg_id}/edit-shift/{s_id}/{action}', factory=Workgroup)
+    config.add_route('applicant-list', '/applicants', factory=Applicant)
+    config.add_route('applicant-new', '/applicants/new', factory=Applicant)
+    config.add_route('applicant-delete', '/applicant/{a_id}/delete', factory=Applicant)
+    config.add_route('applicant-mkmember', '/applicant/{a_id}/mkmember', factory=Applicant)
 
     # custom error views, catching NotFound and all Exceptions
     config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')

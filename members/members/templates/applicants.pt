@@ -1,0 +1,82 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+    <h1>Applicants (who joined orientation)</h1>
+    
+    <form tal:attributes="action python: '{0}/applicants/new'.format(portal_url)"
+          method="post">
+        
+        <table class="main" align="center">
+            <tr class="list-content" align="center">
+                <td width="25%">First Name:</td>
+                <td width="25%">
+                    <input type="text" size="10" maxlength="50" name="fname" />
+                </td>
+                <td width="25%">Last Name:</td>
+                <td width="25%">
+                    <input type="text" size="10" maxlength="50" name="lname" />
+                </td>
+            </tr>
+
+            <tr class="list-content" align="center">
+                <td width="25%">Email address:</td>
+                <td width="25%">
+                    <input type="text" size="10" maxlength="50" name="email" />
+                </td>
+                <td width="25%">Telephone:</td>
+                <td width="25%">
+                    <input type="text" size="10" maxlength="20" name="telnr" />
+                </td>
+            </tr>
+            <tr class="list-content" align="center">
+                <td width="50%" colspan="2">Comment:</td>
+                <td width="50%" colspan="2">
+                    <textarea rows="5" cols="50" size="500" name="comment">
+                    </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td width="50%" colspan="3"></td>
+                <td width="50%">
+                    <input type="submit" name="add" value="Add"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <!-- List existing ones -->
+    <table class="list" width="100%">
+        <tr>
+            <th>Name</th>
+            <th>Month</th>
+            <th>Comment</th>
+            <th>email</th>
+            <th>Tel.</th>
+        </tr>
+        <tr tal:repeat="a applicants">
+            <td width="12%">
+                <span tal:content="a.fname"></span>
+                <span tal:content="a.lname"></span>
+            </td>
+            <td width="10%" tal:content="a.month"></td>
+            <td width="20%" tal:content="a.comment"></td>
+            <td width="14%" tal:content="a.email"></td>
+            <td width="12%" tal:content="a.telnr"></td>
+            <td width="10%">
+                <a title="Make this applicant into a member (with own member ID)"
+                       href="${portal_url}/applicant/${a.id}/mkmember">
+                    <button>M</button>
+                </a>
+                <a title="Delete from list" href="${portal_url}/applicant/${a.id}/delete">
+                    <button>X</button>
+                </a>
+            </td>
+        </tr>
+    </table>
+
+        </div>
+    </div>
+</html>

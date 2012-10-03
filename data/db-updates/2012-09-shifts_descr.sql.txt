@@ -4,4 +4,3 @@ INSERT INTO shift_days_descriptions VALUES (0, 'any day');
 INSERT INTO shift_days_descriptions VALUES (1, 'pick-up day');
 INSERT INTO shift_days_descriptions VALUES (2, 'day before pick-up day');
 ALTER TABLE wg_shifts ALTER COLUMN day TYPE VARCHAR(255);
-ALTER TABLE shift_days_descriptions OWNER TO apache;

@@ -90,8 +90,7 @@ class Member(Base):
         '''
         # check missing fields
         missing = []
-        for f in ('mem_fname', 'mem_lname', 'mem_email',
-                  'mem_street', 'mem_house', 'mem_postcode', 'mem_city'):
+        for f in ('mem_fname', 'mem_lname', 'mem_email'):
             if not f in self.__dict__ or self.__dict__[f] == '':
                 missing.append(f)
         if len(missing) > 0:
@@ -120,7 +119,7 @@ class Member(Base):
                                       'number.')
 
         # check postcode
-        if len(self.mem_postcode) > 0\
+        if self.mem_postcode and len(self.mem_postcode) > 0\
                 and not (self.mem_postcode[:4].isdigit()\
                 and self.mem_postcode[-2:].isalpha()):
             raise VokoValidationError('The postcode does not seem to be'\

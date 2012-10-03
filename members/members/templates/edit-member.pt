@@ -72,11 +72,11 @@
         <td align="center" colspan="5">Address</td>
       </tr>
       <tr class="list-content">
-        <td align="left" width="50%"><span class="warn">*</span> Street:</td>
-        <td align="left" width="10%"><span class="warn">*</span> House No.:</td>
+        <td align="left" width="50%">Street:</td>
+        <td align="left" width="10%">House No.:</td>
         <td align="left" width="10%">Hs./Apt. No:</td>
-        <td align="left" width="10%"><span class="warn">*</span> Postcode:</td>
-        <td align="left" width="25%"><span class="warn">*</span> City:</td>
+        <td align="left" width="10%">Postcode:</td>
+        <td align="left" width="25%">City:</td>
       </tr>
       <tr class="list-content">
         <td><input type="text" align="left" size="40" name="mem_street"
