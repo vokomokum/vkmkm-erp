@@ -7,6 +7,7 @@ from members.models.applicant import Applicant
 from members.models.member import Member
 from members.models.base import DBSession
 from members.views.base import BaseView
+from members.views.pwdreset import send_pwdreset_request
 
 
 def get_applicants(session):
@@ -75,13 +76,14 @@ class Applicant2Member(BaseView):
         member.mem_adm_comment = applicant.comment
         member.mem_email = applicant.email
         member.mem_home_tel = applicant.telnr
-        print "|{}|".format(member.mem_postcode)
         member.validate()
         session.add(member)
         session.delete(applicant)
         session.flush()
+        send_pwdreset_request(member, self.request.application_url, first=True)
         return self.redirect("/member/{}?msg=Applicant has been made "\
-                            "into new Member.".format(member.mem_id))
+                            "into new Member and got an email to set "\
+                            "up a password.".format(member.mem_id))
 
 
 @view_config(renderer='../templates/applicants.pt',
