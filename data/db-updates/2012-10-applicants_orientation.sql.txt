@@ -1,5 +1,6 @@
+-- PK column type: in sqlite 'int', in postgres 'serial'
 CREATE TABLE applicants (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	fname VARCHAR(50), 
 	lname VARCHAR(50), 
 	month VARCHAR(5), 

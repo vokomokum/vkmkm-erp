@@ -31,7 +31,7 @@ class Member(Base):
     mem_lname = Column(Unicode(255), default='')
     mem_email = Column(Unicode(255), default='')
     mem_street = Column(Unicode(255), default='')
-    mem_house = Column(Unicode(255), default='')
+    mem_house = Column(Integer, default=0)
     mem_flatno = Column(Unicode(255), default='')
     mem_city = Column(Unicode(255), default='')
     mem_postcode = Column(Unicode(6), default='')

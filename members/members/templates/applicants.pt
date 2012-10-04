@@ -34,8 +34,7 @@
             <tr class="list-content" align="center">
                 <td width="50%" colspan="2">Comment:</td>
                 <td width="50%" colspan="2">
-                    <textarea rows="5" cols="50" size="500" name="comment">
-                    </textarea>
+                    <textarea rows="5" cols="50" size="500" name="comment"></textarea>
                 </td>
             </tr>
             <tr>
