@@ -2,6 +2,12 @@
 
 cd /var/voko
 
+# choose which app to update, default: the test app
+DEST=memberstest
+if [ "$1" = "production" ]; then
+    DEST=members
+fi
+
 if [ -e git-repo ];
 then
   echo Updating git-repo ...
@@ -30,12 +36,12 @@ echo make all directories under members/ 775 ...
 /usr/bin/sudo /usr/bin/find members -type d -print0 | xargs -0 /usr/bin/sudo /bin/chmod 775 
 
 echo "now move everything (but the .ini and .wsgi files) onto the voko server ..."
-sudo cp -rp CHANGES.txt README.txt setup.* members /var/www/members
+sudo cp -rp CHANGES.txt README.txt setup.* members /var/www/$DEST
 
 cd ../..
 /usr/bin/sudo rm -r git-repo-tmp
 
 echo develop app ...
-cd /var/www/members
+cd /var/www/$DEST
 /usr/bin/sudo /var/www/vopy/bin/python setup.py develop 
 
