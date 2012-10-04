@@ -13,7 +13,6 @@ Content-Type: text/html
 <body>
     <div class="center">
         <h1>${Title}</h1>
-        <img src="http://vokomokum.nl/media/images/logo-vokomokum.jpg" alt="Vokomokum" />
         <form method="post" enctype="multipart/form-data" action="$Nextcgi">
             <h2>Please log-in with your Vokomokum Member Nr.<br />or your e-mail address and your password</h2>
             <fieldset id="log-in">
