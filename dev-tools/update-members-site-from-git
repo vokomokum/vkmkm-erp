@@ -6,6 +6,7 @@ cd /var/voko
 DEST=memberstest
 if [ "$1" = "production" ]; then
     DEST=members
+    echo I will be updating the PRODUCTION application ...
 fi
 
 if [ -e git-repo ];
