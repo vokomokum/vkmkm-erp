@@ -56,7 +56,7 @@
                             <a tal:attributes="href string:${portal_url}/workgroups">Workgroups</a>
                         </li>
                         <li tal:attributes="class python: tab == 'applicants' and 'current' or ''"
-                            tal:condition="python: 'Membership' in [wg.name for wg in view.user.led_workgroups]">
+                            tal:condition="python: 'Membership' in [w.name for w in view.user.led_workgroups]">
                             <a tal:attributes="href string:${portal_url}/applicants">Applicants</a>
                         </li>
                     </tal:block>

@@ -61,11 +61,12 @@ def prepare_deploy():
     commit()
     push()
 
-def deploy(user='you'):
+def deploy(user='you', mode=""):
     '''
     deploy latest code on our server and set it 'live'
     (you need admin rights for this on the server)
-    TODO: do this on test or production instance ...
+    Be sure to use :user=you for sudo commands to succeed.
+    Use :user=you,mode=production to update the production app.
     '''
     test(standalone=False)
     push()
@@ -77,6 +78,6 @@ def deploy(user='you'):
             sudo("git clone git@git.assembla.com:vokomokum.git {}".\
                      format(code_dir), user=user)
     with cd(code_dir):
-        sudo("./dev-tools/update-members-site-from-git")
+        sudo("./dev-tools/update-members-site-from-git {}".format(mode))
         sudo("touch /var/www/members/pyramid.wsgi", user=user)
         #run(sudo("/etc/init.d/apache2 restart"))
