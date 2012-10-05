@@ -22,7 +22,7 @@
     <div id="action-box" tal:condition="wg.exists">
         <a class="view-link" href="${portal_url}/workgroup/${wg.id}">view this group</a>
         <input type="hidden" name="id" value="${wg.id}"></input>
-    </div>    
+    </div> 
 
     <!-- Data -->
     <table class="list" width="100%" id="wg_table">
