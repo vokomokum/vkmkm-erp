@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+    <h1>Transaction Types</h1>
+    
+    <form tal:attributes="action python: '{0}/transaction_types/new'.format(portal_url)"
+          method="post">
+        
+        <table class="main" align="center">
+            <tr class="list-content" align="center">
+                <td width="50%">
+                    <input type="text" size="10" maxlength="50" name="name" />
+                </td>
+                <td width="50%">
+                    <input type="submit" name="add" value="Add"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <!-- List existing ones -->
+    <table class="list" width="100%">
+        <tr>
+            <th colpan="2">Existing</th>
+        </tr>
+        <tr tal:repeat="tt transaction_types">
+            <form action="${portal_url}/transaction-type/${tt.id}/save" method="post">
+                <td width="70%">
+                    <input name="name" value="${tt.name}" size="40" maxlength="100"/>
+                </td>
+                <td width="10%">
+                    <button type="sumbit">Save</button>
+                </td>
+            </form>
+            <td width="10%">
+                <a title="Delete from list (it has not been used so far)" href="${portal_url}/transaction_type/${tt.id}/delete"
+                   tal:condition="python:view.deletable(tt)" 
+                >
+                    <button>X</button>
+                </a>
+            </td>
+        </tr>
+    </table>
+
+        </div>
+    </div>
+</html>

@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 from base import Base, DBSession
 
 
-class SecondOrderModelException(Exception):
+class NotAllowedActionException(Exception):
     pass
 
 
@@ -26,7 +26,7 @@ class Order(Base):
     label = Column('ord_label', Unicode(255), primary_key=True)
 
     def __init__(self):
-        raise SecondOrderModelException('Creation of an order not '\
+        raise NotAllowedActionException('Creation of an order not '\
                                         'allowed in this application.')
 
 

@@ -1,11 +1,8 @@
-from sqlalchemy import Table, Column, Integer, Unicode, Boolean
-from sqlalchemy.orm import relationship
-from sqlalchemy import ForeignKey
+from sqlalchemy import Table, Column, Integer, Unicode
 
 from pyramid.security import Allow, DENY_ALL
 
 from base import Base, VokoValidationError
-from member import Member
 
 
 class Applicant(Base):

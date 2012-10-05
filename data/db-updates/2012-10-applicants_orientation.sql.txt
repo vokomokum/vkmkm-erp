@@ -1,4 +1,4 @@
--- PK column type: in sqlite 'int', in postgres 'serial'
+-- PK column type: in sqlite 'INTEGER PRIMARY KEY' (do not set it at the end), in postgres 'SERIAL NOT NULL'
 CREATE TABLE applicants (
 	id SERIAL NOT NULL, 
 	fname VARCHAR(50), 
