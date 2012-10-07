@@ -14,7 +14,7 @@ from members.models.workgroups import Workgroup
 from members.models.shift import Shift
 from members.models.others import Order
 from members.models.applicant import Applicant
-from members.models.transactions import TransactionType
+from members.models.transactions import Transaction, TransactionType
 
 
 def main(global_config, **settings):
@@ -62,10 +62,10 @@ def main(global_config, **settings):
     config.add_route('applicant-new', '/applicants/new', factory=Applicant)
     config.add_route('applicant-delete', '/applicant/{a_id}/delete', factory=Applicant)
     config.add_route('applicant-mkmember', '/applicant/{a_id}/mkmember', factory=Applicant)
-    config.add_route('transaction-types-list', '/transaction-types', factory=TransactionType)
-    config.add_route('transaction-types-new', '/transaction-types/new', factory=TransactionType)
-    config.add_route('transaction-types-save', '/transaction-types/{tt_id}/save', factory=TransactionType)
-    config.add_route('transaction-types-delete', '/transaction-types/{tt_id}/delete', factory=TransactionType)
+    config.add_route('transaction-type-list', '/transaction-types', factory=TransactionType)
+    config.add_route('transaction-type-new', '/transaction-types/new', factory=TransactionType)
+    config.add_route('transaction-type-save', '/transaction-type/{tt_id}/save', factory=TransactionType)
+    config.add_route('transaction-type-delete', '/transaction-type/{tt_id}/delete', factory=TransactionType)
 
     # custom error views, catching NotFound and all Exceptions
     config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')

@@ -6,10 +6,10 @@ ALTER TABLE transaction_types OWNER TO apache;
 
 CREATE TABLE transactions (
 	id INTEGER PRIMARY KEY NOT NULL, 
-	ttype_id VARCHAR(50), 
+	ttype_id INTEGER, 
 	amount NUMERIC,
         mem_id INTEGER, 
-	ord_no VARCHAR(5), 
+	ord_no INTEGER, 
 	comment VARCHAR(500), 
 	date timestamp with timezone, 
 	late boolean DEFAULT false 
@@ -19,4 +19,6 @@ ALTER TABLE transactions OWNER TO apache;
 ALTER TABLE ONLY transactions
     ADD CONSTRAINT transactions_ttype_fkey FOREIGN KEY (ttype_id) REFERENCES transaction_types(id);
 
+ALTER TABLE ONLY transactions
+    ADD CONSTRAINT transactions_member_fkey FOREIGN KEY (mem_id) REFERENCES members(mem_id);
 

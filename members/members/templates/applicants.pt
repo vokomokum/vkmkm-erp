@@ -6,7 +6,7 @@
 
     <h1>Applicants (who joined orientation)</h1>
     
-    <form tal:attributes="action python: '{0}/applicants/new'.format(portal_url)"
+    <form action="${portal_url}/applicants/new"
           method="post">
         
         <table class="main" align="center">

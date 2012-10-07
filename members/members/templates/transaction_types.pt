@@ -6,7 +6,7 @@
 
     <h1>Transaction Types</h1>
     
-    <form tal:attributes="action python: '{0}/transaction_types/new'.format(portal_url)"
+    <form action="${portal_url}/transaction-types/new"
           method="post">
         
         <table class="main" align="center">
@@ -26,9 +26,12 @@
         <tr>
             <th colpan="2">Existing</th>
         </tr>
+        <tr tal:condition="not:transaction_types">
+            <td colspan="3">No transaction types found.</td>
+        </tr>
         <tr tal:repeat="tt transaction_types">
             <form action="${portal_url}/transaction-type/${tt.id}/save" method="post">
-                <td width="70%">
+                <td width="80%">
                     <input name="name" value="${tt.name}" size="40" maxlength="100"/>
                 </td>
                 <td width="10%">
@@ -36,9 +39,8 @@
                 </td>
             </form>
             <td width="10%">
-                <a title="Delete from list (it has not been used so far)" href="${portal_url}/transaction_type/${tt.id}/delete"
-                   tal:condition="python:view.deletable(tt)" 
-                >
+                <a title="Delete from list (it has not been used so far)" href="${portal_url}/transaction-type/${tt.id}/delete"
+                   tal:condition="view.deletable(tt)">
                     <button>X</button>
                 </a>
             </td>

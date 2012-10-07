@@ -114,7 +114,6 @@ class EditWorkgroupView(BaseView):
                     raise Exception('Cannot delete workgroup, as there '\
                                     'are shifts in the history for this '\
                                     'workgroup.')
-                session.delete(wg)
                 return dict(wg=None, msg='Workgroup %s has been deleted.'\
                                           % wg.name)
 
