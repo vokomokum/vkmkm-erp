@@ -66,6 +66,10 @@ def main(global_config, **settings):
     config.add_route('transaction-type-new', '/transaction-types/new', factory=TransactionType)
     config.add_route('transaction-type-save', '/transaction-type/{tt_id}/save', factory=TransactionType)
     config.add_route('transaction-type-delete', '/transaction-type/{tt_id}/delete', factory=TransactionType)
+    config.add_route('transaction-list', '/transactions/{year}/{month}', factory=Transaction)
+    config.add_route('transaction-new', '/transactions/new', factory=Transaction)
+    config.add_route('transaction-edit', '/transaction/{t_id}/edit/{action}', factory=Transaction)
+    config.add_route('transaction-delete', '/transaction/{t_id}/delete', factory=Transaction)
 
     # custom error views, catching NotFound and all Exceptions
     config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')

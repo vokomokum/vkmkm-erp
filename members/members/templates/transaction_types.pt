@@ -24,7 +24,7 @@
     <!-- List existing ones -->
     <table class="list" width="100%">
         <tr>
-            <th colpan="2">Existing</th>
+            <th colspan="2">Existing</th>
         </tr>
         <tr tal:condition="not:transaction_types">
             <td colspan="3">No transaction types found.</td>
@@ -35,12 +35,12 @@
                     <input name="name" value="${tt.name}" size="40" maxlength="100"/>
                 </td>
                 <td width="10%">
-                    <button type="sumbit">Save</button>
+                    <button type="submit">Save</button>
                 </td>
             </form>
             <td width="10%">
                 <a title="Delete from list (it has not been used so far)" href="${portal_url}/transaction-type/${tt.id}/delete"
-                   tal:condition="view.deletable(tt)">
+                   tal:condition="not:tt.locked">
                     <button>X</button>
                 </a>
             </td>

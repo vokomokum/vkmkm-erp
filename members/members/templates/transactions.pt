@@ -1,0 +1,151 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+    <h1>Transactions</h1>
+    
+    <div class="new-transaction-form" id="stylized-form">
+        <form action="${portal_url}/transactions/new"
+              method="post">
+        
+            <div class="form-title">
+                Create new transaction
+            </div>
+            <div class="form-row">
+                <label for="mem_id">Member:</label>
+                <select name="mem_id">
+                    <option value="--">--</option>
+                    <tal:block tal:repeat="m view.members">
+                        <option value="${m.mem_id}">${m.fullname}</option>
+                    </tal:block>
+                </select>
+                <label for="ttype_id">Type:</label>
+                <select onchange="javascript:toggleOrderSelect();"
+                        name="ttype_id" id="ttype-select">
+                    <option value="--">--</option>
+                    <tal:block tal:repeat="tt view.transaction_types">
+                        <option value="${tt.id}">${tt}</option>
+                    </tal:block>
+                </select>
+                <script language="javascript">
+                    function toggleOrderSelect(){
+                        var sel = $('#ttype-select')[0];
+                        var seltxt = sel.options[sel.selectedIndex].innerHTML; 
+                        if (seltxt == 'Order Payment')
+                            $('#order-div').show();
+                        else 
+                            $('#order-div').hide();
+                    }
+                    toggleOrderSelect();
+                </script>
+                <span id="order-div" style="display:none;">
+                    <label for="ord_no">Order:</label>
+                    <select name="ord_no" id="order-select">
+                        <tal:block tal:repeat="o view.orders">
+                            <option value="${o.id}">${o.label}</option>
+                        </tal:block>
+                    </select>
+                </span>
+            </div>
+            <div class="form-row">
+                <label for="amount">Amount:</label>
+                <input type="text" size="7" maxlength="7" name="amount" />
+                <label for="day">Day:</label>
+                <select name="day">
+                    <tal:block repeat="d view.days">
+                        <option value="${d}">${d}</option>
+                    </tal:block> 
+                </select>
+                <input type="hidden" name="month" value="${view.month}" />
+                <input type="hidden" name="year" value="${view.year}" />
+                <label for="late">Late:</label>
+                <input type="checkbox" name="late" />
+            </div>
+            <div class="form-row">
+                <label for="comment">Comment:</label>
+                <textarea name="comment" rows="2" cols="50"></textarea>
+            </div>
+            <button type="submit">Create</button>
+        </form>
+    </div>
+
+    <!-- List existing ones -->
+    <h1>
+        Transactions in month ${view.month}/${view.year}
+    </h1>
+    
+    <div id="prevnext">
+        <a href="${portal_url}/transactions/${view.month_info.prev_year}/${view.month_info.prev_month}">
+            &lt;&lt;&nbsp;${view.month_info.prev_month}/${view.month_info.prev_year}
+        </a>
+        &nbsp; &nbsp; &nbsp;
+        <a href="${portal_url}/transactions/${view.month_info.next_year}/${view.month_info.next_month}">
+            ${view.month_info.next_month}/${view.month_info.next_year}&nbsp;&gt;&gt;
+        </a>
+    </div>
+
+    <table class="list" width="100%" align="center">
+        <tr class="list-content" align="center">
+            <th width="15%">Member</th>
+            <th width="15%">Type</th>
+            <th width="5%">Amount</th>
+            <th width="10%">Order</th>
+            <th width="5%">Day</th>
+            <th width="30%">Comment</th>
+            <th width="5%">Late</th>
+            <th width="5%"></th>
+        </tr>
+        <tr tal:condition="not:transactions">
+            <td colspan="3">No transactions found.</td>
+        </tr>
+        <tr tal:repeat="t transactions">
+            <td>
+                <form action="${portal_url}/transaction/${t.id}/edit/setmember" method="post">
+                    <select onchange="this.form.submit();" name="mem_id">
+                        <tal:block tal:repeat="m view.members">
+                            <option tal:condition="m.mem_id == t.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
+                            <option tal:condition="m.mem_id != t.mem_id" value="${m.mem_id}">${m.fullname}</option>
+                        </tal:block>
+                    </select>
+                </form>
+            </td>
+            <td tal:content="t.ttype">
+            <td>
+                <form action="${portal_url}/transaction/${t.id}/edit/setamount" method="post">
+                    <input type="text" size="7" maxlength="7" name="amount" value="${t.amount}"
+                        onkeydown="if (event.keyCode == 13) this.form.submit()"/>
+                </form>
+            </td>
+            <td>
+                <span tal:condition="t.ttype.name == 'Order Payment'"
+                      tal:content="t.order.label">
+                </span>
+            </td>
+            <td tal:content="t.date.day">
+            </td>
+            <td>
+                <form action="${portal_url}/transaction/${t.id}/edit/setcomment" method="post">
+                    <input type="text" size="30" maxlength="500" name="comment" value="${t.comment}"
+                        onkeydown="if (event.keyCode == 13) this.form.submit()"/>
+                </form>
+            </td>
+            <td>
+                <form action="${portal_url}/transaction/${t.id}/edit/setlate" method="post">
+                    <input type="checkbox" name="late" tal:condition="t.late" checked="checked" onchange="this.form.submit();"/> 
+                    <input type="checkbox" name="late" tal:condition="not t.late" onchange="this.form.submit();"/> 
+                </form>
+            </td>
+            <td>
+                <a href="${portal_url}/transaction/${t.id}/delete"
+                   tal:condition="not:t.locked">
+                    <img src="${portal_url}/static/img/icons/delete.gif"/>
+                </a>
+            </td>
+        </tr>
+    </table>
+
+        </div>
+    </div>
+</html>

@@ -3,13 +3,13 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember
 
 import datetime
-from calendar import monthrange
 
 from members.models.shift import Shift, get_shift
 from members.models.workgroups import Workgroup, get_wg
 from members.models.member import Member, get_member
 from members.models.base import DBSession, Base
 from members.views.base import BaseView
+from members.utils.misc import month_info
 
 '''
 All shift operations are done on the workgroups
@@ -231,30 +231,14 @@ class ListShiftView(BaseView):
         # we view shifts per-month here
         # use parameters to determine month, default is current month
         now = datetime.datetime.now()
-        self.month = now.month
-        self.year = now.year
-        if 'month' in self.request.matchdict:
-            self.month = int(self.request.matchdict['month'])
-        if 'year' in self.request.matchdict:
-            self.year = int(self.request.matchdict['year'])
+        self.month = int(self.request.matchdict['month'])
+        self.year = int(self.request.matchdict['year'])
         # we take today's day for simplicity
         schedule_date = datetime.date(self.year, self.month, now.day)
-        self.days_in_month = monthrange(self.year, self.month)[1]
-        lmdate = now - datetime.timedelta(days=-self.days_in_month)
-        dipm = monthrange(lmdate.year, lmdate.month)[1]
-        one_month_back = schedule_date + datetime.timedelta(days=-dipm)
-        one_month_ahead = schedule_date\
-                          + datetime.timedelta(days=self.days_in_month)
-        self.prev_month = one_month_back.month
-        self.prev_year = one_month_back.year
-        self.next_month = one_month_ahead.month
-        self.next_year = one_month_ahead.year
+        self.month_info = month_info(schedule_date) 
         q = """SELECT descr FROM shift_days_descriptions ORDER BY id;""" 
         day_literals = [i[0] for i in list(db_session.execute(q))]
-        self.days = day_literals + range(1, self.days_in_month + 1)
-        self.month_lies_in_past = schedule_date.year < now.year\
-                                    or (schedule_date.year == now.year 
-                                        and schedule_date.month < now.month) 
+        self.days = day_literals + range(1, self.month_info.days_in_month + 1)
         shifts = db_session.query(Shift).filter(Shift.wg_id == wg.id)\
                                      .filter(Shift.month == self.month)\
                                      .filter(Shift.year == self.year)\

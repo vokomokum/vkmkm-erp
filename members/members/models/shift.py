@@ -92,9 +92,10 @@ class Shift(Base):
             m = DBSession.query(Member).get(self.mem_id)
             if not m:
                 raise VokoValidationError('No member could be found for this ID.')
-            if not m in self.workgroup.members:
-                raise VokoValidationError('The member of this shift (%s) is not '\
-                        'a member in the workgroup %s.' % (m, self.workgroup))
+            # this is maybe problematic for validating older shifts
+            #if not m in self.workgroup.members:
+            #    raise VokoValidationError('The member of this shift (%s) is not '\
+            #            'a member in the workgroup %s.' % (m, self.workgroup))
         if not self.state in shift_states:
             raise VokoValidationError('The state must be either "open", "assigned", '\
                         '"worked" or "no-show". Cannot set it to %s' % (self.state))

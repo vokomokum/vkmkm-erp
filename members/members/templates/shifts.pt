@@ -10,12 +10,12 @@
     </h1>
     
     <div id="prevnext">
-        <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.prev_year}/${view.prev_month}">
-            &lt;&lt;&nbsp;${view.prev_month}/${view.prev_year}
+        <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.month_info.prev_year}/${view.month_info.prev_month}">
+            &lt;&lt;&nbsp;${view.month_info.prev_month}/${view.month_info.prev_year}
         </a>
         &nbsp; &nbsp; &nbsp;
-        <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.next_year}/${view.next_month}">
-            ${view.next_month}/${view.next_year}&nbsp;&gt;&gt;
+        <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.month_info.next_year}/${view.month_info.next_month}">
+            ${view.month_info.next_month}/${view.month_info.next_year}&nbsp;&gt;&gt;
         </a>
     </div>
 
@@ -117,7 +117,7 @@
 
     <!-- New shifts form -->
     <div class="new-shift-form" id="stylized-form"
-         tal:condition="view.user_is_wgleader and not view.month_lies_in_past">
+         tal:condition="view.user_is_wgleader and not view.month_info.month_lies_in_past">
         <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post">
           <div class="form-title">
                 Create new shift(s)

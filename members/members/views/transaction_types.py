@@ -1,11 +1,7 @@
 from pyramid.view import view_config
-#from sqlalchemy import asc, desc
-
-from datetime import datetime
 
 from members.models.base import DBSession
 from members.views.base import BaseView
-from members.models.member import Member
 from members.models.transactions import TransactionType, Transaction
 
 
@@ -17,13 +13,6 @@ def get_transaction_types(session):
  
 def get_transaction_type(session, tt_id):
     return session.query(TransactionType).get(tt_id)
-
-
-def tt_deletable(session, tt):
-    if len(tt.transactions) > 0:
-        return False
-    else:
-        return True
 
 
 @view_config(renderer='../templates/transaction_types.pt',
@@ -40,9 +29,6 @@ class ListTransactionTypes(BaseView):
             msg = ''
         return dict(msg=msg,
                     transaction_types=get_transaction_types(DBSession()))
-
-    def deletable(self, tt):
-        return tt_deletable(DBSession(), tt)
 
 
 @view_config(renderer='../templates/transaction_types.pt',
@@ -68,7 +54,7 @@ class NewTransactionType(BaseView):
              permission='edit')
 class SaveTransactionType(BaseView):
 
-    tab = 'applicants'
+    tab = 'finance'
 
     def __call__(self):
         session = DBSession()
@@ -86,13 +72,13 @@ class SaveTransactionType(BaseView):
              permission='edit')
 class DeleteTransactionType(BaseView):
 
-    tab = 'applicants'
+    tab = 'finance'
 
     def __call__(self):
         session = DBSession()
         tt_id = self.request.matchdict['tt_id']
         tt = get_transaction_type(session, tt_id)
-        if tt_deletable(session, tt):
+        if not tt.locked():
             session.delete(tt)
             session.flush()
             return self.redirect('/transaction-types?msg='\

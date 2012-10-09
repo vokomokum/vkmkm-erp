@@ -2,7 +2,7 @@
 Models of second order in this app
 '''
 
-from sqlalchemy import Column, Integer, Unicode, ForeignKey
+from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 from base import Base, DBSession
@@ -16,7 +16,7 @@ class Order(Base):
     '''
     Helper class to work with orders. This table has no direct PK,
     but we use two fields as combined identification.
-    Instead of simply querying all orders you can do this:
+    Instead of simply querying all orders (to all suppliers) you can do this:
     session.query(distinct(Order.id, Order.label))
     Not in use right now, but might be useful some day ...
     '''
@@ -24,7 +24,8 @@ class Order(Base):
 
     id = Column('ord_no', Integer, primary_key=True)
     label = Column('ord_label', Unicode(255), primary_key=True)
-
+    completed = Column('who_order_completed', DateTime)
+    
     def __init__(self):
         raise NotAllowedActionException('Creation of an order not '\
                                         'allowed in this application.')
