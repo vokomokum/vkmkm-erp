@@ -29,6 +29,8 @@ def fill_member_from_request(member, request, user_may_edit_admin_settings):
                 elif type == 'INTEGER':
                     if v != '':
                         v = int(v)
+                    else:
+                        v = None
                 member.__setattr__(attr, v)
     return member
 
