@@ -20,6 +20,7 @@ class Applicant(Base):
     telnr = Column(Unicode(20))
 
     __acl__ = [(Allow, 'group:membership', ('view', 'edit')),
+               (Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:wg-members', 'view'),
                DENY_ALL]
 
