@@ -127,7 +127,8 @@ class Member(Base):
         # check bank no
         if self.mem_bank_no:
             bank_no_clean = self.mem_bank_no.replace(' ', '').replace('-', '')
-            if not len(bank_no_clean) in [0, 7, 9]:
+            if not len(bank_no_clean) in [0, 7, 8, 9]:
+                # length of 8 is legacy data
                 raise VokoValidationError('Bank number needs to consist of 7 '\
                                           '(postbank) or 9 numbers.')
             if len(bank_no_clean) > 0 and not bank_no_clean.isdigit():
