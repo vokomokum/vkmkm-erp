@@ -1,0 +1,7 @@
+-- we do not depend on these 
+ALTER TABLE members ALTER COLUMN mem_street DROP NOT NULL;
+ALTER TABLE members ALTER COLUMN mem_house DROP NOT NULL;
+ALTER TABLE members ALTER COLUMN mem_flatno DROP NOT NULL;
+ALTER TABLE members ALTER COLUMN mem_postcode DROP NOT NULL;
+ALTER TABLE members ALTER COLUMN mem_city DROP NOT NULL;
+

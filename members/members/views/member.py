@@ -26,6 +26,9 @@ def fill_member_from_request(member, request, user_may_edit_admin_settings):
                 v = request.params[attr]
                 if type == 'BOOLEAN':
                     v = {'on': True, '': False}[v]
+                if type == 'INTEGER':
+                    if v != '':
+                        v = int(v)
                 member.__setattr__(attr, v)
             else:
                 if (type == 'BOOLEAN' and attr in member.__dict__
