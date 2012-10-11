@@ -44,7 +44,7 @@ class Member(Base):
     mem_cookie = Column(Unicode(255), default='')
     mem_ip = Column(Unicode(255), default='')
     # admin-editable
-    mem_active = Column(Boolean(), default=False)
+    mem_active = Column(Boolean(), default=True)
     mem_membership_paid = Column(Boolean(), default=False)
     mem_admin = Column(Boolean(), default=False)
     mem_adm_adj = Column(Boolean(), default=False)
