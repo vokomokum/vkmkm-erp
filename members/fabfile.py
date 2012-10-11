@@ -79,5 +79,10 @@ def deploy(user='you', mode=""):
                      format(code_dir), user=user)
     with cd(code_dir):
         sudo("./dev-tools/update-members-site-from-git {}".format(mode))
-        sudo("touch /var/www/members/pyramid.wsgi", user=user)
+        # no need to restart apache, simply touch wsgi file (when in daemon mode)
+        # (see http://code.google.com/p/modwsgi/wiki/ReloadingSourceCode)
+        if mode == 'production':
+            sudo("touch /var/www/members/pyramid.wsgi", user=user)
+        else:
+            sudo("touch /var/www/memberstest/pyramid.wsgi", user=user)
         #run(sudo("/etc/init.d/apache2 restart"))
