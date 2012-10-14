@@ -32,6 +32,9 @@ def fill_member_from_request(member, request, user_may_edit_admin_settings):
                     else:
                         v = None
                 member.__setattr__(attr, v)
+            else:
+                if type == 'BOOLEAN':
+                    member.__setattr__(attr, False)
     return member
 
 
