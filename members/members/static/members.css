@@ -19,7 +19,7 @@ body {
   margin: 0 auto;
 }
 
-h1, h2, h3, h4, h5, h6, form, th, tr, #menu-items,
+h1, h2, h3, h4, h5, h6, form, th, tr, #menu-items, #submenu-items,
 .wg-description, #prevnext, #deletion-confirmation {
   text-align: center;
 }
@@ -46,17 +46,7 @@ p, h1, pre {
   padding-left: 300px;
 }
 
-#menu-actions {
-    margin: 0;
-}
-#menu-actions li {
-    font-size: 10px;
-    list-style: none;
-    display: inline;
-    float:right;
-    margin-right: 20px;
-    height: 26px;
-}
+/* Main menu */
 
 #menu-items{
     clear:right;
@@ -94,6 +84,45 @@ p, h1, pre {
 
 #menu-items li.current a{
     border-bottom: 1px solid white;
+}
+
+/* Sub menu */
+
+#submenu-items{
+    clear:right;
+    padding: 3px 0;
+    margin-left: 0;
+    margin-bottom: 0;
+    margin-top: 0.1em;
+    font: bold 12px Verdana;
+}
+
+#submenu-items li{
+    list-style: none;
+    display: inline;
+    margin: 0;
+}
+
+#submenu-items li a{
+    text-decoration: underline;
+    padding: 3px 0.5em;
+    margin-right: 3px;
+    background: white;
+}
+
+
+/* Action menu*/
+
+#menu-actions {
+    margin: 0;
+}
+#menu-actions li {
+    font-size: 10px;
+    list-style: none;
+    display: inline;
+    float:right;
+    margin-right: 20px;
+    height: 26px;
 }
 
 

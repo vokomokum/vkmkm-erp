@@ -25,7 +25,7 @@ def get_applicant(session, a_id):
              permission='edit')
 class NewApplicant(BaseView):
 
-    tab = 'applicants'
+    tab = 'members'
 
     def __call__(self):
         fname = self.request.params['fname']
@@ -50,7 +50,7 @@ class NewApplicant(BaseView):
              permission='edit')
 class DeleteApplicant(BaseView):
 
-    tab = 'applicants'
+    tab = 'members'
 
     def __call__(self):
         session = DBSession()
@@ -67,7 +67,7 @@ class DeleteApplicant(BaseView):
              permission='edit')
 class Applicant2Member(BaseView):
 
-    tab = 'applicants'
+    tab = 'members'
 
     def __call__(self):
         session = DBSession()
@@ -92,7 +92,7 @@ class Applicant2Member(BaseView):
              permission='edit')
 class ApplicantList(BaseView):
 
-    tab = 'applicants'
+    tab = 'members'
 
     def __call__(self):
         return dict(applicants=get_applicants(DBSession()), msg="")

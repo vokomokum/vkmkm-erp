@@ -57,7 +57,7 @@ class NewShiftView(BaseShiftView):
     '''
     this view is called with data already, so it actually inserts
     '''
-    tab = 'workgroups'
+    tab = 'work'
 
     def __call__(self):
         db_session = DBSession()
@@ -138,7 +138,7 @@ class EditShiftView(BaseShiftView):
     This view can be ajaxified pretty easily.
     '''
 
-    tab = 'workgroups'
+    tab = 'work'
 
     def __call__(self):
         db_session = DBSession()
@@ -219,7 +219,7 @@ class EditShiftView(BaseShiftView):
              route_name='shift-list')
 class ListShiftView(BaseView):
 
-    tab = 'workgroups'
+    tab = 'work'
 
     def __call__(self):
         db_session = DBSession()

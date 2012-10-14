@@ -3,6 +3,8 @@ from pyramid.renderers import get_renderer
 from pyramid.security import authenticated_userid, remember
 from pyramid.httpexceptions import HTTPFound
 
+import datetime
+
 from members.utils.security import authenticated_user
 from members.models.base import VokoValidationError
 
@@ -19,6 +21,10 @@ class BaseView(object):
         # only show content if this is False or user is logged in
         # (otherwise, show login screen)
         self.login_necessary = True
+        # for submenus
+        now = datetime.datetime.now()
+        self.year = now.year
+        self.month = now.month
         # every template asks for the layout to look for the macros
         self.layout = get_renderer('../templates/base.pt').implementation()
         self.user = authenticated_user(self.request)

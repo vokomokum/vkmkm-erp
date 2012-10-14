@@ -52,16 +52,33 @@
                         <li tal:attributes="class python: tab == 'members' and 'current' or ''">
                             <a tal:attributes="href string:${portal_url}/members">Members</a>
                         </li>
-                        <li tal:attributes="class python: tab == 'workgroups' and 'current' or ''">
-                            <a tal:attributes="href string:${portal_url}/workgroups">Workgroups</a>
+                        <li tal:attributes="class python: tab == 'work' and 'current' or ''">
+                            <a tal:attributes="href string:${portal_url}/workgroups">Work</a>
                         </li>
-                        <li tal:attributes="class python: tab == 'applicants' and 'current' or ''"
-                            tal:condition="python: 'Membership' in [w.name for w in view.user.led_workgroups]">
-                            <a tal:attributes="href string:${portal_url}/applicants">Applicants</a>
+                        <li tal:attributes="class python: tab == 'finance' and 'current' or ''">
+                            <a tal:attributes="href string:${portal_url}/transactions">Finance</a>
                         </li>
                     </tal:block>
                 </ul>
-
+                <ul id="submenu-items">
+                    <tal:block tal:condition="tab and view.logged_in"
+                               tal:define="tab view.tab | None">
+                        <tal:block tal:condition="tab == 'members'">
+                            <li><a href="${portal_url}/members">Members</a></li>
+                            <li><a href="${portal_url}/applicants">Applicants</a></li>
+                        </tal:block>
+                        <tal:block tal:condition="tab == 'work'">
+                            <li><a href="${portal_url}/workgroups">All Workgroups</a></li>
+                            <li tal:repeat="wg view.user.workgroups">
+                                <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}/${view.month}">Shifts: ${wg.name}</a>
+                            </li>
+                        </tal:block>
+                        <tal:block tal:condition="tab == 'finance'">
+                            <li><a href="${portal_url}/transactions">Transactions</a></li>
+                            <li><a href="${portal_url}/transaction-types">Transaction Types</a></li>
+                        </tal:block>
+                    </tal:block>
+                </ul>
             </div>
 
             <div id="content">

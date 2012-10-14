@@ -47,7 +47,7 @@ def fill_wg_from_request(wg, request, session):
              permission='edit')
 class NewWorkgroupView(BaseView):
 
-    tab = 'workgroups'
+    tab = 'work'
 
     def __call__(self):
         self.possible_members = get_possible_members(DBSession())
@@ -60,7 +60,7 @@ class NewWorkgroupView(BaseView):
              permission='view')
 class WorkgroupView(BaseView):
 
-    tab = 'workgroups'
+    tab = 'work'
 
     def __call__(self):
         if 'msg' in self.request.params:
@@ -81,7 +81,7 @@ class WorkgroupView(BaseView):
              permission='edit')
 class EditWorkgroupView(BaseView):
 
-    tab = 'workgroups'
+    tab = 'work'
 
     def __call__(self):
         session = DBSession()
@@ -124,7 +124,7 @@ class EditWorkgroupView(BaseView):
              route_name='workgroup-list')
 class ListWorkgroupView(BaseView):
 
-    tab = 'workgroups'
+    tab = 'work'
 
     def __call__(self):
         dbsession = DBSession()
