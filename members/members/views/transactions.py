@@ -153,7 +153,10 @@ class EditTransaction(BaseTransactionView):
             transaction.date = adate
             msg = "Date was updated."
         if action == "setlate":
-            transaction.late = bool(self.request.params['late']) 
+            if 'late' in self.request.params:
+                transaction.late = bool(self.request.params['late']) 
+            else:
+                transaction.late = False
             msg = "Late-status of transaction was set to {}."\
                    .format(transaction.late)
         if action == 'setorder':
