@@ -11,12 +11,6 @@ from members.models.others import Order
 from members.utils.misc import month_info
 
 
-def get_transactions(session):
-    return session.query(Transaction)\
-            .order_by(Transaction.id)\
-            .all()
-
- 
 def get_transaction(session, t_id):
     return session.query(Transaction).get(t_id)
 
@@ -81,8 +75,22 @@ class ListTransactions(BaseTransactionView):
         self.month_info = month_info(schedule_date) 
         self.days = range(1, self.month_info.days_in_month + 1)
         now = datetime.datetime.now()
-        self.today = now.day
-        return dict(msg=msg, transactions=get_transactions(session))
+        if self.month == now.month:
+            self.today = now.day
+        else:
+            self.today = 1
+
+        first = datetime.datetime(self.year, self.month, 1, 0, 0, 0)
+        last = datetime.datetime(self.year, self.month, self.month_info.days_in_month, 23, 59, 59)
+        transactions = session.query(Transaction)\
+            .filter(Transaction.date >= first and Transaction.date <= last)\
+            .order_by(Transaction.id)\
+            .all()
+        # This is here because the filter above doesn't work for me
+        # (on sqlite, at least)
+        transactions = [t for t in transactions\
+                        if t.date >= first and t.date <= last]
+        return dict(msg=msg, transactions=transactions)
 
 
 @view_config(renderer='../templates/transactions.pt',
@@ -112,7 +120,7 @@ class NewTransaction(BaseTransactionView):
         if 'ord_no' in params and params['ord_no'] != "":
             transaction.ord_no = int(params['ord_no'])
         if 'late' in params:
-            transaction.late = boolean(params['late'])
+            transaction.late = bool(params['late'])
 
         day = int(params['day'])
         adate = datetime.date(year, month, day)
