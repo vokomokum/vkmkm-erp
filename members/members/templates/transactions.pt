@@ -110,12 +110,13 @@
             <th width="5%"></th>
         </tr>
         <tr tal:condition="not:transactions">
-            <td colspan="3">No transactions found.</td>
+            <td colspan="8">No transactions found.</td>
         </tr>
         <tr tal:repeat="t transactions">
             <td>
                 <form action="${portal_url}/transaction/${t.id}/edit/setmember" method="post">
-                    <select onchange="this.form.submit();" name="mem_id">
+                    <select onchange="this.form.submit();" name="mem_id"
+                        title="Select to update.">
                         <tal:block tal:repeat="m view.members">
                             <option tal:condition="m.mem_id == t.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
                             <option tal:condition="m.mem_id != t.mem_id" value="${m.mem_id}">${m.fullname}</option>
@@ -126,8 +127,9 @@
             <td tal:content="t.ttype">
             <td>
                 <form action="${portal_url}/transaction/${t.id}/edit/setamount" method="post">
-                    <input type="text" size="7" maxlength="7" name="amount" value="${t.amount}"
-                        onkeydown="if (event.keyCode == 13) this.form.submit()"/>
+                    <input type="text" size="7" maxlength="7" name="amount" value="${round(t.amount, 2)}"
+                        onkeydown="if (event.keyCode == 13) this.form.submit()"
+                        title="Edit, then press Enter/Return key to update."/>
                 </form>
             </td>
             <td>
@@ -140,18 +142,21 @@
             <td>
                 <form action="${portal_url}/transaction/${t.id}/edit/setcomment" method="post">
                     <input type="text" size="30" maxlength="500" name="comment" value="${t.comment}"
-                        onkeydown="if (event.keyCode == 13) this.form.submit()"/>
+                        onkeydown="if (event.keyCode == 13) this.form.submit()"
+                        title="Edit, then press Enter/Return key to update."/>
                 </form>
             </td>
             <td>
                 <form action="${portal_url}/transaction/${t.id}/edit/setlate" method="post">
-                    <input type="checkbox" name="late" tal:condition="t.late" checked="checked" onchange="this.form.submit();"/> 
-                    <input type="checkbox" name="late" tal:condition="not t.late" onchange="this.form.submit();"/> 
+                    <input type="checkbox" name="late" tal:condition="t.late" 
+                           checked="checked" onchange="this.form.submit();" title="Click to update."/> 
+                    <input type="checkbox" name="late" tal:condition="not t.late"
+                           onchange="this.form.submit();" title="Click to update."/> 
                 </form>
             </td>
             <td>
                 <a href="${portal_url}/transactions/${t.date.year}/${t.date.month}?confirm-deletion-of=${t.id}"
-                   tal:condition="not:t.locked()">
+                   tal:condition="not:t.locked()" title="Delete this transaction.">
                     <img src="${portal_url}/static/img/icons/delete.gif"/>
                 </a>
             </td>
