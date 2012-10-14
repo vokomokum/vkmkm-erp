@@ -89,7 +89,7 @@
             <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
         </tr>
     </table>
-    <div tal:condition="not assigned_shifts">
+    <div tal:condition="not assigned_shifts" class="info">
         No assigned shifts.
     </div>
 
@@ -107,10 +107,33 @@
             <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
         </tr>
     </table>
-    <div tal:condition="not worked_shifts">
+    <div tal:condition="not worked_shifts" class="info">
         No worked shifts.
     </div>
 
+    <h2>Transactions</h2>
+
+    <table class="list" align="center" tal:condition="transactions">
+        <tr>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Late</th>
+        </tr> 
+        <tr class="list-content" tal:repeat="t transactions">
+            <td><small>EUR</small> ${python:round(t.amount,2)}</td>
+            <td>${t.ttype}</td>
+            <td>${t.date.date()}</td>
+            <td>
+                <span tal:condition="t.late">Yes</span>
+                <span tal:condition="not t.late">No</span>
+            </td>
+        </tr>
+    </table>
+    <div tal:condition="not transactions" class="info">
+        No transactions.
+    </div>
+    
 
         </div>
     </div>

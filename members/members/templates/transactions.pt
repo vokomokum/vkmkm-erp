@@ -62,7 +62,7 @@
             </div>
             <div class="form-row">
                 <label for="amount">Amount:</label>
-                <input type="text" size="7" maxlength="7" name="amount" />
+                <small>EUR</small> <input type="text" size="7" maxlength="7" name="amount" />
                 <label for="day">Day:</label>
                 <select name="day">
                     <tal:block repeat="d view.days">
@@ -100,9 +100,9 @@
 
     <table class="list" width="100%" align="center">
         <tr class="list-content" align="center">
-            <th width="15%">Member</th>
+            <th width="14%">Member</th>
             <th width="15%">Type</th>
-            <th width="5%">Amount</th>
+            <th width="6%">Amount</th>
             <th width="10%">Order</th>
             <th width="5%">Day</th>
             <th width="30%">Comment</th>
@@ -127,7 +127,8 @@
             <td tal:content="t.ttype">
             <td>
                 <form action="${portal_url}/transaction/${t.id}/edit/setamount" method="post">
-                    <input type="text" size="7" maxlength="7" name="amount" value="${round(t.amount, 2)}"
+                    <small>EUR</small>
+                    <input type="text" size="5" maxlength="7" name="amount" value="${round(t.amount, 2)}"
                         onkeydown="if (event.keyCode == 13) this.form.submit()"
                         title="Edit, then press Enter/Return key to update."/>
                 </form>

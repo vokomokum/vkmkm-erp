@@ -68,7 +68,7 @@ class MemberView(BaseView):
         assigned = [s for s in self.m.scheduled_shifts if s.state == 'assigned']
         worked = [s for s in self.m.scheduled_shifts if s.state == 'worked']
         return dict(m=self.m, msg=msg, assigned_shifts=assigned,
-                    worked_shifts=worked)
+                    worked_shifts=worked, transactions=self.m.transactions)
 
 
 @view_config(renderer='../templates/edit-member.pt',

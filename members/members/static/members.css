@@ -19,7 +19,7 @@ body {
   margin: 0 auto;
 }
 
-h1, h2, h3, h4, h5, h6, form, th, tr, #menu-items, #submenu-items,
+h1, h2, h3, h4, h5, h6, form, th, tr, .info, #menu-items, #submenu-items,
 .wg-description, #prevnext, #deletion-confirmation {
   text-align: center;
 }
