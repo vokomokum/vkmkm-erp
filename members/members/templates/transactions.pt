@@ -139,7 +139,7 @@
             </td>
             <td>
                 <a href="${portal_url}/transaction/${t.id}/delete"
-                   tal:condition="not:t.locked">
+                   tal:condition="not:t.locked()">
                     <img src="${portal_url}/static/img/icons/delete.gif"/>
                 </a>
             </td>

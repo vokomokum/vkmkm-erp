@@ -5,11 +5,15 @@ from sqlalchemy import ForeignKey
 
 from pyramid.security import Allow, DENY_ALL
 
-from datetime import datetime
+import datetime
 
 from base import Base, VokoValidationError
 from member import Member
 from others import Order
+
+
+# These types have special meaning and a re therefore protected
+reserved_ttype_names = ['Membership Fee', 'Order Payment']
 
 
 class TransactionType(Base):
@@ -36,9 +40,17 @@ class TransactionType(Base):
         if self.name == '':
             raise VokoValidationError('A transaction type needs a name.')
 
+    @property
     def locked(self):
         ''' Transaction type can't be removed if transactions use it ''' 
         return len(self.transactions) > 0
+
+    @property
+    def reserved(self):
+        '''
+        Returns True if the name of this transaction type cannot be changed
+        '''
+        return self.name in reserved_ttype_names
 
 
 class Transaction(Base):
@@ -62,7 +74,7 @@ class Transaction(Base):
                DENY_ALL]
 
     def __init__(self, request=None, ttype_id=None, amount=0, mem_id=None,
-                 comment='', ord_no=None, date=datetime.now(), late=False):
+                 comment='', ord_no=None, date=datetime.datetime.now(), late=False):
         self.ttype_id = ttype_id
         self.amount = amount
         self.mem_id = mem_id
@@ -72,15 +84,14 @@ class Transaction(Base):
         self.late = late
 
     def __repr__(self):
-        return "{}; [{}]: EUR {}".format(self.member, self.ttype, self.amount)
+        return "EUR {} from {} [{}]".format(self.amount, self.member,
+                                            self.ttype)
 
     def locked(self):
         ''' Transactions can't be removed if they're from last cal. month ''' 
-        begin_of_this_month = datetime.now()
-        begin_of_this_month.day = 1
-        begin_of_this_month.hour = 0
-        begin_of_this_month.minute = 0
-        return self.date < begin_of_this_month
+        now = datetime.datetime.now()
+        begin_of_this_month = datetime.date(now.year, now.month, 1)
+        return self.date.date() < begin_of_this_month
 
     def validate(self):
         ''' validate if this object is valid, raise exception otherwise '''

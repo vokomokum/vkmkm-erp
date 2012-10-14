@@ -3,6 +3,7 @@ from pyramid.view import view_config
 from members.models.base import DBSession
 from members.views.base import BaseView
 from members.models.transactions import TransactionType, Transaction
+from members.models.transactions import reserved_ttype_names
 
 
 def get_transaction_types(session):
@@ -28,6 +29,7 @@ class ListTransactionTypes(BaseView):
         else:
             msg = ''
         return dict(msg=msg,
+                    reserved_names = reserved_ttype_names,
                     transaction_types=get_transaction_types(DBSession()))
 
 
@@ -43,6 +45,12 @@ class NewTransactionType(BaseView):
         tt = TransactionType(None, name)
         tt.validate()
         session = DBSession()
+        existing = session.query(TransactionType)\
+                          .filter(TransactionType.name == tt.name).all()
+        if len(existing) > 0: 
+            return self.redirect('/transaction-types?msg=Transaction type '\
+                                 ' with name "{}" already exists'\
+                                 .format(tt.name))
         session.add(tt)
         session.flush()
         return self.redirect('/transaction-types?msg=Transaction type "{}"'\
@@ -61,6 +69,10 @@ class SaveTransactionType(BaseView):
         tt_id = self.request.matchdict['tt_id']
         name = self.request.params['name']
         tt = get_transaction_type(session, tt_id)
+        if tt.name in reserved_ttype_names:
+            return self.redirect('/transaction-types?msg=The name {} is '\
+                                 'reserved and cannot be changed'\
+                                 .format(tt.name))
         tt.name = name
         tt.validate()
         return self.redirect('/transaction-types?msg=Transaction type "{}" '\
@@ -78,7 +90,7 @@ class DeleteTransactionType(BaseView):
         session = DBSession()
         tt_id = self.request.matchdict['tt_id']
         tt = get_transaction_type(session, tt_id)
-        if not tt.locked():
+        if not tt.locked:
             session.delete(tt)
             session.flush()
             return self.redirect('/transaction-types?msg='\

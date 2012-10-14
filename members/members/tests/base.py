@@ -14,6 +14,7 @@ from members import models
 from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
+from members.models.transactions import reserved_ttype_names
 from members.utils import mail
 from members.utils.misc import get_settings
 from members.utils.md5crypt import md5crypt
@@ -113,6 +114,10 @@ class VokoTestCase(unittest.TestCase):
         self.DBSession.flush()
         s = Shift(wg2.id, 'do stuff', 2012, 6, mem_id=m1.mem_id)
         self.DBSession.add(s)
+        self.DBSession.flush()
+        # reserved transaction types
+        for rt in reserved_ttype_names:
+            self.DBSession.add(TransactionType(name=rt))
         self.DBSession.flush()
 
     def get_peter(self):

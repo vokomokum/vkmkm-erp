@@ -1,4 +1,4 @@
--- insert some needed data that the member app does not generate by itself
+-- insert some needed data that the app does not generate by itself (in tests/base.py)
 
 BEGIN TRANSACTION;
 CREATE TABLE wh_order (

@@ -9,12 +9,12 @@
     <form action="${portal_url}/transaction-types/new"
           method="post">
         
-        <table class="main" align="center">
+        <table class="main" align="center" width="80%">
             <tr class="list-content" align="center">
-                <td width="50%">
-                    <input type="text" size="10" maxlength="50" name="name" />
+                <td width="80%">
+                    <input type="text" size="50" maxlength="50" name="name" />
                 </td>
-                <td width="50%">
+                <td width="20%">
                     <input type="submit" name="add" value="Add"/>
                 </td>
             </tr>
@@ -24,26 +24,31 @@
     <!-- List existing ones -->
     <table class="list" width="100%">
         <tr>
-            <th colspan="2">Existing</th>
+            <th colspan="3">Existing</th>
         </tr>
         <tr tal:condition="not:transaction_types">
             <td colspan="3">No transaction types found.</td>
         </tr>
         <tr tal:repeat="tt transaction_types">
-            <form action="${portal_url}/transaction-type/${tt.id}/save" method="post">
-                <td width="80%">
-                    <input name="name" value="${tt.name}" size="40" maxlength="100"/>
-                </td>
+            <tal:block tal:condition="tt.reserved">
+                <td tal:content="tt.name" title="This type is protected." colspan="3"/>
+            </tal:block>
+            <tal:block tal:condition="not:tt.reserved">
+                <form action="${portal_url}/transaction-type/${tt.id}/save" method="post">
+                    <td width="80%">
+                        <input name="name" value="${tt.name}" size="40" maxlength="100"/>
+                    </td>
+                    <td width="10%">
+                        <button title="Save this type name" type="submit">Save</button>
+                    </td>
+                </form>
                 <td width="10%">
-                    <button type="submit">Save</button>
+                    <a title="Delete from list (it has not been used so far)" href="${portal_url}/transaction-type/${tt.id}/delete"
+                       tal:condition="not:tt.locked">
+                        <button>X</button>
+                    </a>
                 </td>
-            </form>
-            <td width="10%">
-                <a title="Delete from list (it has not been used so far)" href="${portal_url}/transaction-type/${tt.id}/delete"
-                   tal:condition="not:tt.locked">
-                    <button>X</button>
-                </a>
-            </td>
+            </tal:block>
         </tr>
     </table>
 

@@ -41,10 +41,21 @@ class BaseTransactionView(BaseView):
         return session.query(Order)\
                     .order_by(desc(Order.completed)).all()
 
-    def redir_to_list(self, year, month, msg):
+    def redir_to_list(self, year, month, msg=''):
         ''' redirect to list view '''
-        return self.redirect('/transactions/{}/{}?msg={}'.format(year,
-                            month, msg))
+        if msg != '':
+            msg = '?msg={}'.format(msg)
+        return self.redirect('/transactions/{}/{}{}'.format(year, month, msg))
+
+            
+@view_config(renderer='../templates/transactions.pt',
+             route_name='transactions',
+             permission='view')
+class EntryListTransactions(BaseTransactionView):
+
+    def __call__(self):
+        now = datetime.datetime.now()
+        return self.redir_to_list(now.year, now.month) 
 
 
 @view_config(renderer='../templates/transactions.pt',
@@ -78,9 +89,16 @@ class NewTransaction(BaseTransactionView):
         session = DBSession()
         transaction = Transaction()
         params = self.request.params
+        year = int(params['year'])
+        month = int(params['month'])
+        
+        if params['ttype_id'] == '--':
+            return self.redir_to_list(year, month, 'Please select a type.')
         ttype = session.query(TransactionType).get(params['ttype_id'])
         transaction.ttype = ttype
         transaction.amount = float(params['amount'])
+        if params['mem_id'] == '--':
+            return self.redir_to_list(year, month, 'Please select a member.')
         member = session.query(Member).get(params['mem_id'])
         transaction.member = member
         transaction.comment = params['comment']
@@ -88,8 +106,7 @@ class NewTransaction(BaseTransactionView):
             transaction.ord_no = int(params['ord_no'])
         if 'late' in params:
             transaction.late = boolean(params['late'])
-        month = int(params['month'])
-        year = int(params['year'])
+
         day = int(params['day'])
         adate = datetime.date(year, month, day)
         transaction.date = adate
@@ -180,16 +197,13 @@ class DeleteTransaction(BaseTransactionView):
         session = DBSession()
         t_id = self.request.matchdict['t_id']
         t = get_transaction(session, t_id)
-        if t.locked():
+        if not t.locked():
             session.delete(t)
             session.flush()
-            return self.redirect('/transactions?msg='\
+            return self.redir_to_list(t.date.year, t.date.month,
                                  'Transaction "{}" has been deleted.'\
                                   .format(t))
         else:
-            return self.redirect('/transactions?msg=Cannot remove'\
-                                 ' transaction "{}": It is locked.'.format(t))
-        return self.redir_to_list(t.year, t.month,
-                                  '/transactions?msg=Transaction "{}" has '\
-                                  ' been saved. {}'.format(transaction, msg))
- 
+            return self.redir_to_list(t.year, t.month, 
+                                 'Cannot remove transaction "{}":'\
+                                 ' It is locked.'.format(t))
