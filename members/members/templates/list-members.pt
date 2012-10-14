@@ -4,6 +4,8 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
             
+            <h1>Members</h1>
+
             <form option="${portal_url}/members" method="post" id="list-options">
                 <span>Showing ${view.mem_count} member(s).</span>
                 <span>

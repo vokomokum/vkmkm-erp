@@ -3,6 +3,8 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal">
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
+    
+            <h1>Workgroups</h1>
             
             <div id="action-box">
                 <a class="add-link" href="workgroups/new" tal:condition="view.user.mem_admin">
