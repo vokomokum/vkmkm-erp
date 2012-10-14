@@ -74,7 +74,10 @@ class Applicant2Member(BaseView):
         a_id = self.request.matchdict['a_id']
         applicant = get_applicant(session, a_id)
         member = Member(self.request, applicant.fname, '', applicant.lname)
-        member.mem_adm_comment = applicant.comment
+        now = datetime.now()
+        txt = "Joined orientation in {}, became member in {}/{}.".format(\
+                applicant.month, now.month, now.year)
+        member.mem_adm_comment = "{}\n{}".format(txt, applicant.comment)
         member.mem_email = applicant.email
         member.mem_home_tel = applicant.telnr
         member.validate()
