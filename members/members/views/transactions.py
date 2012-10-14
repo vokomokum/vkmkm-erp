@@ -66,16 +66,21 @@ class ListTransactions(BaseTransactionView):
     tab = 'finance'
 
     def __call__(self):
+        session = DBSession()
         if 'msg' in self.request.params:
             msg = self.request.params['msg']
         else:
             msg = ''
+        if 'confirm-deletion-of' in self.request.params:
+            self.cdo = \
+                get_transaction(session,
+                                self.request.params['confirm-deletion-of'])
         self.month = int(self.request.matchdict['month'])
         self.year = int(self.request.matchdict['year'])
         schedule_date = datetime.date(self.year, self.month, 1)
         self.month_info = month_info(schedule_date) 
         self.days = range(1, self.month_info.days_in_month + 1)
-        return dict(msg=msg, transactions=get_transactions(DBSession()))
+        return dict(msg=msg, transactions=get_transactions(session))
 
 
 @view_config(renderer='../templates/transactions.pt',
@@ -197,13 +202,13 @@ class DeleteTransaction(BaseTransactionView):
         session = DBSession()
         t_id = self.request.matchdict['t_id']
         t = get_transaction(session, t_id)
-        if not t.locked():
-            session.delete(t)
-            session.flush()
-            return self.redir_to_list(t.date.year, t.date.month,
-                                 'Transaction "{}" has been deleted.'\
-                                  .format(t))
-        else:
+        if t.locked():
             return self.redir_to_list(t.year, t.month, 
                                  'Cannot remove transaction "{}":'\
                                  ' It is locked.'.format(t))
+        else:
+            session.delete(t)
+            session.flush()
+            return self.redir_to_list(t.date.year, t.date.month,
+                             'Transaction "{}" has been deleted.'\
+                              .format(t))

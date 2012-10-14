@@ -5,7 +5,18 @@
         <div metal:fill-slot="content">
 
     <h1>Transactions</h1>
-    
+ 
+    <!-- show deletion confirmation -->
+    <div id="deletion-confirmation" tal:condition="python: hasattr(view, 'cdo')">
+        <div class="warn">Really delete transaction "${view.cdo}"?</div>
+        <a href="${portal_url}/transaction/${view.cdo.id}/delete">
+            <button>Yes</button>
+        </a>    
+        <a onclick="javascript:$('#deletion-confirmation').hide()">
+            <button>No</button>
+        </a>    
+    </div>
+
     <div class="new-transaction-form" id="stylized-form">
         <form action="${portal_url}/transactions/new"
               method="post">
@@ -138,7 +149,7 @@
                 </form>
             </td>
             <td>
-                <a href="${portal_url}/transaction/${t.id}/delete"
+                <a href="${portal_url}/transactions/${t.date.year}/${t.date.month}?confirm-deletion-of=${t.id}"
                    tal:condition="not:t.locked()">
                     <img src="${portal_url}/static/img/icons/delete.gif"/>
                 </a>
