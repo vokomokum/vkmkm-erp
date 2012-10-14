@@ -66,7 +66,8 @@
                 <label for="day">Day:</label>
                 <select name="day">
                     <tal:block repeat="d view.days">
-                        <option value="${d}">${d}</option>
+                        <option value="${d}" tal:condition="d != view.today">${d}</option>
+                        <option value="${d}" tal:condition="d == view.today" selected="selected">${d}</option>
                     </tal:block> 
                 </select>
                 <input type="hidden" name="month" value="${view.month}" />

@@ -80,6 +80,8 @@ class ListTransactions(BaseTransactionView):
         schedule_date = datetime.date(self.year, self.month, 1)
         self.month_info = month_info(schedule_date) 
         self.days = range(1, self.month_info.days_in_month + 1)
+        now = datetime.datetime.now()
+        self.today = now.day
         return dict(msg=msg, transactions=get_transactions(session))
 
 
