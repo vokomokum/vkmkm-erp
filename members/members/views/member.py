@@ -14,7 +14,7 @@ def fill_member_from_request(member, request, user_may_edit_admin_settings):
     admin_fields = ['mem_active', 'mem_adm_comment',
                     'mem_membership_paid', 'mem_adm_adj',
                     'mem_admin']
-    ignore_fields = ['mem_id', 'mem_enc_pwd', 'mem_pwd_url']
+    ignore_fields = ['mem_id', 'mem_enc_pwd', 'mem_pwd_url', 'mem_active']
     if request and member:
         # overwrite member properties from request, pwds are excluded
         for attr in [a for a in Member.__dict__.keys()\
