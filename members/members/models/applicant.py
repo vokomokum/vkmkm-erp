@@ -16,8 +16,8 @@ class Applicant(Base):
     email = Column(Unicode(50), unique=True)
     telnr = Column(Unicode(20))
 
-    __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
-               (Allow, 'group:membership', ('view', 'edit')),
+    __acl__ = [(Allow, 'group:membership', ('view', 'edit')),
+               (Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:wg-members', 'view'),
                DENY_ALL]
 

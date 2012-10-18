@@ -18,16 +18,18 @@
     <button type="submit" value="donothing" name="action">No</button>
 </form>
 
+
 <!-- show member form -->
 <form tal:condition="python: m and not hasattr(view, 'confirm_deletion')"
       tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else 'new')"
       method="post">
-
+    
     <h1>Editing Member Details</h1>
 
     <div id="action-box">
         <a class="view-link" href="${portal_url}/member/${m.mem_id}">view this member</a>
     </div>
+
     <button tal:condition="m.exists and view.user_may_edit_admin_settings"
             name="action" type="submit" value="toggle-active"
             class="action-button action-button-red">
@@ -168,7 +170,6 @@
                 <button name="action" type="submit" value="save">
                     <img src="${portal_url}/static/img/icons/save.png"/>
                 </button>
-
             </td>
         </tr>
     </table>
