@@ -2,29 +2,24 @@
 -- PostgreSQL database dump
 --
 
-SET client_encoding = 'SQL_ASCII';
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
-COMMENT ON SCHEMA public IS 'Standard public schema';
-
-
---
--- Name: plperl; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: 
---
-
-CREATE PROCEDURAL LANGUAGE plperl;
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
-CREATE PROCEDURAL LANGUAGE plpgsql;
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 SET search_path = public, pg_catalog;
@@ -56,6 +51,7 @@ ALTER TYPE public.order_sums OWNER TO jes;
 --
 
 CREATE FUNCTION add_order_to_member(integer, integer, integer, integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     pr_no  	 ALIAS FOR $1;
@@ -337,17 +333,38 @@ CREATE FUNCTION add_order_to_member(integer, integer, integer, integer) RETURNS 
       who_amt_btw = wh_rec.who_amt_btw
       WHERE ord_no = order_no AND wh_id = wh_no;
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.add_order_to_member(integer, integer, integer, integer) OWNER TO jes;
+
+--
+-- Name: bg_interval(); Type: FUNCTION; Schema: public; Owner: jes
+--
+
+CREATE FUNCTION bg_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+   DECLARE
+     bg_time CURSOR FOR 
+        SELECT DISTINCT wh_last_seen 
+        FROM bg_data ORDER BY wh_last_seen DESC LIMIT 2;
+   BEGIN
+     OPEN bg_time;
+     FETCH bg_time INTO newest;
+     FETCH bg_time INTO penult;
+     CLOSE bg_time;
+END;$$;
+
+
+ALTER FUNCTION public.bg_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) OWNER TO jes;
 
 --
 -- Name: broken_missing(integer, integer, integer, integer, boolean); Type: FUNCTION; Schema: public; Owner: jes
 --
 
 CREATE FUNCTION broken_missing(mem_num integer, ord_num integer, pr_num integer, qty integer, is_damaged boolean) RETURNS void
+    LANGUAGE plpgsql
     AS $$
   DECLARE
      order_no       INTEGER;
@@ -408,8 +425,7 @@ CREATE FUNCTION broken_missing(mem_num integer, ord_num integer, pr_num integer,
          mem_id = mem_num AND ord_no = ord_num AND pr_id = pr_num;
      RETURN;
 
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.broken_missing(mem_num integer, ord_num integer, pr_num integer, qty integer, is_damaged boolean) OWNER TO jes;
@@ -419,6 +435,7 @@ ALTER FUNCTION public.broken_missing(mem_num integer, ord_num integer, pr_num in
 --
 
 CREATE FUNCTION btw_price(ex_btw integer, btw numeric) RETURNS integer
+    LANGUAGE plpgsql
     AS $$
     DECLARE
       int_btw  INTEGER;
@@ -427,8 +444,7 @@ CREATE FUNCTION btw_price(ex_btw integer, btw numeric) RETURNS integer
 
       RETURN (ex_btw * (1000 + int_btw) + 500) / 1000;
 
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.btw_price(ex_btw integer, btw numeric) OWNER TO jes;
@@ -438,13 +454,13 @@ ALTER FUNCTION public.btw_price(ex_btw integer, btw numeric) OWNER TO jes;
 --
 
 CREATE FUNCTION check_mem_ord_allowed() RETURNS boolean
+    LANGUAGE plpgsql
     AS $$
   DECLARE   
     status	INTEGER;
   BEGIN
     RETURN (get_ord_status() < 2);
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.check_mem_ord_allowed() OWNER TO jes;
@@ -454,6 +470,7 @@ ALTER FUNCTION public.check_mem_ord_allowed() OWNER TO jes;
 --
 
 CREATE FUNCTION check_mem_ord_open(integer) RETURNS boolean
+    LANGUAGE plpgsql
     AS $_$
   DECLARE   
     mem_no ALIAS FOR $1; 
@@ -464,8 +481,7 @@ CREATE FUNCTION check_mem_ord_open(integer) RETURNS boolean
     SELECT INTO cnt count(*) FROM mem_order WHERE mem_id = mem_no 
       AND ord_no  = order_no;
     RETURN (cnt > 0);
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.check_mem_ord_open(integer) OWNER TO jes;
@@ -475,6 +491,7 @@ ALTER FUNCTION public.check_mem_ord_open(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION check_prd_in_wh_line(integer) RETURNS boolean
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     pid		ALIAS FOR $1;
@@ -489,8 +506,7 @@ CREATE FUNCTION check_prd_in_wh_line(integer) RETURNS boolean
      PERFORM wh_id FROM wh_line WHERE ord_no = order_no AND pr_id = pid;
      IF(NOT FOUND) THEN RETURN False; END IF;
      RETURN TRUE;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.check_prd_in_wh_line(integer) OWNER TO jes;
@@ -499,7 +515,8 @@ ALTER FUNCTION public.check_prd_in_wh_line(integer) OWNER TO jes;
 -- Name: check_unique_adm_adj(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
-CREATE FUNCTION check_unique_adm_adj() RETURNS "trigger"
+CREATE FUNCTION check_unique_adm_adj() RETURNS trigger
+    LANGUAGE plpgsql
     AS $$
   DECLARE
     cnt INTEGER;
@@ -512,8 +529,7 @@ CREATE FUNCTION check_unique_adm_adj() RETURNS "trigger"
         WHERE mem_adm_adj;
     END IF;
     RETURN NULL;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.check_unique_adm_adj() OWNER TO jes;
@@ -523,13 +539,13 @@ ALTER FUNCTION public.check_unique_adm_adj() OWNER TO jes;
 --
 
 CREATE FUNCTION check_wh_ord_allowed() RETURNS boolean
+    LANGUAGE plpgsql
     AS $$
   DECLARE   
     status	INTEGER;
   BEGIN
     RETURN (get_ord_status() < 7);
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.check_wh_ord_allowed() OWNER TO jes;
@@ -539,6 +555,7 @@ ALTER FUNCTION public.check_wh_ord_allowed() OWNER TO jes;
 --
 
 CREATE FUNCTION check_wh_ord_open(integer) RETURNS boolean
+    LANGUAGE plpgsql
     AS $_$
   DECLARE   
     wh_no ALIAS FOR $1; 
@@ -547,8 +564,7 @@ CREATE FUNCTION check_wh_ord_open(integer) RETURNS boolean
     SELECT INTO cnt count(*) FROM wh_order WHERE wh_id = wh_no 
       AND ord_no  = get_ord_no();
     RETURN (cnt > 0);
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.check_wh_ord_open(integer) OWNER TO jes;
@@ -558,6 +574,7 @@ ALTER FUNCTION public.check_wh_ord_open(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION commit_order(integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     mem_no	ALIAS FOR $1;
@@ -582,8 +599,7 @@ CREATE FUNCTION commit_order(integer) RETURNS void
       WHERE ord_no = order_no AND mem_id = mem_no;
     -- delete any old carry-overs
     DELETE FROM carry_over WHERE mem_id = mem_no;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.commit_order(integer) OWNER TO jes;
@@ -593,6 +609,7 @@ ALTER FUNCTION public.commit_order(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION count_all_rcv_shortages() RETURNS integer
+    LANGUAGE plpgsql
     AS $$
   DECLARE
   order_no	INTEGER;
@@ -616,8 +633,7 @@ CREATE FUNCTION count_all_rcv_shortages() RETURNS integer
     END LOOP;
     CLOSE ml_curs;
     RETURN cnt;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.count_all_rcv_shortages() OWNER TO jes;
@@ -627,6 +643,7 @@ ALTER FUNCTION public.count_all_rcv_shortages() OWNER TO jes;
 --
 
 CREATE FUNCTION count_all_shortages() RETURNS integer
+    LANGUAGE plpgsql
     AS $$
   DECLARE
   order_no	INTEGER;
@@ -650,8 +667,7 @@ CREATE FUNCTION count_all_shortages() RETURNS integer
     END LOOP;
     CLOSE ml_curs;
     RETURN cnt;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.count_all_shortages() OWNER TO jes;
@@ -661,6 +677,7 @@ ALTER FUNCTION public.count_all_shortages() OWNER TO jes;
 --
 
 CREATE FUNCTION count_wh_ord_shortages(integer) RETURNS integer
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
   wh_no		ALIAS FOR $1;
@@ -674,8 +691,7 @@ CREATE FUNCTION count_wh_ord_shortages(integer) RETURNS integer
       WHERE l.wh_id = wh_no AND l.ord_no = order_no AND l.pr_id = p.pr_id AND
       l.whl_qty != floor(p.pr_wh_q/l.whl_mem_qty);
     RETURN cnt;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.count_wh_ord_shortages(integer) OWNER TO jes;
@@ -685,6 +701,7 @@ ALTER FUNCTION public.count_wh_ord_shortages(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION create_carry_over(integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     mem_no      ALIAS FOR $1;
@@ -723,8 +740,7 @@ CREATE FUNCTION create_carry_over(integer) RETURNS void
     DELETE FROM mem_order WHERE mem_id = mem_no AND ord_no = order_no;
     -- raise notice 'Done';
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.create_carry_over(integer) OWNER TO jes;
@@ -734,6 +750,7 @@ ALTER FUNCTION public.create_carry_over(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION create_default_order(integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     mem_no      ALIAS FOR $1;
@@ -743,7 +760,8 @@ CREATE FUNCTION create_default_order(integer) RETURNS void
     commit_ts	TIMESTAMP;
     litems	CURSOR (MEM INTEGER, ORDN INTEGER) FOR 
     		  SELECT pr_id, meml_qty FROM mem_line
-		  WHERE mem_id = MEM AND ord_no = ORDN;
+		  WHERE mem_id = MEM AND ord_no = ORDN
+		  AND meml_pickup !+ 0;
   BEGIN
     order_no = get_ord_no();
     SELECT memo_commit_closed INTO commit_ts FROM mem_order 
@@ -767,8 +785,7 @@ CREATE FUNCTION create_default_order(integer) RETURNS void
     END LOOP;
     CLOSE litems;
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.create_default_order(integer) OWNER TO jes;
@@ -778,6 +795,7 @@ ALTER FUNCTION public.create_default_order(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION create_default_order(integer, integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     mem_no      ALIAS FOR $1;
@@ -787,7 +805,8 @@ CREATE FUNCTION create_default_order(integer, integer) RETURNS void
     commit_ts	TIMESTAMP;
     litems	CURSOR (MEM INTEGER, ORDN INTEGER) FOR 
     		  SELECT pr_id, meml_qty FROM mem_line
-		  WHERE mem_id = MEM AND ord_no = ORDN;
+		  WHERE mem_id = MEM AND ord_no = ORDN
+		  AND meml_pickup != 0;
   BEGIN
     -- pick an arbitrary field to check that there is such an order
     SELECT memo_commit_closed INTO commit_ts FROM mem_order 
@@ -811,8 +830,7 @@ CREATE FUNCTION create_default_order(integer, integer) RETURNS void
     END LOOP;
     CLOSE litems;
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.create_default_order(integer, integer) OWNER TO jes;
@@ -822,6 +840,7 @@ ALTER FUNCTION public.create_default_order(integer, integer) OWNER TO jes;
 --
 
 CREATE FUNCTION dnb_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) RETURNS record
+    LANGUAGE plpgsql
     AS $$
    DECLARE
      dnbtime CURSOR FOR 
@@ -832,8 +851,7 @@ CREATE FUNCTION dnb_interval(OUT newest timestamp with time zone, OUT penult tim
      FETCH dnbtime INTO newest;
      FETCH dnbtime INTO penult;
      CLOSE dnbtime;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.dnb_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) OWNER TO jes;
@@ -843,6 +861,7 @@ ALTER FUNCTION public.dnb_interval(OUT newest timestamp with time zone, OUT penu
 --
 
 CREATE FUNCTION drop_mem_empty_orders(integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE 
     order_no    ALIAS FOR $1; 
@@ -857,8 +876,7 @@ CREATE FUNCTION drop_mem_empty_orders(integer) RETURNS void
         AND (l.meml_adj != 0 OR l.meml_rcv != 0));
     PERFORM rebuild_all_wh_headers();
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.drop_mem_empty_orders(integer) OWNER TO jes;
@@ -868,6 +886,7 @@ ALTER FUNCTION public.drop_mem_empty_orders(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION enter_delivery_shortage(integer, integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     pr_no	ALIAS FOR $1;
@@ -909,8 +928,7 @@ CREATE FUNCTION enter_delivery_shortage(integer, integer) RETURNS void
     UPDATE wh_line SET whl_rcv = qty WHERE ord_no = order_no AND 
       pr_id = pr_no;
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.enter_delivery_shortage(integer, integer) OWNER TO jes;
@@ -920,6 +938,7 @@ ALTER FUNCTION public.enter_delivery_shortage(integer, integer) OWNER TO jes;
 --
 
 CREATE FUNCTION ex_btw_prc(price integer, btw numeric) RETURNS integer
+    LANGUAGE plpgsql
     AS $$
   DECLARE
     int_btw    INTEGER;
@@ -929,8 +948,7 @@ CREATE FUNCTION ex_btw_prc(price integer, btw numeric) RETURNS integer
     -- creates the ex-btw price
     RETURN (price * 1000 + 500)/ (1000 + int_btw);
     
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.ex_btw_prc(price integer, btw numeric) OWNER TO jes;
@@ -939,7 +957,8 @@ ALTER FUNCTION public.ex_btw_prc(price integer, btw numeric) OWNER TO jes;
 -- Name: first_insert(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
-CREATE FUNCTION first_insert() RETURNS "trigger"
+CREATE FUNCTION first_insert() RETURNS trigger
+    LANGUAGE plpgsql
     AS $$  -- TESTED
   DECLARE cnt		INTEGER;
   BEGIN
@@ -952,8 +971,7 @@ CREATE FUNCTION first_insert() RETURNS "trigger"
     NEW.ord_no := 0;
     NEW.ord_status := 7;
     RETURN NEW;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.first_insert() OWNER TO jes;
@@ -963,6 +981,7 @@ ALTER FUNCTION public.first_insert() OWNER TO jes;
 --
 
 CREATE FUNCTION fix_up() RETURNS void
+    LANGUAGE plpgsql
     AS $$
   DECLARE
     p	         record;
@@ -978,8 +997,7 @@ CREATE FUNCTION fix_up() RETURNS void
      end loop;
      
      return;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.fix_up() OWNER TO jes;
@@ -989,13 +1007,13 @@ ALTER FUNCTION public.fix_up() OWNER TO jes;
 --
 
 CREATE FUNCTION get_ord_no() RETURNS integer
+    LANGUAGE plpgsql
     AS $$
   DECLARE   ord_no	INTEGER;
   BEGIN
     SELECT INTO ord_no order_header.ord_no FROM order_header;
     RETURN (ord_no);
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.get_ord_no() OWNER TO jes;
@@ -1005,13 +1023,13 @@ ALTER FUNCTION public.get_ord_no() OWNER TO jes;
 --
 
 CREATE FUNCTION get_ord_status() RETURNS integer
+    LANGUAGE plpgsql
     AS $$
   DECLARE status INTEGER;
   BEGIN
     SELECT INTO status ord_status FROM order_header;
     RETURN status;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.get_ord_status() OWNER TO jes;
@@ -1021,6 +1039,7 @@ ALTER FUNCTION public.get_ord_status() OWNER TO jes;
 --
 
 CREATE FUNCTION join_name(character varying, character varying, character varying) RETURNS character varying
+    LANGUAGE plpgsql
     AS $_$  -- NOT TESTED
   DECLARE 
    first	ALIAS FOR $1;
@@ -1033,8 +1052,7 @@ CREATE FUNCTION join_name(character varying, character varying, character varyin
      END IF;
 
      RETURN first || ' ' || middle || ' ' || last;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.join_name(character varying, character varying, character varying) OWNER TO jes;
@@ -1043,7 +1061,8 @@ ALTER FUNCTION public.join_name(character varying, character varying, character 
 -- Name: message_update(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
-CREATE FUNCTION message_update() RETURNS "trigger"
+CREATE FUNCTION message_update() RETURNS trigger
+    LANGUAGE plpgsql
     AS $$
    BEGIN
       IF (NEW.mem_message = OLD.mem_message)
@@ -1054,8 +1073,7 @@ CREATE FUNCTION message_update() RETURNS "trigger"
          NEW.mem_message_date = LOCALTIMESTAMP;
       END IF;
       RETURN NEW;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.message_update() OWNER TO jes;
@@ -1065,6 +1083,7 @@ ALTER FUNCTION public.message_update() OWNER TO jes;
 --
 
 CREATE FUNCTION min_price(w_price integer, btw numeric, margin integer, w_q integer) RETURNS integer
+    LANGUAGE plpgsql
     AS $$
   DECLARE
     ex_btw       INTEGER; 
@@ -1074,8 +1093,7 @@ CREATE FUNCTION min_price(w_price integer, btw numeric, margin integer, w_q inte
     -- return that price with btw included
     RETURN  btw_price(ex_btw, btw);
 
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.min_price(w_price integer, btw numeric, margin integer, w_q integer) OWNER TO jes;
@@ -1084,15 +1102,15 @@ ALTER FUNCTION public.min_price(w_price integer, btw numeric, margin integer, w_
 -- Name: news_insert(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
-CREATE FUNCTION news_insert() RETURNS "trigger"
+CREATE FUNCTION news_insert() RETURNS trigger
+    LANGUAGE plpgsql
     AS $$
    BEGIN
       NEW.news_date     := LOCALTIMESTAMP;
       NEW.news_mod_auth := NEW.news_auth;
       NEW.news_mod_date := NEW.news_date;
       RETURN NEW;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.news_insert() OWNER TO jes;
@@ -1101,7 +1119,8 @@ ALTER FUNCTION public.news_insert() OWNER TO jes;
 -- Name: news_update(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
-CREATE FUNCTION news_update() RETURNS "trigger"
+CREATE FUNCTION news_update() RETURNS trigger
+    LANGUAGE plpgsql
     AS $$
    BEGIN
       IF (NEW.news_text = OLD.news_text)
@@ -1114,8 +1133,7 @@ CREATE FUNCTION news_update() RETURNS "trigger"
       NEW.news_auth     := OLD.news_auth;
       NEW.news_date     := OLD.news_date;
       RETURN NEW;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.news_update() OWNER TO jes;
@@ -1125,9 +1143,10 @@ ALTER FUNCTION public.news_update() OWNER TO jes;
 --
 
 CREATE SEQUENCE product_pr_id_seq
+    START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1159,10 +1178,11 @@ CREATE TABLE product (
     pr_changed boolean DEFAULT false,
     pr_mq_chg boolean DEFAULT false,
     pr_ex_btw integer,
+    age integer DEFAULT 0,
+    CONSTRAINT btw_valid CHECK ((((pr_btw = (0)::numeric) OR (pr_btw = (6)::numeric)) OR (pr_btw = (21)::numeric))),
     CONSTRAINT minimum_margin CHECK ((pr_margin >= 4)),
     CONSTRAINT not_null_pr_ex_btw CHECK ((pr_ex_btw IS NOT NULL)),
     CONSTRAINT positive_price CHECK ((pr_wh_price > 0)),
-    CONSTRAINT valid_btw_rate CHECK ((((pr_btw = (0)::numeric) OR (pr_btw = (6)::numeric)) OR (pr_btw = (19)::numeric))),
     CONSTRAINT valid_multiple CHECK ((((pr_wh_q % pr_mem_q) = 0) OR ((pr_mem_q % pr_wh_q) = 0)))
 );
 
@@ -1174,6 +1194,7 @@ ALTER TABLE public.product OWNER TO jes;
 --
 
 CREATE FUNCTION open_mem_line(order_no integer, mem_no integer, pr_rec product, exc_flg boolean, exc_msg character varying) RETURNS record
+    LANGUAGE plpgsql
     AS $$
   DECLARE   
     status	  INTEGER;
@@ -1207,8 +1228,7 @@ CREATE FUNCTION open_mem_line(order_no integer, mem_no integer, pr_rec product, 
       ml_rec.meml_ex_btw );
 
     RETURN ml_rec;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.open_mem_line(order_no integer, mem_no integer, pr_rec product, exc_flg boolean, exc_msg character varying) OWNER TO jes;
@@ -1218,6 +1238,7 @@ ALTER FUNCTION public.open_mem_line(order_no integer, mem_no integer, pr_rec pro
 --
 
 CREATE FUNCTION open_mem_ord(integer, boolean, character varying) RETURNS record
+    LANGUAGE plpgsql
     AS $_$
   DECLARE   
     mem_no        ALIAS FOR $1; 
@@ -1246,16 +1267,17 @@ CREATE FUNCTION open_mem_ord(integer, boolean, character varying) RETURNS record
     mo_rec.mo_checked_out         :=  False;
     mo_rec.mo_checked_out_by      := NULL;
     status := get_ord_status();
-    IF(status = 1) THEN
-      mo_rec.memo_commit_open := mo_rec.memo_order_open;
-    END IF;
+
+    -- always committed
+    mo_rec.memo_commit_open := mo_rec.memo_order_open;
+    mo_rec.memo_commit_closed := mo_rec.memo_order_open;
+
     INSERT INTO mem_order (ord_no, mem_id, memo_order_open, memo_commit_open,
-        memo_amt) VALUES (mo_rec.ord_no,
+        memo_commit_closed, memo_amt) VALUES (mo_rec.ord_no,
 	mo_rec.mem_id, mo_rec.memo_order_open, mo_rec.memo_commit_open,
-        mo_rec.memo_amt);
+        mo_rec.memo_commit_closed, mo_rec.memo_amt);
     RETURN mo_rec;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.open_mem_ord(integer, boolean, character varying) OWNER TO jes;
@@ -1265,6 +1287,7 @@ ALTER FUNCTION public.open_mem_ord(integer, boolean, character varying) OWNER TO
 --
 
 CREATE FUNCTION open_wh_line(integer, integer, product, boolean, character varying) RETURNS record
+    LANGUAGE plpgsql
     AS $_$
   DECLARE   
     order_no	  ALIAS FOR $1;
@@ -1297,8 +1320,7 @@ CREATE FUNCTION open_wh_line(integer, integer, product, boolean, character varyi
       wl_rec.whl_mem_qty);
 
     RETURN wl_rec;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.open_wh_line(integer, integer, product, boolean, character varying) OWNER TO jes;
@@ -1308,6 +1330,7 @@ ALTER FUNCTION public.open_wh_line(integer, integer, product, boolean, character
 --
 
 CREATE FUNCTION open_wh_ord(integer, boolean, character varying) RETURNS record
+    LANGUAGE plpgsql
     AS $_$
   DECLARE   
     wh_no         ALIAS FOR $1; 
@@ -1337,8 +1360,7 @@ CREATE FUNCTION open_wh_ord(integer, boolean, character varying) RETURNS record
       VALUES (wh_rec.ord_no, wh_rec.wh_id, wh_rec.who_order_open, 
         wh_rec.who_order_open, 0, 0);
     RETURN wh_rec;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.open_wh_ord(integer, boolean, character varying) OWNER TO jes;
@@ -1348,20 +1370,22 @@ ALTER FUNCTION public.open_wh_ord(integer, boolean, character varying) OWNER TO 
 --
 
 CREATE FUNCTION order_totals(mem integer, ord integer) RETURNS order_sums
+    LANGUAGE plpgsql
     AS $$
-
     DECLARE
        mo       mem_order%ROWTYPE;
        os       order_sums;
        prod     INTEGER;
-       rate     INTEGER;
+       rate     NUMERIC;
        tax      INTEGER;
        prod_tot INTEGER;
        tax_tot  INTEGER;
        nr       INTEGER;
-       mc       CURSOR (ODN INTEGER, MID INTEGER) FOR SELECT sum(meml_pickup * meml_ex_btw)
-                   AS ex_btw, meml_btw FROM mem_line WHERE mem_id = MID and ord_no = ODN
-                   GROUP BY meml_btw ORDER BY meml_btw;
+       mc       CURSOR (ODN INTEGER, MID INTEGER) FOR SELECT 
+       		       sum(meml_pickup * meml_ex_btw)
+                       AS ex_btw, meml_btw 
+		       FROM mem_line WHERE mem_id = MID and ord_no = ODN
+		       GROUP BY meml_btw ORDER BY meml_btw;
     BEGIN
        os.btw_0_prods :=  0;
        os.btw_0_tax   :=  0;
@@ -1385,7 +1409,7 @@ CREATE FUNCTION order_totals(mem integer, ord integer) RETURNS order_sums
        LOOP 
          FETCH mc INTO prod, rate;
 	 EXIT WHEN NOT FOUND;
-         tax := (prod * rate * 10 + 500) / 1000;
+         tax := floor((prod * rate * 10 + 500) / 1000);
 	 os.prod_tot := os.prod_tot + prod;
          os.tax_tot  := os.tax_tot + tax; 
 	 IF rate = 0.0 THEN
@@ -1410,12 +1434,12 @@ CREATE FUNCTION order_totals(mem integer, ord integer) RETURNS order_sums
       END LOOP;
 
       os.grand_tot := os.prod_tot + os.tax_tot +  mo.mo_stgeld_rxed + 
-         mo.mo_crates_rxed + mo.mo_misc_rxed + mo.mo_membership 
+         mo.mo_crates_rxed + mo.mo_misc_rxed + mo.mo_membership + 
+	 mo.mo_vers_groente + mo.mo_vers_kaas + mo.mo_vers_misc +
 	 - (mo.mo_stgeld_refunded + mo.mo_crates_refunded + mo.mo_misc_refunded);
       RETURN os;
 
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.order_totals(mem integer, ord integer) OWNER TO jes;
@@ -1425,6 +1449,7 @@ ALTER FUNCTION public.order_totals(mem integer, ord integer) OWNER TO jes;
 --
 
 CREATE FUNCTION post_news(integer, character varying) RETURNS integer
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     poster	ALIAS FOR $1;
@@ -1437,8 +1462,7 @@ CREATE FUNCTION post_news(integer, character varying) RETURNS integer
 			     nextval('member_news_news_id_seq'),
 			     poster, now, body, now, poster);
     RETURN currval('member_news_news_id_seq');
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.post_news(integer, character varying) OWNER TO jes;
@@ -1447,7 +1471,8 @@ ALTER FUNCTION public.post_news(integer, character varying) OWNER TO jes;
 -- Name: product_update(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
-CREATE FUNCTION product_update() RETURNS "trigger"
+CREATE FUNCTION product_update() RETURNS trigger
+    LANGUAGE plpgsql
     AS $$
   DECLARE 
     mp INTEGER;
@@ -1471,8 +1496,7 @@ CREATE FUNCTION product_update() RETURNS "trigger"
 	  WHERE pr_id = NEW.pr_id;
     END IF;
   RETURN NEW;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.product_update() OWNER TO jes;
@@ -1482,6 +1506,7 @@ ALTER FUNCTION public.product_update() OWNER TO jes;
 --
 
 CREATE FUNCTION put_dnb(prcode character varying, supplier character varying, barcode character varying, descr character varying, brand character varying, kwaliteit character varying, size numeric, wh_q integer, unit character varying, land character varying, trefw character varying, col_h integer, col_g integer, vol_s integer, whpri integer, btw numeric, korting numeric, statieg integer, gluten boolean, suiker boolean, lactose boolean, milk boolean, salt boolean, soya boolean, yeast boolean, veg boolean, tstmp timestamp with time zone) RETURNS void
+    LANGUAGE plpgsql
     AS $$
 
   DECLARE
@@ -1568,8 +1593,7 @@ CREATE FUNCTION put_dnb(prcode character varying, supplier character varying, ba
          'f', 'f', 'f', d.wh_prev_seen,
          d.wh_last_seen);
    END IF;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.put_dnb(prcode character varying, supplier character varying, barcode character varying, descr character varying, brand character varying, kwaliteit character varying, size numeric, wh_q integer, unit character varying, land character varying, trefw character varying, col_h integer, col_g integer, vol_s integer, whpri integer, btw numeric, korting numeric, statieg integer, gluten boolean, suiker boolean, lactose boolean, milk boolean, salt boolean, soya boolean, yeast boolean, veg boolean, tstmp timestamp with time zone) OWNER TO jes;
@@ -1579,6 +1603,7 @@ ALTER FUNCTION public.put_dnb(prcode character varying, supplier character varyi
 --
 
 CREATE FUNCTION put_zap(prcode character varying, descr character varying, wh_q integer, whpri integer, btw numeric, url character varying, tstmp timestamp with time zone) RETURNS void
+    LANGUAGE plpgsql
     AS $$
 
   DECLARE
@@ -1647,8 +1672,7 @@ CREATE FUNCTION put_zap(prcode character varying, descr character varying, wh_q 
          'f', 'f', 'f', 'f', d.wh_prev_seen,
          d.wh_last_seen, d.wh_url);
    END IF;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.put_zap(prcode character varying, descr character varying, wh_q integer, whpri integer, btw numeric, url character varying, tstmp timestamp with time zone) OWNER TO jes;
@@ -1658,6 +1682,7 @@ ALTER FUNCTION public.put_zap(prcode character varying, descr character varying,
 --
 
 CREATE FUNCTION rebuild_all_wh_headers() RETURNS void
+    LANGUAGE plpgsql
     AS $$
   DECLARE
     wh_no	INTEGER;
@@ -1673,8 +1698,7 @@ CREATE FUNCTION rebuild_all_wh_headers() RETURNS void
       PERFORM rebuild_wh_header(wh_no);
     END LOOP;
 
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.rebuild_all_wh_headers() OWNER TO jes;
@@ -1684,6 +1708,7 @@ ALTER FUNCTION public.rebuild_all_wh_headers() OWNER TO jes;
 --
 
 CREATE FUNCTION rebuild_mem_header(integer, integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
   order_no	ALIAS FOR $1;
@@ -1721,8 +1746,7 @@ CREATE FUNCTION rebuild_mem_header(integer, integer) RETURNS void
     UPDATE mem_order SET memo_amt = total
       WHERE ord_no = order_no AND mem_id = mem_no;
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.rebuild_mem_header(integer, integer) OWNER TO jes;
@@ -1732,6 +1756,7 @@ ALTER FUNCTION public.rebuild_mem_header(integer, integer) OWNER TO jes;
 --
 
 CREATE FUNCTION rebuild_wh_header(integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     wh_no	ALIAS FOR $1;
@@ -1854,8 +1879,7 @@ CREATE FUNCTION rebuild_wh_header(integer) RETURNS void
 	ord_no = wh_rec.ord_no AND wh_id = wh_rec.wh_id;
     END IF;
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.rebuild_wh_header(integer) OWNER TO jes;
@@ -1865,6 +1889,7 @@ ALTER FUNCTION public.rebuild_wh_header(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION remove_inactive_member_order(integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     mem_no	ALIAS FOR $1;
@@ -1884,8 +1909,7 @@ CREATE FUNCTION remove_inactive_member_order(integer) RETURNS void
     DELETE FROM mem_order WHERE ord_no = order_no AND mem_id = mem_no;
     PERFORM rebuild_all_wh_headers();
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.remove_inactive_member_order(integer) OWNER TO jes;
@@ -1895,6 +1919,7 @@ ALTER FUNCTION public.remove_inactive_member_order(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION remove_product(integer) RETURNS boolean
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     pr_no	ALIAS FOR $1;
@@ -1932,8 +1957,7 @@ CREATE FUNCTION remove_product(integer) RETURNS boolean
     END LOOP;
     CLOSE witems;
     RETURN True;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.remove_product(integer) OWNER TO jes;
@@ -1943,6 +1967,7 @@ ALTER FUNCTION public.remove_product(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION remove_wholesaler(integer) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     wh_no	ALIAS FOR $1;
@@ -1973,8 +1998,7 @@ CREATE FUNCTION remove_wholesaler(integer) RETURNS void
     DELETE FROM wh_line WHERE wh_id = wh_no AND ord_no = order_no;
     DELETE FROM wh_order WHERE wh_id = wh_no AND ord_no = order_no;
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.remove_wholesaler(integer) OWNER TO jes;
@@ -1984,6 +2008,7 @@ ALTER FUNCTION public.remove_wholesaler(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION set_adm_adj(integer, boolean) RETURNS void
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     mem_no	ALIAS FOR $1;
@@ -1991,8 +2016,7 @@ CREATE FUNCTION set_adm_adj(integer, boolean) RETURNS void
   BEGIN
     UPDATE members SET mem_adm_adj = is_adm WHERE mem_id = mem_no;
 
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.set_adm_adj(integer, boolean) OWNER TO jes;
@@ -2001,7 +2025,8 @@ ALTER FUNCTION public.set_adm_adj(integer, boolean) OWNER TO jes;
 -- Name: set_member_price(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
-CREATE FUNCTION set_member_price() RETURNS "trigger"
+CREATE FUNCTION set_member_price() RETURNS trigger
+    LANGUAGE plpgsql
     AS $$
   DECLARE 
     mp INTEGER;
@@ -2020,8 +2045,7 @@ CREATE FUNCTION set_member_price() RETURNS "trigger"
           NEW.pr_ex_btw = ex_btw_prc(NEW.pr_mem_price, NEW.pr_btw);
      END IF;
   RETURN NEW;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.set_member_price() OWNER TO jes;
@@ -2031,6 +2055,7 @@ ALTER FUNCTION public.set_member_price() OWNER TO jes;
 --
 
 CREATE FUNCTION set_status_0(character varying) RETURNS integer
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     order_label	ALIAS FOR $1;
@@ -2077,8 +2102,7 @@ CREATE FUNCTION set_status_0(character varying) RETURNS integer
     END LOOP;
     CLOSE co_curs;
     RETURN 0;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.set_status_0(character varying) OWNER TO jes;
@@ -2088,6 +2112,7 @@ ALTER FUNCTION public.set_status_0(character varying) OWNER TO jes;
 --
 
 CREATE FUNCTION set_status_1() RETURNS void
+    LANGUAGE plpgsql
     AS $$
   DECLARE
     order_no	INTEGER;
@@ -2099,8 +2124,7 @@ CREATE FUNCTION set_status_1() RETURNS void
     UPDATE wh_order SET who_commit_open = LOCALTIMESTAMP
        WHERE ord_no = order_no;
 
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.set_status_1() OWNER TO jes;
@@ -2110,6 +2134,7 @@ ALTER FUNCTION public.set_status_1() OWNER TO jes;
 --
 
 CREATE FUNCTION set_status_2() RETURNS void
+    LANGUAGE plpgsql
     AS $$
   DECLARE
     order_no	INTEGER;
@@ -2117,8 +2142,7 @@ CREATE FUNCTION set_status_2() RETURNS void
     order_no := get_ord_no();
     UPDATE order_header SET ord_status = 2, func_flag = False WHERE mas_key = 1;
 
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.set_status_2() OWNER TO jes;
@@ -2128,6 +2152,7 @@ ALTER FUNCTION public.set_status_2() OWNER TO jes;
 --
 
 CREATE FUNCTION set_status_2(boolean) RETURNS integer
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     force     ALIAS FOR $1;
@@ -2187,17 +2212,32 @@ CREATE FUNCTION set_status_2(boolean) RETURNS integer
       UPDATE order_header SET ord_status = 2, func_flag = False 
       	     WHERE mas_key = 1;
       RETURN 0;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.set_status_2(boolean) OWNER TO jes;
+
+--
+-- Name: set_status_3(); Type: FUNCTION; Schema: public; Owner: jes
+--
+
+CREATE FUNCTION set_status_3() RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+    BEGIN
+      UPDATE order_header SET ord_status = 3, func_flag = False 
+        WHERE mas_key = 1;
+END;$$;
+
+
+ALTER FUNCTION public.set_status_3() OWNER TO jes;
 
 --
 -- Name: set_status_3(boolean); Type: FUNCTION; Schema: public; Owner: jes
 --
 
 CREATE FUNCTION set_status_3(boolean) RETURNS integer
+    LANGUAGE plpgsql
     AS $_$
    DECLARE
       force	ALIAS FOR $1;    -- True if we discard uncommitted orders
@@ -2255,32 +2295,17 @@ CREATE FUNCTION set_status_3(boolean) RETURNS integer
       UPDATE order_header SET ord_status = 3, func_flag = False 
         WHERE mas_key = 1;
       RETURN 0;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.set_status_3(boolean) OWNER TO jes;
-
---
--- Name: set_status_3(); Type: FUNCTION; Schema: public; Owner: jes
---
-
-CREATE FUNCTION set_status_3() RETURNS void
-    AS $$
-    BEGIN
-      UPDATE order_header SET ord_status = 3, func_flag = False 
-        WHERE mas_key = 1;
-END;$$
-    LANGUAGE plpgsql;
-
-
-ALTER FUNCTION public.set_status_3() OWNER TO jes;
 
 --
 -- Name: set_status_4(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
 CREATE FUNCTION set_status_4() RETURNS integer
+    LANGUAGE plpgsql
     AS $$ -- TESTED
   DECLARE 
     order_no	INTEGER;
@@ -2291,8 +2316,7 @@ CREATE FUNCTION set_status_4() RETURNS integer
     IF(cnt != 0) THEN RETURN cnt; END IF;
     UPDATE order_header SET ord_status = 4, func_flag = false  WHERE mas_key = 1;
     RETURN 0;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.set_status_4() OWNER TO jes;
@@ -2302,6 +2326,7 @@ ALTER FUNCTION public.set_status_4() OWNER TO jes;
 --
 
 CREATE FUNCTION set_status_5() RETURNS integer
+    LANGUAGE plpgsql
     AS $$
   DECLARE 
     order_no	INTEGER;
@@ -2309,8 +2334,7 @@ CREATE FUNCTION set_status_5() RETURNS integer
     order_no := get_ord_no();
     UPDATE order_header SET ord_status = 5, func_flag = False WHERE mas_key = 1;
     RETURN 0;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.set_status_5() OWNER TO jes;
@@ -2320,6 +2344,7 @@ ALTER FUNCTION public.set_status_5() OWNER TO jes;
 --
 
 CREATE FUNCTION set_status_6() RETURNS integer
+    LANGUAGE plpgsql
     AS $$
   DECLARE 
     order_no	INTEGER;
@@ -2327,8 +2352,7 @@ CREATE FUNCTION set_status_6() RETURNS integer
     order_no := get_ord_no();
     UPDATE order_header SET ord_status = 6, func_flag = False WHERE mas_key = 1;
     RETURN 0;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.set_status_6() OWNER TO jes;
@@ -2338,6 +2362,7 @@ ALTER FUNCTION public.set_status_6() OWNER TO jes;
 --
 
 CREATE FUNCTION set_status_7() RETURNS integer
+    LANGUAGE plpgsql
     AS $$ 
   DECLARE
     order_no    INTEGER;
@@ -2361,8 +2386,7 @@ CREATE FUNCTION set_status_7() RETURNS integer
     END LOOP;
     UPDATE order_header SET ord_status = 7, func_flag = False WHERE mas_key = 1;
     RETURN 0;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.set_status_7() OWNER TO jes;
@@ -2372,6 +2396,7 @@ ALTER FUNCTION public.set_status_7() OWNER TO jes;
 --
 
 CREATE FUNCTION short(integer, integer, integer) RETURNS integer
+    LANGUAGE plpgsql
     AS $_$
   declare
     qty alias for $1;
@@ -2382,8 +2407,7 @@ CREATE FUNCTION short(integer, integer, integer) RETURNS integer
     tot := qty - ord;
     if(tot >= 0) then return tot; end if;
     return siz + tot;
-end;$_$
-    LANGUAGE plpgsql;
+end;$_$;
 
 
 ALTER FUNCTION public.short(integer, integer, integer) OWNER TO jes;
@@ -2392,7 +2416,8 @@ ALTER FUNCTION public.short(integer, integer, integer) OWNER TO jes;
 -- Name: status_change(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
-CREATE FUNCTION status_change() RETURNS "trigger"
+CREATE FUNCTION status_change() RETURNS trigger
+    LANGUAGE plpgsql
     AS $$
   DECLARE 
     new_ord_no		INTEGER;
@@ -2454,8 +2479,7 @@ CREATE FUNCTION status_change() RETURNS "trigger"
         SET oh_order_completed = LOCALTIMESTAMP, func_flag = True;
     END IF;
     RETURN NEW;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.status_change() OWNER TO jes;
@@ -2464,7 +2488,8 @@ ALTER FUNCTION public.status_change() OWNER TO jes;
 -- Name: update_member_price(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
-CREATE FUNCTION update_member_price() RETURNS "trigger"
+CREATE FUNCTION update_member_price() RETURNS trigger
+    LANGUAGE plpgsql
     AS $$
   DECLARE 
     mp          INTEGER;
@@ -2502,8 +2527,7 @@ CREATE FUNCTION update_member_price() RETURNS "trigger"
           NEW.pr_changed = 't';
     END IF;
   RETURN NEW;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.update_member_price() OWNER TO jes;
@@ -2513,6 +2537,7 @@ ALTER FUNCTION public.update_member_price() OWNER TO jes;
 --
 
 CREATE FUNCTION update_news(integer, integer, character varying) RETURNS integer
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     nid		ALIAS FOR $1;
@@ -2526,8 +2551,7 @@ CREATE FUNCTION update_news(integer, integer, character varying) RETURNS integer
 			   news_mod_auth = poster
     WHERE news_id = nid;
     RETURN 1;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.update_news(integer, integer, character varying) OWNER TO jes;
@@ -2537,6 +2561,7 @@ ALTER FUNCTION public.update_news(integer, integer, character varying) OWNER TO 
 --
 
 CREATE FUNCTION update_wh_header(integer) RETURNS boolean
+    LANGUAGE plpgsql
     AS $_$
   DECLARE
     wh_no	 ALIAS FOR $1;
@@ -2566,7 +2591,7 @@ CREATE FUNCTION update_wh_header(integer) RETURNS boolean
       EXIT WHEN NOT FOUND;
 
       -- delete empty line items
-      IF(wl_rec.whl_qty = 0) THEN 
+      IF(wl_rec.whl_qty = 0 AND wl_rec.whl_mem_qty = 0) THEN 
 	DELETE FROM wh_line WHERE ord_no = order_no AND wh_id = wh_no
 	  AND pr_id = wl_rec.pr_id;
       ELSE
@@ -2610,8 +2635,7 @@ CREATE FUNCTION update_wh_header(integer) RETURNS boolean
       result = True;
     END IF;
     RETURN result;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.update_wh_header(integer) OWNER TO jes;
@@ -2621,6 +2645,7 @@ ALTER FUNCTION public.update_wh_header(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION update_wh_line_items(integer) RETURNS boolean
+    LANGUAGE plpgsql
     AS $_$
    DECLARE
       wh_no     ALIAS FOR $1;
@@ -2742,8 +2767,7 @@ CREATE FUNCTION update_wh_line_items(integer) RETURNS boolean
 	result = True;
      END IF;
      RETURN result;
-END;$_$
-    LANGUAGE plpgsql;
+END;$_$;
 
 
 ALTER FUNCTION public.update_wh_line_items(integer) OWNER TO jes;
@@ -2753,6 +2777,7 @@ ALTER FUNCTION public.update_wh_line_items(integer) OWNER TO jes;
 --
 
 CREATE FUNCTION xfer_order(from_mem_id integer, to_mem_id integer, ord_num integer, pr_num integer, xfr_qty integer) RETURNS void
+    LANGUAGE plpgsql
     AS $$
    DECLARE
      order_no       INTEGER;
@@ -2862,8 +2887,7 @@ CREATE FUNCTION xfer_order(from_mem_id integer, to_mem_id integer, ord_num integ
          AND pr_id = pr_num;
      RETURN;
 
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.xfer_order(from_mem_id integer, to_mem_id integer, ord_num integer, pr_num integer, xfr_qty integer) OWNER TO jes;
@@ -2873,18 +2897,20 @@ ALTER FUNCTION public.xfer_order(from_mem_id integer, to_mem_id integer, ord_num
 --
 
 CREATE FUNCTION zap_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) RETURNS record
+    LANGUAGE plpgsql
     AS $$
    DECLARE
      zaptime CURSOR FOR 
                 SELECT DISTINCT wh_last_seen 
-                FROM zapatistadata ORDER BY wh_last_seen DESC LIMIT 2;
+                FROM  (select wh_last_seen from zapatistadata) as x
+		union (select wh_prev_seen as wh_last_seen from
+		zapatistadata as y) ORDER BY wh_last_seen DESC LIMIT 2;
    BEGIN
      OPEN zaptime;
      FETCH zaptime INTO newest;
      FETCH zaptime INTO penult;
      CLOSE zaptime;
-END;$$
-    LANGUAGE plpgsql;
+END;$$;
 
 
 ALTER FUNCTION public.zap_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) OWNER TO jes;
@@ -2925,9 +2951,10 @@ ALTER TABLE public.mem_line OWNER TO jes;
 --
 
 CREATE SEQUENCE members_mem_id_seq
+    START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -2942,11 +2969,11 @@ CREATE TABLE members (
     mem_fname character varying NOT NULL,
     mem_prefix character varying DEFAULT ''::character varying NOT NULL,
     mem_lname character varying NOT NULL,
-    mem_street character varying NOT NULL,
-    mem_house integer NOT NULL,
-    mem_flatno character varying DEFAULT ''::character varying NOT NULL,
-    mem_city character varying DEFAULT 'Amsterdam'::character varying NOT NULL,
-    mem_postcode character varying NOT NULL,
+    mem_street character varying,
+    mem_house integer,
+    mem_flatno character varying DEFAULT ''::character varying,
+    mem_city character varying DEFAULT 'Amsterdam'::character varying,
+    mem_postcode character varying,
     mem_home_tel character varying DEFAULT ''::character varying NOT NULL,
     mem_mobile character varying DEFAULT ''::character varying NOT NULL,
     mem_email character varying NOT NULL,
@@ -3004,6 +3031,82 @@ CREATE VIEW adj_email AS
 
 ALTER TABLE public.adj_email OWNER TO jes;
 
+SET default_with_oids = false;
+
+--
+-- Name: applicants; Type: TABLE; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE TABLE applicants (
+    id integer NOT NULL,
+    fname character varying(50),
+    lname character varying(50),
+    month character varying(5),
+    comment character varying(500),
+    email character varying(50),
+    telnr character varying(20)
+);
+
+
+ALTER TABLE public.applicants OWNER TO apache;
+
+--
+-- Name: applicants_id_seq; Type: SEQUENCE; Schema: public; Owner: apache
+--
+
+CREATE SEQUENCE applicants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.applicants_id_seq OWNER TO apache;
+
+--
+-- Name: applicants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: apache
+--
+
+ALTER SEQUENCE applicants_id_seq OWNED BY applicants.id;
+
+
+--
+-- Name: bg_data; Type: TABLE; Schema: public; Owner: jes; Tablespace: 
+--
+
+CREATE TABLE bg_data (
+    wh_pr_id integer NOT NULL,
+    wh_whpri integer NOT NULL,
+    wh_btw numeric NOT NULL,
+    wh_descr character varying NOT NULL,
+    wh_url character varying DEFAULT ''::character varying,
+    wh_wh_q integer NOT NULL,
+    is_product boolean DEFAULT true,
+    is_changed boolean DEFAULT false,
+    is_seen boolean DEFAULT false,
+    is_skipped boolean DEFAULT false,
+    wh_last_seen timestamp with time zone,
+    wh_prev_seen timestamp with time zone,
+    wh_prcode character varying DEFAULT ''::character varying,
+    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (6)::numeric)) OR (wh_btw = (21)::numeric)))
+);
+
+
+ALTER TABLE public.bg_data OWNER TO jes;
+
+--
+-- Name: bg_products; Type: VIEW; Schema: public; Owner: jes
+--
+
+CREATE VIEW bg_products AS
+    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw, w.is_product, w.is_changed, w.is_seen, w.is_skipped, w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc, p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active, p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc, min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr, min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS over_marg FROM (bg_data w LEFT JOIN product p ON (((w.wh_prcode)::text = (p.wh_prcode)::text)));
+
+
+ALTER TABLE public.bg_products OWNER TO jes;
+
+SET default_with_oids = true;
+
 --
 -- Name: carry_over; Type: TABLE; Schema: public; Owner: jes; Tablespace: 
 --
@@ -3023,9 +3126,10 @@ ALTER TABLE public.carry_over OWNER TO jes;
 --
 
 CREATE SEQUENCE category_cat_id_seq
+    START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -3106,7 +3210,8 @@ CREATE TABLE dnbdata (
     is_skipped boolean DEFAULT false,
     wh_last_seen timestamp with time zone,
     wh_prev_seen timestamp with time zone,
-    wh_prcode character varying DEFAULT ''::character varying
+    wh_prcode character varying DEFAULT ''::character varying,
+    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (6)::numeric)) OR (wh_btw = (21)::numeric)))
 );
 
 
@@ -3117,7 +3222,7 @@ ALTER TABLE public.dnbdata OWNER TO jes;
 --
 
 CREATE VIEW dnb_products AS
-    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw, w.is_product, w.is_changed, w.is_seen, w.is_skipped, w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc, p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active, p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc, min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr, min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS over_marg FROM (dnbdata w LEFT JOIN product p ON (((w.wh_prcode)::text = (p.wh_prcode)::text)));
+    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw, w.is_product, w.is_changed, w.is_seen, w.is_skipped, w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc, p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active, p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc, min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr, min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS over_marg FROM (dnbdata w LEFT JOIN product p ON ((((w.wh_prcode)::text = (p.wh_prcode)::text) AND (p.pr_wh = 1))));
 
 
 ALTER TABLE public.dnb_products OWNER TO jes;
@@ -3231,7 +3336,10 @@ CREATE TABLE mem_order (
     mo_misc_refunded integer DEFAULT 0,
     mo_checked_out boolean DEFAULT false,
     mo_checked_out_by integer,
-    mo_membership integer DEFAULT 0
+    mo_membership integer DEFAULT 0,
+    mo_vers_groente integer DEFAULT 0 NOT NULL,
+    mo_vers_kaas integer DEFAULT 0 NOT NULL,
+    mo_vers_misc integer DEFAULT 0 NOT NULL
 );
 
 
@@ -3242,9 +3350,10 @@ ALTER TABLE public.mem_order OWNER TO jes;
 --
 
 CREATE SEQUENCE member_news_news_id_seq
+    START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -3382,13 +3491,26 @@ CREATE VIEW sh_view AS
 ALTER TABLE public.sh_view OWNER TO jes;
 
 --
+-- Name: shift_days_descriptions; Type: TABLE; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE TABLE shift_days_descriptions (
+    id integer NOT NULL,
+    descr character varying(255)
+);
+
+
+ALTER TABLE public.shift_days_descriptions OWNER TO apache;
+
+--
 -- Name: sub_cat_sc_id_seq; Type: SEQUENCE; Schema: public; Owner: jes
 --
 
 CREATE SEQUENCE sub_cat_sc_id_seq
+    START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -3420,6 +3542,73 @@ CREATE VIEW unc_email AS
 
 
 ALTER TABLE public.unc_email OWNER TO jes;
+
+SET default_with_oids = false;
+
+--
+-- Name: wg_leadership; Type: TABLE; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE TABLE wg_leadership (
+    wg_id integer,
+    mem_id integer
+);
+
+
+ALTER TABLE public.wg_leadership OWNER TO apache;
+
+--
+-- Name: wg_membership; Type: TABLE; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE TABLE wg_membership (
+    wg_id integer,
+    mem_id integer
+);
+
+
+ALTER TABLE public.wg_membership OWNER TO apache;
+
+--
+-- Name: wg_shifts; Type: TABLE; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE TABLE wg_shifts (
+    id integer NOT NULL,
+    mem_id integer,
+    state character varying(255),
+    day character varying(255),
+    month integer DEFAULT 1 NOT NULL,
+    year integer DEFAULT 2012 NOT NULL,
+    wg_id integer NOT NULL,
+    task character varying(255)
+);
+
+
+ALTER TABLE public.wg_shifts OWNER TO apache;
+
+--
+-- Name: wg_shifts_id_seq; Type: SEQUENCE; Schema: public; Owner: apache
+--
+
+CREATE SEQUENCE wg_shifts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wg_shifts_id_seq OWNER TO apache;
+
+--
+-- Name: wg_shifts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: apache
+--
+
+ALTER SEQUENCE wg_shifts_id_seq OWNED BY wg_shifts.id;
+
+
+SET default_with_oids = true;
 
 --
 -- Name: wh_order; Type: TABLE; Schema: public; Owner: jes; Tablespace: 
@@ -3458,7 +3647,7 @@ ALTER TABLE public.wh_view OWNER TO jes;
 --
 
 CREATE VIEW wh_view_all AS
-    SELECT wl.wh_id AS wh_no, wl.ord_no, wl.wh_prcode AS prcode, pr.wh_desc AS descr, wl.pr_id, wl.whl_qty AS qty, wl.whl_rcv AS received, ((((wl.whl_price * wl.whl_rcv))::numeric / 100.0))::numeric(10,2) AS price, ((((((wl.whl_price * wl.whl_rcv))::numeric * ((100)::numeric + wl.whl_btw)) / 100.0) / 100.0))::numeric(10,2) AS price_inc_btw FROM product pr, wh_line wl WHERE (wl.pr_id = pr.pr_id) ORDER BY wl.ord_no DESC, wl.wh_id, pr.pr_id;
+    SELECT wl.wh_id AS wh_no, wl.ord_no, wl.wh_prcode AS prcode, pr.wh_desc AS descr, wl.pr_id, wl.whl_qty AS qty, wl.whl_rcv AS received, ((((wl.whl_price * wl.whl_rcv))::numeric / 100.0))::numeric(10,2) AS price, ((((((wl.whl_price * wl.whl_rcv))::numeric * ((100)::numeric + wl.whl_btw)) / 100.0) / 100.0))::numeric(10,2) AS price_inc_btw, pr.pr_cat, pr.pr_sc FROM product pr, wh_line wl WHERE (wl.pr_id = pr.pr_id) ORDER BY wl.ord_no DESC, wl.wh_id, pr.pr_id;
 
 
 ALTER TABLE public.wh_view_all OWNER TO jes;
@@ -3470,8 +3659,8 @@ ALTER TABLE public.wh_view_all OWNER TO jes;
 CREATE SEQUENCE wholesaler_wh_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -3499,6 +3688,41 @@ CREATE TABLE wholesaler (
 ALTER TABLE public.wholesaler OWNER TO jes;
 
 SET default_with_oids = false;
+
+--
+-- Name: workgroups; Type: TABLE; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE TABLE workgroups (
+    id integer NOT NULL,
+    name character varying(255),
+    "desc" character varying(255),
+    leader_id integer
+);
+
+
+ALTER TABLE public.workgroups OWNER TO apache;
+
+--
+-- Name: workgroups_id_seq; Type: SEQUENCE; Schema: public; Owner: apache
+--
+
+CREATE SEQUENCE workgroups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.workgroups_id_seq OWNER TO apache;
+
+--
+-- Name: workgroups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: apache
+--
+
+ALTER SEQUENCE workgroups_id_seq OWNED BY workgroups.id;
+
 
 --
 -- Name: xfer; Type: TABLE; Schema: public; Owner: jes; Tablespace: 
@@ -3534,7 +3758,7 @@ CREATE TABLE zapatistadata (
     wh_last_seen timestamp with time zone,
     wh_prev_seen timestamp with time zone,
     wh_prcode character varying DEFAULT ''::character varying,
-    CONSTRAINT zap_btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (6)::numeric)) OR (wh_btw = (19)::numeric)))
+    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (6)::numeric)) OR (wh_btw = (21)::numeric)))
 );
 
 
@@ -3545,10 +3769,47 @@ ALTER TABLE public.zapatistadata OWNER TO jes;
 --
 
 CREATE VIEW zap_products AS
-    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw, w.is_product, w.is_changed, w.is_seen, w.is_skipped, w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc, p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active, p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc, min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr, min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS over_marg FROM (zapatistadata w LEFT JOIN product p ON (((w.wh_prcode)::text = (p.wh_prcode)::text)));
+    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw, w.is_product, w.is_changed, w.is_seen, w.is_skipped, w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc, p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active, p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc, min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr, min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS over_marg FROM (zapatistadata w LEFT JOIN product p ON ((((w.wh_prcode)::text = (p.wh_prcode)::text) AND (p.pr_wh = 2))));
 
 
 ALTER TABLE public.zap_products OWNER TO jes;
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: apache
+--
+
+ALTER TABLE applicants ALTER COLUMN id SET DEFAULT nextval('applicants_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: apache
+--
+
+ALTER TABLE wg_shifts ALTER COLUMN id SET DEFAULT nextval('wg_shifts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: apache
+--
+
+ALTER TABLE workgroups ALTER COLUMN id SET DEFAULT nextval('workgroups_id_seq'::regclass);
+
+
+--
+-- Name: applicants_pkey; Type: CONSTRAINT; Schema: public; Owner: apache; Tablespace: 
+--
+
+ALTER TABLE ONLY applicants
+    ADD CONSTRAINT applicants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bg_data_pkey; Type: CONSTRAINT; Schema: public; Owner: jes; Tablespace: 
+--
+
+ALTER TABLE ONLY bg_data
+    ADD CONSTRAINT bg_data_pkey PRIMARY KEY (wh_pr_id);
+
 
 --
 -- Name: carry_over_pkey; Type: CONSTRAINT; Schema: public; Owner: jes; Tablespace: 
@@ -3639,11 +3900,27 @@ ALTER TABLE ONLY product
 
 
 --
+-- Name: shift_days_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: apache; Tablespace: 
+--
+
+ALTER TABLE ONLY shift_days_descriptions
+    ADD CONSTRAINT shift_days_descriptions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: sub_cat_pkey; Type: CONSTRAINT; Schema: public; Owner: jes; Tablespace: 
 --
 
 ALTER TABLE ONLY sub_cat
     ADD CONSTRAINT sub_cat_pkey PRIMARY KEY (cat_id, sc_id);
+
+
+--
+-- Name: wg_shifts_pkey; Type: CONSTRAINT; Schema: public; Owner: apache; Tablespace: 
+--
+
+ALTER TABLE ONLY wg_shifts
+    ADD CONSTRAINT wg_shifts_pkey PRIMARY KEY (id);
 
 
 --
@@ -3671,11 +3948,26 @@ ALTER TABLE ONLY wholesaler
 
 
 --
+-- Name: workgroups_pkey; Type: CONSTRAINT; Schema: public; Owner: apache; Tablespace: 
+--
+
+ALTER TABLE ONLY workgroups
+    ADD CONSTRAINT workgroups_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: zapatistadata_pkey; Type: CONSTRAINT; Schema: public; Owner: jes; Tablespace: 
 --
 
 ALTER TABLE ONLY zapatistadata
     ADD CONSTRAINT zapatistadata_pkey PRIMARY KEY (wh_pr_id);
+
+
+--
+-- Name: dnbcodes; Type: INDEX; Schema: public; Owner: jes; Tablespace: 
+--
+
+CREATE INDEX dnbcodes ON dnbdata USING btree (wh_prcode);
 
 
 --
@@ -3717,80 +4009,56 @@ CREATE UNIQUE INDEX idx_wh_prcode ON product USING btree (pr_wh, wh_prcode);
 -- Name: init_product; Type: TRIGGER; Schema: public; Owner: jes
 --
 
-CREATE TRIGGER init_product
-    BEFORE INSERT ON product
-    FOR EACH ROW
-    EXECUTE PROCEDURE set_member_price();
+CREATE TRIGGER init_product BEFORE INSERT ON product FOR EACH ROW EXECUTE PROCEDURE set_member_price();
 
 
 --
 -- Name: message_update; Type: TRIGGER; Schema: public; Owner: jes
 --
 
-CREATE TRIGGER message_update
-    BEFORE UPDATE ON members
-    FOR EACH ROW
-    EXECUTE PROCEDURE message_update();
+CREATE TRIGGER message_update BEFORE UPDATE ON members FOR EACH ROW EXECUTE PROCEDURE message_update();
 
 
 --
 -- Name: news_insert; Type: TRIGGER; Schema: public; Owner: jes
 --
 
-CREATE TRIGGER news_insert
-    BEFORE INSERT ON member_news
-    FOR EACH ROW
-    EXECUTE PROCEDURE news_insert();
+CREATE TRIGGER news_insert BEFORE INSERT ON member_news FOR EACH ROW EXECUTE PROCEDURE news_insert();
 
 
 --
 -- Name: news_update; Type: TRIGGER; Schema: public; Owner: jes
 --
 
-CREATE TRIGGER news_update
-    BEFORE UPDATE ON member_news
-    FOR EACH ROW
-    EXECUTE PROCEDURE news_update();
+CREATE TRIGGER news_update BEFORE UPDATE ON member_news FOR EACH ROW EXECUTE PROCEDURE news_update();
 
 
 --
 -- Name: oh_change_status; Type: TRIGGER; Schema: public; Owner: jes
 --
 
-CREATE TRIGGER oh_change_status
-    AFTER UPDATE ON order_header
-    FOR EACH ROW
-    EXECUTE PROCEDURE status_change();
+CREATE TRIGGER oh_change_status AFTER UPDATE ON order_header FOR EACH ROW EXECUTE PROCEDURE status_change();
 
 
 --
 -- Name: oh_insert; Type: TRIGGER; Schema: public; Owner: jes
 --
 
-CREATE TRIGGER oh_insert
-    BEFORE INSERT ON order_header
-    FOR EACH ROW
-    EXECUTE PROCEDURE first_insert();
+CREATE TRIGGER oh_insert BEFORE INSERT ON order_header FOR EACH ROW EXECUTE PROCEDURE first_insert();
 
 
 --
 -- Name: product_update; Type: TRIGGER; Schema: public; Owner: jes
 --
 
-CREATE TRIGGER product_update
-    BEFORE UPDATE ON product
-    FOR EACH ROW
-    EXECUTE PROCEDURE update_member_price();
+CREATE TRIGGER product_update BEFORE UPDATE ON product FOR EACH ROW EXECUTE PROCEDURE update_member_price();
 
 
 --
 -- Name: unique_mem_adm_adj; Type: TRIGGER; Schema: public; Owner: jes
 --
 
-CREATE TRIGGER unique_mem_adm_adj
-    AFTER INSERT OR UPDATE ON members
-    FOR EACH ROW
-    EXECUTE PROCEDURE check_unique_adm_adj();
+CREATE TRIGGER unique_mem_adm_adj AFTER INSERT OR UPDATE ON members FOR EACH ROW EXECUTE PROCEDURE check_unique_adm_adj();
 
 
 --
@@ -3930,11 +4198,59 @@ ALTER TABLE ONLY sub_cat
 
 
 --
+-- Name: wg_leadership_mem_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY wg_leadership
+    ADD CONSTRAINT wg_leadership_mem_id_fkey FOREIGN KEY (mem_id) REFERENCES members(mem_id);
+
+
+--
+-- Name: wg_leadership_wg_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY wg_leadership
+    ADD CONSTRAINT wg_leadership_wg_id_fkey FOREIGN KEY (wg_id) REFERENCES workgroups(id);
+
+
+--
+-- Name: wg_membership_mem_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY wg_membership
+    ADD CONSTRAINT wg_membership_mem_id_fkey FOREIGN KEY (mem_id) REFERENCES members(mem_id);
+
+
+--
+-- Name: wg_membership_wg_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY wg_membership
+    ADD CONSTRAINT wg_membership_wg_id_fkey FOREIGN KEY (wg_id) REFERENCES workgroups(id);
+
+
+--
+-- Name: wg_shifts_mem_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY wg_shifts
+    ADD CONSTRAINT wg_shifts_mem_id_fkey FOREIGN KEY (mem_id) REFERENCES members(mem_id);
+
+
+--
+-- Name: wg_shifts_wg_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY wg_shifts
+    ADD CONSTRAINT wg_shifts_wg_id_fkey FOREIGN KEY (wg_id) REFERENCES workgroups(id);
+
+
+--
 -- Name: wh_line_ord_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: jes
 --
 
 ALTER TABLE ONLY wh_line
-    ADD CONSTRAINT wh_line_ord_no_fkey FOREIGN KEY (ord_no, wh_id) REFERENCES wh_order(ord_no, wh_id);
+    ADD CONSTRAINT wh_line_ord_no_fkey FOREIGN KEY (pr_id) REFERENCES product(pr_id);
 
 
 --
@@ -3951,6 +4267,14 @@ ALTER TABLE ONLY wh_line
 
 ALTER TABLE ONLY wh_line
     ADD CONSTRAINT wh_line_wh_id_fkey FOREIGN KEY (wh_id, wh_prcode) REFERENCES product(pr_wh, wh_prcode);
+
+
+--
+-- Name: workgroups_leader_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY workgroups
+    ADD CONSTRAINT workgroups_leader_id_fkey FOREIGN KEY (leader_id) REFERENCES members(mem_id);
 
 
 --
@@ -3983,10 +4307,10 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 -- Name: product_pr_id_seq; Type: ACL; Schema: public; Owner: jes
 --
 
-REVOKE ALL ON TABLE product_pr_id_seq FROM PUBLIC;
-REVOKE ALL ON TABLE product_pr_id_seq FROM jes;
-GRANT ALL ON TABLE product_pr_id_seq TO jes;
-GRANT ALL ON TABLE product_pr_id_seq TO apache;
+REVOKE ALL ON SEQUENCE product_pr_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE product_pr_id_seq FROM jes;
+GRANT ALL ON SEQUENCE product_pr_id_seq TO jes;
+GRANT ALL ON SEQUENCE product_pr_id_seq TO apache;
 
 
 --
@@ -4013,10 +4337,10 @@ GRANT ALL ON TABLE mem_line TO apache;
 -- Name: members_mem_id_seq; Type: ACL; Schema: public; Owner: jes
 --
 
-REVOKE ALL ON TABLE members_mem_id_seq FROM PUBLIC;
-REVOKE ALL ON TABLE members_mem_id_seq FROM jes;
-GRANT ALL ON TABLE members_mem_id_seq TO jes;
-GRANT ALL ON TABLE members_mem_id_seq TO apache;
+REVOKE ALL ON SEQUENCE members_mem_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE members_mem_id_seq FROM jes;
+GRANT ALL ON SEQUENCE members_mem_id_seq TO jes;
+GRANT ALL ON SEQUENCE members_mem_id_seq TO apache;
 
 
 --
@@ -4050,6 +4374,26 @@ GRANT ALL ON TABLE adj_email TO apache;
 
 
 --
+-- Name: bg_data; Type: ACL; Schema: public; Owner: jes
+--
+
+REVOKE ALL ON TABLE bg_data FROM PUBLIC;
+REVOKE ALL ON TABLE bg_data FROM jes;
+GRANT ALL ON TABLE bg_data TO jes;
+GRANT ALL ON TABLE bg_data TO apache;
+
+
+--
+-- Name: bg_products; Type: ACL; Schema: public; Owner: jes
+--
+
+REVOKE ALL ON TABLE bg_products FROM PUBLIC;
+REVOKE ALL ON TABLE bg_products FROM jes;
+GRANT ALL ON TABLE bg_products TO jes;
+GRANT ALL ON TABLE bg_products TO apache;
+
+
+--
 -- Name: carry_over; Type: ACL; Schema: public; Owner: jes
 --
 
@@ -4063,10 +4407,10 @@ GRANT ALL ON TABLE carry_over TO apache;
 -- Name: category_cat_id_seq; Type: ACL; Schema: public; Owner: jes
 --
 
-REVOKE ALL ON TABLE category_cat_id_seq FROM PUBLIC;
-REVOKE ALL ON TABLE category_cat_id_seq FROM jes;
-GRANT ALL ON TABLE category_cat_id_seq TO jes;
-GRANT ALL ON TABLE category_cat_id_seq TO apache;
+REVOKE ALL ON SEQUENCE category_cat_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE category_cat_id_seq FROM jes;
+GRANT ALL ON SEQUENCE category_cat_id_seq TO jes;
+GRANT ALL ON SEQUENCE category_cat_id_seq TO apache;
 
 
 --
@@ -4203,10 +4547,10 @@ GRANT ALL ON TABLE mem_order TO apache;
 -- Name: member_news_news_id_seq; Type: ACL; Schema: public; Owner: jes
 --
 
-REVOKE ALL ON TABLE member_news_news_id_seq FROM PUBLIC;
-REVOKE ALL ON TABLE member_news_news_id_seq FROM jes;
-GRANT ALL ON TABLE member_news_news_id_seq TO jes;
-GRANT ALL ON TABLE member_news_news_id_seq TO apache;
+REVOKE ALL ON SEQUENCE member_news_news_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE member_news_news_id_seq FROM jes;
+GRANT ALL ON SEQUENCE member_news_news_id_seq TO jes;
+GRANT ALL ON SEQUENCE member_news_news_id_seq TO apache;
 
 
 --
@@ -4313,10 +4657,10 @@ GRANT ALL ON TABLE sh_view TO apache;
 -- Name: sub_cat_sc_id_seq; Type: ACL; Schema: public; Owner: jes
 --
 
-REVOKE ALL ON TABLE sub_cat_sc_id_seq FROM PUBLIC;
-REVOKE ALL ON TABLE sub_cat_sc_id_seq FROM jes;
-GRANT ALL ON TABLE sub_cat_sc_id_seq TO jes;
-GRANT ALL ON TABLE sub_cat_sc_id_seq TO apache;
+REVOKE ALL ON SEQUENCE sub_cat_sc_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE sub_cat_sc_id_seq FROM jes;
+GRANT ALL ON SEQUENCE sub_cat_sc_id_seq TO jes;
+GRANT ALL ON SEQUENCE sub_cat_sc_id_seq TO apache;
 
 
 --
@@ -4337,6 +4681,46 @@ REVOKE ALL ON TABLE unc_email FROM PUBLIC;
 REVOKE ALL ON TABLE unc_email FROM jes;
 GRANT ALL ON TABLE unc_email TO jes;
 GRANT ALL ON TABLE unc_email TO apache;
+
+
+--
+-- Name: wg_leadership; Type: ACL; Schema: public; Owner: apache
+--
+
+REVOKE ALL ON TABLE wg_leadership FROM PUBLIC;
+REVOKE ALL ON TABLE wg_leadership FROM apache;
+GRANT ALL ON TABLE wg_leadership TO apache;
+GRANT ALL ON TABLE wg_leadership TO jes;
+
+
+--
+-- Name: wg_membership; Type: ACL; Schema: public; Owner: apache
+--
+
+REVOKE ALL ON TABLE wg_membership FROM PUBLIC;
+REVOKE ALL ON TABLE wg_membership FROM apache;
+GRANT ALL ON TABLE wg_membership TO apache;
+GRANT ALL ON TABLE wg_membership TO jes;
+
+
+--
+-- Name: wg_shifts; Type: ACL; Schema: public; Owner: apache
+--
+
+REVOKE ALL ON TABLE wg_shifts FROM PUBLIC;
+REVOKE ALL ON TABLE wg_shifts FROM apache;
+GRANT ALL ON TABLE wg_shifts TO apache;
+GRANT ALL ON TABLE wg_shifts TO jes;
+
+
+--
+-- Name: wg_shifts_id_seq; Type: ACL; Schema: public; Owner: apache
+--
+
+REVOKE ALL ON SEQUENCE wg_shifts_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE wg_shifts_id_seq FROM apache;
+GRANT ALL ON SEQUENCE wg_shifts_id_seq TO apache;
+GRANT ALL ON SEQUENCE wg_shifts_id_seq TO jes;
 
 
 --
@@ -4373,10 +4757,10 @@ GRANT ALL ON TABLE wh_view_all TO apache;
 -- Name: wholesaler_wh_id_seq; Type: ACL; Schema: public; Owner: jes
 --
 
-REVOKE ALL ON TABLE wholesaler_wh_id_seq FROM PUBLIC;
-REVOKE ALL ON TABLE wholesaler_wh_id_seq FROM jes;
-GRANT ALL ON TABLE wholesaler_wh_id_seq TO jes;
-GRANT ALL ON TABLE wholesaler_wh_id_seq TO apache;
+REVOKE ALL ON SEQUENCE wholesaler_wh_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE wholesaler_wh_id_seq FROM jes;
+GRANT ALL ON SEQUENCE wholesaler_wh_id_seq TO jes;
+GRANT ALL ON SEQUENCE wholesaler_wh_id_seq TO apache;
 
 
 --
@@ -4387,6 +4771,26 @@ REVOKE ALL ON TABLE wholesaler FROM PUBLIC;
 REVOKE ALL ON TABLE wholesaler FROM jes;
 GRANT ALL ON TABLE wholesaler TO jes;
 GRANT ALL ON TABLE wholesaler TO apache;
+
+
+--
+-- Name: workgroups; Type: ACL; Schema: public; Owner: apache
+--
+
+REVOKE ALL ON TABLE workgroups FROM PUBLIC;
+REVOKE ALL ON TABLE workgroups FROM apache;
+GRANT ALL ON TABLE workgroups TO apache;
+GRANT ALL ON TABLE workgroups TO jes;
+
+
+--
+-- Name: workgroups_id_seq; Type: ACL; Schema: public; Owner: apache
+--
+
+REVOKE ALL ON SEQUENCE workgroups_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE workgroups_id_seq FROM apache;
+GRANT ALL ON SEQUENCE workgroups_id_seq TO apache;
+GRANT ALL ON SEQUENCE workgroups_id_seq TO jes;
 
 
 --
