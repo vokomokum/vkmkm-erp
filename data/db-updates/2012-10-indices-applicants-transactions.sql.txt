@@ -1,0 +1,3 @@
+-- These fields get searched, should be useful to index them in postgres
+CREATE INDEX idx_trans_ordno ON transactions USING btree (ord_no);
+CREATE INDEX idx_trans_date ON transactions USING btree (date);
