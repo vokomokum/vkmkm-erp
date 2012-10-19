@@ -81,15 +81,16 @@ class ListTransactions(BaseTransactionView):
             self.today = 1
 
         first = datetime.datetime(self.year, self.month, 1, 0, 0, 0)
-        last = datetime.datetime(self.year, self.month, self.month_info.days_in_month, 23, 59, 59)
+        last = datetime.datetime(self.year, self.month, 
+                                 self.month_info.days_in_month, 23, 59, 59)
         transactions = session.query(Transaction)\
             .filter(Transaction.date >= first and Transaction.date <= last)\
             .order_by(Transaction.id)\
             .all()
         # This is here because the filter above doesn't work for me
         # (on sqlite, at least)
-        transactions = [t for t in transactions\
-                        if t.date >= first and t.date <= last]
+        #transactions = [t for t in transactions\
+        #                if t.date >= first and t.date <= last]
         return dict(msg=msg, transactions=transactions)
 
 
@@ -128,9 +129,9 @@ class NewTransaction(BaseTransactionView):
         transaction.validate()
         session.add(transaction)
         session.flush()
-        return self.redir_to_list(year, month,
-                                  'Transaction "{}" has been added to '\
-                                  'the list.'.format(transaction))
+        return self.redir_to_list(year, month, 'Transaction "{}" has been '\
+                                'added to the list.'\
+                                .format(transaction.encode('ascii', 'replace')
 
 
 @view_config(renderer='../templates/transactions.pt',
