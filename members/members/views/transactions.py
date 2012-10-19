@@ -92,8 +92,8 @@ class ListTransactions(BaseTransactionView):
         # This is here because the filter above doesn't work for me
         # (on sqlite, at least)
         transactions = [t for t in transactions\
-                        if tz.localize(t.date) >= first\
-                        and tz.localize(t.date) <= last]
+                        if t.date.tzinfo and t.date or tz.localize(t.date) >= first\
+                        and t.date.tzinfo and t.date or tz.localize(t.date) <= last]
         return dict(msg=msg, transactions=transactions)
 
 
