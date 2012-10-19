@@ -12,16 +12,12 @@ CREATE TABLE transactions (
 	ord_no INTEGER, 
 	comment VARCHAR(500), 
 	date timestamp with time zone, 
-	late boolean DEFAULT false 
+	late boolean DEFAULT false,
+        foreign key (ttype_id) references transaction_types(id),
+        foreign key (mem_id) references members(mem_id)
 );
 ALTER TABLE transactions OWNER TO apache;
 
 INSERT INTO transaction_types (name) VALUES ('Membership Fee');
 INSERT INTO transaction_types (name) VALUES ('Order Payment');
-
-ALTER TABLE ONLY transactions
-    ADD CONSTRAINT transactions_ttype_fkey FOREIGN KEY (ttype_id) REFERENCES transaction_types(id);
-
-ALTER TABLE ONLY transactions
-    ADD CONSTRAINT transactions_member_fkey FOREIGN KEY (mem_id) REFERENCES members(mem_id);
 
