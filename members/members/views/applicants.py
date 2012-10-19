@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from pyramid.view import view_config
 #from sqlalchemy import asc, desc
 
