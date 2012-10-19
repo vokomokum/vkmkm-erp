@@ -14,6 +14,7 @@ from members import models
 from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
+from members.models.transactions import TransactionType
 from members.models.transactions import reserved_ttype_names
 from members.utils import mail
 from members.utils.misc import get_settings
@@ -49,6 +50,11 @@ class VokoTestCase(unittest.TestCase):
         self.config = testing.setUp()
         if db_type == 'sqlite':
             # initalise a temporary database with some order data the members app relies on
+            if os.path.exists('members-test.db'):
+                print "Removing the old db!"
+                Popen('rm members-test.db', shell=True).wait()
+            if os.path.exists('members-test.db'):
+                print "IT's still there!"
             Popen('sqlite3 members-test.db < members/tests/setup.sql', shell=True).wait()
             self.engine = create_engine('sqlite:///members-test.db')
             self.DBSession = models.base.configure_session(self.engine)
@@ -71,14 +77,18 @@ class VokoTestCase(unittest.TestCase):
         rmtree(get_settings()['vokomokum.mail_folder'])
         testing.tearDown()
 
+    def path_to_here(self):
+        return '/'.join(os.path.realpath(__file__).split('/')[:-1])
+
     def add_custom_settings(self):
         '''
         Add custom settings that the application expects to be in the .ini file 
         (in app[main])
         '''
         # make a mail folder
-        self.path_to_here = '/'.join(os.path.realpath(__file__).split('/')[:-1])
-        mail_folder = '{0}/.testmails'.format(self.path_to_here)
+        mail_folder = '{0}/.testmails'.format(self.path_to_here())
+        if os.path.exists(mail_folder):
+            rmtree(mail_folder)
         os.mkdir(mail_folder)
         settings = get_settings()
         settings['vokomokum.mail_exec'] = '/opt/local/sbin/exim'
