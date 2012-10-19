@@ -1,11 +1,11 @@
 CREATE TABLE transaction_types (
-	id INTEGER PRIMARY KEY NOT NULL, 
+	id SERIAL NOT NULL, 
 	name VARCHAR(100) 
 );
 ALTER TABLE transaction_types OWNER TO apache;
 
 CREATE TABLE transactions (
-	id INTEGER PRIMARY KEY NOT NULL, 
+	id SERIAL NOT NULL, 
 	ttype_id INTEGER, 
 	amount NUMERIC,
         mem_id INTEGER, 
