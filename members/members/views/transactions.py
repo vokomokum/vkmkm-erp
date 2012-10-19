@@ -130,8 +130,8 @@ class NewTransaction(BaseTransactionView):
         session.add(transaction)
         session.flush()
         return self.redir_to_list(year, month, 'Transaction "{}" has been '\
-                                'added to the list.'\
-                                .format(transaction.encode('ascii', 'replace')
+                            'added to the list.'\
+                            .format(transaction.encode('ascii', 'replace')))
 
 
 @view_config(renderer='../templates/transactions.pt',
