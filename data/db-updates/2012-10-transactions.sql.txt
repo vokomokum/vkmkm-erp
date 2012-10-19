@@ -16,6 +16,9 @@ CREATE TABLE transactions (
 );
 ALTER TABLE transactions OWNER TO apache;
 
+INSERT INTO transaction_types (name) VALUES ('Membership Fee');
+INSERT INTO transaction_types (name) VALUES ('Order Payment');
+
 ALTER TABLE ONLY transactions
     ADD CONSTRAINT transactions_ttype_fkey FOREIGN KEY (ttype_id) REFERENCES transaction_types(id);
 
