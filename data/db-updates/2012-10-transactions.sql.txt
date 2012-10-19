@@ -11,7 +11,7 @@ CREATE TABLE transactions (
         mem_id INTEGER, 
 	ord_no INTEGER, 
 	comment VARCHAR(500), 
-	date timestamp with timezone, 
+	date timestamp with time zone, 
 	late boolean DEFAULT false 
 );
 ALTER TABLE transactions OWNER TO apache;
