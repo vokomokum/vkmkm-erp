@@ -1,6 +1,7 @@
 CREATE TABLE transaction_types (
 	id SERIAL NOT NULL, 
-	name VARCHAR(100) 
+	name VARCHAR(100), 
+	PRIMARY KEY (id)
 );
 ALTER TABLE transaction_types OWNER TO apache;
 
@@ -13,6 +14,7 @@ CREATE TABLE transactions (
 	comment VARCHAR(500), 
 	date timestamp with time zone, 
 	late boolean DEFAULT false,
+	PRIMARY KEY (id),
         foreign key (ttype_id) references transaction_types(id),
         foreign key (mem_id) references members(mem_id)
 );
