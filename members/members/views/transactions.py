@@ -2,6 +2,7 @@ from pyramid.view import view_config
 from sqlalchemy import distinct, desc
 
 import datetime
+import pytz
 
 from members.models.base import DBSession
 from members.views.base import BaseView
@@ -80,17 +81,19 @@ class ListTransactions(BaseTransactionView):
         else:
             self.today = 1
 
-        first = datetime.datetime(self.year, self.month, 1, 0, 0, 0)
-        last = datetime.datetime(self.year, self.month, 
-                                 self.month_info.days_in_month, 23, 59, 59)
+        tz = pytz.timezone('Europe/Amsterdam')
+        first = tz.localize(datetime.datetime(self.year, self.month, 1, 0, 0, 0))
+        last = tz.localize(datetime.datetime(self.year, self.month, 
+                                 self.month_info.days_in_month, 23, 59, 59))
         transactions = session.query(Transaction)\
             .filter(Transaction.date >= first and Transaction.date <= last)\
             .order_by(Transaction.id)\
             .all()
         # This is here because the filter above doesn't work for me
         # (on sqlite, at least)
-        #transactions = [t for t in transactions\
-        #                if t.date >= first and t.date <= last]
+        transactions = [t for t in transactions\
+                        if tz.localize(t.date) >= first\
+                        and tz.localize(t.date) <= last]
         return dict(msg=msg, transactions=transactions)
 
 
