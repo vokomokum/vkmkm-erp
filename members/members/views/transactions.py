@@ -85,15 +85,15 @@ class ListTransactions(BaseTransactionView):
         first = tz.localize(datetime.datetime(self.year, self.month, 1, 0, 0, 0))
         last = tz.localize(datetime.datetime(self.year, self.month, 
                                  self.month_info.days_in_month, 23, 59, 59))
-        transactions = session.query(Transaction)\
-            .filter(Transaction.date >= first and Transaction.date <= last)\
-            .order_by(Transaction.id)\
-            .all()
+        transactions = session.query(Transaction)
+        #    .filter(Transaction.date >= first and Transaction.date <= last)\
+        #    .order_by(Transaction.id)\
+        #    .all()
         # This is here because the filter above doesn't work for me
-        # (on sqlite, at least)
+        # I only get pure string comparison to work, which works for now
         transactions = [t for t in transactions\
-                        if t.date.tzinfo and t.date or tz.localize(t.date) >= first\
-                        and t.date.tzinfo and t.date or tz.localize(t.date) <= last]
+                if (str(t.date.tzinfo and t.date or tz.localize(t.date)) >= str(first))\
+                and (str(t.date.tzinfo and t.date or tz.localize(t.date)) <= str(last))]
         return dict(msg=msg, transactions=transactions)
 
 
