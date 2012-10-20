@@ -38,6 +38,7 @@ $ cd $VIRPY/bin
 $ ./pip install paste
 $ ./pip install pyramid  # web framework + dependencies
 $ ./pip install psycopg2 # Postgres wrapper for Python, for sqlite you would install sqlite3
+$ ./pip install pytz     # Timezone support
 $ ./pip install fabric   # python build environment, handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
                          # if you don't install fabric, look inside the fabfile for the actual commands
 
