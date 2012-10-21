@@ -30,6 +30,8 @@ class ListTransactionTypes(BaseView):
             msg = self.request.params['msg']
         else:
             msg = ''
+        self.user_can_edit = self.user.mem_admin\
+                             or 'Finance' in self.user.workgroups
         return dict(msg=msg,
                     reserved_names = reserved_ttype_names,
                     transaction_types=get_transaction_types(DBSession()))
