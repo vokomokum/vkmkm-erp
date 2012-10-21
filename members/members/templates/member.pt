@@ -111,6 +111,7 @@
         No worked shifts.
     </div>
 
+    <tal:block tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in view.user.workgroups">
     <h2>Transactions</h2>
 
     <table class="list" align="center" tal:condition="transactions">
@@ -133,6 +134,7 @@
     <div tal:condition="not transactions" class="info">
         No transactions.
     </div>
+    </tal:block>
     
 
         </div>
