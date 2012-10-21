@@ -7,6 +7,7 @@
     <h1>Transaction Types</h1>
     
     <form action="${portal_url}/transaction-types/new"
+          tal:condition="python: 'Finance' in view.user.workgroups">
           method="post">
         
         <table class="main" align="center" width="80%">
@@ -30,10 +31,10 @@
             <td colspan="3">No transaction types found.</td>
         </tr>
         <tr tal:repeat="tt transaction_types">
-            <tal:block tal:condition="tt.reserved">
+            <tal:block tal:condition="python: tt.reserved or 'Finance' not in view.user.workgroups">
                 <td tal:content="tt.name" title="This type is protected." colspan="3"/>
             </tal:block>
-            <tal:block tal:condition="not:tt.reserved">
+            <tal:block tal:condition="python: not tt.reserved and 'Finance' in view.user.workgroups">
                 <form action="${portal_url}/transaction-type/${tt.id}/save" method="post">
                     <td width="80%">
                         <input name="name" value="${tt.name}" size="40" maxlength="100"/>
@@ -44,7 +45,7 @@
                 </form>
                 <td width="10%">
                     <a title="Delete from list (it has not been used so far)" href="${portal_url}/transaction-type/${tt.id}/delete"
-                       tal:condition="not:tt.locked">
+                       tal:condition="python: not tt.locked and 'Finance' in view.user.workgroups">
                         <button>X</button>
                     </a>
                 </td>

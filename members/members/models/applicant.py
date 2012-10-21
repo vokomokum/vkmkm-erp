@@ -18,7 +18,7 @@ class Applicant(Base):
 
     __acl__ = [(Allow, 'group:membership', ('view', 'edit')),
                (Allow, 'group:admins', ('view', 'edit')),
-               (Allow, 'group:wg-members', 'view'),
+               (Allow, 'group:members', 'view'),
                DENY_ALL]
 
     def __init__(self, request=None, fname='', lname='', month='', comment='',

@@ -25,7 +25,7 @@ class TransactionType(Base):
 
     __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:finance', ('view', 'edit')),
-               (Allow, 'group:wg-members', 'view'),
+               (Allow, 'group:members', 'view'),
                DENY_ALL]
 
     def __init__(self, request=None, name=''):
@@ -70,7 +70,6 @@ class Transaction(Base):
 
     __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:finance', ('view', 'edit')),
-               (Allow, 'group:wg-members', 'view'),
                DENY_ALL]
 
     def __init__(self, request=None, ttype_id=None, amount=0, mem_id=None,
