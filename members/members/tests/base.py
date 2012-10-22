@@ -51,10 +51,8 @@ class VokoTestCase(unittest.TestCase):
         if db_type == 'sqlite':
             # initalise a temporary database with some order data the members app relies on
             if os.path.exists('members-test.db'):
-                print "Removing the old db!"
                 Popen('rm members-test.db', shell=True).wait()
             if os.path.exists('members-test.db'):
-                print "IT's still there!"
             Popen('sqlite3 members-test.db < members/tests/setup.sql', shell=True).wait()
             self.engine = create_engine('sqlite:///members-test.db')
             self.DBSession = models.base.configure_session(self.engine)
