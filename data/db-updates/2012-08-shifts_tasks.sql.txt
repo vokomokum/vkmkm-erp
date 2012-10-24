@@ -8,7 +8,7 @@ UPDATE wg_shifts SET wg_id = (SELECT min(id) FROM workgroups);
 -- such that this works
 ALTER TABLE wg_shifts ALTER COLUMN wg_id SET NOT NULL;
 ALTER TABLE wg_shifts ADD COLUMN task VARCHAR(255);
- 
+
 DROP table wg_tasks CASCADE;
 ALTER TABLE wg_shifts DROP COLUMN task_id;
 
