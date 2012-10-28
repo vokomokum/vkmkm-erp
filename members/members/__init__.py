@@ -12,7 +12,7 @@ from members.views.base import ErrorView
 from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
-from members.models.others import Order
+from members.models.orders import Order
 from members.models.applicant import Applicant
 from members.models.transactions import Transaction, TransactionType
 

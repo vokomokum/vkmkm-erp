@@ -2,7 +2,7 @@ import os, sys
 from pyramid.paster import get_app
 
 # these 3 lines should not be necessary, but they might
-# be needed if Apache does not us this dir as working directory
+# be needed if Apache does not use this dir as working directory
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)

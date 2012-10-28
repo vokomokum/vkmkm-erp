@@ -8,7 +8,7 @@ from members.models.base import DBSession
 from members.views.base import BaseView
 from members.models.member import Member, get_member
 from members.models.transactions import Transaction, TransactionType
-from members.models.others import Order
+from members.models.orders import Order
 from members.utils.misc import month_info
 
 

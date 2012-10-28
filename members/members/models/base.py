@@ -67,3 +67,8 @@ def configure_session(engine):
     ''' configure the session '''
     DBSession.configure(bind=engine)
     return DBSession
+
+
+class CreationForbiddenException(Exception):
+    pass
+

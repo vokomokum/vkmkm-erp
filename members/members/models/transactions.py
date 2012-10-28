@@ -9,11 +9,11 @@ import datetime
 
 from base import Base, VokoValidationError
 from member import Member
-from others import Order
+from orders import Order
 
 
 # These types have special meaning and a re therefore protected
-reserved_ttype_names = ['Membership Fee', 'Order Payment']
+reserved_ttype_names = ['Membership Fee', 'Order Charge']
 
 
 class TransactionType(Base):
@@ -87,10 +87,12 @@ class Transaction(Base):
                                             self.ttype)
 
     def locked(self):
-        ''' Transactions can't be removed if they're from last cal. month ''' 
-        now = datetime.datetime.now()
-        begin_of_this_month = datetime.date(now.year, now.month, 1)
-        return self.date.date() < begin_of_this_month
+        '''
+        Transactions can't be removed by the app if they were created
+        by the system based on existing data (for now: Order Charge) ''' 
+        if self.ttype.name == 'Order Charge':
+            return True
+        return False
 
     def validate(self):
         ''' validate if this object is valid, raise exception otherwise '''
@@ -98,9 +100,10 @@ class Transaction(Base):
             raise VokoValidationError('A transaction needs a type.')
         if not self.member:
             raise VokoValidationError('A transaction needs a member.')
-        if self.amount <= 0:
-            raise VokoValidationError('A transaction should have a positive'\
-                                      ' amount.')
+        if self.ttype.name in ['Order Charge', 'Membership Fee']\
+            and self.amount > 0:
+            raise VokoValidationError('A transaction of this type is charged '\
+                                      'from members and should be negative.')
 
 """
 def get_transaction(session, request):

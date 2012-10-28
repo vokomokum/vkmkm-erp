@@ -149,6 +149,14 @@ class Member(Base):
             raise VokoValidationError('The password should be between '\
                                       '6 and 30 characters long.')
 
+    @property
+    def balance(self):
+        ''' returns the account balance'''
+        balance = 0
+        for t in self.transactions:
+            balance += t.amount
+        return balance
+
 
 def get_member(session, request):
     '''

@@ -44,7 +44,7 @@
                     function toggleOrderSelect(){
                         var sel = $('#ttype-select')[0];
                         var seltxt = sel.options[sel.selectedIndex].innerHTML; 
-                        if (seltxt == 'Order Payment')
+                        if (seltxt == 'Order Charge')
                             $('#order-div').show();
                         else 
                             $('#order-div').hide();
@@ -100,12 +100,12 @@
 
     <table class="list" width="100%" align="center">
         <tr class="list-content" align="center">
-            <th width="13%">Member</th>
+            <th width="17%">Member</th>
             <th width="20%">Type</th>
             <th width="6%">Amount</th>
             <th width="10%">Order</th>
             <th width="5%">Day</th>
-            <th width="32%">Comment</th>
+            <th width="28%">Comment</th>
             <th width="5%">Late</th>
             <th width="5%"></th>
         </tr>
@@ -116,7 +116,7 @@
             <td>
                 <form action="${portal_url}/transaction/${t.id}/edit/setmember" method="post">
                     <select onchange="this.form.submit();" name="mem_id"
-                        title="Select to update." style="width: 180px;">
+                        title="Select to update." style="width: 140px;">
                         <tal:block tal:repeat="m view.members">
                             <option tal:condition="m.mem_id == t.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
                             <option tal:condition="m.mem_id != t.mem_id" value="${m.mem_id}">${m.fullname}</option>
@@ -134,7 +134,7 @@
                 </form>
             </td>
             <td>
-                <span tal:condition="t.ttype.name == 'Order Payment'"
+                <span tal:condition="t.ttype.name == 'Order Charge'"
                       tal:content="t.order.label">
                 </span>
             </td>

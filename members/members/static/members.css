@@ -290,6 +290,8 @@ table.list td:hover a {color:white !important; }
 tr.subtitle   {background-color:#c0c0c0; color:black; border: solid black; line-height:100%;}
 tr.common     {background-color:#c0c0ff; color:black; border: solid black; }
 tr.list-content, td.list-content{background-color:#d0d0ff; color:#231f20;}
+td.list-balance {border-top:2px solid black !important; font-weight: 900;}
+td.list-amount, td.list-balance {text-align:right;}
 td.space4     {text-align:right;width:4em;}
 td.descr      {text-align:left; width:60em;} 
 td.number     {text-align:right;width:6em;}

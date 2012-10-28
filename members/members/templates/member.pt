@@ -116,19 +116,30 @@
 
     <table class="list" align="center" tal:condition="transactions">
         <tr>
-            <th>Amount</th>
             <th>Type</th>
             <th>Date</th>
+            <th>Comment</th>
             <th>Late</th>
+            <th>Amount</th>
         </tr> 
         <tr class="list-content" tal:repeat="t transactions">
-            <td><small>EUR</small> ${python:round(t.amount,2)}</td>
-            <td>${t.ttype}</td>
+            <td tal:condition="t.ttype.name != 'Order Charge'">${t.ttype}</td>
+            <td tal:condition="t.ttype.name == 'Order Charge'">
+                Charge for Order:
+                <a href="http://order.vokomokum.nl/cgi-bin/order?order_no=${t.order.id}"
+                   title="Click to see the details of this order (you might need to login).">${t.order}</a>
+            </td>
             <td>${t.date.date()}</td>
+            <td>${t.comment}</td>
             <td>
                 <span tal:condition="t.late">Yes</span>
                 <span tal:condition="not t.late">No</span>
             </td>
+            <td class="list-amount"><small>EUR</small>&nbsp;${python:round(t.amount,2)}</td>
+        </tr>
+        <tr class="list-content">
+            <td colspan="4"/>
+            <td class="list-balance"><small>EUR</small>&nbsp;${python:round(m.balance,2)}</td>
         </tr>
     </table>
     <div tal:condition="not transactions" class="info">
