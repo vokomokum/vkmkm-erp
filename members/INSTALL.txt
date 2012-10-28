@@ -147,3 +147,6 @@ On a web server, you might need to add a DNS entry (most likely via your webhost
 3. Now restart the Apache server
 $ sudo /usr/sbin/apachectl restart
 
+Note: To make Apache aware of code updates, it is usually enough to touch the ´pyramid.wsgi´ file
+(see also the deploy command within �fabfile.py´), so restarting Apache is usually not necessary. 
+
