@@ -50,10 +50,10 @@ class Shift(Base):
         self.year = year
 
     def __repr__(self):
-        return "Shift - workgroup '%s' on '%s-%d-%d', by member %s"\
-               " in the '%s'-group [state is %s]" %\
-                (str(self.workgroup), str(self.day), self.month, self.year, self.member.fullname,
-                 self.workgroup, self.state)
+        return "[Shift on day '{}', in month {}/{}, "\
+               "by member {} in the '{}'-group (state:{})]"\
+                .format(str(self.day), self.month, self.year, 
+                        self.member.fullname, self.workgroup.name, self.state)
 
     def clone(self):
         return Shift(self.wg_id, self.task, self.year, self.month,

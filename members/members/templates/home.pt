@@ -12,8 +12,8 @@
                 <div id="todos-header">Some things you might want to check upon:</div>
                 <ul>
                     <li tal:repeat="todo todos" class="todo-${todo.wg}">
-                        <span class="classifier"
-                              title="This TODO is shown to all people in workgroup ${todo.wg}">
+                        <span class="todo-classifier"
+                              title="This TODO is shown to all people or coordinators in workgroup ${todo.wg}">
                             &nbsp;&nbsp;&nbsp;
                         </span>
                         <span class="todo-msg" tal:content="todo.msg">

@@ -365,7 +365,6 @@ form {border:0; margin:0; padding:0;}
 
 /* Todo items */
 #todos {
-  border: 1px solid #04176D;
   padding: 10px;
   padding-left: 40px;
 }
@@ -377,15 +376,17 @@ form {border:0; margin:0; padding:0;}
 
 #todos ul li {
   list-style: none;
+  margin-top: 2px;
 }
 
-.classifier {
+.todo-classifier {
   width: 10px;
   margin-right: 5px;
+  background-color #04176D;
 }
 
-.todo-Membership .classifier{
-  background-color: blue;
+.todo-Membership .todo-classifier{
+  background-color: pink;
 }
 
 /* other */
