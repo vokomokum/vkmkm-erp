@@ -4,11 +4,32 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
         
-            <h4 >
-                Welcome to the Vokomokum Members application.<br/>
+            <h4>
+                Howdy, ${view.user}
+            </h4>
+
+            <div id="todos">
+                <div id="todos-header">Some things you might want to check upon:</div>
+                <ul>
+                    <li tal:repeat="todo todos" class="todo-${todo.wg}">
+                        <span class="classifier"
+                              title="This TODO is shown to all people in workgroup ${todo.wg}">
+                            &nbsp;&nbsp;&nbsp;
+                        </span>
+                        <span class="todo-msg" tal:content="todo.msg">
+                        <a href="${portal_url}/${todo.link_act}"
+                           title="${todo.link_title}">
+                            ${todo.link_txt}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <h6>
                 For help or questions, please do <a
 href="mailto:systems@vokomokum.nl">contact the admins</a>.
-            </h4>
+            </h6>
+
         </div>
     </div>
 </html>

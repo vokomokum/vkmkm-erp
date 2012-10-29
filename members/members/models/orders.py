@@ -43,9 +43,11 @@ def get_order_amount(ord_no, mem_id):
                                                 .format(ord_no, mem_id)
     return list(dbsession.execute(query))[0][0]
 
+
 """
-doesn't work yet (see model/workgroups.py how to do it right, but is also not 
-needed right now, anyway
+doesn't work yet (see model/workgroups.py how to do it right, i.e. how to 
+connect ord_no and mem_id, since this basically represents an m:n table - 
+but is also not needed right now, anyway)
 class MemberOrder(Base):
     '''
     Helper class to work with orders by members. This table has no direct PK,
