@@ -1,0 +1,3 @@
+UPDATE transaction_types SET name = 'Order Charge' WHERE name = 'Order Payment';
+
+ALTER TABLE applicants ADD COLUMN household_size INTEGER DEFAULT 0;
