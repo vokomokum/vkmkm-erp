@@ -1,0 +1,8 @@
+The following data fields are not in use anymore.
+We could drop them (but would have to look out for any code depending on them).
+We might just hide their usage in the order app for now, but it is good to keep track.
+If further investigation would be needed before dropping, this in indicated by "(?)".
+
+- mem_order.amnt (amount field that does not seem to be correct nor used anywhere)
+- (?) mem_order.completed (and other date fields, seem identical to the ones in wh_order)
+- members.membership_paid (will soon be modeled by transactions: members are charged 10 Euros per household member)
