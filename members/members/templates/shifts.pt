@@ -142,6 +142,9 @@
                                 <option tal:condition="m.mem_id == shift.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
                                 <option tal:condition="m.mem_id != shift.mem_id" value="${m.mem_id}">${m.fullname}</option>
                             </tal:block>
+                            <tal:block tal:condition="python: shift.state == 'assigned' and shift.member not in wg.members">
+                                <option value="${shift.mem_id}" selected="selected">${shift.member}</option>
+                            </tal:block>
                         </select>
                         <tal:block tal:condition="python:shift.state in ['worked', 'noshow']">
                             ${shift.member}
