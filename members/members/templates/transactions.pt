@@ -124,7 +124,7 @@
                     </select>
                 </form>
             </td>
-            <td tal:content="t.ttype">
+            <td>${t.ttype}</td>
             <td>
                 <form action="${portal_url}/transaction/${t.id}/edit/setamount" method="post">
                     <small>EUR</small>
@@ -134,9 +134,11 @@
                 </form>
             </td>
             <td>
-                <span tal:condition="t.ttype.name == 'Order Charge'"
-                      tal:content="t.order.label">
-                </span>
+                <a tal:condition="t.ttype.name == 'Order Charge'"
+                   href="http://order.vokomokum.nl/cgi-bin/order?order_no=${t.ord_no}&amp;mem_id=${t.mem_id}"
+                   title="Click to see the details of this order (you might need to login)."
+                   tal:content="t.order.label">
+                </a>
             </td>
             <td tal:content="t.date.day">
             </td>
