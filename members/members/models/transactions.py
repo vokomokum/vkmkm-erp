@@ -90,7 +90,7 @@ class Transaction(Base):
         self.late = late
 
     def __repr__(self):
-        return "EUR {} from {} [{}]".format(self.amount, self.member,
+        return "EUR {} from {} [{}]".format(round(self.amount, 2), self.member,
                                             self.ttype)
 
     def locked(self):
@@ -103,6 +103,12 @@ class Transaction(Base):
 
     def validate(self):
         ''' validate if this object is valid, raise exception otherwise '''
+        try:
+            _ = float(self.amount)
+        except Exception, e:
+            raise VokoValidationError('The amount is not numeric - maybe it '\
+                                      'contains illegal characters (please '\
+                                      'write numbers with a dot, e.g. "3.89").')
         if not self.ttype:
             raise VokoValidationError('A transaction needs a type.')
         if not self.member:
