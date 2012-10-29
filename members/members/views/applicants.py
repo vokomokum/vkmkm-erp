@@ -8,8 +8,12 @@ from datetime import datetime
 from members.models.applicant import Applicant
 from members.models.member import Member
 from members.models.base import DBSession
+from members.models.base import VokoValidationError
 from members.views.base import BaseView
 from members.views.pwdreset import send_pwdreset_request
+from members.models.transactions import Transaction
+from members.models.transactions import TransactionType
+from members.models.transactions import get_ttypeid_by_name
 
 
 def get_applicants(session):
@@ -33,12 +37,14 @@ class NewApplicant(BaseView):
         fname = self.request.params['fname']
         lname = self.request.params['lname']
         now = datetime.now()
-        month = "{}/{}".format(str(now.month).rjust(2, '0'),
-                               str(now.year)[-2:])
+        month = "{}/{}".format(unicode(now.month).rjust(2, '0'),
+                               unicode(now.year)[-2:])
         comment = self.request.params['comment']
         email = self.request.params['email']
         telnr = self.request.params['telnr']
-        applicant = Applicant(None, fname, lname, month, comment, email, telnr)
+        hsize = int(self.request.params['household_size'])
+        applicant = Applicant(None, fname, lname, month, comment, email,
+                              telnr, hsize)
         applicant.validate()
         session = DBSession()
         session.add(applicant)
@@ -75,6 +81,7 @@ class Applicant2Member(BaseView):
         session = DBSession()
         a_id = self.request.matchdict['a_id']
         applicant = get_applicant(session, a_id)
+        # copy over our knowledge of him/her
         member = Member(self.request, applicant.fname, '', applicant.lname)
         now = datetime.now()
         txt = "Joined orientation in {}, became member in {}/{}.".format(\
@@ -84,6 +91,19 @@ class Applicant2Member(BaseView):
         member.mem_home_tel = applicant.telnr
         member.validate()
         session.add(member)
+        # charge membership fee
+        if applicant.household_size < 1:
+            raise VokoValidationError('Please specify the household size.')
+        t = Transaction(amount = applicant.household_size * 10 * -1,
+                        comment = 'automatically charged for {} people in the '\
+                                  'household'.format(applicant.household_size)
+        )
+        ttype = session.query(TransactionType)\
+                       .get(get_ttypeid_by_name('Membership Fee'))
+        t.ttype = ttype
+        t.member = member
+        t.validate()
+        session.add(t)
         session.delete(applicant)
         session.flush()
         send_pwdreset_request(member, self.request.application_url, first=True)

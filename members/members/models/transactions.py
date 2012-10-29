@@ -7,7 +7,7 @@ from pyramid.security import Allow, DENY_ALL
 
 import datetime
 
-from base import Base, VokoValidationError
+from base import Base, VokoValidationError, DBSession
 from member import Member
 from orders import Order
 
@@ -51,6 +51,13 @@ class TransactionType(Base):
         Returns True if the name of this transaction type cannot be changed
         '''
         return self.name in reserved_ttype_names
+
+
+def get_ttypeid_by_name(name):
+    session = DBSession()
+    tt = session.query(TransactionType)\
+                .filter(TransactionType.name == name).first()
+    return tt.id 
 
 
 class Transaction(Base):

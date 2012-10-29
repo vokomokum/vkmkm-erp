@@ -20,7 +20,6 @@
                     <input type="text" size="10" maxlength="50" name="lname" />
                 </td>
             </tr>
-
             <tr class="list-content" align="center">
                 <td width="25%">Email address:</td>
                 <td width="25%">
@@ -32,8 +31,11 @@
                 </td>
             </tr>
             <tr class="list-content" align="center">
-                <td width="50%" colspan="2">Comment:</td>
-                <td width="50%" colspan="2">
+                <td width="80%">Household size:</td>
+                <td width="20%">
+                    <input type="text" size="2" maxlength="2" name="household_size" value="0"/>
+                </td>
+                <td width="50%" colspan="2">Comment:
                     <textarea rows="5" cols="50" size="500" name="comment"></textarea>
                 </td>
             </tr>
@@ -54,17 +56,19 @@
             <th>Comment</th>
             <th>email</th>
             <th>Tel.</th>
+            <th>Household size</th>
         </tr>
         <tr tal:repeat="a applicants">
-            <td width="12%">
+            <td width="20%">
                 <span tal:content="a.fname"></span>
                 <span tal:content="a.lname"></span>
             </td>
-            <td width="10%" tal:content="a.month"></td>
-            <td width="20%" tal:content="a.comment"></td>
-            <td width="14%" tal:content="a.email"></td>
-            <td width="12%" tal:content="a.telnr"></td>
-            <td width="10%">
+            <td width="8%" tal:content="a.month"></td>
+            <td width="23%" tal:content="a.comment"></td>
+            <td width="19%" tal:content="a.email"></td>
+            <td width="13%" tal:content="a.telnr"></td>
+            <td width="5%" tal:content="a.household_size"></td>
+            <td width="12%">
                 <a title="Make this applicant into a member (with own member ID)"
                        href="${portal_url}/applicant/${a.id}/mkmember">
                     <button>M</button>
