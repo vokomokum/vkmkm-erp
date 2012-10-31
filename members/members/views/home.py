@@ -27,7 +27,46 @@ def get_todos(session, user):
     act_members = session.query(Member)\
                          .filter(Member.mem_active == True).all()
     now = datetime.datetime.now()
+    def df(i):
+        return unicode(i).rjust(2, '0')
+   
+    # Todos for every user:
+    # negative balance
+    if user.balance < 0:
+        todos.append(Todo(msg='You have a negative balance of {}.'\
+                             .format(round(user.balance, 2)),
+                          wg='Finance',
+                          link_act='member/{}'.format(user.mem_id),
+                          link_txt='See the transaction list on your profile.',
+                          link_title='You should transfer the missing amount.'))
+    # shift user is assigned to
+    ass_shifts = session.query(Shift)\
+                        .filter(Shift.mem_id == user.mem_id)\
+                        .filter(Shift.state == 'assigned')\
+                        .order_by(Shift.year, Shift.month).all()
+    for s in ass_shifts:
+        todos.append(Todo(msg='You are assigned for shift in "{}" on ({}) '\
+                              'in {}/{}.'.format(s.workgroup, 
+                                            s.day and s.day or 'any day',
+                                            df(s.month), df(s.year)),
+                              wg=s.workgroup.name,
+                              link_act='workgroup/{}/shifts/{}/{}'\
+                                            .format(s.wg_id, s.year, s.month),
+                              link_txt='Shift schedule.',
+                              link_title="Don't forget :)"))
 
+    # Workgroup Finance:
+    if 'Finance' in user.workgroups or user.mem_admin:
+        for m in [m for m in act_members if m.balance < 0]:
+            todos.append(Todo(msg='Member {} has a negative balance of {}.'\
+                                 .format(m, round(m.balance, 2)),
+                              wg='Finance',
+                              link_act='member/{}'.format(m.mem_id),
+                              link_txt='See member profile.',
+                              link_title='You should contact the member and '\
+                                 'tell them to transfer the missing amount.'))
+    
+    # Workgroup Membership:
     if 'Membership' in user.workgroups or user.mem_admin:
         # Members without a workgroup
         for m in [am for am in act_members if len(am.workgroups) == 0]:
@@ -38,24 +77,45 @@ def get_todos(session, user):
                               link_title='You should contact the member and '\
                                  'discuss which openings he/she would '\
                                  'like. If they refuse, inactivate him/her.'))
-    # coordinators in general
+    
+    # Todos for coordinators in general:
+    # unfilled shifts
     for led_wg in user.led_workgroups:
+        open_shifts = session.query(Shift)\
+                             .filter(Shift.wg_id == led_wg.id)\
+                             .filter(Shift.state == 'open')\
+                             .order_by(Shift.year, Shift.month).all()
+        for s in open_shifts: 
+            todos.append(Todo(msg='Open shift in group "{}" in {}/{}.'\
+                                  .format(s.workgroup, df(s.month), df(s.year)),
+                              wg=s.workgroup,
+                              link_act='workgroup/{}/shifts/{}/{}'\
+                                  .format(s.wg_id, df(s.year), df(s.month)),
+                              link_txt='Shift schedule.',
+                              link_title='Go to the shift schedule and sign '\
+                                       'someone up, or mail group members .'\
+                                       'to find a volunteer.'))
+
         # shifts to check upon
         ass_shifts = session.query(Shift)\
                             .filter(Shift.wg_id == led_wg.id)\
-                            .filter(Shift.state == 'assigned').all()
-        print ass_shifts
+                            .filter(Shift.state == 'assigned')\
+                            .order_by(Shift.year, Shift.month).all()
         for s in [s for s in ass_shifts\
                   if s.month < now.month or s.year < now.year]:
-            todos.append(Todo(msg='Please write off shift by {} ({}), '\
-                                  'in {}/{}.'\
-                                  .format(s.member, s.day and s.day or 'any day', s.month, s.year),
+            todos.append(Todo(msg='Group "{}": Please write off shift by {} ({}), '\
+                                  'in {}/{}.'.format(s.workgroup, s.member, 
+                                        s.day and s.day or 'any day',
+                                        df(s.month), df(s.year)),
                               wg=s.workgroup.name,
                               link_act='workgroup/{}/shifts/{}/{}'\
                                             .format(s.wg_id, s.year, s.month),
                               link_txt='Shift schedule.',
                               link_title='Go to the shift schedule and put '\
-                                       'the shift in "worked" or "no-show" mode.'))
+                                  'the shift in "worked" or "no-show" mode.'))
         
     return todos
 
+#TODO: 
+# - Membership: no-show shifts?
+#               late payments?
