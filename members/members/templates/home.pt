@@ -8,7 +8,7 @@
                 Howdy, ${view.user}
             </h4>
 
-            <div id="todos">
+            <div id="todos" tal:condition="view.logged_in">
                 <div id="todos-header">Some things you might want to check upon:</div>
                 <ul>
                     <li tal:repeat="todo todos" class="todo-${todo.wg}">
