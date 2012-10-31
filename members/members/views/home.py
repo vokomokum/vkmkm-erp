@@ -14,7 +14,10 @@ class HomeView(BaseView):
 
     def __call__(self):
         session = DBSession()
-        todos = get_todos(session, self.user)
+        if self.logged_in:
+            todos = get_todos(session, self.user)
+        else:
+            todos = []
         return dict(todos=todos)
 
 
