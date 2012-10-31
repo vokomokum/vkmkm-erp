@@ -7,6 +7,7 @@ from members.models.todo import Todo
 from members.models.member import Member
 from members.models.shift import Shift
 from members.views.base import BaseView
+from members.utils.misc import ascii_save
 
 
 @view_config(renderer='../templates/home.pt', route_name='home')
@@ -62,7 +63,8 @@ def get_todos(session, user):
     if 'Finance' in user.workgroups or user.mem_admin:
         for m in [m for m in act_members if m.balance < 0]:
             todos.append(Todo(msg='Member {} has a negative balance of {}.'\
-                                 .format(m, round(m.balance, 2)),
+                                 .format(ascii_save(m.fullname),
+                                        round(m.balance, 2)),
                               wg='Finance',
                               link_act='member/{}'.format(m.mem_id),
                               link_txt='See member profile.',
@@ -73,7 +75,8 @@ def get_todos(session, user):
     if 'Membership' in user.workgroups or user.mem_admin:
         # Members without a workgroup
         for m in [am for am in act_members if len(am.workgroups) == 0]:
-            todos.append(Todo(msg='Member {} is without a workgroup.'.format(m),
+            todos.append(Todo(msg='Member {} is without a workgroup.'\
+                                  .format(ascii_save(m.fullname)),
                               wg='Membership',
                               link_act='member/{}'.format(m.mem_id),
                               link_txt='See member profile.',
@@ -107,7 +110,8 @@ def get_todos(session, user):
         for s in [s for s in ass_shifts\
                   if s.month < now.month or s.year < now.year]:
             todos.append(Todo(msg='Group "{}": Please write off shift by {} ({}), '\
-                                  'in {}/{}.'.format(s.workgroup, s.member, 
+                                  'in {}/{}.'.format(s.workgroup, 
+                                        ascii_save(s.member.fullname), 
                                         s.day and s.day or 'any day',
                                         df(s.month), df(s.year)),
                               wg=s.workgroup.name,
@@ -122,3 +126,4 @@ def get_todos(session, user):
 #TODO: 
 # - Membership: no-show shifts?
 #               late payments?
+#               list all current applicants

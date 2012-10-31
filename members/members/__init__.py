@@ -74,7 +74,7 @@ def main(global_config, **settings):
 
     # custom error views, catching NotFound and all Exceptions
     config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')
-    config.add_view(ErrorView, context=Exception, renderer='templates/base.pt')
+    #config.add_view(ErrorView, context=Exception, renderer='templates/base.pt')
 
     config.scan()
 

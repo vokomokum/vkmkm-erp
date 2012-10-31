@@ -12,6 +12,12 @@ def get_settings():
     registry = pyramid.threadlocal.get_current_registry()
     return registry.settings
 
+def ascii_save(s):
+    '''
+    Not exactly perfect way to make Ascii from unicode,
+    we might want to use the Unidecode module (see on pypi)
+    '''
+    return s.encode('ascii', 'replace')
 
 def month_info(date):
     ''' 

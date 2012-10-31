@@ -10,6 +10,7 @@ import datetime
 from base import Base, VokoValidationError, DBSession
 from member import Member
 from orders import Order
+from members.utils.misc import ascii_save
 
 
 # These types have special meaning and a re therefore protected
@@ -90,7 +91,8 @@ class Transaction(Base):
         self.late = late
 
     def __repr__(self):
-        return "EUR {} from {} [{}]".format(round(self.amount, 2), self.member,
+        return "EUR {} from {} [{}]".format(round(self.amount, 2), 
+                                            ascii_save(self.member.fullname),
                                             self.ttype)
 
     def locked(self):

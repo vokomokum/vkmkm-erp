@@ -15,6 +15,7 @@ from workgroups import Workgroup
 
 shift_states = ['open', 'assigned', 'worked' ,'no-show']
 
+
 class Shift(Base):
     '''
     A shift is not identifiable by any number of its attributes, as

@@ -10,6 +10,8 @@ from members.models.member import Member, get_member
 from members.models.base import DBSession, Base
 from members.views.base import BaseView
 from members.utils.misc import month_info
+from members.utils.misc import ascii_save
+
 
 '''
 All shift operations are done on the workgroups
@@ -169,9 +171,7 @@ class EditShiftView(BaseShiftView):
             if member: 
                 shift.member = member
                 shift.state = 'assigned'
-                # not exactly perfect way to make Ascii from unicode,
-                # we might want to use the Unidecode module (see on pypi)
-                name = shift.member.fullname.encode('ascii', 'replace')
+                name = ascii_save(shift.member.fullname)
                 return redir(u'{} has been signed up for the shift.'.format(name))
             else:
                 if shift.is_locked and not self.user in wg.leaders:
