@@ -382,11 +382,39 @@ form {border:0; margin:0; padding:0;}
 .todo-classifier {
   width: 10px;
   margin-right: 5px;
-  background-color #04176D;
+  background-color: #04176D;
 }
 
 .todo-Membership .todo-classifier{
   background-color: pink;
+}
+
+.todo-Finance .todo-classifier{
+  background-color: black;
+}
+
+.todo-System .todo-classifier{
+  background-color: gray;
+}
+
+.todo-Vers .todo-classifier{
+  background-color: green;
+}
+
+.todo-Bestelling .todo-classifier{
+  background-color: yellow;
+}
+
+.todo-Setup .todo-classifier{
+  background-color: orange;
+}
+
+.todo-Cafe .todo-classifier{
+  background-color: brown;
+}
+
+.todo-Communication .todo-classifier{
+  background-color: purple;
 }
 
 /* other */
