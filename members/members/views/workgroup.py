@@ -10,12 +10,12 @@ from members.models.shift import Shift
 from members.views.base import BaseView
 
 
-def get_possible_members(session):
-    ''' get possible members for a(ny) workgroup '''
-    return session.query(Member)\
-            .filter(Member.mem_active == True)\
-            .order_by(Member.mem_fname)\
-            .all()
+def get_possible_members(session, wg):
+    ''' get possible members for a workgroup '''
+    q1 = session.query(Member).filter(Member.mem_active == True)
+    wgmids = [m.mem_id for m in wg.members]
+    q2 = session.query(Member).filter(Member.mem_id.in_(wgmids))
+    return q1.union(q2).order_by(Member.mem_fname).all()
 
 
 def fill_wg_from_request(wg, request, session):
@@ -49,9 +49,9 @@ class NewWorkgroupView(BaseView):
     tab = 'work'
 
     def __call__(self):
-        self.possible_members = get_possible_members(DBSession())
-        return dict(wg=Workgroup('', ''),
-                    msg="You're about to make a new workgroup.")
+        wg = Workgroup()
+        self.possible_members = get_possible_members(DBSession(), wg)
+        return dict(wg=wg, msg="You're about to make a new workgroup.")
 
 
 @view_config(renderer='../templates/workgroup.pt',
@@ -87,7 +87,7 @@ class EditWorkgroupView(BaseView):
         wg = get_wg(session, self.request)
         req = self.request
 
-        self.possible_members = get_possible_members(session)
+        self.possible_members = get_possible_members(session, wg)
         if 'action' in req.params:
             action = req.params['action']
             if action == "save":
