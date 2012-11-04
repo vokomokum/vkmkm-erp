@@ -10,6 +10,16 @@
 
             <div id="todos" tal:condition="view.logged_in">
                 <div id="todos-header">Some things you might want to check upon:</div>
+                <div tal:condition="view.user.mem_admin" id="todos-toggle">
+                    <tal:block tal:condition="not: view.show_all">(These are only yours.
+                        <a href="${portal_url}?show-all-todos=1">
+                            Show all TODOs in the system
+                        </a> [admins only].
+                    )</tal:block>
+                    <tal:block tal:condition="view.show_all">(These are all TODOs in the system.
+                        <a href="${portal_url}">Show only your TODOs.</a>
+                    )</tal:block>
+                </div>
                 <ul>
                     <li tal:repeat="todo todos" class="todo-${todo.wg}">
                         <span class="todo-classifier"

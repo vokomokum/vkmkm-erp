@@ -374,6 +374,10 @@ form {border:0; margin:0; padding:0;}
   color: gray; 
 }
 
+#todos-toggle {
+  font-size: 10px;
+}
+
 #todos ul li {
   list-style: none;
   margin-top: 2px;

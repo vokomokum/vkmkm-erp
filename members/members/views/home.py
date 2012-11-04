@@ -5,6 +5,7 @@ import datetime
 from members.models.base import DBSession
 from members.models.todo import Todo
 from members.models.member import Member
+from members.models.workgroups import Workgroup
 from members.models.shift import Shift
 from members.views.base import BaseView
 from members.utils.misc import ascii_save
@@ -15,17 +16,23 @@ class HomeView(BaseView):
 
     def __call__(self):
         session = DBSession()
+        self.show_all = False
+        if 'show-all-todos' in self.request.params:
+            if self.request.params['show-all-todos'] == '1'\
+               and self.user.mem_admin:
+                self.show_all = True
         if self.logged_in:
-            todos = get_todos(session, self.user)
+            todos = get_todos(session, self.user, self.show_all)
         else:
             todos = []
         return dict(todos=todos)
 
 
 
-def get_todos(session, user):
+def get_todos(session, user, show_all):
     '''
-    Go through a list of cases to find current TODOs for this user
+    Go through a list of cases to find current TODOs for this user.
+    If show_all is true, find all TODOs system-wide
     '''
     todos = []
     act_members = session.query(Member)\
@@ -34,7 +41,7 @@ def get_todos(session, user):
     def df(i):
         return unicode(i).rjust(2, '0')
    
-    # Todos for every user:
+    # ---- Todos for every user:
     # negative balance
     if user.balance < 0:
         todos.append(Todo(msg='You have a negative balance of {}.'\
@@ -59,8 +66,8 @@ def get_todos(session, user):
                               link_txt='Shift schedule.',
                               link_title="Don't forget :)"))
 
-    # Workgroup Finance:
-    if 'Finance' in user.workgroups or user.mem_admin:
+    # ---- Workgroup Finance:
+    if 'Finance' in user.workgroups or show_all:
         for m in [m for m in act_members if m.balance < 0]:
             todos.append(Todo(msg='Member {} has a negative balance of {}.'\
                                  .format(ascii_save(m.fullname),
@@ -71,8 +78,8 @@ def get_todos(session, user):
                               link_title='You should contact the member and '\
                                  'tell them to transfer the missing amount.'))
     
-    # Workgroup Membership:
-    if 'Membership' in user.workgroups or user.mem_admin:
+    # ---- Workgroup Membership:
+    if 'Membership' in user.workgroups or show_all:
         # Members without a workgroup
         for m in [am for am in act_members if len(am.workgroups) == 0]:
             todos.append(Todo(msg='Member {} is without a workgroup.'\
@@ -84,11 +91,14 @@ def get_todos(session, user):
                                  'discuss which openings he/she would '\
                                  'like. If they refuse, inactivate him/her.'))
     
-    # Todos for coordinators in general:
+    # ---- Todos for coordinators in general:
     # unfilled shifts
-    for led_wg in user.led_workgroups:
+    wgs = user.led_workgroups
+    if show_all:
+        wgs = session.query(Workgroup).all()
+    for wg in wgs:
         open_shifts = session.query(Shift)\
-                             .filter(Shift.wg_id == led_wg.id)\
+                             .filter(Shift.wg_id == wg.id)\
                              .filter(Shift.state == 'open')\
                              .order_by(Shift.year, Shift.month).all()
         for s in open_shifts: 
@@ -104,7 +114,7 @@ def get_todos(session, user):
 
         # shifts to check upon
         ass_shifts = session.query(Shift)\
-                            .filter(Shift.wg_id == led_wg.id)\
+                            .filter(Shift.wg_id == wg.id)\
                             .filter(Shift.state == 'assigned')\
                             .order_by(Shift.year, Shift.month).all()
         for s in [s for s in ass_shifts\
