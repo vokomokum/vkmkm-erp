@@ -108,8 +108,9 @@ class Applicant2Member(BaseView):
         session.flush()
         send_pwdreset_request(member, self.request.application_url, first=True)
         return self.redirect("/member/{}?msg=Applicant has been made "\
-                            "into new Member and got an email to set "\
-                            "up a password.".format(member.mem_id))
+                            "into a new Member, got an email to set up a "\
+                            "password and has been charged membership fee."\
+                            .format(member.mem_id))
 
 
 @view_config(renderer='../templates/applicants.pt',
