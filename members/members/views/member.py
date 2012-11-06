@@ -98,7 +98,10 @@ class EditMemberView(BaseView):
                                           first=True)
                     return self.redirect('/member/{0:d}?msg=Member has been'\
                                          ' created and got an email to set up'\
-                                         ' a password.'.format(member.mem_id))
+                                         ' a password. Note: no membership'\
+                                         ' fee has been charged (we do not'\
+                                         ' know the household size).'\
+                                         .format(member.mem_id))
                 return dict(m=member, msg='Member has been saved.')
             elif action == 'toggle-active':
                 member = get_member(session, self.request)
