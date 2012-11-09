@@ -46,7 +46,7 @@ class NewMemberView(BaseView):
     tab = 'members'
 
     def __call__(self):
-        self.user_may_edit_admin_settings = self.user.mem_admin 
+        self.user_may_edit_admin_settings = self.user.mem_admin
         return dict(m=Member('', '', ''), msg='')
 
 

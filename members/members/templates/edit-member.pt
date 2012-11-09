@@ -25,6 +25,11 @@
       method="post">
     
     <h1>Editing Member Details</h1>
+    
+    <div class="warn" tal:condition="not m.exists">
+        You are about to create a new member. Note that this will not charge
+        membership fee (you can do that manually).
+    </div>
 
     <div id="action-box">
         <a class="view-link" href="${portal_url}/member/${m.mem_id}">view this member</a>
