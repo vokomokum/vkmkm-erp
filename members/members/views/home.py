@@ -67,7 +67,7 @@ def get_todos(session, user, show_all):
                               link_title="Don't forget :)"))
 
     # ---- Workgroup Finance:
-    if 'Finance' in user.workgroups or show_all:
+    if 'Finance' in [w.name for w in user.workgroups] or show_all:
         for m in [m for m in act_members if m.balance < 0]:
             todos.append(Todo(msg='Member {} has a negative balance of {}.'\
                                  .format(ascii_save(m.fullname),
@@ -79,7 +79,7 @@ def get_todos(session, user, show_all):
                                  'tell them to transfer the missing amount.'))
     
     # ---- Workgroup Membership:
-    if 'Membership' in user.workgroups or show_all:
+    if 'Membership' in [w.name for w in user.workgroups] or show_all:
         # Members without a workgroup
         for m in [am for am in act_members if len(am.workgroups) == 0]:
             todos.append(Todo(msg='Member {} is without a workgroup.'\
