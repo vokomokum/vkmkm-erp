@@ -69,15 +69,12 @@ class MemberView(BaseView):
         msg = ''
         if 'msg' in self.request.params:
             msg = self.request.params['msg']
-        # assigned and worked shifts
-        assigned = [s for s in self.m.scheduled_shifts if s.state == 'assigned']
-        worked = [s for s in self.m.scheduled_shifts if s.state == 'worked']
         nov12 = datetime.datetime(2012, 12, 1)
         orders = [MemberOrder(self.m, o) for o in session.query(Order)\
                     .order_by(desc(Order.completed)).all()]
         old_orders = [o for o in orders if str(o.order.completed) < str(nov12)]
-        return dict(m=self.m, msg=msg, assigned_shifts=assigned, old_orders=orders,
-                    worked_shifts=worked, transactions=self.m.transactions)
+        return dict(m=self.m, msg=msg, shifts=self.m.shifts, old_orders=orders,
+                    transactions=self.m.transactions)
 
 
 @view_config(renderer='../templates/edit-member.pt',

@@ -36,7 +36,7 @@ class Shift(Base):
     workgroup = relationship(Workgroup,
                   backref=backref('shifts', cascade='all,delete,delete-orphan',
                                            order_by='Shift.id'))
-    member = relationship(Member, backref='scheduled_shifts')
+    member = relationship(Member, backref='shifts')
 
     def __init__(self, wg_id, task, year, month, day=None, mem_id=None):
         self.mem_id = mem_id

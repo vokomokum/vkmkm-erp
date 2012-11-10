@@ -75,40 +75,24 @@
         </tr>
     </table>
 
-    <h2>Assigned Shifts</h2>
+    <h2>Shifts</h2>
 
-    <table class="list" align="center" tal:condition="assigned_shifts">
+    <table class="list" align="center" tal:condition="shifts">
         <tr>
             <th>Task</th>
             <th>Month</th>
             <th>Workgroup</th>
+            <th>Status</th>
         </tr> 
-        <tr class="list-content" tal:repeat="s assigned_shifts">
+        <tr class="list-content" tal:repeat="s shifts">
             <td>${s.task}</td>
             <td><a href="${portal_url}/workgroup/${s.workgroup.id}/shifts/${s.year}/${s.month}">${s.month}/${s.year}</td>
             <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
+            <td>${s.state}</td>
         </tr>
     </table>
-    <div tal:condition="not assigned_shifts" class="info">
-        No assigned shifts.
-    </div>
-
-    <h2>Worked Shifts</h2>
-
-    <table class="list" align="center" tal:condition="worked_shifts">
-        <tr>
-            <th>Task</th>
-            <th>Month</th>
-            <th>Workgroup</th>
-        </tr> 
-        <tr class="list-content" tal:repeat="s worked_shifts">
-            <td>${s.task}</td>
-            <td><a href="${portal_url}/workgroup/${s.workgroup.id}/shifts/${s.year}/${s.month}">${s.month}/${s.year}</td>
-            <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
-        </tr>
-    </table>
-    <div tal:condition="not worked_shifts" class="info">
-        No worked shifts.
+    <div tal:condition="not shifts" class="info">
+        No shifts.
     </div>
 
     <tal:block tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in view.user.workgroups or 'Membership' in view.user.workgroups">
