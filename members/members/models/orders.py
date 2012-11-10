@@ -30,19 +30,28 @@ class Order(Base):
         return self.label
 
 
-def get_order_label(ord_no):
-    dbsession = DBSession()
-    query = """SELECT DISTINCT ord_label FROM wh_order WHERE ord_no = {};"""\
-                                                .format(ord_no)
-    return list(dbsession.execute(query))[0][0]
-
 def get_order_amount(ord_no, mem_id):
-    '''TODO: look at Jims email to get this right, do sthg else if sqlite'''
-    dbsession = DBSession()
-    query = """SELECT amount FROM order... WHERE ord_no = {} and mem_id = {};"""\
-                                                .format(ord_no, mem_id)
-    return list(dbsession.execute(query))[0][0]
+    ''' let DB compute amount for this member on this order in EUR  '''
+    query = """SELECT * FROM order_totals({}, {});""".format(ord_no, mem_id)
+    return list(DBSession().connection().engine.execute(query))[0][11] / 100.
 
+
+class MemberOrder(object):
+    '''
+    Helper class to model member orders (Note: not a DB model class)
+    '''
+
+    def __init__(self, member, order):
+        self.member = member
+        self.order = order
+        self._mnt = -1
+
+    @property
+    def amount(self):
+        ''' lazily use get_order_amount to compute this once when needed '''
+        if self._mnt == -1:
+            self._mnt = get_order_amount(self.member.mem_id, self.order.id)
+        return self._mnt
 
 """
 doesn't work yet (see model/workgroups.py how to do it right, i.e. how to 

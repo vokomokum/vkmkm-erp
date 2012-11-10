@@ -111,7 +111,7 @@
         No worked shifts.
     </div>
 
-    <tal:block tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in view.user.workgroups">
+    <tal:block tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in view.user.workgroups or 'Membership' in view.user.workgroups">
     <h2>Transactions</h2>
 
     <table class="list" align="center" tal:condition="transactions">
@@ -146,7 +146,30 @@
         No transactions.
     </div>
     </tal:block>
+ 
+    <tal:block tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in view.user.workgroups or 'Membership' in view.user.workgroups">
+    <h2>Orders before Nov 2012</h2>
+
+    <table class="list" align="center" tal:condition="old_orders">
+        <tr>
+            <th>Label</th>
+            <th>Amount</th>
+        </tr> 
+        <tal:block tal:repeat="o old_orders">
+        <tr class="list-content" tal:condition="o.amount > 0.0">
+            <td>
+                <a href="http://order.vokomokum.nl/cgi-bin/order?order_no=${o.order.id}">${o.order.label}</a>
+            </td>
+            <td class="list-amount"><small>EUR</small>&nbsp;${python:round(o.amount,2)}</td>
+        </tr>
+        </tal:block>
+    </table>
+    <div tal:condition="not old_orders" class="info">
+        No orders before Nov 2012.
+    </div>
+    </tal:block>
     
+   
 
         </div>
     </div>

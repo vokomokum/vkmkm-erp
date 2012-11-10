@@ -2,8 +2,10 @@ from __future__ import unicode_literals
 
 from pyramid.view import view_config
 from sqlalchemy import asc, desc
+import datetime
 
 from members.models.member import Member, get_member
+from members.models.orders import Order, MemberOrder
 from members.models.base import DBSession
 from members.views.base import BaseView
 from members.views.pwdreset import send_pwdreset_request
@@ -62,14 +64,19 @@ class MemberView(BaseView):
         return self.user.mem_id == self.m.mem_id or self.user.mem_admin
 
     def __call__(self):
-        self.m = get_member(DBSession(), self.request)
+        session = DBSession()
+        self.m = get_member(session, self.request)
         msg = ''
         if 'msg' in self.request.params:
             msg = self.request.params['msg']
         # assigned and worked shifts
         assigned = [s for s in self.m.scheduled_shifts if s.state == 'assigned']
         worked = [s for s in self.m.scheduled_shifts if s.state == 'worked']
-        return dict(m=self.m, msg=msg, assigned_shifts=assigned,
+        nov12 = datetime.datetime(2012, 12, 1)
+        orders = [MemberOrder(self.m, o) for o in session.query(Order)\
+                    .order_by(desc(Order.completed)).all()]
+        old_orders = [o for o in orders if str(o.order.completed) < str(nov12)]
+        return dict(m=self.m, msg=msg, assigned_shifts=assigned, old_orders=orders,
                     worked_shifts=worked, transactions=self.m.transactions)
 
 
