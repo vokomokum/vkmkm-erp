@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 
 from base import Base, DBSession, CreationForbiddenException
 from members.models.member import Member
+from members.utils.misc import running_sqlite
 
 
 class Order(Base):
@@ -33,6 +34,8 @@ class Order(Base):
 def get_order_amount(ord_no, mem_id):
     ''' let DB compute amount for this member on this order in EUR  '''
     query = """SELECT * FROM order_totals({}, {});""".format(ord_no, mem_id)
+    if running_sqlite():
+        return -1
     return list(DBSession().connection().engine.execute(query))[0][11] / 100.
 
 

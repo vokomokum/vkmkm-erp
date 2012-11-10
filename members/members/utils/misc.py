@@ -19,6 +19,14 @@ def ascii_save(s):
     '''
     return s.encode('ascii', 'replace')
 
+def running_sqlite():
+    '''
+    True if app is currently running on sqlite (thus, probably in dev mode
+    or testing)
+    '''
+    settings = get_settings()
+    return settings['sqlalchemy.url'].startswith('sqlite:')
+
 def month_info(date):
     ''' 
     Return useful info about the month in the given date object:
