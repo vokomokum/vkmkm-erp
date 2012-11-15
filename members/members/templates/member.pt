@@ -20,7 +20,7 @@
         </tr>
         <tr class="list-content">
             <td>
-                <div>${m.fullname}</div>
+                <div>${m.fullname} (Voko-ID:${m.mem_id})</div>
                 <div>${m.mem_email}</div>
             </td>
             <td>
