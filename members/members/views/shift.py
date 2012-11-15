@@ -11,6 +11,7 @@ from members.models.base import DBSession, Base
 from members.views.base import BaseView
 from members.utils.misc import month_info
 from members.utils.misc import ascii_save
+from members.utils.mail import sendmail
 
 
 '''
@@ -168,16 +169,48 @@ class EditShiftView(BaseShiftView):
                 member = None
             else:
                 member = get_member(db_session, self.request)
-            if member: 
+
+            # prepare some things for mailing
+            schedule_url = '{}/workgroup/{}/shifts/{}/{}'.format(
+                        self.request.application_url, shift.workgroup.id,
+                        shift.year, shift.month)
+            q = 'Please direct any questions to your group coordinator(s).'\
+                '\n\nBest,\nVokomokum'           
+            old_member = shift.member
+            def mail_old_assignee():
+                # send old assignee an email
+                if old_member and not self.user == old_member:
+                    subject = 'You have been signed out of a shift.'
+                    body = 'Hi,\n\n{} has signed you off a shift that '\
+                           'you were previously assigned to.\nThe shift is '\
+                           'now:\n\n{}\n\nYou can view the shift '\
+                           'schedule at {}.\n{}'.format(self.user, shift, 
+                            schedule_url, q) 
+                    sendmail(old_member.mem_email, subject, body, 
+                             folder='shifts')
+
+            if member:
                 shift.member = member
                 shift.state = 'assigned'
+                shift.validate()
+                if not self.user == member:
+                    # send new assignee an email
+                    subject = 'You have been assigned to a shift.'
+                    body = 'Hi,\n\n{} has assigned you to a shift: '\
+                           '\n\n{}\n\nYou can view the shift schedule at {}'\
+                           '\n\n{}'.format(self.user, shift, schedule_url, q)
+                    sendmail(member.mem_email, subject, body, folder='shifts')
+                mail_old_assignee()
                 name = ascii_save(shift.member.fullname)
-                return redir(u'{} has been signed up for the shift.'.format(name))
+                return redir(u'{} has been signed up for the shift.'\
+                             .format(name))
             else:
                 if shift.is_locked and not self.user in wg.leaders:
                     return redir('Shift is already locked. Ask your workgroup admin for help.')
                 shift.member = None
                 shift.state = 'open' 
+                shift.validate()
+                mail_old_assignee()
                 return redir('Shift is now open.')
             return redir('You are not allowed to do this.')
 

@@ -38,11 +38,11 @@ class Shift(Base):
                                            order_by='Shift.id'))
     member = relationship(Member, backref='shifts')
 
-    def __init__(self, wg_id, task, year, month, day=None, mem_id=None):
-        self.mem_id = mem_id
+    def __init__(self, wg_id, task, year, month, day=None, member=None):
+        self.member = member
         self.wg_id = wg_id
         self.task = task
-        if mem_id:
+        if self.member:
             self.state = 'assigned'
         else:
             self.state = 'open'
@@ -51,9 +51,9 @@ class Shift(Base):
         self.year = year
 
     def __repr__(self):
-        return "[Shift on day '{}', in month {}/{}, "\
+        return "[Shift '{}' on day '{}', in month {}/{}, "\
                "by member {} in the '{}'-group (state:{})]"\
-                .format(str(self.day), self.month, self.year, 
+                .format(self.task, str(self.day), self.month, self.year, 
                         self.member.fullname, self.workgroup.name, self.state)
 
     def clone(self):
@@ -88,11 +88,9 @@ class Shift(Base):
         if self.task == "":
             raise VokoValidationError('The task should not be empty.')
         if self.state in ['assigned', 'worked', 'no-show']:
-            if not self.mem_id or self.mem_id == '--':
-                raise VokoValidationError('Please select a member. We need to know a member for state "{}".'.format(self.state))
-            m = DBSession.query(Member).get(self.mem_id)
-            if not m:
-                raise VokoValidationError('No member could be found for this ID.')
+            if not self.member:
+                raise VokoValidationError('Please select a member. '\
+                'We need to know a member for state "{}".'.format(self.state))
             # this is maybe problematic for validating older shifts
             #if not m in self.workgroup.members:
             #    raise VokoValidationError('The member of this shift (%s) is not '\

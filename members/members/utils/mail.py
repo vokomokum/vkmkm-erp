@@ -1,11 +1,12 @@
 import subprocess
+import os
 from datetime import datetime
 import logging
 
 from members.utils.misc import get_settings
 
 
-def sendmail(to, subject, body, sender=None):
+def sendmail(to, subject, body, folder='other', sender=None):
     '''
     Send a mail using a local mail program (like exim).
     Will save a time-stamped copy in a local folder, as well.
@@ -43,7 +44,10 @@ Subject: %s
         result = mailer.wait()
         error = mailer.stderr.read()
         # save a copy
-        mf = open('%s/%s.eml' % (mail_folder, mail_time), 'w')
+        target_folder = '{}/{}'.format(mail_folder, folder)
+        if not os.path.exists(target_folder):
+            os.mkdir(target_folder)
+        mf = open('{}/{}.eml'.format(target_folder, mail_time), 'w')
         mf.write(mail)
         mf.close()
         assert(result == 0)

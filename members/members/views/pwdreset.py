@@ -28,7 +28,7 @@ def send_pwdreset_request(member, app_url, first=False):
     mail_templ = open('members/templates/pwdreset_txt.eml', 'r')
     mail = mail_templ.read()
     body = mail.format(portal_url=app_url, mem_id=member.mem_id, key=code)
-    return sendmail(member.mem_email, subject, body)
+    return sendmail(member.mem_email, subject, body, folder='passwords')
 
 
 @view_config(renderer='../templates/pwdreset.pt', route_name='reset-pwd-request')
