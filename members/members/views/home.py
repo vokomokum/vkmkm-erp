@@ -1,14 +1,19 @@
 from pyramid.view import view_config
 
+import os
 import datetime
+from sqlalchemy import desc
 
 from members.models.base import DBSession
 from members.models.todo import Todo
 from members.models.member import Member
+from members.models.orders import Order
+from members.models.transactions import Transaction
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
 from members.views.base import BaseView
 from members.utils.misc import ascii_save
+from members.utils.misc import get_settings
 
 
 @view_config(renderer='../templates/home.pt', route_name='home')
@@ -40,7 +45,8 @@ def get_todos(session, user, show_all):
     now = datetime.datetime.now()
     def df(i):
         return unicode(i).rjust(2, '0')
-   
+    
+
     # ---- Todos for every user:
     # negative balance
     if user.balance < 0:
@@ -69,7 +75,7 @@ def get_todos(session, user, show_all):
     # ---- Workgroup Finance:
     if 'Finance' in [w.name for w in user.workgroups] or show_all:
         for m in [m for m in act_members if m.balance < 0]:
-            todos.append(Todo(msg='Member {} has a negative balance of {}.'\
+            todos.append(Todo(msg='Member {} has a negative balance of EUR {}.'\
                                  .format(ascii_save(m.fullname),
                                         round(m.balance, 2)),
                               wg='Finance',
@@ -77,7 +83,40 @@ def get_todos(session, user, show_all):
                               link_txt='See member profile.',
                               link_title='You should contact the member and '\
                                  'tell them to transfer the missing amount.'))
-    
+   
+        nov12 = datetime.datetime(2012, 7, 1)
+        orders = session.query(Order).order_by(desc(Order.completed)).all()
+        new_orders = [o for o in orders if str(o.completed) != ''\
+                                        and str(o.completed) > str(nov12)]
+        print "++++++++++++++++++++++++++++"
+        print new_orders
+        for no in new_orders:
+            charges_made = session.query(Transaction)\
+                                .filter(Transaction.ord_no == no.id).count()
+            if charges_made == 0:
+                todos.append(Todo(msg='Order "{}" has yet to be charged.'\
+                                       .format(no.label),
+                                  wg='Finance',
+                                  link_act='charge-order/{}'.format(no.id),
+                                  link_txt='Charge members now.',
+                                  link_title='There have been no charges made '\
+                                    'for this order to members. Clicking this '\
+                                    'link will create these charges.'))
+            else:
+                settings = get_settings()
+                mail_folder = settings['vokomokum.mail_folder']
+                if not os.path.exists('{}/order-charges/{}'.format(mail_folder, no.id)):
+                    todos.append(Todo(msg='Members have not gotten mail about '\
+                                          'charges for order "{}".'.format(no.label),
+                                  wg='Finance',
+                                  link_act='mail-order-charges/{}'.format(no.id),
+                                  link_txt='Email members now.',
+                                  link_title='There have been charges made '\
+                                    'for this order to members. If these charges seem '\
+                                    'to be correct, you can inform them what they '\
+                                    'should pay.'))
+
+
     # ---- Workgroup Membership:
     if 'Membership' in [w.name for w in user.workgroups] or show_all:
         # Members without a workgroup

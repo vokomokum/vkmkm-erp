@@ -119,6 +119,9 @@ class Transaction(Base):
             and self.amount > 0:
             raise VokoValidationError('A transaction of this type is charged '\
                                       'from members and should be negative.')
+        if self.ttype.name == 'Order Charge' and not self.order:
+            raise VokoValidationError('This Order Charge has no connected order.')
+            
 
 """
 def get_transaction(session, request):
