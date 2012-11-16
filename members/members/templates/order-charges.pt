@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+
+    <h1>Charging order "${order.label}"</h1>
+    
+    <tal:block tal:condition="not: action">
+        No action given.
+    </tal:block>
+    <tal:block tal:condition="python: not view.user.mem_admin and not 'Finance' in view.user.workgroups">
+        You have no right to use this page.
+    </tal:block>
+    <tal:block tal:condition="python: view.user.mem_admin or 'Finance' in view.user.workgroups or 'Membership' in view.user.workgroups">
+        <tal:block tal:condition="action == 'show'">
+            <h3>These are the charges I would make:</h3>
+
+            <table class="list" align="center" tal:condition="charges">
+                <tr>
+                    <th>Member</th>
+                    <th>Amount</th>
+                </tr> 
+                <tr tal:repeat="c charges">
+                    <td>
+                        <a href="${portal_url}/member/${c.member.mem_id}">${c.member.fullname}</a>
+                    </td>
+                    <td class="list-amount">
+                        <a href="http://order.vokomokum.nl/cgi-bin/adm_view_memord.cgi?order_no=${order.id}&amp;Member=${c.member.mem_id}">
+                            <small>EUR</small>&nbsp;${python:round(c.amount,2)}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th><th></th>
+                </tr>
+            </table>
+            <h3 tal:condition="charges" class="info">
+                <a href="${portal_url}/charge-order/${order.id}?action=charge">
+                    Go ahead, create these charges.
+                </a>
+            </h3>
+            <h3 tal:condition="not charges" class="info">
+                None found.
+            </h3>
+        </tal:block>
+        <tal:block tal:condition="action == 'done'">
+            <h3>Charges have been created.</h3>
+            <h3>
+                <a href="${portal_url}/mail-order-charges">Now mail the charges to members.</a>
+            </h3>
+        </tal:block>
+    </tal:block>
+
+        </div>
+    </div>
+</html>

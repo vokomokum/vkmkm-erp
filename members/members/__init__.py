@@ -71,6 +71,8 @@ def main(global_config, **settings):
     config.add_route('transaction-new', '/transactions/new', factory=Transaction)
     config.add_route('transaction-edit', '/transaction/{t_id}/edit/{action}', factory=Transaction)
     config.add_route('transaction-delete', '/transaction/{t_id}/delete', factory=Transaction)
+    config.add_route('charge-order', '/charge-order/{o_id}')
+    config.add_route('mail-order-charges', '/mail-order-charges/{o_id}')
 
     # custom error views, catching NotFound and all Exceptions
     config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')
