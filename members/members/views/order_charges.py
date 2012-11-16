@@ -96,7 +96,7 @@ class MailOrderCharges(BaseView):
             mail = mail_templ.read()
             body = mail.format(label=order.label, amount=c.amount,
                        deadline_nl=deadline_nl, deadline_en=deadline_en)
-            sendmail(c.member.mem_email, subject, body)
+            sendmail(c.member.mem_email, subject, body, folder='order-charges')
         return dict(msg=u'Emails with order charges have been sent out '\
                         'for order {}'.format(order.label))
 
