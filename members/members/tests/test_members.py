@@ -246,7 +246,7 @@ class TestMembers(VokoTestCase):
         
 
     def get_reset_info_from_mails(self):
-        mail_folder = get_settings()['vokomokum.mail_folder']
+        mail_folder = '{}/passwords'.format(get_settings()['vokomokum.mail_folder'])
         mails = [m for m in os.listdir(mail_folder) if m.endswith('.eml')]
         f = open('%s/%s' % (mail_folder, mails[0]), 'r')
         line = ""

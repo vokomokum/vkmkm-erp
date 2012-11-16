@@ -14,7 +14,7 @@ class TestUtils(VokoTestCase):
         body = 'Bla\nBla'
         mail.sendmail(to, subject, body)
         # look up mail (only file in folder)
-        mail_folder = get_settings()['vokomokum.mail_folder']
+        mail_folder = '{}/other'.format(get_settings()['vokomokum.mail_folder'])
         mails = [m for m in os.listdir(mail_folder) if m.endswith('.eml')]
         f = open('%s/%s' % (mail_folder, mails[0]), 'r')
         _ = f.readline()

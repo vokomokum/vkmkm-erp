@@ -119,7 +119,7 @@ class VokoTestCase(unittest.TestCase):
         wg2.members.append(m2)
         wg2.leaders.append(m2)
         self.DBSession.flush()
-        s = Shift(wg2.id, 'do stuff', 2012, 6, mem_id=m1.mem_id)
+        s = Shift(wg2.id, 'do stuff', 2012, 6, member=m1)
         self.DBSession.add(s)
         self.DBSession.flush()
         # reserved transaction types
