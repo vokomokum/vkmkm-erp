@@ -28,11 +28,12 @@
     
     <div class="warn" tal:condition="not m.exists">
         You are about to create a new member. Note that this will not charge
-        membership fee (you can do that manually).
+        membership fee (you can do that manually in the Finance section).
     </div>
 
     <div id="action-box">
-        <a class="view-link" href="${portal_url}/member/${m.mem_id}">view this member</a>
+        <a class="view-link" tal:condition="m.exists"
+           href="${portal_url}/member/${m.mem_id}">view this member</a>
     </div>
 
     <button tal:condition="m.exists and view.user_may_edit_admin_settings"

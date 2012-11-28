@@ -17,11 +17,11 @@
             </form>
 
             <!-- This is non-standard. Creating members should go via applicants -->
-            <!--div id="action-box">
+            <div id="action-box">
                 <a class="add-link" href="members/new" tal:condition="view.user.mem_admin">
                     New member
                 </a>
-            </div-->            
+            </div>            
 
             <table class="list" width="100%">
                 <tr>
