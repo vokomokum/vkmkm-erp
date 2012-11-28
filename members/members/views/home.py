@@ -84,7 +84,7 @@ def get_todos(session, user, show_all):
                               link_title='You should contact the member and '\
                                  'tell them to transfer the missing amount.'))
    
-        nov12 = datetime.datetime(2012, 7, 1)
+        nov12 = datetime.datetime(2012, 11, 1)
         orders = session.query(Order).order_by(desc(Order.completed)).all()
         new_orders = [o for o in orders if str(o.completed) != ''\
                                         and str(o.completed) > str(nov12)]
