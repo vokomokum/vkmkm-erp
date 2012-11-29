@@ -174,7 +174,9 @@ class EditShiftView(BaseShiftView):
             schedule_url = '{}/workgroup/{}/shifts/{}/{}'.format(
                         self.request.application_url, shift.workgroup.id,
                         shift.year, shift.month)
-            q = 'Please direct any questions to your group coordinator(s).'\
+            q = 'This email was automatically generated, so please do not '\
+                'directly reply to it. You may direct any questions to your '\
+                'group coordinator(s).'\
                 '\n\nBest,\nVokomokum'           
             old_member = shift.member
             def mail_old_assignee():
