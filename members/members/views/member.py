@@ -69,7 +69,7 @@ class MemberView(BaseView):
         msg = ''
         if 'msg' in self.request.params:
             msg = self.request.params['msg']
-        nov12 = datetime.datetime(2012, 12, 1)
+        nov12 = datetime.datetime(2012, 11, 1)
         orders = [MemberOrder(self.m, o) for o in session.query(Order)\
                     .order_by(desc(Order.completed)).all()]
         old_orders = [o for o in orders if str(o.order.completed) < str(nov12)]
