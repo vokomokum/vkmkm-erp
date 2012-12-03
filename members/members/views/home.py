@@ -88,8 +88,6 @@ def get_todos(session, user, show_all):
         orders = session.query(Order).order_by(desc(Order.completed)).all()
         new_orders = [o for o in orders if str(o.completed) != ''\
                                         and str(o.completed) > str(nov12)]
-        print "++++++++++++++++++++++++++++"
-        print new_orders
         for no in new_orders:
             charges_made = session.query(Transaction)\
                                 .filter(Transaction.ord_no == no.id).count()
