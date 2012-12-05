@@ -65,12 +65,11 @@ class MemberOrder(object):
         however we have to check legacy data from before Nov 2012, as well.
         '''
         now = datetime.now()
-        query = "SELECT count(*) FROM mem_order WHERE mem_id = {} AND mem_amt > 0"\
-                " AND memo_completed < '{}');".format(mem_id, str(now))
+        query = "SELECT count(*) FROM mem_order WHERE mem_id = {} AND memo_amt > 0"\
+                " AND memo_completed < '{}';".format(self.member.mem_id, str(now))
         if running_sqlite():
             return False
-        print "DB result in list: ", list(DBSession().connection().engine.execute(query))
-        return int(list(DBSession().connection().engine.execute(query))[0]) == 0
+        return int(list(DBSession().connection().engine.execute(query))[0][0]) == 0
 
 
 """

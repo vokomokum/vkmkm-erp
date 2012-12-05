@@ -32,7 +32,7 @@
                             <small>EUR</small>&nbsp;${python:round(c.amount,2)}
                         </a>
                     </td>
-                    <td><span tal:condition="c.is_first_order">yes</span></td>
+                    <td><span tal:condition="c.is_first_order()">yes</span></td>
                 </tr>
                 <tr>
                     <th></th><th></th><th></th>

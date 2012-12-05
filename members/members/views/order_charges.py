@@ -65,10 +65,9 @@ class ChargeOrder(BaseView):
                     session.add(t)
                     # first order of this member? Charge Membership fee
                     if c.is_first_order():
-                        # charge membership fee
                         mf = Transaction(\
                                 amount = c.member.mem_household_size * 10 * -1,
-                                comment = 'automatically charged (for {}'\
+                                comment = 'Automatically charged (for {}'\
                                 ' people in the household) on first-time'\
                                 ' order ({})'\
                                 .format(c.member.mem_household_size,
