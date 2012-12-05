@@ -5,6 +5,8 @@ Models of second order in this app
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
+from datetime import datetime
+
 from base import Base, DBSession, CreationForbiddenException
 from members.models.member import Member
 from members.utils.misc import running_sqlite
@@ -57,15 +59,18 @@ class MemberOrder(object):
         return self._mnt
 
     def is_first_order(self):
-        ''' True if this member is ordering for the first time '''
-        # we have to import here to avoid a cycle
-        from members.models.transactions import Transaction, get_ttypeid_by_name 
-        order_charge_ttype_id = get_ttypeid_by_name('Order Charge')
-        older_charge = DBSession().query(Transaction)\
-                       .filter(Transaction.mem_id == self.member.id)\
-                       .filter(Transaction.ttype_id == order_charge_ttype_id)\
-                       .first() 
-        return older_charge is None
+        '''
+        True if this member is ordering for the first time.
+        The modern way would be to check for an Order Charge transaction,
+        however we have to check legacy data from before Nov 2012, as well.
+        '''
+        now = datetime()
+        query = "SELECT count(*) FROM mem_order WHERE mem_id = {} AND mem_amt > 0"\
+                " AND memo_completed < '{}');".format(mem_id, str(now))
+        if running_sqlite():
+            return False 
+        return int(DBSession().connection().engine.execute(query))[0]) == 0
+
 
 """
 doesn't work yet (see model/workgroups.py how to do it right, i.e. how to 
