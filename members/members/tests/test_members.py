@@ -120,6 +120,7 @@ class TestMembers(VokoTestCase):
         request = self.fillin_dummy_data(request)
         # and some explicit editing
         request.params['mem_lname'] = 'Petersnewlname'
+        request.params['mem_household_size'] = '2'
         view_info = view()
         self.assertEqual(self.get_peter().mem_lname, 'Petersnewlname')
 
@@ -155,6 +156,7 @@ class TestMembers(VokoTestCase):
         request.params['action'] = 'save'
         view = EditMemberView(None, request)
         request.params['mem_lname'] = 'NewLastname'
+        request.params['mem_household_size'] = '2'
         # Make peter an admin, and let him be the user executing the view
         peter = self.get_peter()
         peter.mem_admin = True

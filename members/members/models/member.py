@@ -55,6 +55,7 @@ class Member(Base):
     #mem_news = Column(Unicode(255), default='')
     #mem_message_auth = Column(Integer())
     #mem_message_date = Column(DateTime()) #timestamp
+    mem_household_size = Column(Integer, default=0)
 
     __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:this-member', ('view', 'edit')),
@@ -134,6 +135,10 @@ class Member(Base):
             if len(bank_no_clean) > 0 and not bank_no_clean.isdigit():
                 raise VokoValidationError('Bank number needs to consist of '\
                                           'only numbers.')
+        # household size
+        if self.mem_household_size < 1:
+            raise VokoValidationError('Please specify how many people live '\
+                                      'in the household.')
 
     def validate_pwd(self, req):
         '''
@@ -147,7 +152,7 @@ class Member(Base):
             raise VokoValidationError('Passwords do not match.')
         if not 6 <= len(req.params['pwd1']) <= 30:
             raise VokoValidationError('The password should be between '\
-                                      '6 and 30 characters long.')
+                                 '6 and 30 characters long.')
 
     @property
     def balance(self):

@@ -56,6 +56,17 @@ class MemberOrder(object):
             self._mnt = get_order_amount(self.member.mem_id, self.order.id)
         return self._mnt
 
+    def is_first_order(self):
+        ''' True if this member is ordering for the first time '''
+        # we have to import here to avoid a cycle
+        from members.models.transactions import Transaction, get_ttypeid_by_name 
+        order_charge_ttype_id = get_ttypeid_by_name('Order Charge')
+        older_charge = DBSession().query(Transaction)\
+                       .filter(Transaction.mem_id == self.member.id)\
+                       .filter(Transaction.ttype_id == order_charge_ttype_id)\
+                       .first() 
+        return older_charge is None
+
 """
 doesn't work yet (see model/workgroups.py how to do it right, i.e. how to 
 connect ord_no and mem_id, since this basically represents an m:n table - 

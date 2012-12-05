@@ -80,23 +80,27 @@
         <td align="center" colspan="5">Address</td>
       </tr>
       <tr class="list-content">
-        <td align="left" width="50%">Street:</td>
+        <td align="left" width="42%">Street:</td>
         <td align="left" width="10%">House No.:</td>
         <td align="left" width="10%">Hs./Apt. No:</td>
         <td align="left" width="10%">Postcode:</td>
         <td align="left" width="25%">City:</td>
+        <td align="left" width="8%">Household size:</td>
       </tr>
       <tr class="list-content">
         <td><input type="text" align="left" size="40" name="mem_street"
-                 Value="${m.mem_street}" maxlength="30"></input></td>
+                value="${m.mem_street}" maxlength="30"></input></td>
         <td><input type="text" align="left" size="7" name="mem_house"
-                 Value="${m.mem_house}" maxlength="7"></input></td>
+                value="${m.mem_house}" maxlength="7"></input></td>
         <td><input type="text" align="left" size="7" name="mem_flatno"
-                 Value="${m.mem_flatno}" maxlength="7"></input></td>
+                value="${m.mem_flatno}" maxlength="7"></input></td>
         <td><input type="text" align="left" size="7" name="mem_postcode"
-                 Value="${m.mem_postcode}" maxlength="7"></input></td>
+                value="${m.mem_postcode}" maxlength="7"></input></td>
         <td><input type="text" align="left" size="15" name="mem_city"
-                Value="${m.mem_city}" maxlength="60"></input></td>
+                value="${m.mem_city}" maxlength="60"></input></td>
+        <td><input type="text" align="left" size="2" name="mem_household_size"
+                value="${m.mem_household_size}" maxlength="2" />
+        </td>
       </tr>
     </table>
 

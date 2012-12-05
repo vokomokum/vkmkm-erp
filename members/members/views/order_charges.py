@@ -63,6 +63,23 @@ class ChargeOrder(BaseView):
                     t.order = c.order
                     t.validate()
                     session.add(t)
+                    # first order of this member? Charge Membership fee
+                    if c.is_first_order():
+                        # charge membership fee
+                        mf = Transaction(\
+                                amount = c.member.mem_household_size * 10 * -1,
+                                comment = 'automatically charged (for {}'\
+                                ' people in the household) on first-time'\
+                                ' order ({})'\
+                                .format(c.member.mem_household_size,
+                                        c.order.label)
+                        )
+                        ttype = session.query(TransactionType)\
+                                    .get(get_ttypeid_by_name('Membership Fee'))
+                        mf.ttype = ttype
+                        mf.member = c.member
+                        mf.validate()
+                        session.add(mf)
                 return dict(order=order, action='done')
         return dict(order=order, action='')
 

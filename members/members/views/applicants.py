@@ -89,27 +89,15 @@ class Applicant2Member(BaseView):
         member.mem_adm_comment = "{}\n{}".format(txt, applicant.comment)
         member.mem_email = applicant.email
         member.mem_home_tel = applicant.telnr
+        member.mem_household_size = applicant.household_size
         member.validate()
         session.add(member)
-        # charge membership fee
-        if applicant.household_size < 1:
-            raise VokoValidationError('Please specify the household size.')
-        t = Transaction(amount = applicant.household_size * 10 * -1,
-                        comment = 'automatically charged for {} people in the '\
-                                  'household'.format(applicant.household_size)
-        )
-        ttype = session.query(TransactionType)\
-                       .get(get_ttypeid_by_name('Membership Fee'))
-        t.ttype = ttype
-        t.member = member
-        t.validate()
-        session.add(t)
         session.delete(applicant)
         session.flush()
         send_pwdreset_request(member, self.request.application_url, first=True)
         return self.redirect("/member/{}?msg=Applicant has been made "\
-                            "into a new Member, got an email to set up a "\
-                            "password and has been charged membership fee."\
+                            "into a new Member and got an email to set up a "\
+                            "password."\
                             .format(member.mem_id))
 
 

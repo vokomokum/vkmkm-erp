@@ -21,6 +21,7 @@
                 <tr>
                     <th>Member</th>
                     <th>Amount</th>
+                    <th>Membership Fee</th>
                 </tr> 
                 <tr tal:repeat="c charges">
                     <td>
@@ -31,9 +32,10 @@
                             <small>EUR</small>&nbsp;${python:round(c.amount,2)}
                         </a>
                     </td>
+                    <td><span tal:condition="c.is_first_order">yes</span></td>
                 </tr>
                 <tr>
-                    <th></th><th></th>
+                    <th></th><th></th><th></th>
                 </tr>
             </table>
             <h3 tal:condition="charges" class="info">
