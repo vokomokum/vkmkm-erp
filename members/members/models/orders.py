@@ -69,7 +69,7 @@ class MemberOrder(object):
                 " AND memo_completed < '{}');".format(mem_id, str(now))
         if running_sqlite():
             return False 
-        return int(DBSession().connection().engine.execute(query))[0]) == 0
+        return int(list(DBSession().connection().engine.execute(query))[0]) == 0
 
 
 """
