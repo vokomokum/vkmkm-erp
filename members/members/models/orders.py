@@ -68,7 +68,8 @@ class MemberOrder(object):
         query = "SELECT count(*) FROM mem_order WHERE mem_id = {} AND mem_amt > 0"\
                 " AND memo_completed < '{}');".format(mem_id, str(now))
         if running_sqlite():
-            return False 
+            return False
+        print "DB result in list: ", list(DBSession().connection().engine.execute(query))
         return int(list(DBSession().connection().engine.execute(query))[0]) == 0
 
 
