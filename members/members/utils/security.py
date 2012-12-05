@@ -13,13 +13,10 @@ def get_member(login):
     '''
     mem = None
     session = DBSession()
-    try:
-        if "@" in str(login): # email address given as login?
-            mem = session.query(Member).filter(Member.mem_email == login).first()
-        else: # then assume id
-            mem = session.query(Member).filter(Member.mem_id == login).first()
-    except Exception, e:
-        print "Exception while getting a member: %s" % e
+    if "@" in str(login): # email address given as login?
+        mem = session.query(Member).filter(Member.mem_email == login).first()
+    else: # then assume id
+        mem = session.query(Member).filter(Member.mem_id == login).first()
     return mem
 
 
