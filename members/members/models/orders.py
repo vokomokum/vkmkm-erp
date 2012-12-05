@@ -64,7 +64,7 @@ class MemberOrder(object):
         The modern way would be to check for an Order Charge transaction,
         however we have to check legacy data from before Nov 2012, as well.
         '''
-        now = datetime()
+        now = datetime.now()
         query = "SELECT count(*) FROM mem_order WHERE mem_id = {} AND mem_amt > 0"\
                 " AND memo_completed < '{}');".format(mem_id, str(now))
         if running_sqlite():
