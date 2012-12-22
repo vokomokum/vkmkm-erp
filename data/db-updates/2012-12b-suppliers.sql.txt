@@ -1,0 +1,25 @@
+
+-- PK column type: in sqlite 'INTEGER PRIMARY KEY' (do not set it at the end), in postgres 'SERIAL NOT NULL'
+CREATE TABLE vers_suppliers (
+	id SERIAL NOT NULL, 
+	name VARCHAR(100), 
+	website VARCHAR(50), 
+	email VARCHAR(50), 
+	telnr VARCHAR(20), 
+	faxnr VARCHAR(20), 
+	comment VARCHAR(500), 
+        active boolean DEFAULT true,
+        PRIMARY KEY id
+);
+ALTER TABLE vers_suppliers OWNER TO apache;
+
+-- Add two new features to transaction types
+ALTER TABLE transaction_types ADD COLUMN pos_neg VARCHAR(3) DEFAULT '---'; -- pos or neg or ---
+ALTER TABLE transaction_types ADD COLUMN mem_sup VARCHAR(4) DEFAULT 'memb'; -- memb or whol or vers or none 
+
+-- Add suppliers to transactions
+ALTER TABLE transactions ALTER COLUMN mem_id DROP NOT NULL;
+ALTER TABLE transactions ADD COLUMN whol_id INTEGER DEFAULT NULL;
+ALTER TABLE ONLY transactions ADD CONSTRAINT transactions_whol_id_wholesalers_id_fkey FOREIGN KEY (whol_id) REFERENCES wholesalers(wh_id);
+ALTER TABLE transactions ADD COLUMN vers_id INTEGER DEFAULT NULL;
+ALTER TABLE ONLY transactions ADD CONSTRAINT transactions_vers_id_vers_suppliers_id_fkey FOREIGN KEY (vers_id) REFERENCES vers_suppliers(id);

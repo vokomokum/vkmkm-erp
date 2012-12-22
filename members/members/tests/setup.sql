@@ -17,4 +17,19 @@ INSERT INTO "wh_order" VALUES(5,'September 2012', '2012-09-29 17:35:23');
 
 --CREATE TABLE order_header (ord_no integer NOT NULL, ord_label character varying NOT NULL);
 --INSERT INTO "order_header" VALUES(1,'current_order');
+
+CREATE TABLE wholesaler (
+	wh_id INTEGER PRIMARY KEY, 
+	wh_name VARCHAR(100), 
+	wh_addr1 VARCHAR(50), 
+	wh_addr2 VARCHAR(50), 
+	wh_addr3 VARCHAR(50), 
+	wh_city VARCHAR(50), 
+	wh_postcode VARCHAR(10), 
+	wh_tel VARCHAR(20), 
+	wh_fax VARCHAR(20), 
+        wh_active boolean DEFAULT true,
+	wh_update VARCHAR(20)
+);
+
 COMMIT;
