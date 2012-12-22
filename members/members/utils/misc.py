@@ -43,15 +43,15 @@ def month_info(date):
 
     info = MInfo()
     info.days_in_month = monthrange(date.year, date.month)[1]
-    now = datetime.datetime.now()
-    lmdate = now - datetime.timedelta(days=-info.days_in_month)
-    dipm = monthrange(lmdate.year, lmdate.month)[1]
+    a_pm_date = date + datetime.timedelta(days=-(date.day + 1))
+    dipm = monthrange(a_pm_date.year, a_pm_date.month)[1]
     one_month_back = date + datetime.timedelta(days=-dipm)
     one_month_ahead = date + datetime.timedelta(days=info.days_in_month)
     info.prev_month = one_month_back.month
     info.prev_year = one_month_back.year
     info.next_month = one_month_ahead.month
     info.next_year = one_month_ahead.year
+    now = datetime.datetime.now()
     info.month_lies_in_past = date.year < now.year\
                                     or (date.year == now.year 
                                         and date.month < now.month) 

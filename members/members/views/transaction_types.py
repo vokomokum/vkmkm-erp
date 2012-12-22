@@ -46,7 +46,9 @@ class NewTransactionType(BaseView):
 
     def __call__(self):
         name = self.request.params['name']
-        tt = TransactionType(None, name)
+        pos_neg = self.request.params['pos_neg']
+        mem_sup = self.request.params['mem_sup']
+        tt = TransactionType(None, name=name, pos_neg=pos_neg, mem_sup=mem_sup)
         tt.validate()
         session = DBSession()
         existing = session.query(TransactionType)\
@@ -65,6 +67,11 @@ class NewTransactionType(BaseView):
              route_name='transaction-type-save',
              permission='edit')
 class SaveTransactionType(BaseView):
+    '''
+    We only make it possible to edit the name currently
+    (as soon as a transaction type has transactions, the other attributes
+    should stay fixed, anyway).
+    '''
 
     tab = 'finance'
 

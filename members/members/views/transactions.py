@@ -1,5 +1,5 @@
 from pyramid.view import view_config
-from sqlalchemy import distinct, desc
+from sqlalchemy import distinct, desc, asc
 
 import datetime
 import pytz
@@ -7,6 +7,7 @@ import pytz
 from members.models.base import DBSession
 from members.views.base import BaseView
 from members.models.member import Member, get_member
+from members.models.supplier import Wholesaler, VersSupplier
 from members.models.transactions import Transaction, TransactionType
 from members.models.orders import Order
 from members.utils.misc import month_info
@@ -21,7 +22,17 @@ class BaseTransactionView(BaseView):
     @property
     def members(self):
         session = DBSession()
-        return session.query(Member).all()
+        return session.query(Member).order_by(asc(Member.mem_id)).all()
+    
+    @property
+    def wholesalers(self):
+        session = DBSession()
+        return session.query(Wholesaler).all()
+
+    @property
+    def vers_suppliers(self):
+        session = DBSession()
+        return session.query(VersSupplier).all()
 
     @property
     def transaction_types(self):
@@ -32,7 +43,6 @@ class BaseTransactionView(BaseView):
     def orders(self):
         ''' return a dict, with order IDs as keys and labels as values'''
         session = DBSession()
-        #return session.query(distinct((Order.id, Order.label)))\
         return session.query(Order)\
                     .order_by(desc(Order.completed)).all()
 
@@ -86,6 +96,26 @@ class ListTransactions(BaseTransactionView):
         last = tz.localize(datetime.datetime(self.year, self.month, 
                                  self.month_info.days_in_month, 23, 59, 59))
         transactions = session.query(Transaction)
+        # fitering by type
+        self.ttid = None
+        if 'ttype' in self.request.params:
+            if self.request.params['ttype'] != '':
+                self.ttid = int(self.request.params['ttype'])
+                transactions = transactions.filter(Transaction.ttype_id == self.ttid)     
+        # ordering
+        order_by = Transaction.date
+        self.order_criterion = 'date'
+        if 'order_by' in self.request.params:
+            if self.request.params['order_by'] == 'date':
+                order_by = Transaction.date
+            if self.request.params['order_by'] == 'amount':
+                order_by = Transaction.amount
+            if self.request.params['order_by'] == 'type':
+                order_by = Transaction.ttype_id
+            self.order_criterion = self.request.params['order_by']
+        transactions = transactions.order_by(order_by)
+        print "############", self.order_criterion
+        self.order_criteria = ('date', 'amount', 'type')
         #    .filter(Transaction.date >= first and Transaction.date <= last)\
         #    .order_by(Transaction.id)\
         #    .all()
@@ -166,10 +196,23 @@ class EditTransaction(BaseTransactionView):
             msg = 'Transaction Type was updated.'
         if action == "setmember":
             if not 'mem_id' in self.request.params:
-                msg = 'No member selected.'
+                msg = 'No member was selected.'
             else:
                 transaction.member = get_member(session, self.request)
-                msg = u'Transaction got a new member.'
+                msg = u'Transaction got a new member:{}'\
+                        .format(transaction.member)
+        if action == "setwholesaler":
+            if not 'wh_id' in self.request.params:
+                msg = 'No wholesaler was selected.'
+            else:
+                transaction.wh_id = self.request.params['wh_id']
+                msg = u'Transaction got a new wholesaler.'
+        if action == "setversupplier":
+            if not 'vers_id' in self.request.params:
+                msg = 'No vers supplier was selected.'
+            else:
+                transaction.vers_id = self.request.params['vers_id']
+                msg = u'Transaction got a new vers supplier.'
         if action == "setamount":
             amount = self.request.params['amount']
             try:

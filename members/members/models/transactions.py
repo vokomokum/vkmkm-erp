@@ -9,6 +9,7 @@ import datetime
 
 from base import Base, VokoValidationError, DBSession
 from member import Member
+from supplier import Wholesaler, VersSupplier
 from orders import Order
 from members.utils.misc import ascii_save
 
@@ -23,15 +24,22 @@ class TransactionType(Base):
     id = Column(Integer, primary_key=True)
     # TODO: comment?
     name = Column(Unicode(100), unique=True)
+    # Transactions of this type are either all positive or all negative
+    pos_neg = Column(Unicode(3), default=u'---')
+    # Transactions of this type are between Vokomokum and its members or its
+    # suppliers
+    mem_sup = Column(Unicode(4), default=u'memb')
 
     __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:finance', ('view', 'edit')),
                (Allow, 'group:members', 'view'),
                DENY_ALL]
 
-    def __init__(self, request=None, name=''):
+    def __init__(self, request=None, name='', pos_neg='---', mem_sup='mem'):
         ''' receiving request makes this class a factory for views '''
         self.name = name
+        self.pos_neg = pos_neg
+        self.mem_sup = mem_sup
 
     def __repr__(self):
         return self.name
@@ -40,6 +48,12 @@ class TransactionType(Base):
         ''' validate if this object is valid, raise exception otherwise '''
         if self.name == '':
             raise VokoValidationError('A transaction type needs a name.')
+        if not self.pos_neg in ('pos', 'neg', '---'):
+            raise VokoValidationError('The field pos_neg should be "pos", "neg"'\
+                                      ' or "---".')
+        if not self.mem_sup in ('memb', 'whol', 'vers', 'none'):
+            raise VokoValidationError('The field mem_sup should be "memb" or'\
+                                      ' "whol" or "vers" or "none".')
 
     @property
     def locked(self):
@@ -70,6 +84,10 @@ class Transaction(Base):
     amount = Column(Numeric)
     mem_id = Column(Integer, ForeignKey('members.mem_id'), nullable=False)
     member = relationship(Member, backref='transactions')
+    whol_id = Column(Integer, ForeignKey('wholesaler.wh_id'), nullable=False)
+    wholesaler = relationship(Wholesaler)
+    vers_id = Column(Integer, ForeignKey('vers_suppliers.id'), nullable=False)
+    vers_supplier = relationship(VersSupplier)
     comment = Column(Unicode(500))
     ord_no = Column(Integer, ForeignKey('wh_order.ord_no'), nullable=True)
     order = relationship(Order, backref='transactions')
@@ -81,19 +99,30 @@ class Transaction(Base):
                DENY_ALL]
 
     def __init__(self, request=None, ttype_id=None, amount=0, mem_id=None,
-                 comment='', ord_no=None, date=datetime.datetime.now(), late=False):
+                 sup_id=None, comment='', ord_no=None,
+                 date=datetime.datetime.now(), late=False):
         self.ttype_id = ttype_id
         self.amount = amount
         self.mem_id = mem_id
+        self.sup_id = sup_id
         self.comment = comment
         self.ord_no = ord_no
         self.date = date
         self.late = late
 
     def __repr__(self):
-        return "EUR {} from {} [{}]".format(round(self.amount, 2), 
-                                            ascii_save(self.member.fullname),
-                                            self.ttype)
+        fromto = {True: 'from', False: 'to'}[self.amount > 0]
+        if self.ttype.mem_sup == 'memb':
+            partner = ascii_save(self.member.fullname)
+        elif self.ttype.mem_sup == 'whol':
+            partner = ascii_save(self.wholesaler.name)
+        elif self.ttype.mem_sup == 'vers':
+            partner = ascii_save(self.vers_supplier.name)
+        else:
+            partner = 'Other'
+        
+        return "EUR {} {} {} [{}]".format(round(self.amount, 2), fromto,
+                                          partner, self.ttype)
 
     def locked(self):
         '''
@@ -113,23 +142,28 @@ class Transaction(Base):
                                       'write numbers with a dot, e.g. "3.89").')
         if not self.ttype:
             raise VokoValidationError('A transaction needs a type.')
-        if not self.member:
-            raise VokoValidationError('A transaction needs a member.')
-        if self.ttype.name in ['Order Charge', 'Membership Fee']\
-            and self.amount > 0:
-            raise VokoValidationError('A transaction of this type is charged '\
-                                      'from members and should be negative.')
+        if self.ttype.mem_sup == 'memb' and not self.member:
+            raise VokoValidationError('A transaction of type {} needs a '\
+                                      'member.'.format(self.ttype))
+        if self.ttype.mem_sup == 'whol' and not self.wholesaler:
+            raise VokoValidationError('A transaction of type {} needs a '\
+                                      'wholesaler.'.format(self.ttype))
+        if self.ttype.mem_sup == 'vers' and not self.vers_supplier:
+            raise VokoValidationError('A transaction of type {} needs a '\
+                                      'vers supplier.'.format(self.ttype))
+        if self.ttype.pos_neg == 'pos' and self.amount < 0:
+            raise VokoValidationError('A transaction of this type should by'\
+                                      'its definition be benefitting Vokomokum'\
+                                      ' and thus be positive.')
+        if self.ttype.pos_neg == 'neg' and self.amount > 0:
+            raise VokoValidationError('A transaction of this type should by'\
+                                      'its definition represent something that '\
+                                      'Vokomokum gives out or pays and thus '\
+                                      'and thus be negative.')
+        if (self.member and self.wholesaler) or\
+           (self.member and self.vers_supplier):
+            raise VokoValidationError('This transaction should not link to '\
+                                      'both a member and a supplier.')
         if self.ttype.name == 'Order Charge' and not self.order:
             raise VokoValidationError('This Order Charge has no connected order.')
             
-
-"""
-def get_transaction(session, request):
-    ''' get transaction object from id '''
-    if (request and 't_id' in request.matchdict
-         and int(request.matchdict['t_id']) >= 0):
-            transaction = session.query(Transaction).get(request.matchdict['t_id'])
-    else:
-        transaction = None
-    return transaction
-"""

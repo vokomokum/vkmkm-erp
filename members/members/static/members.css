@@ -313,6 +313,13 @@ form {border:0; margin:0; padding:0;}
     padding:14px;
 }
 
+.new-transaction-form {
+    margin:0 auto;
+    width: 600px;
+    margin-bottom: 14px;
+    padding: 7px;
+}
+
 /* ----------- stylized-form ----------- */
 #stylized-form{
     border:solid 2px #b7ddf2;

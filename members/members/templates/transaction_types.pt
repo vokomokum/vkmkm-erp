@@ -12,8 +12,25 @@
         
         <table class="main" align="center" width="80%">
             <tr class="list-content" align="center">
-                <td width="80%">
+                <td width="60%">
                     <input type="text" size="50" maxlength="50" name="name" />
+                </td>
+                <td width="10%">
+                    <select name="pos_neg"
+                            title="Are transactions of this type positive or negative?">
+                        <option value="pos">Positive</option>
+                        <option value="neg" selected="selected">Negative</option>
+                        <option value="---">Can be both</option>
+                    </select>
+                </td>
+                <td width="10%">
+                    <select name="mem_sup"
+                            title="Are transactions of this type between Vokomokum and members, wholesalers or vers suppliers?">
+                        <option value="memb" selected="selected">Members</option>
+                        <option value="whol">Wholesalers</option>
+                        <option value="vers">Vers Suppliers</option>
+                        <option value="none">Other</option>
+                    </select>
                 </td>
                 <td width="20%">
                     <input type="submit" name="add" value="Add"/>
@@ -24,27 +41,44 @@
 
     <!-- List existing ones -->
     <table class="list" width="100%">
-        <tr tal:condition="view.user_can_edit">
-            <th colspan="3">Existing</th>
+        <tr>
+            <th colspan="3">Existing Types</th>
+        </tr>
+        <tr>
+            <th width="60%">Name</th>
+            <th width="10%">Pos./Neg.</th>
+            <th width="10%">Mem./Sup.</th>
+            <th width="20%"></th>
         </tr>
         <tr tal:condition="not:transaction_types">
             <td colspan="3">No transaction types found.</td>
         </tr>
         <tr tal:repeat="tt transaction_types">
-            <tal:block tal:condition="python: tt.reserved or not view.user_can_edit">
-                <td tal:content="tt.name" title="This type is protected." colspan="3"/>
-            </tal:block>
-            <tal:block tal:condition="python: not tt.reserved and 'Finance' in view.user.workgroups">
+            <td tal:condition="tt.reserved or not view.user_can_edit"
+                tal:content="tt.name" title="This type is protected."></td>
+            <tal:block tal:condition="not tt.reserved and view.user_can_edit">
                 <form action="${portal_url}/transaction-type/${tt.id}/save" method="post">
-                    <td width="80%">
+                    <td>
                         <input name="name" value="${tt.name}" size="40" maxlength="100"/>
-                    </td>
-                    <td width="10%">
                         <button title="Save this type name" type="submit">Save</button>
                     </td>
                 </form>
+            </tal:block>
+                <td>
+                    <span tal:condition="tt.pos_neg == 'pos'">Positive</span>
+                    <span tal:condition="tt.pos_neg == 'neg'">Negative</span>
+                    <span tal:condition="tt.pos_neg == '---'">Can be both</span>
+                </td>
+                <td>
+                    <span tal:condition="tt.mem_sup == 'memb'">Members</span>
+                    <span tal:condition="tt.mem_sup == 'whol'">Wholesalers</span>
+                    <span tal:condition="tt.mem_sup == 'vers'">Vers Suppliers</span>
+                    <span tal:condition="tt.mem_sup == 'none'">Other</span>
+                </td>
+            <td tal:condition="tt.reserved or not view.user_can_edit"></td>
+            <tal:block tal:condition="not tt.reserved and view.user_can_edit">
                 <td width="10%">
-                    <a title="Delete from list (it has not been used so far)" href="${portal_url}/transaction-type/${tt.id}/delete"
+                    <a title="Delete from list (this works because there are no transactions with this type so far)" href="${portal_url}/transaction-type/${tt.id}/delete"
                        tal:condition="python: not tt.locked and view.user_can_edit">
                         <button>X</button>
                     </a>
