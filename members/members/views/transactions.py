@@ -9,6 +9,7 @@ from members.views.base import BaseView
 from members.models.member import Member, get_member
 from members.models.supplier import Wholesaler, VersSupplier
 from members.models.transactions import Transaction, TransactionType
+from members.models.transactions import get_transaction_sums
 from members.models.orders import Order
 from members.utils.misc import month_info
 
@@ -114,13 +115,18 @@ class ListTransactions(BaseTransactionView):
                 order_by = Transaction.ttype_id
             self.order_criterion = self.request.params['order_by']
         transactions = transactions.order_by(order_by)
-        print "############", self.order_criterion
         self.order_criteria = ('date', 'amount', 'type')
         #    .filter(Transaction.date >= first and Transaction.date <= last)\
         #    .order_by(Transaction.id)\
         #    .all()
         # This is here because the filter above doesn't work for me
         # I only get pure string comparison to work, which works for now
+        self.sums = {}
+        for ttype in self.transaction_types:
+            self.sums[ttype.name] =\
+                         get_transaction_sums(self.year, self.month, ttype)
+        self.overall_sum = get_transaction_sums(self.year, self.month, None)
+
         transactions = [t for t in transactions\
                 if (str(t.date.tzinfo and t.date or tz.localize(t.date)) >= str(first))\
                 and (str(t.date.tzinfo and t.date or tz.localize(t.date)) <= str(last))]

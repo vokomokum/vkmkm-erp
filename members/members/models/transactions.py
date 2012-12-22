@@ -6,12 +6,14 @@ from sqlalchemy import ForeignKey
 from pyramid.security import Allow, DENY_ALL
 
 import datetime
+import pytz
 
 from base import Base, VokoValidationError, DBSession
 from member import Member
 from supplier import Wholesaler, VersSupplier
 from orders import Order
 from members.utils.misc import ascii_save
+from members.utils.misc import month_info
 
 
 # These types have special meaning and a re therefore protected
@@ -166,4 +168,32 @@ class Transaction(Base):
                                       'both a member and a supplier.')
         if self.ttype.name == 'Order Charge' and not self.order:
             raise VokoValidationError('This Order Charge has no connected order.')
-            
+           
+
+def get_transaction_sums(year, month, ttype):
+    '''
+    Get the sum of transaction amounts of this type in this month.
+    If month is None, get for the whole year.
+    If type is None, get the sum for all types.
+    '''
+    if not month:
+        start_month = 1
+        end_month = 12
+    else:
+        start_month = end_month = month
+    tz = pytz.timezone('Europe/Amsterdam')
+    end_month_date = datetime.date(year, end_month, 1)
+    em_info = month_info(end_month_date) 
+    first = tz.localize(datetime.datetime(year, start_month, 1, 0, 0, 0))
+    last = tz.localize(datetime.datetime(year, end_month, 
+                                         em_info.days_in_month, 23, 59, 59))
+    query = "SELECT sum(amount) FROM transactions"
+    query += " WHERE date >= '{}' AND date <= '{}'".format(first, last)
+    if ttype:
+        query += " AND ttype_id = {}".format(ttype.id)
+    result = list(DBSession().connection().engine.execute(query))[0][0]
+    if not result:
+        result = 0.0
+    return round(result, 2)
+
+ 

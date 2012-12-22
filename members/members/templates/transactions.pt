@@ -140,9 +140,27 @@
             </div>
         </form>
     </div>
-
     
-    <!-- List existing ones -->
+    <h2>Summary:</h2>
+    
+    <div id="stylized-sums">
+        <table width="100%">
+            <tr id="sums-header">
+                <th width="80%">Type</th>
+                <th width="20%">Sum</th>
+            </tr>
+            <tr tal:repeat="tt view.transaction_types">
+                <td>${tt.name}</td>
+                <td><small>EUR</small> ${python: view.sums[tt.name]}</td>
+            </tr>
+            <tr id="sums-overall">
+                <td/>
+                <td><small>EUR</small> ${view.overall_sum}</td>
+            </tr>
+        </table> 
+    </div>
+    
+    <h2>List:</h2>
 
     <form action="${portal_url}/transactions/${view.year}/${view.month}">
         Type:

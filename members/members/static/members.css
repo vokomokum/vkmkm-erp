@@ -127,11 +127,12 @@ p, h1, pre {
 
 
 /* content */
-
-h1 {
-    font-size: 21px;
+h1, h2, h3 {
     color: #04176D;
 }
+h1 {font-size: 21px;}
+
+h2 {font-size: 18px;}
 
 #content {
     margin-top: 15px;
@@ -318,6 +319,22 @@ form {border:0; margin:0; padding:0;}
     width: 600px;
     margin-bottom: 14px;
     padding: 7px;
+}
+
+
+#stylized-sums{
+    border:solid 2px #b7f2dd;
+    background:#ebfbf4;
+    width: 600px;
+    margin:0 auto;
+    text-align: left;
+}
+#sums-header th{
+    border-bottom: 1px solid black !important;
+}
+#sums-overall td{
+    border-top: 1px solid black;
+    font-weight: 800;
 }
 
 /* ----------- stylized-form ----------- */
