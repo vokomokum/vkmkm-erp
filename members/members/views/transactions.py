@@ -152,10 +152,10 @@ class NewTransaction(BaseTransactionView):
         ttype = session.query(TransactionType).get(params['ttype_id'])
         transaction.ttype = ttype
         transaction.amount = float(params['amount'])
-        if params['mem_id'] == '--':
-            return self.redir_to_list(year, month, 'Please select a member.')
         member = session.query(Member).get(params['mem_id'])
         transaction.member = member
+        transaction.whol_id = params['wh_id']
+        transaction.vers_id = params['vers_id']
         transaction.comment = params['comment']
         if 'ord_no' in params and params['ord_no'] != "":
             transaction.ord_no = int(params['ord_no'])
@@ -211,9 +211,9 @@ class EditTransaction(BaseTransactionView):
             if not 'wh_id' in self.request.params:
                 msg = 'No wholesaler was selected.'
             else:
-                transaction.wh_id = self.request.params['wh_id']
+                transaction.whol_id = self.request.params['wh_id']
                 msg = u'Transaction got a new wholesaler.'
-        if action == "setversupplier":
+        if action == "setverssupplier":
             if not 'vers_id' in self.request.params:
                 msg = 'No vers supplier was selected.'
             else:

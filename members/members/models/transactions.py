@@ -101,12 +101,13 @@ class Transaction(Base):
                DENY_ALL]
 
     def __init__(self, request=None, ttype_id=None, amount=0, mem_id=None,
-                 sup_id=None, comment='', ord_no=None,
+                 whol_id=None, vers_id=None, comment='', ord_no=None,
                  date=datetime.datetime.now(), late=False):
         self.ttype_id = ttype_id
         self.amount = amount
         self.mem_id = mem_id
-        self.sup_id = sup_id
+        self.whol_id = whol_id
+        self.vers_id = vers_id
         self.comment = comment
         self.ord_no = ord_no
         self.date = date
@@ -117,7 +118,7 @@ class Transaction(Base):
         if self.ttype.mem_sup == 'memb':
             partner = ascii_save(self.member.fullname)
         elif self.ttype.mem_sup == 'whol':
-            partner = ascii_save(self.wholesaler.name)
+            partner = ascii_save(self.wholesaler.wh_name)
         elif self.ttype.mem_sup == 'vers':
             partner = ascii_save(self.vers_supplier.name)
         else:

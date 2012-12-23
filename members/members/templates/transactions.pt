@@ -213,8 +213,8 @@
                     <select onchange="this.form.submit();" name="wh_id"
                         title="Select to update." style="width: 140px;">
                         <tal:block tal:repeat="w view.wholesalers">
-                            <option tal:condition="w.wh_id == t.wh_id" value="${w.wh_id}" selected="selected">${w}</option>
-                            <option tal:condition="w.wh_id != t.wh_id" value="${w.wh_id}">${w}</option>
+                            <option tal:condition="w.wh_id == t.whol_id" value="${w.wh_id}" selected="selected">${w}</option>
+                            <option tal:condition="w.wh_id != t.whol_id" value="${w.wh_id}">${w}</option>
                         </tal:block>
                     </select>
                 </form>
@@ -223,7 +223,7 @@
                     <select onchange="this.form.submit();" name="vers_id"
                         title="Select to update." style="width: 140px;">
                         <tal:block tal:repeat="vs view.vers_suppliers">
-                            <option tal:condition="vs.id == t.vers_id" value="${vs.id}" selected="selected">${m.fullname}</option>
+                            <option tal:condition="vs.id == t.vers_id" value="${vs.id}" selected="selected">${vs}</option>
                             <option tal:condition="vs.id != t.vers_id" value="${vs.id}">${vs}</option>
                         </tal:block>
                     </select>

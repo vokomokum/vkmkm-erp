@@ -11,11 +11,16 @@
           method="post">
         
         <table class="main" align="center" width="80%">
+            <tr>
+                <th width="60%">Name</th>
+                <th width="10%">pos./neg.</th>
+                <th width="10%">Partner</th>
+            </tr>
             <tr class="list-content" align="center">
-                <td width="60%">
+                <td>
                     <input type="text" size="50" maxlength="50" name="name" />
                 </td>
-                <td width="10%">
+                <td>
                     <select name="pos_neg"
                             title="Are transactions of this type positive or negative?">
                         <option value="pos">Positive</option>
@@ -23,7 +28,7 @@
                         <option value="---">Can be both</option>
                     </select>
                 </td>
-                <td width="10%">
+                <td>
                     <select name="mem_sup"
                             title="Are transactions of this type between Vokomokum and members, wholesalers or vers suppliers?">
                         <option value="memb" selected="selected">Members</option>
@@ -47,7 +52,7 @@
         <tr>
             <th width="60%">Name</th>
             <th width="10%">Pos./Neg.</th>
-            <th width="10%">Mem./Sup.</th>
+            <th width="10%">Partner</th>
             <th width="20%"></th>
         </tr>
         <tr tal:condition="not:transaction_types">

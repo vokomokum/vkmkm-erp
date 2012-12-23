@@ -32,4 +32,11 @@ CREATE TABLE wholesaler (
 	wh_update VARCHAR(20)
 );
 
+INSERT INTO "wholesaler" VALUES(1,'DNB', '', '', '', 'Amsterdam', '', '', '', true, '2012-11-29 17:35:23');
+INSERT INTO "wholesaler" VALUES(2,'Zapatista', '', '', '', 'Hamburg', '', '', '', true, '2012-11-29 17:35:23');
+INSERT INTO "wholesaler" VALUES(3,'De Werkbij', '', '', '', 'Amsterdam', '', '', '', true, '2012-11-29 17:35:23');
+
+INSERT INTO "vers_suppliers" VALUES(1,'Geijtenboerderij', '', '', '', '', '', true);
+INSERT INTO "vers_suppliers" VALUES(2,'Boerderij B', '', '', '', '', '', true);
+
 COMMIT;
