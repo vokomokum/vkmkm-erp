@@ -173,7 +173,7 @@ class Transaction(Base):
 
 def get_transaction_sums(year, month, ttype):
     '''
-    Get the sum of transaction amounts of this type in this month.
+    Get the sum of transaction count and money amounts of this type in this month.
     If month is None, get for the whole year.
     If type is None, get the sum for all types.
     '''
@@ -188,13 +188,15 @@ def get_transaction_sums(year, month, ttype):
     first = tz.localize(datetime.datetime(year, start_month, 1, 0, 0, 0))
     last = tz.localize(datetime.datetime(year, end_month, 
                                          em_info.days_in_month, 23, 59, 59))
-    query = "SELECT sum(amount) FROM transactions"
-    query += " WHERE date >= '{}' AND date <= '{}'".format(first, last)
+    query_filter = " WHERE date >= '{}' AND date <= '{}'".format(first, last)
     if ttype:
-        query += " AND ttype_id = {}".format(ttype.id)
-    result = list(DBSession().connection().engine.execute(query))[0][0]
-    if not result:
-        result = 0.0
-    return round(result, 2)
+        query_filter += " AND ttype_id = {}".format(ttype.id)
+    query_a = "SELECT sum(amount) FROM transactions {}".format(query_filter)
+    query_c = "SELECT count(*) FROM transactions {}".format(query_filter)
+    amount = list(DBSession().connection().engine.execute(query_a))[0][0]
+    if not amount:
+        amount = 0.0
+    count = list(DBSession().connection().engine.execute(query_c))[0][0]
+    return {'count': count, 'amount': round(amount, 2)}
 
  

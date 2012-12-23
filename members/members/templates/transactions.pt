@@ -146,16 +146,21 @@
     <div id="stylized-sums">
         <table width="100%">
             <tr id="sums-header">
-                <th width="80%">Type</th>
-                <th width="20%">Sum</th>
+                <th width="60%">Type</th>
+                <th width="15%">Count</th>
+                <th width="25%">Sum</th>
             </tr>
             <tr tal:repeat="tt view.transaction_types">
-                <td>${tt.name}</td>
-                <td><small>EUR</small> ${python: view.sums[tt.name]}</td>
+                <tal:block tal:condition="python: view.sums[tt.name]['count'] > 0">
+                    <td>${tt.name}</td>
+                    <td>${python: view.sums[tt.name]['count']}</td>
+                    <td><small>EUR</small> ${python: view.sums[tt.name]['amount']}</td>
+                </tal:block>
             </tr>
             <tr id="sums-overall">
                 <td/>
-                <td><small>EUR</small> ${view.overall_sum}</td>
+                <td> ${python:view.overall['count']}</td>
+                <td><small>EUR</small> ${python: view.overall['amount']}</td>
             </tr>
         </table> 
     </div>

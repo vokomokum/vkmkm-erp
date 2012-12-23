@@ -125,7 +125,7 @@ class ListTransactions(BaseTransactionView):
         for ttype in self.transaction_types:
             self.sums[ttype.name] =\
                          get_transaction_sums(self.year, self.month, ttype)
-        self.overall_sum = get_transaction_sums(self.year, self.month, None)
+        self.overall = get_transaction_sums(self.year, self.month, None)
 
         transactions = [t for t in transactions\
                 if (str(t.date.tzinfo and t.date or tz.localize(t.date)) >= str(first))\
