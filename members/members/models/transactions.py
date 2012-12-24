@@ -155,11 +155,11 @@ class Transaction(Base):
             raise VokoValidationError('A transaction of type {} needs a '\
                                       'vers supplier.'.format(self.ttype))
         if self.ttype.pos_neg == 'pos' and self.amount < 0:
-            raise VokoValidationError('A transaction of this type should by'\
-                                      'its definition be benefitting Vokomokum'\
-                                      ' and thus be positive.')
+            raise VokoValidationError('A transaction of this type should by '\
+                                      'its definition be benefitting Vokomokum '\
+                                      'and thus be positive.')
         if self.ttype.pos_neg == 'neg' and self.amount > 0:
-            raise VokoValidationError('A transaction of this type should by'\
+            raise VokoValidationError('A transaction of this type should by '\
                                       'its definition represent something that '\
                                       'Vokomokum gives out or pays and thus '\
                                       'and thus be negative.')

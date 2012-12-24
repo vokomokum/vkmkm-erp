@@ -105,8 +105,10 @@
                             else 
                                 $('#order-div').hide();
                         }
-                        // perform once when starting
-                        toggleOrderSelect();
+                        // perform once when page is loaded
+                        $(document).ready(function(){
+                            toggleOrderSelect();
+                        });
                     </script>
                     <span id="order-div" style="display:none;">
                         <label for="ord_no">Order:</label>
