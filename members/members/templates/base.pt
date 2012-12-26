@@ -74,7 +74,8 @@
                             </li>
                         </tal:block>
                         <tal:block tal:condition="tab == 'finance'">
-                            <li><a href="${portal_url}/transactions">Transactions</a></li>
+                            <li><a href="${portal_url}/transactions">Monthly</a></li>
+                            <li><a href="${portal_url}/transactions/2013">2013</a></li>
                             <li><a href="${portal_url}/transaction-types">Transaction Types</a></li>
                         </tal:block>
                     </tal:block>

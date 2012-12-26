@@ -121,15 +121,15 @@ class ListTransactions(BaseTransactionView):
         #    .all()
         # This is here because the filter above doesn't work for me
         # I only get pure string comparison to work, which works for now
+        transactions = [t for t in transactions\
+                if (str(t.date.tzinfo and t.date or tz.localize(t.date)) >= str(first))\
+                and (str(t.date.tzinfo and t.date or tz.localize(t.date)) <= str(last))]
         self.sums = {}
         for ttype in self.transaction_types:
             self.sums[ttype.name] =\
                          get_transaction_sums(self.year, self.month, ttype)
         self.overall = get_transaction_sums(self.year, self.month, None)
 
-        transactions = [t for t in transactions\
-                if (str(t.date.tzinfo and t.date or tz.localize(t.date)) >= str(first))\
-                and (str(t.date.tzinfo and t.date or tz.localize(t.date)) <= str(last))]
         return dict(msg=msg, transactions=transactions)
 
 
@@ -275,3 +275,44 @@ class DeleteTransaction(BaseTransactionView):
             return self.redir_to_list(t.date.year, t.date.month,
                              'Transaction "{}" has been deleted.'\
                               .format(t))
+
+
+
+@view_config(renderer='../templates/transaction_year_overview.pt',
+             route_name='transactions-year-overview',
+             permission='view')
+class TransactionsYearOverview(BaseTransactionView):
+
+    tab = 'finance'
+
+    def __call__(self):
+        session = DBSession()
+        self.year = int(self.request.matchdict['year'])
+        start_sec = datetime.datetime(self.year, 1, 1, 0, 0, 0)
+        end_sec = datetime.datetime(self.year, 12, 31, 23, 59, 59)
+        #self.start_month_info = month_info(start_date) 
+
+        tz = pytz.timezone('Europe/Amsterdam')
+        first = tz.localize(start_sec)
+        last = tz.localize(end_sec)
+        self.all_sums = {}
+        self.month_sums = {}
+        self.type_sums = {}
+        for ttype in self.transaction_types:
+            self.type_sums[ttype.name] = 0.0
+        self.sum_overall = 0.0
+        self.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
+                       'Sep', 'Oct', 'Nov', 'Dec']
+        for month in self.months:
+            self.all_sums[month] = {}
+            self.month_sums[month] = 0.0
+            for ttype in self.transaction_types:
+                smtt = get_transaction_sums(self.year, self.months.index(month)+1, ttype)['amount']
+                self.all_sums[month][ttype.name] = smtt
+                self.month_sums[month] += smtt
+                self.type_sums[ttype.name] += smtt
+                self.sum_overall += smtt 
+        
+        return dict(msg='')
+
+

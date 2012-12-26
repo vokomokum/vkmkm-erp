@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+    <h1>
+        Transaction summary for ${view.year}
+    </h1>
+
+    <table width="100%" border="1">
+        <tr>
+            <th width="15%"/>
+            <th width="6%" tal:repeat="month view.months">
+                <a href="${portal_url}/transactions/${view.year}/${python:view.months.index(month)+1}">${month}</a>
+            </th>
+            <th width="6%"/>
+        </tr>
+        <tr tal:repeat="type view.transaction_types">
+            <td>${type.name}</td>
+            <td tal:repeat="month view.months">${python:view.all_sums[month][type.name]}</td>
+            <td id="financial-sums-per-type">${python:view.type_sums[type.name]}</td>
+        </tr>
+        <tr id="financial-sums-per-month">
+            <td/>
+            <td tal:repeat="month view.months">${python:view.month_sums[month]}</td>
+            <td>${view.sum_overall}</td>
+        </tr>
+    </table> 
+
+        </div>
+    </div>
+</html>
