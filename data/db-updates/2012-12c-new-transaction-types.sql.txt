@@ -1,8 +1,8 @@
 
 UPDATE transaction_types SET pos_neg = 'pos' WHERE name = 'Member Payment to Vokomokum';
 
-INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Declaration of Vers-related Expense/Expenditure', 'pos', 'memb');
-INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Declaration of other Expense/Expenditure', 'pos', 'memb');
-INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Refund transferred to Members bank account', 'neg', 'memb');
-INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Late Vers order change', '---', 'memb');
-INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Late bulk order change', '---', 'memb');
+--INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Declaration of Vers-related Expense/Expenditure', 'pos', 'memb');
+--INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Declaration of other Expense/Expenditure', 'pos', 'memb');
+--INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Refund transferred to Members bank account', 'neg', 'memb');
+--INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Late Vers order change', '---', 'memb');
+--INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Late bulk order change', '---', 'memb');
