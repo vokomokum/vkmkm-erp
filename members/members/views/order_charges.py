@@ -14,13 +14,6 @@ from members.models.base import DBSession
 from members.utils.mail import sendmail
 
 
-def get_charges(order, session):
-    ''' get all (positive) order charges for this order '''
-    charges = [MemberOrder(m, order) for m in\
-                session.query(Member).all()]
-    return [c for c in charges if c.amount > 0]
-
-
 @view_config(renderer='../templates/order-charges.pt', route_name='charge-order')
 class ChargeOrder(BaseView):
     
@@ -34,17 +27,21 @@ class ChargeOrder(BaseView):
         session = DBSession()
         order = session.query(Order).\
                 filter(Order.id == o_id).first()
+        if not order:
+            return dict(msg='An order with ID {} does not exist.'.format(o_id),
+                        order=None, action=None)
         charge_ttype_id = get_ttypeid_by_name('Order Charge')
 
         if not 'Finance' in [wg.name for wg in self.user.workgroups]\
             and not self.user.mem_admin:
             return dict(order=order, action=None, 
                         msg='Only Finance people can do this.')
-        # all charges for members who have not been charged for 
+        # all (positive) charges for members who have not been charged for 
         # this order yet
-        charges = [c for c in get_charges(order, session) if not o_id in\
-                    [t.order.id for t in c.member.transactions\
-                                if t.ttype_id == charge_ttype_id]]
+        charges = [MemberOrder(m, order) for m in session.query(Member).all()]
+        charges = [c for c in charges if c.amount > 0 and not o_id in\
+                                [t.order.id for t in c.member.transactions\
+                                            if t.ttype_id == charge_ttype_id]]
 
         if not 'action' in self.request.params:
             # show charges that would be made
@@ -90,12 +87,19 @@ class MailOrderCharges(BaseView):
 
     def __call__(self):
         '''
-        Send members an email about their order charge
+        Send members an email about their negative balance.
+        We send these mails after orders, that is why this action is tied
+        to an order number (it also helps us to keep track a little over
+        when we already sent these reminders). 
         '''
         o_id = self.request.matchdict['o_id']
         session = DBSession()
         order = session.query(Order).\
                     filter(Order.id == o_id).first()
+        if not order:
+            return dict(msg='An order with ID {} does not exist.'.format(o_id),
+                        order=None)
+        members = [m for m in session.query(Member).all() if m.balance < 0]
         now = datetime.datetime.now()
         deadline = now + datetime.timedelta(days = 3)
         weekdays_en= ['monday', 'tuesday', 'wednesday', 'thursday',
@@ -106,15 +110,15 @@ class MailOrderCharges(BaseView):
                         deadline.day, deadline.month, deadline.year)
         deadline_nl = '{} {}.{}.{}'.format(weekdays_nl[deadline.weekday()],
                         deadline.day, deadline.month, deadline.year)
-        for c in get_charges(order, session):
+        for m in members:
             subject = 'Please pay for order of {}'.format(order.label)
             mail_templ = open('members/templates/order_charge_txt.eml', 'r')
             mail = mail_templ.read()
-            body = mail.format(label=order.label, amount=c.amount,
+            body = mail.format(label=order.label, amount=m.balance,
                        deadline_nl=deadline_nl, deadline_en=deadline_en)
-            sendmail(c.member.mem_email, subject, body,
+            sendmail(m.mem_email, subject, body,
                         folder='order-charges/{}'.format(order.id),
                         sender='finance@vokomokum.nl')
-        return dict(msg=u'Emails with order charges have been sent out '\
-                        'for order {}'.format(order.label))
+        return dict(msg=u'Emails with payment reminders have been sent out '\
+                        'after order {}'.format(order.label))
 
