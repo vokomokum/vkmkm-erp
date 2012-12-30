@@ -9,7 +9,7 @@ CREATE TABLE vers_suppliers (
 	faxnr VARCHAR(20), 
 	comment VARCHAR(500), 
         active boolean DEFAULT true,
-        PRIMARY KEY id
+        PRIMARY KEY (id)
 );
 ALTER TABLE vers_suppliers OWNER TO apache;
 
@@ -20,6 +20,6 @@ ALTER TABLE transaction_types ADD COLUMN mem_sup VARCHAR(4) DEFAULT 'memb'; -- m
 -- Add suppliers to transactions
 ALTER TABLE transactions ALTER COLUMN mem_id DROP NOT NULL;
 ALTER TABLE transactions ADD COLUMN whol_id INTEGER DEFAULT NULL;
-ALTER TABLE ONLY transactions ADD CONSTRAINT transactions_whol_id_wholesalers_id_fkey FOREIGN KEY (whol_id) REFERENCES wholesalers(wh_id);
+ALTER TABLE ONLY transactions ADD CONSTRAINT transactions_whol_id_wholesaler_id_fkey FOREIGN KEY (whol_id) REFERENCES wholesaler(wh_id);
 ALTER TABLE transactions ADD COLUMN vers_id INTEGER DEFAULT NULL;
 ALTER TABLE ONLY transactions ADD CONSTRAINT transactions_vers_id_vers_suppliers_id_fkey FOREIGN KEY (vers_id) REFERENCES vers_suppliers(id);
