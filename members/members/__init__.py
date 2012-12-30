@@ -13,6 +13,7 @@ from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
 from members.models.orders import Order
+from members.models.supplier import VersSupplier
 from members.models.applicant import Applicant
 from members.models.transactions import Transaction, TransactionType
 
