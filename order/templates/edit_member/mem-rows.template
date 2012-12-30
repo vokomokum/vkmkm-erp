@@ -1,8 +1,0 @@
-  <tr class="myorder">
-    <td><input type="radio" name="selected_row" value="m_${mem_id}" $Selected></input></td>
-    <td width="3%">$mem_id</td>
-    <td width="30%">$mem_lname, $mem_fname $mem_prefix</td>
-    <td width="30%">$mem_email</td>
-    <td width="30%">$mem_street $mem_house $mem_flatno</td>
-    <td width="7%">$mem_postcode</td>
-  </tr>

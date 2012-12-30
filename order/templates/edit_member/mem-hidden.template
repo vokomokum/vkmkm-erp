@@ -1,2 +1,0 @@
-<input type="hidden" name="pass" value="$pass"></input>
-<input type="hidden" name="mem" value="$member_id"></input>

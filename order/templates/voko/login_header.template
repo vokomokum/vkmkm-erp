@@ -22,12 +22,9 @@ Content-Type: text/html
                 <label for="Password">Password</label><br />
                 <input align="left" type="password" name="Password" id="Password" /><br />
                 <input type="submit" name="Login" value="Login" /><br />
-                <input type="checkbox" name="Forgot" id="Forgot" />
-                <label for="Forgot">
-                    I Forgot My Password<br />
-                    ( <span class="small italic">enter your Member Nr. or e-mail address,<br />tick the check-box and click Login</span> )
-                </label>
-                
+                <a href="http://members.vokomokum.nl/reset-pwd">
+                    Forgot Password?
+                </a> 
                 <input type="hidden" name="caller" value="$Caller}"></input>
             </fieldset>
     </form>

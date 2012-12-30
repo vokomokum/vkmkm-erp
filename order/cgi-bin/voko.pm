@@ -26,7 +26,7 @@ BEGIN {
     @EXPORT      = qw(read_conf connect_database prepare set_cookie
                       process_login force_login print_title handle_cookie
                       admin_banner test_cookie process_login_data open_cgi
-                      password_reset get_cats order_selector print_sub_cat
+                      get_cats order_selector print_sub_cat
 		      mem_names_hash make_dropdown make_scdrop email_header
 		      email_chunk email_rows err_msg_2_html get_ord_totals dump_stuff);
     %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
@@ -145,9 +145,6 @@ sub process_login_data {
     my $mem_id;
 
     my $vals = $cgi->Vars;
-
-    do_forgot($vals, $config, $cgi, $dbh) 
-	if(defined($vals->{Member}) and defined($vals->{Forgot}));
 
     return -5 if(not defined($vals->{Member}) or not defined($vals->{Password}));
     my $memno = $vals->{Member};
@@ -458,75 +455,6 @@ sub open_cgi {
     }
 
     return ($cgi, $dbh);
-}
-
-sub password_reset {
-    my ($mem_id, $email, $days, $config, $dbh) = @_;
-    
-    # generate a big random number
-    open(RND, "</dev/random");
-    my $buf;
-    sysread RND, $buf, 24;
-    close(RND);
-    my $key = encode_base64($buf);
-    chomp $key;
-    my $url = sprintf "%s:%d", $key, time + 86400 * $days;
-    my $sth = prepare(
-	"UPDATE members SET mem_pwd_url = ? WHERE mem_id = ?", $dbh);
-    $sth->execute($url, $mem_id);
-    $dbh->commit;
-    my $subject = "You can set a new password on your account";
-    my $fh = email_header($email, $subject, $config);
-    email_chunk($fh, "pwdreset_txt.template", {key => $key}, $config);
-    email_chunk($fh, "sig_txt.tmplate", {}, $config);
-    email_chunk($fh, "html_start.template", {}, $config);
-    email_chunk($fh, "pwdreset_html.template", {key => $key}, $config);
-    email_chunk($fh, "sig_html.tmplate", {}, $config);
-    close($fh);
-}
-
-sub do_forgot {
-    my ($vals, $config, $cgi, $dbh) = @_;
-    my $memno = $vals->{Member};
-    $memno =~ s/^\s*//;
-    $memno =~ s/\s*$//;
-    force_login($config, $cgi, $dbh) if($memno eq "");
-    my $sth;
-    if($memno =~ /^\d+$/) {
-	$memno = int($memno);
-	$sth = prepare(
-	    'SELECT * FROM members WHERE mem_id = ? AND mem_active',
-	    $dbh);
-    } else {
-	$memno =~ s/%//;
-	$sth = prepare(
-	    'SELECT * FROM members WHERE mem_email ILIKE ? AND mem_active',
-	    $dbh);
-    }
-    $sth->execute($memno);
-    my $href = $sth->fetchrow_hashref;
-    $sth->finish;
-    force_login($config, $cgi, $dbh) if(not defined($href));
-    password_reset($href->{mem_id}, $href->{mem_email}, 3, $config, $dbh);
-        my $tpl = new CGI::FastTemplate($config->{templates});
-    $dbh->commit;
-    $dbh->disconnect;
-    $tpl->strict();
-    $tpl->define( header      => "common/header.template",
-	          body        => "voko/reset-requested.template"
-	);
-    my %hdr_h =(  Pagename    => "Password Reset Requested",
-		  Title       => "Password Reset Requested",
-		  Nextcgi     => "mem_login",
-		  BANNER      => "",
-	);
-
-    $tpl->assign(\%hdr_h);
-    $tpl->parse(MAIN => "header");
-    $tpl->print("MAIN");
-    $tpl->parse(BODY => "body");
-    $tpl->print("BODY");
-    exit 0;
 }
 
 # return a list of category links as a single table string
