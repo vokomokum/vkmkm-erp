@@ -157,7 +157,7 @@ class NewTransaction(BaseTransactionView):
         transaction.whol_id = params['wh_id']
         transaction.vers_id = params['vers_id']
         transaction.comment = params['comment']
-        if 'ord_no' in params and params['ord_no'] != "":
+        if 'ord_no' in params and not params['ord_no'] in ('', '--'):
             transaction.ord_no = int(params['ord_no'])
         if 'late' in params:
             transaction.late = bool(params['late'])

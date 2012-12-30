@@ -39,7 +39,7 @@
             <div id="form-data" style="display:none;">
                 <div class="form-row">
                     <label for="ttype_id">Type:</label>
-                    <select onchange="javascript:toggleOrderSelect();"
+                    <select onchange="javascript:togglePartnerOrderSelect();"
                             name="ttype_id" id="ttype-select">
                         <option value="--">--</option>
                         <tal:block tal:repeat="tt view.transaction_types">
@@ -49,7 +49,7 @@
                     <div id="member">
                         <label for="mem_id">Member:</label>
                         <select name="mem_id">
-                            <option value="--">[ID] Name (active)</option>
+                            <option id="mem-default-option" value="--">[ID] Name (active)</option>
                             <tal:block tal:repeat="m view.members">
                                 <option tal:define="active python:{True:'yes', False:'no'}[m.mem_active]"
                                         value="${m.mem_id}">[${m.mem_id}] ${m.fullname} (${active})</option>
@@ -59,7 +59,7 @@
                     <div id="wholesaler">
                         <label for="wh_id">Wholesaler:</label>
                         <select name="wh_id">
-                            <option value="--">--</option>
+                            <option id="wh-default-option" value="--">--</option>
                             <tal:block tal:repeat="w view.wholesalers">
                                 <option value="${w.wh_id}">${w}</option>
                             </tal:block>
@@ -68,7 +68,7 @@
                     <div id="vers_supplier">
                         <label for="vers_id">Vers Supplier:</label>
                         <select name="vers_id">
-                            <option value="--">--</option>
+                            <option id="vers-default-option" value="--">--</option>
                             <tal:block tal:repeat="vs view.vers_suppliers">
                                 <option value="${vs.id}">${vs}</option>
                             </tal:block>
@@ -83,10 +83,10 @@
                         <tal:block tal:condition="tt.mem_sup == 'whol'">wholesaler_types.push("${tt.name}");</tal:block>
                         <tal:block tal:condition="tt.mem_sup == 'vers'">vers_supplier_types.push("${tt.name}");</tal:block>
                         </tal:block>
-                        function toggleOrderSelect(){
+                        function togglePartnerOrderSelect(){
                             var sel = $('#ttype-select')[0];
                             var seltxt = sel.options[sel.selectedIndex].innerHTML;
-                            // toggle the partner woth whom to associate
+                            // toggle the partner with whom to associate
                             if (member_types.indexOf(seltxt) >= 0)
                                 $('#member').show();
                             else 
@@ -105,14 +105,20 @@
                             else 
                                 $('#order-div').hide();
                         }
-                        // perform once when page is loaded
                         $(document).ready(function(){
-                            toggleOrderSelect();
+                            // perform showing/hiding once
+                            togglePartnerOrderSelect();
+                            // make sure we're empty (some browsers are too nice)
+                            $('#mem-default-option').attr('selected', 'selected');
+                            $('#wh-default-option').attr('selected', 'selected');
+                            $('#vers-default-option').attr('selected', 'selected');
+                            $('#order-default-option').attr('selected', 'selected');
                         });
                     </script>
                     <span id="order-div" style="display:none;">
                         <label for="ord_no">Order:</label>
                         <select name="ord_no" id="order-select">
+                            <option id="order-default-option" value="--">--</option>
                             <tal:block tal:repeat="o view.orders">
                                 <option value="${o.id}">${o.label}</option>
                             </tal:block>

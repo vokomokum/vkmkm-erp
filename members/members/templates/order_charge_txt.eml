@@ -8,7 +8,7 @@ Graag ontvangen we jullie betalingen voor de bestelling van {label}.
 
 Je huidige saldo is EUR {amount}. Zou je dit bedrag over willen maken naar Triodos rekening 78.68.29.109 ten name van VOKOMOKUM? Vermeld je *Naam en lidmaatschap nummer* plus het feit voor welke maand het is.
 
-Je kan details van jouw order en eerdere transacties online bekijken op de Vokomokum website: www.vokomokum.nl/member-area/. Onder "order (wholesale)", log in en kies My Orders > current. Onder "members", log in en klik op je naam om op de "My Account" pagina te komen. Daar vind je een overzicht van al je transacties.
+Je kan details van jouw order en eerdere transacties online bekijken op de Vokomokum website: www.vokomokum.nl/member-area/. Onder "order (wholesale)", log in en kies My Orders > current. Onder "Membership", log in en klik op je naam om op de "My Account" pagina te komen. Daar vind je een overzicht van al je transacties.
 
 Let op: De deadline voor het betalen is na 3 dagen, dat is uiterlijk op {deadline_nl}.
 
@@ -34,7 +34,7 @@ We would like to receive your payments for the order of {label}.
 
 Your current balance is EUR {amount}. Please transfer the exact amount to Triodos account 78.68.29.109 in the name of VOKOMOKUM. Also include your *name and membership number* and state the month for which it is.
 
-You can review the details of your order online on the Vokomokum website: www.vokomokum.nl/member-area/. Under  "order (wholesale)", log in > choose My Orders > current. Under "members", log in and click on your name to access the "My Account" page where you will see your transaction history.
+You can review the details of your order online on the Vokomokum website: www.vokomokum.nl/member-area/. Under  "order (wholesale)", log in > choose My Orders > current. Under "Membership", log in and click on your name to access the "My Account" page where you will see your transaction history.
 
 NB: The deadline for paying is in 3 days, which is latest on {deadline_en}.
 

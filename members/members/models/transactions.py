@@ -169,6 +169,9 @@ class Transaction(Base):
                                       'both a member and a supplier.')
         if self.ttype.name == 'Order Charge' and not self.order:
             raise VokoValidationError('This Order Charge has no connected order.')
+        if self.ttype.name != 'Order Charge' and self.order:
+            raise VokoValidationError('This transaction has a connected order, '\
+                                      'but is not an Order Charge.')
            
 
 def get_transaction_sums(year, month, ttype):
