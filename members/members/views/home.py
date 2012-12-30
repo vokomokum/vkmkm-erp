@@ -99,7 +99,9 @@ def get_todos(session, user, show_all):
                                   link_txt='Charge members now.',
                                   link_title='There have been no charges made '\
                                     'for this order to members. Clicking this '\
-                                    'link will create these charges.'))
+                                    'link will show you a list of charges '\
+                                    'that should be made and you can then '\
+                                    'confirm to actually make them.'))
             else:
                 settings = get_settings()
                 mail_folder = settings['vokomokum.mail_folder']
