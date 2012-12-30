@@ -1,6 +1,10 @@
 
 UPDATE transaction_types SET pos_neg = 'pos' WHERE name = 'Member Payment to Vokomokum';
+UPDATE transaction_types SET pos_neg = 'neg' WHERE name = 'Membership Fee';
+UPDATE transaction_types SET pos_neg = 'neg' WHERE name = 'Order Charge';
+UPDATE transaction_types SET pos_neg = 'pos' WHERE name = 'Reimbursement to Member from Vokomokum';
 
+-- These are already there
 --INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Declaration of Vers-related Expense/Expenditure', 'pos', 'memb');
 --INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Declaration of other Expense/Expenditure', 'pos', 'memb');
 --INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Refund transferred to Members bank account', 'neg', 'memb');
