@@ -109,10 +109,14 @@
                             // perform showing/hiding once
                             togglePartnerOrderSelect();
                             // make sure we're empty (some browsers are too nice)
-                            $('#mem-default-option').attr('selected', 'selected');
-                            $('#wh-default-option').attr('selected', 'selected');
-                            $('#vers-default-option').attr('selected', 'selected');
-                            $('#order-default-option').attr('selected', 'selected');
+                            $('#mem-default-option').attr('selected', 'selected')
+                                                    .removeAttr('selected');
+                            $('#wh-default-option').attr('selected', 'selected')
+                                                   .removeAttr('selected');
+                            $('#vers-default-option').attr('selected', 'selected')
+                                                     .removeAttr('selected');
+                            $('#order-default-option').attr('selected', 'selected')
+                                                      .removeAttr('selected');
                         });
                     </script>
                     <span id="order-div" style="display:none;">

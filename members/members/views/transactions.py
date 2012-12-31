@@ -152,12 +152,12 @@ class NewTransaction(BaseTransactionView):
         ttype = session.query(TransactionType).get(params['ttype_id'])
         transaction.ttype = ttype
         transaction.amount = float(params['amount'])
-        if 'mem_id' in params and not params['mem_id'] in ('', '--'):
-            transaction.mem_id = params['mem_id']
-        if 'wh_id' in params and not params['wh_id'] in ('', '--'):
-            transaction.whol_id = params['wh_id']
-        if 'vers_id' in params and not params['vers_id'] in ('', '--'):
-            transaction.vers_id = params['vers_id']
+        if ttype.mem_sup == 'memb' and 'mem_id' in params:
+            transaction.member = session.query(Member).get(params['mem_id'])
+        if ttype.mem_sup == 'whol' and 'wh_id' in params:
+            transaction.wholesaler = session.query(Wholesaler).get(params['wh_id'])
+        if ttype.mem_sup == 'vers' and 'vers_id' in params:
+            transaction.vers_supplier = session.query(VersSupplier).get(params['vers_id'])
         transaction.comment = params['comment']
         if 'ord_no' in params and not params['ord_no'] in ('', '--'):
             transaction.ord_no = int(params['ord_no'])
