@@ -43,7 +43,9 @@
                             name="ttype_id" id="ttype-select">
                         <option value="--">--</option>
                         <tal:block tal:repeat="tt view.transaction_types">
-                            <option value="${tt.id}">${tt}</option>
+                            <tal:block tal:define="pn python:{'pos':'+', 'neg':'-', '---':'+ or -'}[tt.pos_neg]">
+                                <option value="${tt.id}">${tt} (${pn})</option>
+                            </tal:block>
                         </tal:block>
                     </select>
                     <div id="member">
