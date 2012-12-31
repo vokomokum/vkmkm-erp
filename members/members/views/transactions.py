@@ -154,8 +154,10 @@ class NewTransaction(BaseTransactionView):
         transaction.amount = float(params['amount'])
         member = session.query(Member).get(params['mem_id'])
         transaction.member = member
-        transaction.whol_id = params['wh_id']
-        transaction.vers_id = params['vers_id']
+        if 'wh_id' in params and not params['wh_id'] in ('', '--'):
+            transaction.whol_id = params['wh_id']
+        if 'vers_id' in params and not params['vers_id'] in ('', '--'):
+            transaction.vers_id = params['vers_id']
         transaction.comment = params['comment']
         if 'ord_no' in params and not params['ord_no'] in ('', '--'):
             transaction.ord_no = int(params['ord_no'])
