@@ -79,16 +79,16 @@
                         var wholesaler_types = Array();
                         var vers_supplier_types = Array();
                         <tal:block tal:repeat="tt view.transaction_types">
-                        <tal:block tal:condition="tt.mem_sup == 'memb'">member_types.push("${tt.name}");</tal:block>
-                        <tal:block tal:condition="tt.mem_sup == 'whol'">wholesaler_types.push("${tt.name}");</tal:block>
-                        <tal:block tal:condition="tt.mem_sup == 'vers'">vers_supplier_types.push("${tt.name}");</tal:block>
+                        <tal:block tal:condition="tt.mem_sup == 'memb'">member_types.push("${tt.name_js}");</tal:block>
+                        <tal:block tal:condition="tt.mem_sup == 'whol'">wholesaler_types.push("${tt.name_js}");</tal:block>
+                        <tal:block tal:condition="tt.mem_sup == 'vers'">vers_supplier_types.push("${tt.name_js}");</tal:block>
                         </tal:block>
                         function togglePartnerOrderSelect(){
                             var sel = $('#ttype-select')[0];
                             var seltxt = sel.options[sel.selectedIndex].innerHTML;
                             // indicate near amount field if it needs to be positive/negative
                             <tal:block tal:repeat="tt view.transaction_types">
-                            if (seltxt == '${tt.name}')
+                            if (seltxt == '${tt.name_js}')
                                 var pn = '<tal:block>${python:{'pos':'+', 'neg':'-', '---':'+ or -'}[tt.pos_neg]}</tal:block>';
                             </tal:block>
                             $('#amount-posneg').html('(' + pn + ')');

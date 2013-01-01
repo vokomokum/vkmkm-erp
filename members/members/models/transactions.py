@@ -46,6 +46,11 @@ class TransactionType(Base):
     def __repr__(self):
         return self.name
 
+    @property
+    def name_js(self):
+        ''' Name save to use in js '''
+        return self.name.replace("'", "\\'")
+
     def validate(self):
         ''' validate if this object is valid, raise exception otherwise '''
         if self.name == '':
