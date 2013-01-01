@@ -51,7 +51,7 @@
             <tal:block tal:condition="action == 'done'">
                 <h3>Charges have been created.</h3>
                 <h3>
-                    <a href="${portal_url}/mail-order-charges">Now mail the charges to members.</a>
+                    <a href="${portal_url}/mail-order-charges/${order.id}">Now mail the charges to members.</a>
                 </h3>
             </tal:block>
         </tal:block>
