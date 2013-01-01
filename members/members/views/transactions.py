@@ -92,17 +92,16 @@ class ListTransactions(BaseTransactionView):
         else:
             self.today = 1
 
-        tz = pytz.timezone('Europe/Amsterdam')
-        first = tz.localize(datetime.datetime(self.year, self.month, 1, 0, 0, 0))
-        last = tz.localize(datetime.datetime(self.year, self.month, 
-                                 self.month_info.days_in_month, 23, 59, 59))
-        transactions = session.query(Transaction)
+        self.show_items = False  # we only show summary when list is not asked for
+        transactions = []
+        query = session.query(Transaction)
         # fitering by type
         self.ttid = None
         if 'ttype' in self.request.params:
+            self.show_items = True
             if self.request.params['ttype'] != '':
                 self.ttid = int(self.request.params['ttype'])
-                transactions = transactions.filter(Transaction.ttype_id == self.ttid)     
+                query = query.filter(Transaction.ttype_id == self.ttid)     
         # ordering
         order_by = Transaction.date
         self.order_criterion = 'date'
@@ -114,16 +113,23 @@ class ListTransactions(BaseTransactionView):
             if self.request.params['order_by'] == 'type':
                 order_by = Transaction.ttype_id
             self.order_criterion = self.request.params['order_by']
-        transactions = transactions.order_by(order_by)
+        query = query.order_by(order_by)
         self.order_criteria = ('date', 'amount', 'type')
-        #    .filter(Transaction.date >= first and Transaction.date <= last)\
-        #    .order_by(Transaction.id)\
-        #    .all()
-        # This is here because the filter above doesn't work for me
-        # I only get pure string comparison to work, which works for now
-        transactions = [t for t in transactions\
-                if (str(t.date.tzinfo and t.date or tz.localize(t.date)) >= str(first))\
-                and (str(t.date.tzinfo and t.date or tz.localize(t.date)) <= str(last))]
+
+        if self.show_items:
+            tz = pytz.timezone('Europe/Amsterdam')
+            first = tz.localize(datetime.datetime(self.year, self.month, 1, 0, 0, 0))
+            last = tz.localize(datetime.datetime(self.year, self.month, 
+                                     self.month_info.days_in_month, 23, 59, 59))
+            #    .filter(Transaction.date >= first and Transaction.date <= last)\
+            #    .order_by(Transaction.id)\
+            #    .all()
+            # This is here because the filter above doesn't work for me
+            # I only get pure string comparison to work, which works for now
+            transactions = [t for t in query.all()\
+                    if (str(t.date.tzinfo and t.date or tz.localize(t.date)) >= str(first))\
+                    and (str(t.date.tzinfo and t.date or tz.localize(t.date)) <= str(last))]
+        
         self.sums = {}
         for ttype in self.transaction_types:
             self.sums[ttype.name] =\

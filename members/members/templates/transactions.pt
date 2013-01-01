@@ -215,8 +215,11 @@
             <th width="5%">Late</th>
             <th width="5%"></th>
         </tr>
-        <tr tal:condition="not:transactions">
+        <tr tal:condition="view.show_items and not transactions">
             <td colspan="8">No transactions found.</td>
+        </tr>
+        <tr tal:condition="not:view.show_items">
+            <td colspan="8">No transactions shown. Update list to see transactions of this month.</td>
         </tr>
         <tr tal:repeat="t transactions">
             <td>${t.ttype}</td>
