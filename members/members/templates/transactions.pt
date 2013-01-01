@@ -43,9 +43,7 @@
                             name="ttype_id" id="ttype-select">
                         <option value="--">--</option>
                         <tal:block tal:repeat="tt view.transaction_types">
-                            <tal:block tal:define="pn python:{'pos':'+', 'neg':'-', '---':'+ or -'}[tt.pos_neg]">
-                                <option value="${tt.id}">${tt} (${pn})</option>
-                            </tal:block>
+                            <option value="${tt.id}">${tt}</option>
                         </tal:block>
                     </select>
                     <div id="member">
@@ -88,6 +86,12 @@
                         function togglePartnerOrderSelect(){
                             var sel = $('#ttype-select')[0];
                             var seltxt = sel.options[sel.selectedIndex].innerHTML;
+                            // indicate near amount field if it needs to be positive/negative
+                            <tal:block tal:repeat="tt view.transaction_types">
+                            if (seltxt == '${tt.name}')
+                                var pn = '<tal:block>${python:{'pos':'+', 'neg':'-', '---':'+ or -'}[tt.pos_neg]}</tal:block>';
+                            </tal:block>
+                            $('#amount-posneg').html('(' + pn + ')');
                             // toggle the partner with whom to associate
                             if (member_types.indexOf(seltxt) >= 0)
                                 $('#member').show();
@@ -132,7 +136,7 @@
                     </span>
                 </div>
                 <div class="form-row">
-                    <label for="amount">Amount:</label>
+                    <label for="amount">Amount <span id="amount-posneg"></span>:</label>
                     <small>EUR</small> <input type="text" size="7" maxlength="7" name="amount" />
                     <label for="day">Day:</label>
                     <select name="day">
