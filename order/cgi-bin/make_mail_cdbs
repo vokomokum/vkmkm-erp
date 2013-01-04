@@ -58,11 +58,12 @@ def get_wgs(cur):
         wg_names[name] = id
 
 def wg_name(wg_names):
-    f = open("/etc/exim/members/wg_names.tmp", "w")
-    for i in wg_names.keys():
-        print >>f, i
-    f.close()
-    os.rename("/etc/exim/members/wg_names.tmp", "/etc/exim/members/wg_names")
+    # create cdb of key: wg_name value wg_name
+    wg_names_cdb = cdb.cdbmake("/etc/exim/members/wg_names.cdb",
+                              "/etc/exim/members/wg_names.cdb.tmp")
+    for name in wg_names.keys():
+        wg_names_cdb.add(name, name)
+    wg_names_cdb.finish()
     
 def wg_leaders(cur, wg_ids):
     # build a cdb giving the email addresses of wg leaders (used
@@ -84,10 +85,6 @@ def wg_leaders(cur, wg_ids):
             break
         if wg_id != last_wg:
             if last_wg >= 0:
-                f = open("/etc/exim/members/%s" % (wg_ids[last_wg],), "w")
-                print >>f, list
-                f.close()
-                #print wg_ids[last_wg], list
                 leaders_cdb.add(wg_ids[last_wg], list)
             separator = ""
             list = ""
@@ -95,9 +92,6 @@ def wg_leaders(cur, wg_ids):
         list += separator + mem_email
         separator = ","
 
-    f = open("/etc/exim/members/%s" % (wg_ids[last_wg],), "w")
-    print >>f, list
-    f.close()
     leaders_cdb.add(wg_ids[last_wg], list)
     leaders_cdb.finish()
         
