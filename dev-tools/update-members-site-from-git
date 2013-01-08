@@ -9,6 +9,7 @@ if [ "$1" = "production" ]; then
     echo I will be updating the PRODUCTION application ...
 fi
 
+# make sure we have latest changes
 if [ -e git-repo ];
 then
   echo Updating git-repo ...
@@ -20,6 +21,11 @@ else
   git clone git@git.assembla.com:vokomokum.git git-repo
 fi
 
+# make ourselves a nice copy to deploy from
+if [ -e git-repo ];
+then
+    /usr/bin/sudo rm -r git-repo-tmp
+fi
 cp -r git-repo git-repo-tmp
 rm -r git-repo-tmp/.git
 rm -r git-repo-tmp/members/members/tests
@@ -40,7 +46,7 @@ echo "now move everything (but the .ini and .wsgi files) onto the voko server ..
 sudo cp -rp CHANGES.txt README.txt setup.* members /var/www/$DEST
 
 cd ../..
-/usr/bin/sudo rm -r git-repo-tmp
+rm -r git-repo-tmp
 
 echo develop app ...
 cd /var/www/$DEST
