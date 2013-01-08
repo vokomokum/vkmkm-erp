@@ -20,7 +20,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6, form, th, tr, .info, #menu-items, #submenu-items,
-.wg-description, #prevnext, #deletion-confirmation {
+#wg-description, #prevnext, #deletion-confirmation {
   text-align: center;
 }
 
@@ -212,6 +212,11 @@ a:hover {
     padding: 2px 24px;
 }
 
+.mail-link {
+    background: #ffffff url(img/icons/mail.png) no-repeat;
+    background-position: -4px 0px;
+    padding: 2px 24px;
+}
 #prevnext {
     margin-bottom: 10px;
 }
@@ -449,11 +454,12 @@ form {border:0; margin:0; padding:0;}
   background-color: purple;
 }
 
-/* other */
-.wg-description {
+/* workgroups */
+#wg-description {
     color: #04176D;
     font-style:italic;
 }
+
 
 /* Specific styling */
 #wg_table #wg_members, #wg_table #wg_leaders {

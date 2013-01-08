@@ -1,3 +1,5 @@
+import re
+
 from sqlalchemy import Table, Column, Integer, Unicode, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
@@ -41,6 +43,15 @@ class Workgroup(Base):
 
     def __repr__(self):
         return self.name
+
+    @property
+    def mailing_list_address(self):
+        ''' return the email address used as mailing list in this group '''
+        name = self.name.strip()
+        name = re.sub(r'\s+', '-', name)
+        name = re.sub(r'[\'"@,:;]', "", name)
+        name = name.lower()
+        return "{}@vokomokum.nl".format(name)
 
     def validate(self):
         ''' validate if this object is valid, raise exception otherwise '''
