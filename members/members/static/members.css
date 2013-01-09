@@ -29,6 +29,10 @@ p, h1, pre {
     padding: 10px; 
 }
 
+h1 {
+    padding-bottom: 25px;
+}
+
 .warn {
   color: #D14836;    
 }
@@ -288,7 +292,7 @@ a:hover {
 
 
 /* Tables */
-table.list    {padding-right:3px; padding-left:3px; margin-bottom:10px; padding-top:10px; clear:right;}
+table.list    {padding-right:3px; padding-left:3px; margin-bottom:10px; padding-top:25px; clear:both;}
 table.list th {background-color:#a0a0a0; color:black; padding:2px;}
 table.list td {padding:5px;}
 table.list td:hover {background-color:#c0c0c0;}
@@ -457,9 +461,10 @@ form {border:0; margin:0; padding:0;}
 /* workgroups */
 #wg-description {
     color: #04176D;
-    font-style:italic;
-    clear:left;
-    margin-left: 100px;
+    font-style: italic;
+    float: left;
+    margin-left: 150px;
+    max-width: 450px;
 }
 
 
