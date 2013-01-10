@@ -19,6 +19,13 @@ def ascii_save(s):
     '''
     return s.encode('ascii', 'replace')
 
+def membership_fee(member):
+    '''
+    The formula to compute membership fee
+    Ten Euro per household member plus five euro for vers kratten (refundable)
+    '''
+    return 10. * member.mem_household_size + 5.
+
 def running_sqlite():
     '''
     True if app is currently running on sqlite (thus, probably in dev mode

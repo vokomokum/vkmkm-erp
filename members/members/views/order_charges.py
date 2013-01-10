@@ -12,6 +12,7 @@ from members.models.transactions import TransactionType
 from members.models.transactions import get_ttypeid_by_name
 from members.models.base import DBSession
 from members.utils.mail import sendmail
+from members.utils.misc import membership_fee
 
 
 @view_config(renderer='../templates/order-charges.pt', route_name='charge-order')
@@ -63,7 +64,7 @@ class ChargeOrder(BaseView):
                     # first order of this member? Charge Membership fee
                     if c.is_first_order():
                         mf = Transaction(\
-                                amount = c.member.mem_household_size * 10 * -1,
+                                amount = membership_fee(c.member) * -1,
                                 comment = 'Automatically charged (for {}'\
                                 ' people in the household) on first-time'\
                                 ' order ({})'\

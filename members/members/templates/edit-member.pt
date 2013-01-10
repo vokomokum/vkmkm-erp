@@ -145,11 +145,11 @@
            <tr class="list-content">
              <td align="center" colspan="2">Account Settings</td>
            </tr>
-           <tr class="list-content">
+           <!--tr class="list-content">
              <td align="right">
                 <input type="checkbox" name="mem_membership_paid" checked="${m.mem_membership_paid}" /></td>
              <td align="left"><label for="mem_membership_paid">Membership fee is paid</label></td>
-           </tr>
+           </tr-->
            <tr class="list-content">
              <td align="right"> 
                 <input type="checkbox" name="mem_admin" checked="${m.mem_admin}" /></td>
