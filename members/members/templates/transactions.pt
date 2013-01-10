@@ -43,7 +43,7 @@
                             name="ttype_id" id="ttype-select">
                         <option value="--">--</option>
                         <tal:block tal:repeat="tt view.transaction_types">
-                            <option value="${tt.id}">${tt}</option>
+                            <option value="${tt.id}">${tt} (${python:{'pos':'+', 'neg':'-', '---':'+ or -'}[tt.pos_neg]})</option>
                         </tal:block>
                     </select>
                     <div id="member">
@@ -79,34 +79,35 @@
                         var wholesaler_types = Array();
                         var vers_supplier_types = Array();
                         <tal:block tal:repeat="tt view.transaction_types">
-                        <tal:block tal:condition="tt.mem_sup == 'memb'">member_types.push("${tt.name_js}");</tal:block>
-                        <tal:block tal:condition="tt.mem_sup == 'whol'">wholesaler_types.push("${tt.name_js}");</tal:block>
-                        <tal:block tal:condition="tt.mem_sup == 'vers'">vers_supplier_types.push("${tt.name_js}");</tal:block>
+                        <tal:block tal:condition="tt.mem_sup == 'memb'">member_types.push("${tt.id}");</tal:block>
+                        <tal:block tal:condition="tt.mem_sup == 'whol'">wholesaler_types.push("${tt.id}");</tal:block>
+                        <tal:block tal:condition="tt.mem_sup == 'vers'">vers_supplier_types.push("${tt.id}");</tal:block>
                         </tal:block>
                         function togglePartnerOrderSelect(){
                             var sel = $('#ttype-select')[0];
-                            var seltxt = sel.options[sel.selectedIndex].innerHTML;
+                            var sel_ttid = sel.options[sel.selectedIndex].value;
+                            var sel_txt = sel.options[sel.selectedIndex].innerHTML;
                             // indicate near amount field if it needs to be positive/negative
                             <tal:block tal:repeat="tt view.transaction_types">
-                            if (seltxt == '${tt.name_js}')
-                                var pn = '<tal:block>${python:{'pos':'+', 'neg':'-', '---':'+ or -'}[tt.pos_neg]}</tal:block>';
+                            if (sel_ttid == '${tt.id}')
+                                var pn = '${python:{'pos':'+', 'neg':'-', '---':'+ or -'}[tt.pos_neg]}';
                             </tal:block>
                             $('#amount-posneg').html('(' + pn + ')');
                             // toggle the partner with whom to associate
-                            if (member_types.indexOf(seltxt) >= 0)
+                            if (member_types.indexOf(sel_ttid) >= 0)
                                 $('#member').show();
                             else 
                                 $('#member').hide();
-                            if (wholesaler_types.indexOf(seltxt) >= 0)
+                            if (wholesaler_types.indexOf(sel_ttid) >= 0)
                                 $('#wholesaler').show();
                             else 
                                 $('#wholesaler').hide();
-                            if (vers_supplier_types.indexOf(seltxt) >= 0)
+                            if (vers_supplier_types.indexOf(sel_ttid) >= 0)
                                 $('#vers_supplier').show();
                             else 
                                 $('#vers_supplier').hide();
                             // also toggle the order selection for some type(s)
-                            if (seltxt == 'Order Charge')
+                            if (sel_txt == 'Order Charge')
                                 $('#order-div').show();
                             else 
                                 $('#order-div').hide();
