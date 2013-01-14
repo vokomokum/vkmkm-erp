@@ -54,7 +54,7 @@ class Shift(Base):
         return "[Shift '{}' on day '{}', in month {}/{}, "\
                "by member {} in the '{}'-group (state:{})]"\
                 .format(self.task, str(self.day), self.month, self.year, 
-                        self.member.fullname, self.workgroup.name, self.state)
+                        self.member, self.workgroup.name, self.state)
 
     def clone(self):
         return Shift(self.wg_id, self.task, self.year, self.month,
