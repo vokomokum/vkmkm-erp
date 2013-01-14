@@ -136,7 +136,7 @@
             <td>
                 <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setmember" method="post">
                     <tal:block tal:condition="view.user_is_wgleader or view.user.mem_admin">
-                        <select onchange="this.form.submit()" name="mem_id" tal:condition="python: shift.state not in ['worked', 'noshow']">
+                        <select onchange="this.form.submit()" name="mem_id" tal:condition="python: shift.state not in ['worked', 'no-show']">
                             <option value="--">--</option>
                             <tal:block tal:repeat="m wg.members">
                                 <option tal:condition="m.mem_id == shift.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
@@ -146,7 +146,7 @@
                                 <option value="${shift.mem_id}" selected="selected">${shift.member}</option>
                             </tal:block>
                         </select>
-                        <tal:block tal:condition="python:shift.state in ['worked', 'noshow']">
+                        <tal:block tal:condition="python:shift.state in ['worked', 'no-show']">
                             ${shift.member}
                         </tal:block>
                     </tal:block>
@@ -167,17 +167,20 @@
             <!-- State -->
             <td align="center">
                 ${shift.state}
-                <form tal:condition="view.user_is_wgleader or view.user.mem_admin"
-                       action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setstate" method="post">
-                    <button name="state" onclick="this.form.submit()"
-                            tal:condition="python:shift.state in ['assigned','noshow'] " value="worked">
-                        Worked
-                    </button>
-                    <button name="state" onclick="this.form.submit()"
-                            tal:condition="shift.state == 'assigned'" value="noshow">
-                        No-show!
-                    </button>
-                </form>
+                <tal:block tal:condition="view.user_is_wgleader or view.user.mem_admin">
+                    <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setstate" method="post">
+                        <button type="submit" name="state"
+                                tal:condition="python:shift.state in ['assigned','no-show'] " value="worked">
+                            Worked
+                        </button>
+                    </form>
+                    <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setstate" method="post">
+                        <button type="submit" name="state"
+                                tal:condition="python:shift.state in ['assigned', 'worked']" value="no-show">
+                            No-show!
+                        </button>
+                    </form>
+                </tal:block>
             </td>
             <!-- Delete-Button -->
             <td>
