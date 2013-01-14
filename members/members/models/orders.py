@@ -43,7 +43,8 @@ def get_order_amount(ord_no, mem_id):
 
 class MemberOrder(object):
     '''
-    Helper class to model member orders (Note: not a DB model class)
+    Helper class to model member orders (Note: not a DB model class).
+    It connects a member object with an order object.
     '''
 
     def __init__(self, member, order):
@@ -62,14 +63,19 @@ class MemberOrder(object):
         '''
         True if this member is ordering for the first time.
         The modern way would be to check for an Order Charge transaction,
-        however we have to check legacy data from before Nov 2012, as well.
+        however, we have to check legacy data from before Nov 2012, as well.
+        If this is the first order, then there exists only one result in the 
+        mem_order table for this member (which is this one).
+        Explaining the WHERE clause: We ignore any order after this one (that 
+        start later than this order was completed) and we also don't care 
+        for (past) orders where the amount was <= 0.
         '''
-        now = datetime.now()
-        query = "SELECT count(*) FROM mem_order WHERE mem_id = {} AND memo_amt > 0"\
-                " AND memo_completed < '{}';".format(self.member.mem_id, str(now))
-        if running_sqlite():
+        query = "SELECT count(*) FROM mem_order WHERE mem_id = {}"\
+                " AND memo_amt > 0 AND memo_order_open <= '{}';"\
+                .format(self.member.mem_id, str(self.order.completed))
+        if running_sqlite():  # sqlite can't handle this query
             return False
-        return int(list(DBSession().connection().engine.execute(query))[0][0]) == 0
+        return int(list(DBSession().connection().engine.execute(query))[0][0]) <= 1
 
 
 """
