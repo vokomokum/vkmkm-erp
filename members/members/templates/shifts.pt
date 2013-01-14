@@ -11,7 +11,7 @@
  
     <!-- New shifts form -->
     <div class="new-shift-form" id="stylized-form"
-         tal:condition="(view.user_is_wgleader or view.user.mem_admin) and not view.month_info.month_lies_in_past">
+         tal:condition="(view.user_is_wgleader or view.user.mem_admin)"><!--and not view.month_info.month_lies_in_past"-->
         <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post">
           <div class="form-title">
                 Create new shift(s)
