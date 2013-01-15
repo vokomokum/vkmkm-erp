@@ -11,6 +11,7 @@ from base import DBSession
 from base import VokoValidationError
 from member import Member
 from workgroups import Workgroup
+from members.utils.misc import ascii_save
 
 
 shift_states = ['open', 'assigned', 'worked' ,'no-show']
@@ -51,10 +52,13 @@ class Shift(Base):
         self.year = year
 
     def __repr__(self):
+        mname = '[not assigned yet]'
+        if self.member:
+            mname = ascii_save(self.member.fullname)
         return "[Shift '{}' on day '{}', in month {}/{}, "\
                "by member {} in the '{}'-group (state:{})]"\
                 .format(self.task, str(self.day), self.month, self.year, 
-                        self.member, self.workgroup.name, self.state)
+                        mname, self.workgroup.name, self.state)
 
     def clone(self):
         return Shift(self.wg_id, self.task, self.year, self.month,

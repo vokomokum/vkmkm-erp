@@ -186,7 +186,8 @@ class EditShiftView(BaseShiftView):
                     body = 'Hi,\n\n{} has signed you off a shift that '\
                            'you were previously assigned to.\nThe shift is '\
                            'now:\n\n{}\n\nYou can view the shift '\
-                           'schedule at {}.\n{}'.format(self.user, shift, 
+                           'schedule at {}.\n{}'.format(
+                            ascii_save(self.user.fullname), shift,
                             schedule_url, q) 
                     sendmail(old_member.mem_email, subject, body, 
                              folder='shifts')
@@ -200,7 +201,8 @@ class EditShiftView(BaseShiftView):
                     subject = 'You have been assigned to a shift.'
                     body = 'Hi,\n\n{} has assigned you to a shift: '\
                            '\n\n{}\n\nYou can view the shift schedule at {}'\
-                           '\n\n{}'.format(self.user, shift, schedule_url, q)
+                           '\n\n{}'.format(ascii_save(self.user.fullname),
+                            str(shift), schedule_url, q)
                     sendmail(member.mem_email, subject, body, folder='shifts')
                 mail_old_assignee()
                 name = ascii_save(shift.member.fullname)
