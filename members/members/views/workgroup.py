@@ -37,7 +37,8 @@ def fill_wg_from_request(wg, request, session):
                 wg.members.append(m)
         # make sure leaders are also members
         for m in wg.leaders:
-            wg.members.append(m)
+            if not m in wg.members:  # avoid duplicates
+                wg.members.append(m)
     return wg
 
 
