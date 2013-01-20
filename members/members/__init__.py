@@ -59,6 +59,7 @@ def main(global_config, **settings):
     config.add_route('shift-list', '/workgroup/{wg_id}/shifts/{year}/{month}', factory=Workgroup)
     config.add_route('shift-new', '/workgroup/{wg_id}/new-shift', factory=Workgroup)
     config.add_route('shift-edit', '/workgroup/{wg_id}/edit-shift/{s_id}/{action}', factory=Workgroup)
+    config.add_route('shift-year-overview', '/workgroup/{wg_id}/shifts/{year}', factory=Workgroup)
     config.add_route('applicant-list', '/applicants', factory=Applicant)
     config.add_route('applicant-new', '/applicants/new', factory=Applicant)
     config.add_route('applicant-delete', '/applicant/{a_id}/delete', factory=Applicant)
@@ -78,7 +79,7 @@ def main(global_config, **settings):
 
     # custom error views, catching NotFound and all Exceptions
     config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')
-    config.add_view(ErrorView, context=Exception, renderer='templates/base.pt')
+    #config.add_view(ErrorView, context=Exception, renderer='templates/base.pt')
 
     config.scan()
 

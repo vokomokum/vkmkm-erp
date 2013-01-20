@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+    <h1>
+        Shift summary for workgroup ${view.wg} in ${view.year}
+    </h1>
+
+    <table width="100%" border="1">
+        <tr>
+            <th width="12%"/>
+            <th width="6.2%" tal:repeat="month view.months">
+                <a href="${portal_url}/workgroup/${view.wg.id}/shifts/${view.year}/${python:view.months.index(month)+1}">${month}</a>
+            </th>
+            <th width="6.2%"/>
+        </tr>
+        <tr tal:repeat="mem view.wg.members">
+            <td><a href="${portal_url}/member/${mem.mem_id}">${mem}</a></td>
+            <td tal:repeat="month view.months">
+                <tal:block tal:define="mm python:view.all_shift_data[month][mem.mem_id]">
+                    ${mm[0]}/${mm[1]}
+                </tal:block>
+            </td>
+            <td id="shift-sums-per-member">
+                <tal:block tal:define="mm python:view.member_sums[mem.mem_id]">
+                    ${mm[0]}/${mm[1]}
+                </tal:block>
+            </td>
+        </tr>
+        <tr id="shift-sums-per-month">
+            <td/>
+            <td tal:repeat="month view.months">
+                <tal:block tal:define="mm python:view.month_sums[month]">
+                    ${mm[0]}/${mm[1]}
+                </tal:block>
+            </td>
+            <td>
+                <tal:block tal:define="mm view.sum_overall">
+                    ${mm[0]}/${mm[1]}
+                </tal:block>
+            </td>
+        </tr>
+    </table> 
+
+    <p>This table shows x/y - two numbers per member and per month, which mean the following:
+        <ul>
+            <li>x: the number of worked shifts</li>
+            <li>y: the number of assigned or no-show shifts.</li>
+        </ul>
+    </p>
+   
+
+        </div>
+    </div>
+</html>

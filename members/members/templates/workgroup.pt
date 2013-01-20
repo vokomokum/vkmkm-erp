@@ -17,7 +17,8 @@ Only if coordinators of this group send to this address (from their registered e
         >Mailing list</a>
         <a tal:condition="python: view.user_is_wgleader or view.user.mem_admin"
             class="edit-link" href="${portal_url}/workgroup/${wg.id}/edit">Edit this group</a>
-        <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}/${now.month}">See shifts</a>
+        <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}/${now.month}">Monthly shift schedule</a>
+        <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}">Yearly shift overview</a>
     </div>
 
     <table class="list" align="center">

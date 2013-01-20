@@ -70,7 +70,8 @@
                         <tal:block tal:condition="tab == 'work'">
                             <li><a href="${portal_url}/workgroups">All Workgroups</a></li>
                             <li tal:repeat="wg view.user.workgroups">
-                                <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}/${view.month}">Shifts: ${wg.name}</a>
+                                <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}/${view.month}">Schedule: ${wg.name}</a>
+                                <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}">Overview: ${wg.name}</a>
                             </li>
                         </tal:block>
                         <tal:block tal:condition="tab == 'finance'">

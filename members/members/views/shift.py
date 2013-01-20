@@ -106,9 +106,7 @@ class NewShiftView(BaseShiftView):
             if params['day'] == 'any day':
                 return self.redir_to_shiftlist(wg, sdate.year, sdate.month, 
                         'Cannot repeat shift with with no day set.')
-            if repeat == 'weekly':
-                pass 
-            elif repeat == 'bi-weekly':
+            elif repeat == 'bi-monthly':
                 pass
             elif repeat == 'monthly':
                 for year in xrange(sdate.year, udate.year + 1):
@@ -290,3 +288,51 @@ class ListShiftView(BaseView):
             msg = ''
 
         return dict(shifts=shifts, wg=wg, msg=msg)
+
+
+
+@view_config(renderer='../templates/shift_year_overview.pt',
+             route_name='shift-year-overview',
+             permission='view')
+class ShiftYearOverview(BaseView):
+
+    tab = 'work'
+
+    def __call__(self):
+        session = DBSession()
+        self.wg = session.query(Workgroup).get(int(self.request.matchdict['wg_id']))
+        self.year = int(self.request.matchdict['year'])
+
+        self.all_shift_data = {}
+        self.month_sums = {}
+        self.member_sums = {}
+        for m in self.wg.members:
+            self.member_sums[m.mem_id] = [0, 0]
+        self.sum_overall = [0, 0]
+        self.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
+                       'Sep', 'Oct', 'Nov', 'Dec']
+        for month in self.months:
+            self.all_shift_data[month] = {} 
+            self.month_sums[month] = [0, 0]
+            for m in self.wg.members:
+                q = session.query(Shift).filter(Shift.mem_id == m.mem_id)\
+                            .filter(Shift.wg_id == self.wg.id)\
+                            .filter(Shift.month == self.months.index(month)+1)\
+                            .filter(Shift.year == self.year)
+                # worked shifts shifts of this member this month
+                wmm = q.filter(Shift.state == 'worked').count()        
+                # assigned (or not-worked) 
+                amm = q.filter(Shift.state == 'assigned').count()        
+                amm += q.filter(Shift.state == 'no-show').count()        
+                #get_transaction_sums(self.year, self.months.index(month)+1, ttype)['amount']
+                self.all_shift_data[month][m.mem_id] = wmm, amm
+                self.month_sums[month][0] += wmm
+                self.month_sums[month][1] += amm
+                self.member_sums[m.mem_id][0] += wmm
+                self.member_sums[m.mem_id][1] += amm
+                self.sum_overall[0] += wmm 
+                self.sum_overall[1] += amm 
+        
+        return dict(msg='')
+
+
