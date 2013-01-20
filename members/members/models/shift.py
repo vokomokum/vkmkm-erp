@@ -11,7 +11,7 @@ from base import DBSession
 from base import VokoValidationError
 from member import Member
 from workgroups import Workgroup
-from members.utils.misc import ascii_save
+from members.utils.misc import ascii_save, month_info
 
 
 shift_states = ['open', 'assigned', 'worked' ,'no-show']
@@ -69,12 +69,14 @@ class Shift(Base):
         '''
         Only the wg leader can sign off a member from a locked shift
         TODO: now all shifts w/o a (numeric) day are locked 1 week before the
-              month starts, probably we want to change that, but need to discuss
+              month ends, probably we want to change that, but need to discuss
         '''
+        now = datetime.now()
         day = self.day
         if not self.day or not str(self.day).isdigit():
-            day = 1
-        now = datetime.now()
+            sdate = datetime(self.year, self.month, 1)
+            minfo = month_info(sdate)
+            day = minfo.days_in_month
         sdate = datetime(self.year, self.month, int(day))
         return self.day and (sdate - now).days < 7
 
