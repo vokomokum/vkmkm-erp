@@ -105,12 +105,13 @@ h1 {
     list-style: none;
     display: inline;
     margin: 0;
+    margin-right: 5px;
 }
 
 #submenu-items li a{
     text-decoration: underline;
-    padding: 3px 0.5em;
-    margin-right: 3px;
+    /*padding: 3px 0.5em;
+    margin-right: 3px;*/
     background: white;
 }
 
@@ -221,7 +222,9 @@ a:hover {
     background-position: -4px 0px;
     padding: 2px 24px;
 }
+
 #prevnext {
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
