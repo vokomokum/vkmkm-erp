@@ -106,9 +106,8 @@ class NewShiftView(BaseShiftView):
             if params['day'] == 'any day':
                 return self.redir_to_shiftlist(wg, sdate.year, sdate.month, 
                         'Cannot repeat shift with with no day set.')
-            elif repeat == 'bi-monthly':
-                pass
-            elif repeat == 'monthly':
+            elif repeat in ('monthly', 'bi-monthly-startnow',
+                            'bi-monthly-startnext'):
                 for year in xrange(sdate.year, udate.year + 1):
                     smonth = 1
                     if year == sdate.year:
@@ -116,7 +115,12 @@ class NewShiftView(BaseShiftView):
                     umonth = 12
                     if year == udate.year:
                         umonth = udate.month
-                    for month in xrange(smonth, umonth + 1):
+                    step = 1
+                    if repeat.startswith('bi-monthly'):
+                        step = 2
+                    if repeat == 'bi-monthly-startnext':
+                        smonth += 1
+                    for month in xrange(smonth, umonth + 1, step):
                         add_shift(month, year)
                 if self.added_shifts == 0:
                     return self.redir_to_shiftlist(wg, sdate.year, sdate.month,

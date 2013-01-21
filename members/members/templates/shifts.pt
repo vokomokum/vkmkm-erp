@@ -10,73 +10,75 @@
     </h1>
  
     <!-- New shifts form -->
-    <div class="new-shift-form" id="stylized-form"
-         tal:condition="(view.user_is_wgleader or view.user.mem_admin)"><!--and not view.month_info.month_lies_in_past"-->
+        <div class="new-shift-form" id="stylized-form"
+             tal:condition="(view.user_is_wgleader or view.user.mem_admin)"><!--and not view.month_info.month_lies_in_past"-->
         <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post">
           <div class="form-title">
-                Create new shift(s)
+                Create new shift(s) <a onclick="$('#form-data').toggle()">show/hide</a>
           </div>
-          <p>Make one or more shifts for this month.</p>
-          <div class="form-row">
-            <label for="task">
-              Task
-            </label>
-            <input name="task" value="" size="40" maxlenght="100"/>
-            <!--span class="small">What job has to be done?</span-->
-          </div>
-          <div class="form-row">
-            <label for="day">
-              Day
-            </label>
-            <select name="day">
-              <option tal:repeat="d view.days" value="${d}">${d}</option>
-            </select>
-            <input name="month" type="hidden" value="${view.month}" />
-            <input name="year" type="hidden" value="${view.year}"/>
-            <!--span class="small">On what day of this month?</span-->
-            <label for="people">
-              People
-            </label>
-            <select name="people">
-              <option tal:repeat="p python:range(1,10,1)" value="${p}">${p}</option>
-            </select>
-            <!--span class="small">How many people shoud do this?</span-->
-          </div>
-          <div class="form-row">
-              <label for="repeat">
-                Do this
-              </label>
-              <script language="javascript">
-                function toggleUntilSpec(){
-                    if ($('#repeat').val() == 'once')
-                        $('#until-spec').hide();
-                    else 
-                        $('#until-spec').show();
-                }
-              </script>
-              <select id="repeat" name="repeat" 
-                  onchange="javascript:toggleUntilSpec();">
-                <option value="once" selected="selected">once</option>
-                <!--option value="weekly">weekly</option>
-                <option value="bi-weekly">bi-weekly</option-->
-                <option value="monthly">monthly</option>
-              </select>
-              <span id="until-spec" style="display:none;">
-                  <label for="until_month">until</label>
-                  <select name="until_month">
-                    <tal:block tal:repeat="m python:xrange(1, 13, 1)">
-                        <option tal:condition="m == view.month" value="${m}" selected="selected">${m}</option>
-                        <option tal:condition="m != view.month" value="${m}">${m}</option>
-                    </tal:block>
+          <div id="form-data" style="display:none;">
+              <p>Make one or more shifts for this month.</p>
+              <div class="form-row">
+                <label for="task">
+                  Task
+                </label>
+                <input name="task" value="" size="40" maxlenght="100"/>
+                <!--span class="small">What job has to be done?</span-->
+              </div>
+              <div class="form-row">
+                <label for="day">
+                  Day
+                </label>
+                <select name="day">
+                  <option tal:repeat="d view.days" value="${d}">${d}</option>
+                </select>
+                <input name="month" type="hidden" value="${view.month}" />
+                <input name="year" type="hidden" value="${view.year}"/>
+                <!--span class="small">On what day of this month?</span-->
+                <label for="people">
+                  People
+                </label>
+                <select name="people">
+                  <option tal:repeat="p python:range(1,10,1)" value="${p}">${p}</option>
+                </select>
+                <!--span class="small">How many people shoud do this?</span-->
+              </div>
+              <div class="form-row">
+                  <label for="repeat">
+                    Do this
+                  </label>
+                  <script language="javascript">
+                    function toggleUntilSpec(){
+                        if ($('#repeat').val() == 'once')
+                            $('#until-spec').hide();
+                        else 
+                            $('#until-spec').show();
+                    }
+                  </script>
+                  <select id="repeat" name="repeat" 
+                      onchange="javascript:toggleUntilSpec();">
+                    <option value="once" selected="selected">once</option>
+                    <option value="monthly">monthly</option>
+                    <option value="bi-monthly-startnow">bi-monthly (starting in this month)</option>
+                    <option value="bi-monthly-startnext">bi-monthly (starting in next month)</option>
                   </select>
-                  <span>/</span>
-                  <select name="until_year">
-                    <option tal:repeat="y python:xrange(view.year,view.year+3)" value="${y}">${y}</option>
-                  </select>
-                  <!--span class="small">You can automatically create shifts that recur over time.</span-->
-              </span>
-          </div>
-          <button type="submit">Create</button>
+                  <span id="until-spec" style="display:none;">
+                      <label for="until_month">until</label>
+                      <select name="until_month">
+                        <tal:block tal:repeat="m python:xrange(1, 13, 1)">
+                            <option tal:condition="m == view.month" value="${m}" selected="selected">${m}</option>
+                            <option tal:condition="m != view.month" value="${m}">${m}</option>
+                        </tal:block>
+                      </select>
+                      <span>/</span>
+                      <select name="until_year">
+                        <option tal:repeat="y python:xrange(view.year,view.year+3)" value="${y}">${y}</option>
+                      </select>
+                      <!--span class="small">You can automatically create shifts that recur over time.</span-->
+                  </span>
+              </div>
+              <button type="submit">Create</button>
+            </div>
         </form>   
     </div>
 
