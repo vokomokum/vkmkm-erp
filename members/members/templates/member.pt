@@ -21,7 +21,7 @@
         <tr class="list-content">
             <td>
                 <div>${m.fullname} (Voko-ID:${m.mem_id})</div>
-                <div>${m.mem_email}</div>
+                <div><a href="mailto:${m.mem_email}">${m.mem_email}</a></div>
             </td>
             <td>
                 <div>${m.addr_street()}</div>
