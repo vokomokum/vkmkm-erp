@@ -177,8 +177,9 @@ class EditShiftView(BaseShiftView):
                         self.request.application_url, shift.workgroup.id,
                         shift.year, shift.month)
             q = 'This email was automatically generated, so please do not '\
-                'directly reply to it. You may direct any questions to your '\
-                'group coordinator(s).'\
+                'directly reply to it. You may direct any questions regarding '\
+                'the workgroup to your coordinator(s). Only technical questions '\
+                'go to systems@vokomokum.nl.'\
                 '\n\nBest,\nVokomokum'           
             old_member = shift.member
             def mail_old_assignee():
@@ -206,6 +207,16 @@ class EditShiftView(BaseShiftView):
                            '\n\n{}'.format(ascii_save(self.user.fullname),
                             str(shift), schedule_url, q)
                     sendmail(member.mem_email, subject, body, folder='shifts')
+                # let coordinator(s) know, as well
+                subject = "Task {} on day '{}' in {}/{} is now assigned to {}"\
+                    format(shift.task, shift.day, shift.month, shift.year,
+                           ascii_save(shift.member.fullname))
+                body = "The assignment was done by member {}\n\n{}".\
+                    format(ascii_save(self.user.fullname), q)
+                for c in wg.leaders:
+                    if c is not self.user:
+                        sendmail(c.mem_email, subject, body, folder='shifts')
+                # and inform previous assignee
                 mail_old_assignee()
                 name = ascii_save(shift.member.fullname)
                 return redir(u'{} has been signed up for the shift.'\
