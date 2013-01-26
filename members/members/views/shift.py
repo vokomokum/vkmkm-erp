@@ -73,14 +73,15 @@ class NewShiftView(BaseShiftView):
             people = 1
         else:
             people = int(params['people'])
-        self.added_shifts = 0
+        self.added_shifts = []
         def add_shift(month=None, year=None):
             ''' add a shift object to session, several times if people > 1 '''
             shift = Shift(wg_id, '', None, None, None, None)
+            shift.workgroup = DBSession().query(Workgroup).get(wg_id)
             shift = fill_shift_from_request(shift, self.request)
             shift.validate()
             db_session.add(shift)
-            self.added_shifts += 1
+            self.added_shifts.append(shift)
             if month:
                 shift.month = month
             if year:
@@ -90,7 +91,7 @@ class NewShiftView(BaseShiftView):
                     s = shift.clone()
                     s.validate()
                     db_session.add(s)
-                    self.added_shifts += 1
+                    self.added_shifts.append(s)
         day = params['day']
         if not str(day).isdigit():
             day = 1
@@ -123,16 +124,24 @@ class NewShiftView(BaseShiftView):
                         smonth += 1
                     for month in xrange(smonth, umonth + 1, step):
                         add_shift(month, year)
-                if self.added_shifts == 0:
+                if len(self.added_shifts) == 0:
                     return self.redir_to_shiftlist(wg, sdate.year, sdate.month,
                         "Invalid date range: {}/{} to {}/{}".format(sdate.month,
                             sdate.year, udate.month, udate.year)) 
             else: 
                 return self.redir_to_shiftlist(wg, sdate.year, sdate.month, 
                     'Could not create shifts. "repeat"-command unknown.')
+        # inform (other) coordinators
+        subject = "Workgroup {}: Shifts were created by {}"\
+                    .format(ascii_save(wg.name), ascii_save(self.user.fullname))
+        body = "These shifts were added:\n\n{}\n\nBest, Vokomokum"\
+                .format('\n'.join([str(s) for s in self.added_shifts]))
+        for c in wg.leaders:
+            if c is not self.user:
+                sendmail(c.mem_email, subject, body, folder='shifts')
         return self.redir_to_shiftlist(wg, sdate.year, sdate.month, 
                     'Succesfully added {} shift(s) for task "{}".'\
-                    .format(self.added_shifts, 
+                    .format(len(self.added_shifts), 
                             ascii_save(self.request.params['task'])))
 
 

@@ -35,7 +35,7 @@ class Shift(Base):
 
     workgroup = relationship(Workgroup,
                   backref=backref('shifts', cascade='all,delete,delete-orphan',
-                                           order_by='Shift.id'))
+                                            order_by='Shift.id'))
     member = relationship(Member, backref='shifts')
 
     def __init__(self, wg_id, task, year, month, day=None, member=None):
@@ -91,6 +91,8 @@ class Shift(Base):
             datetime(self.year, self.month, int(tmp_day))
         except ValueError, e:
             raise VokoValidationError('The date of this shift is not correct: %s.' % e)
+        if self.wg_id == "" or not self.workgroup:
+            raise VokoValidationError('No workgroup is assigned to this shift.')
         if self.task == "":
             raise VokoValidationError('The task should not be empty.')
         if self.state in ['assigned', 'worked', 'no-show']:
