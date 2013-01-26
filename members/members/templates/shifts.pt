@@ -17,7 +17,7 @@
                 Create new shift(s) <a onclick="$('#form-data').toggle()">show/hide</a>
           </div>
           <div id="form-data" style="display:none;">
-              <p>Make one or more shifts for this month.</p>
+              <p>Create one or more shifts.</p>
               <div class="form-row">
                 <label for="task">
                   Task
@@ -36,16 +36,25 @@
                 <input name="year" type="hidden" value="${view.year}"/>
                 <!--span class="small">On what day of this month?</span-->
                 <label for="people">
-                  People
+                  Shifts
                 </label>
                 <select name="people">
                   <option tal:repeat="p python:range(1,10,1)" value="${p}">${p}</option>
                 </select>
-                <!--span class="small">How many people shoud do this?</span-->
+                <!--span class="small">How many shifts should be created?</span-->
+              </div>
+              <div class="form-row">
+                <label for="people">
+                Member
+                </label>
+                <select name="mem_id">
+                  <option value="--">Leave open (will be set later)</option>  
+                  <option tal:repeat="m wg.members" value="${m.mem_id}">${m}</option>
+                </select>
               </div>
               <div class="form-row">
                   <label for="repeat">
-                    Do this
+                    Create
                   </label>
                   <script language="javascript">
                     function toggleUntilSpec(){
@@ -57,7 +66,7 @@
                   </script>
                   <select id="repeat" name="repeat" 
                       onchange="javascript:toggleUntilSpec();">
-                    <option value="once" selected="selected">once</option>
+                    <option value="once" selected="selected">only in this month</option>
                     <option value="monthly">monthly</option>
                     <option value="bi-monthly-startnow">bi-monthly (starting in this month)</option>
                     <option value="bi-monthly-startnext">bi-monthly (starting in next month)</option>

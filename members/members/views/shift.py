@@ -35,10 +35,12 @@ def fill_shift_from_request(shift, request):
                 shift.__setattr__(attr, int(request.params[attr]))
         if 'mem_id' in request.params:
             mem_id = request.params['mem_id']
-            if not mem_id == '--':
-                shift.mem_id = None
+            if mem_id == '--':
+                shift.mem_id = shift.member = None
             else:
                 shift.mem_id = int(mem_id)
+                shift.member = DBSession().query(Member).get(mem_id)
+                shift.state = 'assigned'
         if 'day' in request.params:
             shift.day = request.params['day']  # brutally using the strings here
     return shift
@@ -76,16 +78,19 @@ class NewShiftView(BaseShiftView):
             ''' add a shift object to session, several times if people > 1 '''
             shift = Shift(wg_id, '', None, None, None, None)
             shift = fill_shift_from_request(shift, self.request)
+            shift.validate()
+            db_session.add(shift)
+            self.added_shifts += 1
             if month:
                 shift.month = month
             if year:
-                shift.year = year 
-            for _ in xrange(people):
-                s = shift.clone()
-                s.mem_id = None  # should not be necessary, just to be sure
-                s.validate()
-                db_session.add(s)
-                self.added_shifts += 1
+                shift.year = year
+            if people > 1:
+                for _ in xrange(1, people):
+                    s = shift.clone()
+                    s.validate()
+                    db_session.add(s)
+                    self.added_shifts += 1
         day = params['day']
         if not str(day).isdigit():
             day = 1
@@ -102,11 +107,7 @@ class NewShiftView(BaseShiftView):
         else:
             udate = datetime.datetime(int(params['until_year']),
                                       int(params['until_month']), day)
-            # not possible for any-day shifts
-            if params['day'] == 'any day':
-                return self.redir_to_shiftlist(wg, sdate.year, sdate.month, 
-                        'Cannot repeat shift with with no day set.')
-            elif repeat in ('monthly', 'bi-monthly-startnow',
+            if repeat in ('monthly', 'bi-monthly-startnow',
                             'bi-monthly-startnext'):
                 for year in xrange(sdate.year, udate.year + 1):
                     smonth = 1
@@ -126,10 +127,13 @@ class NewShiftView(BaseShiftView):
                     return self.redir_to_shiftlist(wg, sdate.year, sdate.month,
                         "Invalid date range: {}/{} to {}/{}".format(sdate.month,
                             sdate.year, udate.month, udate.year)) 
-                         
+            else: 
+                return self.redir_to_shiftlist(wg, sdate.year, sdate.month, 
+                    'Could not create shifts. "repeat"-command unknown.')
         return self.redir_to_shiftlist(wg, sdate.year, sdate.month, 
                     'Succesfully added {} shift(s) for task "{}".'\
-                    .format(self.added_shifts, self.request.params['task']))
+                    .format(self.added_shifts, 
+                            ascii_save(self.request.params['task'])))
 
 
 @view_config(renderer='../templates/workgroup.pt',

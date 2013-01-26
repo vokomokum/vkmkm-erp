@@ -7,7 +7,6 @@ from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 
 from base import Base
-from base import DBSession
 from base import VokoValidationError
 from member import Member
 from workgroups import Workgroup
@@ -40,9 +39,10 @@ class Shift(Base):
     member = relationship(Member, backref='shifts')
 
     def __init__(self, wg_id, task, year, month, day=None, member=None):
-        self.member = member
         self.wg_id = wg_id
         self.task = task
+        if member:
+            self.member = member
         if self.member:
             self.state = 'assigned'
         else:
@@ -52,7 +52,7 @@ class Shift(Base):
         self.year = year
 
     def __repr__(self):
-        mname = '[not assigned yet]'
+        mname = '<not assigned yet>'
         if self.member:
             mname = ascii_save(self.member.fullname)
         return "[Shift '{}' on day '{}', in month {}/{}, "\
@@ -62,7 +62,7 @@ class Shift(Base):
 
     def clone(self):
         return Shift(self.wg_id, self.task, self.year, self.month,
-                  self.day, self.mem_id)
+                  self.day, self.member)
 
     @property
     def is_locked(self):
