@@ -209,10 +209,10 @@ class EditShiftView(BaseShiftView):
                     sendmail(member.mem_email, subject, body, folder='shifts')
                 # let coordinator(s) know, as well
                 subject = "Task {} on day '{}' in {}/{} is now assigned to {}"\
-                    format(shift.task, shift.day, shift.month, shift.year,
+                    .format(shift.task, shift.day, shift.month, shift.year,
                            ascii_save(shift.member.fullname))
-                body = "The assignment was done by member {}\n\n{}".\
-                    format(ascii_save(self.user.fullname), q)
+                body = "The assignment was done by member {}\n\n{}"\
+                    .format(ascii_save(self.user.fullname), q)
                 for c in wg.leaders:
                     if c is not self.user:
                         sendmail(c.mem_email, subject, body, folder='shifts')
