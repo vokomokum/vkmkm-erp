@@ -34,23 +34,24 @@ Subject: %s
     error = ""
     mail_time = str(datetime.now()).replace(' ', '_').replace(':', '-')
     try:
-        # send mail
-        mailer = subprocess.Popen([mail_exec, "-t"],
-                        stdin=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                        stdout=subprocess.PIPE)
-        print >> mailer.stdin, mail
-        mailer.stdin.close()
-        result = mailer.wait()
-        error = mailer.stderr.read()
-        # save a copy
+        # try to send mail if our little custom test-workaround is not in place 
+        if not 'DONOTACTUALLYSEND' in mail_exec:
+            mailer = subprocess.Popen([mail_exec, "-t"],
+                            stdin=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            stdout=subprocess.PIPE)
+            print >> mailer.stdin, mail
+            mailer.stdin.close()
+            result = mailer.wait()
+            error = mailer.stderr.read()
+            assert(result == 0)
+        # save a copy if mailing succeeded (or if we used the workaround)
         target_folder = '{}/{}'.format(mail_folder, folder)
         if not os.path.exists(target_folder):
             os.mkdir(target_folder)
         mf = open('{}/{}.eml'.format(target_folder, mail_time), 'w')
         mf.write(mail)
         mf.close()
-        assert(result == 0)
     except OSError, e:
         # log that it didn't work
         log = logging.getLogger(__name__)
