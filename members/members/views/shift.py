@@ -212,11 +212,18 @@ class EditShiftView(BaseShiftView):
                             str(shift), schedule_url, q)
                     sendmail(member.mem_email, subject, body, folder='shifts')
                 # let coordinator(s) know, as well
-                subject = "Task {} on day '{}' in {}/{} is now assigned to {}"\
-                    .format(shift.task, shift.day, shift.month, shift.year,
+                subject = "Workgroup {}: The shift for {} on day '{}' in "\
+                          "{}/{} is now assigned to {}".format(shift.workgroup,
+                           shift.task, shift.day, shift.month, shift.year,
                            ascii_save(shift.member.fullname))
-                body = "The assignment was done by member {}\n\n{}"\
-                    .format(ascii_save(self.user.fullname), q)
+                body = "The assignment was done by member {}."\
+                            .format(ascii_save(self.user.fullname))
+                if old_member:
+                    body += " The previous assignee was: {}."\
+                            .format(ascii_save(old_member.fullname))
+                else:
+                    body += " No one was assigned to this shift before."
+                body += "\n\n{}".format(q)
                 for c in wg.leaders:
                     if c is not self.user:
                         sendmail(c.mem_email, subject, body, folder='shifts')
@@ -232,6 +239,18 @@ class EditShiftView(BaseShiftView):
                 shift.state = 'open' 
                 shift.validate()
                 mail_old_assignee()
+                # let coordinator(s) know, as well
+                subject = "Workgroup {}: Member {} was unassigned from the "\
+                          "shift for {} on day '{}' in {}/{}"\
+                           .format(shift.workgroup,
+                           ascii_save(old_member.fullname),
+                           shift.task, shift.day, shift.month, shift.year)
+                body = "The un-assignment was done by member {}."\
+                            .format(ascii_save(self.user.fullname))
+                body += "\n\n{}".format(q)
+                for c in wg.leaders:
+                    if c is not self.user:
+                        sendmail(c.mem_email, subject, body, folder='shifts')
                 return redir('Shift is now open.')
             return redir('You are not allowed to do this.')
 
