@@ -1,4 +1,3 @@
-from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
@@ -22,12 +21,12 @@ class VokoValidationError(Exception):
 # and straightforward. They do not need to do anything with objects
 # in the session but adding, deleting or changing them.
 # All changes made on objects that are in the session will
-# automatically commited to the DB at the end of a successful request.
+# automatically be commited to the DB at the end of a successful request.
 #
 # What is commiting?
 # -------------------
 #   A commit makes all SQL statements within a transactions permanent.
-#   If one statement fails, thw whole transaction is rolled back.
+#   If one statement fails, the whole transaction is rolled back.
 #   In our context, all that happens within one request is our
 #   transaction.
 #   Pyramid (via SQLAlchemy and the ZopeTransactionExtension)

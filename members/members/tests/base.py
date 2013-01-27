@@ -88,7 +88,8 @@ class VokoTestCase(unittest.TestCase):
             rmtree(mail_folder)
         os.mkdir(mail_folder)
         settings = get_settings()
-        settings['vokomokum.mail_exec'] = '/opt/local/sbin/exim'
+        # workaround: this will not send mails, just save copies in mails-dir
+        settings['vokomokum.mail_exec'] = '/opt/local/sbin/eximDONOTACTUALLYSEND'
         settings['vokomokum.mail_folder'] = mail_folder
         settings['vokomokum.mail_sender'] = 'systems@vokomokum.nl'
 

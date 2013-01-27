@@ -32,11 +32,23 @@ CREATE TABLE wholesaler (
 	wh_update VARCHAR(20)
 );
 
-INSERT INTO "wholesaler" VALUES(1,'DNB', '', '', '', 'Amsterdam', '', '', '', true, '2012-11-29 17:35:23');
-INSERT INTO "wholesaler" VALUES(2,'Zapatista', '', '', '', 'Hamburg', '', '', '', true, '2012-11-29 17:35:23');
-INSERT INTO "wholesaler" VALUES(3,'De Werkbij', '', '', '', 'Amsterdam', '', '', '', true, '2012-11-29 17:35:23');
+INSERT INTO "wholesaler" VALUES(1,'DNB', '', '', '', 'Amsterdam', '', '', '', 1, '2012-11-29 17:35:23');
+INSERT INTO "wholesaler" VALUES(2,'Zapatista', '', '', '', 'Hamburg', '', '', '', 1, '2012-11-29 17:35:23');
+INSERT INTO "wholesaler" VALUES(3,'De Werkbij', '', '', '', 'Amsterdam', '', '', '', 1, '2012-11-29 17:35:23');
 
-INSERT INTO "vers_suppliers" VALUES(1,'Geijtenboerderij', '', '', '', '', '', true);
-INSERT INTO "vers_suppliers" VALUES(2,'Boerderij B', '', '', '', '', '', true);
+-- I don't know why this is not created automatically with 
+-- models.base.Base.metadata.create_all(self.engine)
+CREATE TABLE vers_suppliers (
+	id INTEGER PRIMARY KEY, 
+	name VARCHAR(100), 
+	website VARCHAR(50), 
+	email VARCHAR(50), 
+	telnr VARCHAR(20), 
+	faxnr VARCHAR(20), 
+	comment VARCHAR(500) 
+);
+
+INSERT INTO "vers_suppliers" VALUES(1,'Geijtenboerderij', '', '', '', '', '');
+INSERT INTO "vers_suppliers" VALUES(2,'Boerderij B', '', '', '', '', '');
 
 COMMIT;
