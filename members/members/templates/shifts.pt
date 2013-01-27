@@ -147,22 +147,36 @@
             <td>
                 <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setmember" method="post">
                     <tal:block tal:condition="view.user_is_wgleader or view.user.mem_admin">
-                        <select onchange="this.form.submit()" name="mem_id" tal:condition="python: shift.state not in ['worked', 'no-show']">
-                            <option value="--">--</option>
-                            <tal:block tal:repeat="m wg.members">
-                                <option tal:condition="m.mem_id == shift.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
-                                <option tal:condition="m.mem_id != shift.mem_id" value="${m.mem_id}">${m.fullname}</option>
-                            </tal:block>
-                            <tal:block tal:condition="python: shift.state == 'assigned' and shift.member not in wg.members">
-                                <option value="${shift.mem_id}" selected="selected">${shift.member}</option>
-                            </tal:block>
-                        </select>
+                        <tal:block tal:condition="python:shift.state not in ['worked', 'no-show']">
+                            <select onchange="this.form.submit()" name="mem_id">
+                                <option value="--">--</option>
+                                <tal:block tal:repeat="m wg.members">
+                                    <option tal:condition="m.mem_id == shift.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
+                                    <option tal:condition="m.mem_id != shift.mem_id" value="${m.mem_id}">${m.fullname}</option>
+                                </tal:block>
+                                <tal:block tal:condition="python: shift.state == 'assigned' and shift.member not in wg.members">
+                                    <option value="${shift.mem_id}" selected="selected">${shift.member}</option>
+                                </tal:block>
+                            </select>
+                            <a tal:condition="shift.member" id="profile-link" 
+                                href="${portal_url}/member/${shift.member.mem_id}"
+                                title="Click to see ${shift.member}'s profile (e.g. to write an email)">&nbsp;&nbsp;
+                            </a>
+                        </tal:block>
                         <tal:block tal:condition="python:shift.state in ['worked', 'no-show']">
                             ${shift.member}
+                            <a tal:condition="shift.member" id="profile-link" 
+                                href="${portal_url}/member/${shift.member.mem_id}"
+                                title="Click to see ${shift.member}'s profile (e.g. to write an email)">&nbsp;&nbsp;
+                            </a>
                         </tal:block>
                     </tal:block>
                     <tal:block tal:condition="python:not(view.user_is_wgleader or view.user.mem_admin)">
                         ${shift.member}
+                        <a tal:condition="shift.member" id="profile-link" 
+                            href="${portal_url}/member/${shift.member.mem_id}"
+                            title="Click to see ${shift.member}'s profile (e.g. to write an email)">&nbsp;&nbsp;
+                        </a>
                         <span tal:condition="not:shift.member">No one yet</span>
                         <button tal:condition="shift.state == 'open'"
                             type="submit" name="mem_id" value="${view.user.mem_id}">

@@ -166,7 +166,7 @@ a:hover {
 }
 
 #profile-link {
-    background: #ffffff url(img/icons/profile.png) no-repeat;
+    background: transparent url(img/icons/profile.png) no-repeat;
     padding: 2px 20px;
 }
 

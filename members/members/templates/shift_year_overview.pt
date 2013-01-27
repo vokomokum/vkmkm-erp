@@ -43,7 +43,7 @@
             </td>
         </tr>
         <tr id="shift-open-per-month">
-            <td>open</td>
+            <td>still open</td>
             <td tal:repeat="month view.months">
                 <tal:block tal:define="mm python:view.all_shift_data[month][-1]">
                     ${mm}
