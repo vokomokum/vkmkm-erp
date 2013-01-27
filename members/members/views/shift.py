@@ -89,6 +89,7 @@ class NewShiftView(BaseShiftView):
             if people > 1:
                 for _ in xrange(1, people):
                     s = shift.clone()
+                    s.workgroup = DBSession().query(Workgroup).get(s.wg_id)
                     s.validate()
                     db_session.add(s)
                     self.added_shifts.append(s)
