@@ -40,8 +40,8 @@ def get_todos(session, user, show_all):
     If show_all is true, find all TODOs system-wide
     '''
     todos = []
-    act_members = session.query(Member)\
-                         .filter(Member.mem_active == True).all()
+    all_members = session.query(Member).all()
+    act_members = [m for m in all_members if m.mem_active]
     now = datetime.datetime.now()
     def df(i):
         return unicode(i).rjust(2, '0')
@@ -74,7 +74,7 @@ def get_todos(session, user, show_all):
 
     # ---- Workgroup Finance:
     if 'Finance' in [w.name for w in user.workgroups] or show_all:
-        for m in [m for m in act_members if m.balance < 0]:
+        for m in [m for m in all_members if m.balance < 0]:
             todos.append(Todo(msg='Member {} has a negative balance of EUR {}.'\
                                  .format(ascii_save(m.fullname),
                                         round(m.balance, 2)),
