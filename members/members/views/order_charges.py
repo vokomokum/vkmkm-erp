@@ -112,7 +112,7 @@ class MailOrderCharges(BaseView):
         deadline_nl = '{} {}.{}.{}'.format(weekdays_nl[deadline.weekday()],
                         deadline.day, deadline.month, deadline.year)
         for m in members:
-            subject = 'Please pay for order of {}'.format(order.label)
+            subject = 'Payment request / Verzoek tot betaling'
             mail_templ = open('members/templates/order_charge_txt.eml', 'r')
             mail = mail_templ.read()
             body = mail.format(label=order.label, amount=m.balance,
