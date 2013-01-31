@@ -317,8 +317,7 @@ class ListShiftView(BaseView):
         now = datetime.datetime.now()
         self.month = int(self.request.matchdict['month'])
         self.year = int(self.request.matchdict['year'])
-        # we take today's day for simplicity
-        schedule_date = datetime.date(self.year, self.month, now.day)
+        schedule_date = datetime.date(self.year, self.month, 1)
         self.month_info = month_info(schedule_date) 
         q = """SELECT descr FROM shift_days_descriptions ORDER BY id;""" 
         day_literals = [i[0] for i in list(db_session.execute(q))]
