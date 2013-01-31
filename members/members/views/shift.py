@@ -243,7 +243,8 @@ class EditShiftView(BaseShiftView):
                 return redir(u'{} has been signed up for the shift.'\
                              .format(name))
             else:
-                if shift.is_locked and not self.user in wg.leaders:
+                if shift.is_locked and not self.user in wg.leaders\
+                                   and not self.user.mem_admin:
                     return redir('Shift is already locked. Ask your workgroup admin for help.')
                 shift.member = None
                 shift.state = 'open' 
@@ -265,7 +266,7 @@ class EditShiftView(BaseShiftView):
             return redir('You are not allowed to do this.')
 
         elif action == "settask":
-            if self.user in wg.leaders:
+            if self.user in wg.leaders or self.user.mem_admin:
                 if not 'task' in self.request.params:
                     return dict(msg='No task given.')
                 shift.task = self.request.params['task']
@@ -274,7 +275,7 @@ class EditShiftView(BaseShiftView):
             return redir('You are not allowed to edit the task.')
 
         elif action == "setday":
-            if self.user in wg.leaders:
+            if self.user in wg.leaders or self.user.mem_admin:
                 if not 'day' in self.request.params:
                     return dict(msg='No day given.')
                 shift.day = self.request.params['day']
@@ -283,7 +284,7 @@ class EditShiftView(BaseShiftView):
             return redir('You are not allowed to set the day.')
 
         elif action == "setstate":
-            if self.user in wg.leaders:
+            if self.user in wg.leaders or self.user.mem_admin:
                 if not 'state' in self.request.params:
                     return redir('No state given.')
                 shift.state = self.request.params['state']
@@ -292,7 +293,7 @@ class EditShiftView(BaseShiftView):
             return redir('You are not allowed to set the state.')
 
         elif action == 'delete':
-            if self.user in wg.leaders:
+            if self.user in wg.leaders or self.user.mem_admin:
                 db_session.delete(shift)
                 return redir('Deleted shift.')
             return redir('You are not allowed to delete a shift.')
