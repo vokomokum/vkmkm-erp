@@ -21,10 +21,11 @@ def ascii_save(s):
 
 def membership_fee(member):
     '''
-    The formula to compute membership fee
+    The formula to compute membership fee.
     Ten Euro per household member plus five euro for vers kratten (refundable)
+    We limit the number of household members we consider to five.
     '''
-    return 10. * member.mem_household_size + 5.
+    return 10. * min(5, member.mem_household_size) + 5.
 
 def running_sqlite():
     '''
