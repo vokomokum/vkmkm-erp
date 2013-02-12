@@ -94,6 +94,9 @@ class ResetPasswordView(BaseView):
         # set new password
         member.validate_pwd(self.request)
         pwd = str(self.request.params['pwd1'])
+        pwd_confirm = str(self.request.params['pwd2'])
+        if not pwd == pwd_confirm:
+            return info(u'Sorry, the confirmation password does not match.')
         salt = md5crypt(pwd, '') # jim uses encrypted pwd as salt
         member.mem_enc_pwd = md5crypt(pwd, salt) 
         member.mem_pwd_url = ''

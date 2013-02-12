@@ -14,6 +14,8 @@ def sendmail(to, subject, body, folder='other', sender=None):
     :param string to: addressee
     :param string subject: subject of mail
     :param string body: content of mail
+    :param string folder: a subfolder in which to put a copy
+              (within the main mail_folder)
     :param string sender: senders address
     :returns: True if mail could be sent
               (if mail process returned successfully)
@@ -44,7 +46,7 @@ Subject: %s
             mailer.stdin.close()
             result = mailer.wait()
             error = mailer.stderr.read()
-            assert(result == 0)
+            assert(result == 0)  # specific to exim?
         # save a copy if mailing succeeded (or if we used the workaround)
         target_folder = '{}/{}'.format(mail_folder, folder)
         if not os.path.exists(target_folder):
