@@ -12,11 +12,11 @@ from members.utils.md5crypt import md5crypt
 
 def send_pwdreset_request(member, app_url, first=False):
     '''
-    sent member a mail with a temporary URL to update their password.
-    we set an initial random code in mem_pwd_url and send an email
-    with the reset link
+    Make a key that enables resetting the password. Store it in the member
+    table and then send it per email to the member, in a nice rest URL.
     
     :param Member member: member whose password is to be reset
+    :param string app_url: URL of this application
     :param bool first: True if this email is the first this user gets (on
                         account creation)
     '''
@@ -94,9 +94,6 @@ class ResetPasswordView(BaseView):
         # set new password
         member.validate_pwd(self.request)
         pwd = str(self.request.params['pwd1'])
-        pwd_confirm = str(self.request.params['pwd2'])
-        if not pwd == pwd_confirm:
-            return info(u'Sorry, the confirmation password does not match.')
         salt = md5crypt(pwd, '') # jim uses encrypted pwd as salt
         member.mem_enc_pwd = md5crypt(pwd, salt) 
         member.mem_pwd_url = ''
