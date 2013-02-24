@@ -14,7 +14,7 @@ else
 fi
 
 cp -r git-repo git-repo-tmp
-rm -r git-repo-tmp/.git
+rm -rf git-repo-tmp/.git
 rm -r git-repo-tmp/members/members/tests
 
 cd git-repo-tmp
