@@ -1,0 +1,131 @@
+#!/usr/bin/env python
+
+import sys
+import os
+from pyPgSQL import PgSQL
+import re
+import cdb
+import time
+
+def die(message, *args):
+
+    if args:
+        sys.stderr.write("%s\n" % (message % tuple(args),))
+    else:
+        sys.stderr.write("%s\n", message)
+
+    sys.exit(1)
+                                
+def connect(dbase):
+    try:
+        con = PgSQL.connect( database = dbase, user = "apache")
+    except StandardError, e:
+        die("Can't connect to database %s: %s", dbase, str(e))
+
+    cur = con.cursor()
+    return con, cur
+
+def doquery(cursor, query, *args):
+    #print "cursor", cursor
+    #print "query:", query
+    #print "args", list(args)
+    try:
+        if args:
+            cursor.execute(query, list(args))
+        else:
+            cursor.execute(query)
+    except StandardError, e:
+        die("Can't execute query %s: %s", query, str(e))
+
+def get_wgs(cur):
+    # return dict wg_ids id=>wg_name and dict wg_names name=>_id
+    # names cleaned up to eliminate whitespace and single/double quotes
+    # also forbidden - comma, @, : ;
+    wg_ids = {}
+    wg_names = {}
+    doquery(cur, "SELECT id, name FROM workgroups");
+    while True:
+        try:
+            id, name = cur.fetchone()
+        except:
+            return (wg_ids, wg_names)
+        #id = int(id,10)
+        name = name.strip()
+        name = re.sub(r'\s+', '-', name)
+        name = re.sub(r'[\'"@,:;]', "", name)
+        name = name.lower()
+        wg_ids[id] = name
+        wg_names[name] = id
+
+def wg_name(wg_names):
+    # create cdb of key: wg_name value wg_name
+    wg_names_cdb = cdb.cdbmake("/etc/exim/members/wg_names.cdb",
+                              "/etc/exim/members/wg_names.cdb.tmp")
+    for name in wg_names.keys():
+        wg_names_cdb.add(name, name)
+    wg_names_cdb.finish()
+    
+def wg_leaders(cur, wg_ids):
+    # build a cdb giving the email addresses of wg leaders (used
+    # for mail to a wg_name sent from an address not matching a
+    # leader's email address (the mail will go only to the wg leaders
+    # who can decide if they want to forward it to the members of the wg
+    leaders = {}
+    doquery(cur, "SELECT w.wg_id, m.mem_email FROM wg_leadership AS w, " + \
+            "members as m WHERE w.mem_id = m.mem_id AND mem_active " +
+            "ORDER BY w.wg_id");
+    last_wg = -1
+    leaders_cdb = cdb.cdbmake("/etc/exim/members/leaders.cdb",
+                              "/etc/exim/members/leaders.cdb.tmp")
+
+    while True:
+        try:
+            wg_id, mem_email = cur.fetchone()
+        except:
+            break
+        if wg_id != last_wg:
+            if last_wg >= 0:
+                leaders_cdb.add(wg_ids[last_wg], list)
+            separator = ""
+            list = ""
+            last_wg = wg_id
+        list += separator + mem_email
+        separator = ","
+
+    leaders_cdb.add(wg_ids[last_wg], list)
+    leaders_cdb.finish()
+        
+def wg_members(cur, wg_ids):
+    # build a cdb giving the email addresses of wg members (used
+    # for mail to a wg_name sent from an address matching a
+    # leader's email address (the mail will go to all  the wg members)
+    doquery(cur, "SELECT w.wg_id, m.mem_email FROM wg_membership AS w, " + \
+            "members as m WHERE w.mem_id = m.mem_id AND mem_active " +
+            "ORDER BY w.wg_id");
+    last_wg = -1
+    members_cdb = cdb.cdbmake("/etc/exim/members/members.cdb",
+                              "/etc/exim/members/members.cdb.tmp")
+    while True:
+        try:
+            wg_id, mem_email = cur.fetchone()
+        except:
+            break
+        if wg_id != last_wg:
+            if last_wg >= 0:
+                members_cdb.add(wg_ids[last_wg], list)
+            separator = ""
+            list = ""
+            last_wg = wg_id
+        list += separator + mem_email
+        separator = ","
+
+    members_cdb.add(wg_ids[last_wg], list)
+    members_cdb.finish()
+
+    
+    
+con, cur = connect("voko")
+wg_ids, wg_names = get_wgs(cur)
+wg_name(wg_names)
+wg_leaders(cur, wg_ids)
+wg_members(cur, wg_ids)
