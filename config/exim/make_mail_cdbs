@@ -63,6 +63,7 @@ def wg_name(wg_names):
                               "/etc/exim/members/wg_names.cdb.tmp")
     for name in wg_names.keys():
         wg_names_cdb.add(name, name)
+        wg_names_cdb.add(name + "-all", name +"-all")
     wg_names_cdb.finish()
     
 def wg_leaders(cur, wg_ids):
@@ -77,7 +78,9 @@ def wg_leaders(cur, wg_ids):
     last_wg = -1
     leaders_cdb = cdb.cdbmake("/etc/exim/members/leaders.cdb",
                               "/etc/exim/members/leaders.cdb.tmp")
-
+    ct_list = ""
+    ct_sep = ""
+    
     while True:
         try:
             wg_id, mem_email = cur.fetchone()
@@ -91,11 +94,18 @@ def wg_leaders(cur, wg_ids):
             last_wg = wg_id
         list += separator + mem_email
         separator = ","
+        email = "(^|,)%s(,|$)" % mem_email
+        if re.search(email, ct_list, re.I) is None:
+            ct_list += ct_sep + mem_email
+            ct_sep = ","
 
     leaders_cdb.add(wg_ids[last_wg], list)
+    leaders_cdb.add("ct", ct_list);
+    leaders_cdb.add("all", ct_list);
     leaders_cdb.finish()
+    return ct_list
         
-def wg_members(cur, wg_ids):
+def wg_members(cur, wg_ids, ct_list):
     # build a cdb giving the email addresses of wg members (used
     # for mail to a wg_name sent from an address matching a
     # leader's email address (the mail will go to all  the wg members)
@@ -103,29 +113,39 @@ def wg_members(cur, wg_ids):
             "members as m WHERE w.mem_id = m.mem_id AND mem_active " +
             "ORDER BY w.wg_id");
     last_wg = -1
+    all_list = ""
+    all_sep  = ""
     members_cdb = cdb.cdbmake("/etc/exim/members/members.cdb",
                               "/etc/exim/members/members.cdb.tmp")
+    members_all_cdb = cdb.cdbmake("/etc/exim/members/members_all.cdb",
+                              "/etc/exim/members/members_all.cdb.tmp")
     while True:
         try:
             wg_id, mem_email = cur.fetchone()
         except:
             break
+        all_list += all_sep + mem_email
+        all_sep = ","
         if wg_id != last_wg:
             if last_wg >= 0:
                 members_cdb.add(wg_ids[last_wg], list)
+                members_all_cdb.add("%s-all" % (wg_ids[last_wg],), list)
             separator = ""
             list = ""
             last_wg = wg_id
         list += separator + mem_email
         separator = ","
-
+        
     members_cdb.add(wg_ids[last_wg], list)
+    members_all_cdb.add("%s-all" % (wg_ids[last_wg],), list)
+    members_cdb.add("ct", ct_list)
+    members_cdb.add("all", all_list)
     members_cdb.finish()
-
+    members_all_cdb.finish()
     
     
 con, cur = connect("voko")
 wg_ids, wg_names = get_wgs(cur)
 wg_name(wg_names)
-wg_leaders(cur, wg_ids)
-wg_members(cur, wg_ids)
+ct_list = wg_leaders(cur, wg_ids)
+wg_members(cur, wg_ids, ct_list)
