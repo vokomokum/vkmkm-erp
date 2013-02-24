@@ -10,11 +10,14 @@
     <div id="wg-description" tal:content="wg.desc"></div>
  
     <div id="action-box">
-        <a class="mail-link" href="mailto:${wg.mailing_list_address}"
-           title="This workgroup can be reached at ${wg.mailing_list_address}.
-Emails sent to this address will reach all coordinators.
+        <a class="mail-link" href="mailto:${wg.main_mailing_list_address}"
+           title="The coordinators of this workgroup can be reached at ${wg.main_mailing_list_address}.
 Only if coordinators of this group send to this address (from their registered email account), the email will be sent to all group members. We do this to avoid common mailing list flooding problems." 
-        >Mailing list</a>
+        >Mail the coordinators</a>
+        <a class="mail-link" href="mailto:${wg.all_mailing_list_address}"
+           title="All members of this workgroup can be reached at ${wg.all_mailing_list_address}.
+Usage of this address is limited to members."
+        >Mail all members</a>
         <a tal:condition="python: view.user_is_wgleader or view.user.mem_admin"
             class="edit-link" href="${portal_url}/workgroup/${wg.id}/edit">Edit this group</a>
         <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}/${now.month}">Monthly shift schedule</a>

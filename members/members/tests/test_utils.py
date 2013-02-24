@@ -1,4 +1,3 @@
-from pyramid import testing
 import os
 
 from members.utils import mail

@@ -45,13 +45,21 @@ class Workgroup(Base):
         return self.name
 
     @property
-    def mailing_list_address(self):
-        ''' return the email address used as mailing list in this group '''
+    def main_mailing_list_address(self):
+        ''' return the email address that reaches coordinators '''
+        return "{}@vokomokum.nl".format(self._mkaddress())
+     
+    @property
+    def all_mailing_list_address(self):
+        ''' return the email address that reaches all members of this group '''
+        return "{}-all@vokomokum.nl".format(self._mkaddress())
+
+    def _mkaddress(self):
         name = self.name.strip()
         name = re.sub(r'\s+', '-', name)
         name = re.sub(r'[\'"@,:;]', "", name)
-        name = name.lower()
-        return "{}@vokomokum.nl".format(name)
+        return name.lower()
+
 
     def validate(self):
         ''' validate if this object is valid, raise exception otherwise '''
