@@ -61,10 +61,13 @@ def wg_name(wg_names):
     # create cdb of key: wg_name value wg_name
     wg_names_cdb = cdb.cdbmake("/etc/exim/members/wg_names.cdb",
                               "/etc/exim/members/wg_names.cdb.tmp")
+    wg_names_all_cdb = cdb.cdbmake("/etc/exim/members/wg_names_all.cdb",
+                              "/etc/exim/members/wg_names_all.cdb.tmp")
     for name in wg_names.keys():
         wg_names_cdb.add(name, name)
-        wg_names_cdb.add(name + "-all", name +"-all")
+        wg_names_all_cdb.add(name + "-all", name +"-all")
     wg_names_cdb.finish()
+    wg_names_all_cdb.finish()
     
 def wg_leaders(cur, wg_ids):
     # build a cdb giving the email addresses of wg leaders (used
