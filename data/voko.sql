@@ -2992,6 +2992,7 @@ CREATE TABLE members (
     mem_message_auth integer,
     mem_message_date timestamp with time zone,
     mem_membership_paid boolean DEFAULT false,
+    mem_household_size integer DEFAULT 0,
     CONSTRAINT need_tel_no CHECK ((NOT ((((mem_home_tel)::text = ''::text) AND ((mem_mobile)::text = ''::text)) AND ((mem_work_tel)::text = ''::text)))),
     CONSTRAINT no_member_zero CHECK ((mem_id > 0))
 );
@@ -3044,7 +3045,8 @@ CREATE TABLE applicants (
     month character varying(5),
     comment character varying(500),
     email character varying(50),
-    telnr character varying(20)
+    telnr character varying(20),
+    household_size integer DEFAULT 0
 );
 
 
@@ -3533,6 +3535,84 @@ CREATE TABLE sub_cat (
 
 ALTER TABLE public.sub_cat OWNER TO jes;
 
+SET default_with_oids = false;
+
+--
+-- Name: transaction_types; Type: TABLE; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE TABLE transaction_types (
+    id integer NOT NULL,
+    name character varying(100),
+    pos_neg character varying(3) DEFAULT '---'::character varying,
+    mem_sup character varying(4) DEFAULT 'memb'::character varying
+);
+
+
+ALTER TABLE public.transaction_types OWNER TO apache;
+
+--
+-- Name: transaction_types_id_seq; Type: SEQUENCE; Schema: public; Owner: apache
+--
+
+CREATE SEQUENCE transaction_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.transaction_types_id_seq OWNER TO apache;
+
+--
+-- Name: transaction_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: apache
+--
+
+ALTER SEQUENCE transaction_types_id_seq OWNED BY transaction_types.id;
+
+
+--
+-- Name: transactions; Type: TABLE; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE TABLE transactions (
+    id integer NOT NULL,
+    ttype_id integer,
+    amount numeric,
+    mem_id integer,
+    ord_no integer,
+    comment character varying(500),
+    date timestamp with time zone,
+    late boolean DEFAULT false,
+    whol_id integer,
+    vers_id integer
+);
+
+
+ALTER TABLE public.transactions OWNER TO apache;
+
+--
+-- Name: transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: apache
+--
+
+CREATE SEQUENCE transactions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.transactions_id_seq OWNER TO apache;
+
+--
+-- Name: transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: apache
+--
+
+ALTER SEQUENCE transactions_id_seq OWNED BY transactions.id;
+
+
 --
 -- Name: unc_email; Type: VIEW; Schema: public; Owner: jes
 --
@@ -3543,7 +3623,44 @@ CREATE VIEW unc_email AS
 
 ALTER TABLE public.unc_email OWNER TO jes;
 
-SET default_with_oids = false;
+--
+-- Name: vers_suppliers; Type: TABLE; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE TABLE vers_suppliers (
+    id integer NOT NULL,
+    name character varying(100),
+    website character varying(50),
+    email character varying(50),
+    telnr character varying(20),
+    faxnr character varying(20),
+    comment character varying(500),
+    active boolean DEFAULT true
+);
+
+
+ALTER TABLE public.vers_suppliers OWNER TO apache;
+
+--
+-- Name: vers_suppliers_id_seq; Type: SEQUENCE; Schema: public; Owner: apache
+--
+
+CREATE SEQUENCE vers_suppliers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.vers_suppliers_id_seq OWNER TO apache;
+
+--
+-- Name: vers_suppliers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: apache
+--
+
+ALTER SEQUENCE vers_suppliers_id_seq OWNED BY vers_suppliers.id;
+
 
 --
 -- Name: wg_leadership; Type: TABLE; Schema: public; Owner: apache; Tablespace: 
@@ -3785,6 +3902,27 @@ ALTER TABLE applicants ALTER COLUMN id SET DEFAULT nextval('applicants_id_seq'::
 -- Name: id; Type: DEFAULT; Schema: public; Owner: apache
 --
 
+ALTER TABLE transaction_types ALTER COLUMN id SET DEFAULT nextval('transaction_types_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: apache
+--
+
+ALTER TABLE transactions ALTER COLUMN id SET DEFAULT nextval('transactions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: apache
+--
+
+ALTER TABLE vers_suppliers ALTER COLUMN id SET DEFAULT nextval('vers_suppliers_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: apache
+--
+
 ALTER TABLE wg_shifts ALTER COLUMN id SET DEFAULT nextval('wg_shifts_id_seq'::regclass);
 
 
@@ -3916,6 +4054,46 @@ ALTER TABLE ONLY sub_cat
 
 
 --
+-- Name: transaction_types_pkey; Type: CONSTRAINT; Schema: public; Owner: apache; Tablespace: 
+--
+
+ALTER TABLE ONLY transaction_types
+    ADD CONSTRAINT transaction_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: apache; Tablespace: 
+--
+
+ALTER TABLE ONLY transactions
+    ADD CONSTRAINT transactions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: vers_suppliers_pkey; Type: CONSTRAINT; Schema: public; Owner: apache; Tablespace: 
+--
+
+ALTER TABLE ONLY vers_suppliers
+    ADD CONSTRAINT vers_suppliers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wg_leadership_wg_id_mem_id_key; Type: CONSTRAINT; Schema: public; Owner: apache; Tablespace: 
+--
+
+ALTER TABLE ONLY wg_leadership
+    ADD CONSTRAINT wg_leadership_wg_id_mem_id_key UNIQUE (wg_id, mem_id);
+
+
+--
+-- Name: wg_membership_wg_id_mem_id_key; Type: CONSTRAINT; Schema: public; Owner: apache; Tablespace: 
+--
+
+ALTER TABLE ONLY wg_membership
+    ADD CONSTRAINT wg_membership_wg_id_mem_id_key UNIQUE (wg_id, mem_id);
+
+
+--
 -- Name: wg_shifts_pkey; Type: CONSTRAINT; Schema: public; Owner: apache; Tablespace: 
 --
 
@@ -3996,6 +4174,20 @@ CREATE UNIQUE INDEX idx_ord_label ON order_header USING btree (ord_label);
 --
 
 CREATE UNIQUE INDEX idx_sc_name ON sub_cat USING btree (cat_id, sc_name);
+
+
+--
+-- Name: idx_trans_date; Type: INDEX; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE INDEX idx_trans_date ON transactions USING btree (date);
+
+
+--
+-- Name: idx_trans_ordno; Type: INDEX; Schema: public; Owner: apache; Tablespace: 
+--
+
+CREATE INDEX idx_trans_ordno ON transactions USING btree (ord_no);
 
 
 --
@@ -4195,6 +4387,38 @@ ALTER TABLE ONLY product
 
 ALTER TABLE ONLY sub_cat
     ADD CONSTRAINT sub_cat_cat_id_fkey FOREIGN KEY (cat_id) REFERENCES category(cat_id);
+
+
+--
+-- Name: transactions_mem_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY transactions
+    ADD CONSTRAINT transactions_mem_id_fkey FOREIGN KEY (mem_id) REFERENCES members(mem_id);
+
+
+--
+-- Name: transactions_ttype_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY transactions
+    ADD CONSTRAINT transactions_ttype_id_fkey FOREIGN KEY (ttype_id) REFERENCES transaction_types(id);
+
+
+--
+-- Name: transactions_vers_id_vers_suppliers_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY transactions
+    ADD CONSTRAINT transactions_vers_id_vers_suppliers_id_fkey FOREIGN KEY (vers_id) REFERENCES vers_suppliers(id);
+
+
+--
+-- Name: transactions_whol_id_wholesaler_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: apache
+--
+
+ALTER TABLE ONLY transactions
+    ADD CONSTRAINT transactions_whol_id_wholesaler_id_fkey FOREIGN KEY (whol_id) REFERENCES wholesaler(wh_id);
 
 
 --
