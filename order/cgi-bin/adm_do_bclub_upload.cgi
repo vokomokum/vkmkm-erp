@@ -49,7 +49,7 @@ sub process {
     my ($config, $cgi, $dbh) = @_;
     my $count = 0;
     my $bclub = "$datadir/$datafile";
-    die("Can't find a Bijenpark Geuzenveld data file $datadir/$datafile")
+    die("Can't find a Bubble Club data file $datadir/$datafile")
 	if(not -f "$datadir/$datafile");
     my $parser   = Spreadsheet::ParseExcel->new();
     my $workbook = $parser->parse($bclub) or 
@@ -79,7 +79,7 @@ sub process {
 	    if($xls_date eq "");
 	die "Missing Title and database date from spreadsheet" 
 	    if(not $id or 
-	       $id !~ /Bijenpark Geuzenveld - (\d{4,4}-\d\d-\d\d \d\d:\d\d:\d\d)/);
+	       $id !~ /Bubble Club - (\d{4,4}-\d\d-\d\d \d\d:\d\d:\d\d)/);
 	$id = $1;
 	my $sth = prepare(
 	    'SELECT wh_update FROM wholesaler WHERE wh_id = ?', $dbh);
@@ -247,8 +247,8 @@ sub doit {
                   banner         => "common/adm-banner.template",
 		  buttons        => "adm_bc/adm_bc_file_done.template",
 	);
-    my %hdr_h =(  Pagename       => 'Bijenpark Geuzenveld File Processing Complete',
-		  Title          => 'Bijenpark Geuzenveld File Processing Complete',
+    my %hdr_h =(  Pagename       => 'Bubble Club File Processing Complete',
+		  Title          => 'Bubble Club File Processing Complete',
 		  Nextcgi        => 'adm_bclub.cgi',
 		  mem_name       => $config->{mem_name},
 		  count          => $count,

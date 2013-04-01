@@ -144,10 +144,10 @@ sub open_spreadsheet{
 #   @voko_changed - active voko products which need updating
 #   @voko_dropped - products which are no longer available
 #   @voko_same    - active products which haven't changed and need no attention
-#   @new_bclub      - products which are new in this Bijenpark Geuzenveld list
-#   @bclub_maybe    - Bijenpark Geuzenveld products not currently on offer, but maybe later
-#   @bclub_all      - all Bijenpark Geuzenveld products which are not vokomokum products
-# each array element is a row from Bijenpark Geuzenveld_products view
+#   @new_bclub      - products which are new in this Bubble Club list
+#   @bclub_maybe    - Bubble Club products not currently on offer, but maybe later
+#   @bclub_all      - all Bubble Club products which are not vokomokum products
+# each array element is a row from Bubble Club_products view
 
 sub get_stats {
     my ($new_vals, $config, $cgi, $dbh) = @_;
@@ -218,7 +218,7 @@ sub get_stats {
 		push @bclub_all, $h if($h->{is_skipped});
 		next;
 	    }
-	    # it's in the voko product list, but no longer a Bijenpark Geuzenveld product
+	    # it's in the voko product list, but no longer a Bubble Club product
 	    if($h->{wh_last_seen} lt $newest) {
 		push @voko_dropped, $h;
 		next;
@@ -247,7 +247,7 @@ sub get_stats {
 	    push @voko_same, $h;
 	    next;
 	}
-	# Bijenpark Geuzenveld product not in the voko list. Skip if no longer a Bijenpark Geuzenveld product
+	# Bubble Club product not in the voko list. Skip if no longer a Bubble Club product
 	next if($h->{wh_last_seen} lt $newest);
 
 	# display as new product unless already classified
@@ -287,9 +287,9 @@ sub get_mode {
 
 # mode not chosen, prompt for it
 # choices are: voko-chnaged products  
-#              new Bijenpark Geuzenveld products
-#              all non-excluded Bijenpark Geuzenveld products
-#              all Bijenpark Geuzenveld products
+#              new Bubble Club products
+#              all non-excluded Bubble Club products
+#              all Bubble Club products
 
 sub get_choice {
     my ($voko_changed, $voko_dropped, $voko_same, 
@@ -612,7 +612,7 @@ sub do_changed_products {
 sub mode_1 {
     my ($voko_changed, $voko_dropped, $config, $cgi, $dbh) = @_;
 
-    html_header("Product File Changes from Bijenpark Geuzenveld Product List",
+    html_header("Product File Changes from Bubble Club Product List",
 		"adm_bc/adm_bc_mode_1.template", $config, $cgi, $dbh);
 
     do_dropped_products($voko_dropped, $config, $cgi, $dbh)
@@ -622,7 +622,7 @@ sub mode_1 {
 	if(scalar(@{$voko_changed}));
 }
 
-# mode 2 - new Bijenpark Geuzenveld Products
+# mode 2 - new Bubble Club Products
 # admin can make it a product while setting the description, category
 # price, and margin, can mark it as a Maybe or a Never
 
@@ -658,7 +658,7 @@ sub mode_4 {
 
 sub do_header_234 {
     my ($template,  $config, $cgi, $dbh) = @_;
-    html_header("New Products in the  Bijenpark Geuzenveld Product List",
+    html_header("New Products in the  Bubble Club Product List",
 		"adm_bc/adm_bc_mode_1.template", $config, $cgi, $dbh);
 
 
@@ -668,7 +668,7 @@ sub do_header_234 {
 	);
     $tpl->assign({ mode => $config->{choice},
 		   toggle => ($config->{choice} & 8) ?
-		       "Return to Bijenpark Geuzenveld Product list" :  
+		       "Return to Bubble Club Product list" :  
 		       "Edit New Products"});
     $tpl->parse(MAIN => "header");
     $tpl->print("MAIN");
@@ -681,7 +681,7 @@ sub do_footer_234 {
     $tpf->strict();
     $tpf->define( footer => "adm_bc/adm_bc_m234_footer.template");
     $tpf->assign({ toggle => ($config->{choice} & 8) ?
-		       "Return to Bijenpark Geuzenveld list" : "Edit New Products"});
+		       "Return to Bubble Club list" : "Edit New Products"});
     $tpf->parse(MAIN => "footer");
     $tpf->print("MAIN");
     exit 0;
@@ -734,7 +734,7 @@ sub modes_234 {
 
 }
 
-# display edit rows for selected Bijenpark Geuzenveld products
+# display edit rows for selected Bubble Club products
 sub modes_101112 {
     my ($new_vals, $bclub_hash, $config, $cgi, $dbh) = @_;
     my $sth = prepare("SELECT min_price(?, ?, ?, ?)", $dbh);
@@ -793,8 +793,8 @@ sub mode_5 {
                   banner         => "common/adm-banner.template",
 		  buttons        => "adm_bc/adm_bc_file_upload.template",
 	);
-    my %hdr_h =(  Pagename       => 'Upload Bijenpark Geuzenveld Product File',
-		  Title          => 'Upload Bijenpark Geuzenveld Product File',
+    my %hdr_h =(  Pagename       => 'Upload Bubble Club Product File',
+		  Title          => 'Upload Bubble Club Product File',
 		  Nextcgi        => 'adm_do_bclub_upload.cgi',
 		  mem_name       => $config->{mem_name},
 	);
@@ -839,7 +839,7 @@ sub main {
     syslog(LOG_ERR, "$program");
     my $config = read_conf($conf);
     $config->{nextcgi}  = "adm_bclub.cgi";
-    $config->{title}    = "Process Bijenpark Geuzenveld Product List";
+    $config->{title}    = "Process Bubble Club Product List";
     $config->{choice} = 0;
 
     openlog( $program, LOG_PID, LOG_USER );
