@@ -79,7 +79,7 @@ sub process {
 	    if($xls_date eq "");
 	die "Missing Title and database date from spreadsheet" 
 	    if(not $id or 
-	       $id !~ /Zapatista Coffee - (\d{4,4}-\d\d-\d\d \d\d:\d\d:\d\d)/);
+	       $id !~ /Zapatista Coffee - (\d{4,4}.\d\d.\d\d \d\d:\d\d:\d\d)/);
 	$id = $1;
 	my $sth = prepare(
 	    'SELECT wh_update FROM wholesaler WHERE wh_id = ?', $dbh);
