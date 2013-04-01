@@ -454,6 +454,20 @@ sub open_cgi {
 	};
     }
 
+    if(defined($config->{BUBBLE_CLUB})) {
+	eval {
+	    my $sth = prepare("SELECT p.pr_id, w.wh_url FROM product AS p, " .
+			      "bg_data AS w ".
+			      "where p.wh_prcode = w.wh_prcode", $dbh);
+	    $sth->execute;
+	    while(my $h = $sth->fetchrow_hashref) {
+		$config->{BUBBLE_CLUB}->{$h->{pr_id}} = $h->{wh_url};
+	    }
+	    $sth->finish;
+	    $dbh->commit;
+	};
+    }
+
     return ($cgi, $dbh);
 }
 

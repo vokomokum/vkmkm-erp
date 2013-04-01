@@ -1,0 +1,23 @@
+<h3>These are all the products in the Bijenpark Geuzenveld Product list which are not
+currently Vokomokum products<br>
+You can choose one of three actions:<br>
+A = add this product to the Vokomokum product list, using the values
+filled in<br>
+M = Do not make this a product, but display it as a possible new
+product<br>
+X = Do not make this a product, do not display it as a possible new
+product<br>
+</h3>
+<p/>
+<table>
+  <tr>
+    <td align="center" width="30%"><input type="submit" value="Submit"
+    name="Submit"/></td>
+    <td width = 30% align="center"><input type="submit"
+    Value="$toggle" name="toggle_list"/></td>
+  </tr?
+</table>
+<input type="hidden" name="hidden_choice" value="$mode" />
+<table class="main">
+
+  

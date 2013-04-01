@@ -1,0 +1,13 @@
+  <tr class="title">
+    <td class="ttlqty">Wh. Pr. Code</td>
+    <td>Description</td>
+    <td >Category</td>
+    <td class="ttlqty">Ord qty</td>
+    <td class="ttlqty">Wh. qty</td>
+    <td class="ttlprc">Price</td>
+    <td class="ttlprc">Wh price</td>
+    <td class="ttlqty">BTW</td>
+    <td class="ttlqty">Margin</td>
+    <td class="ttlqty">Action</td>
+  </tr>
+  
