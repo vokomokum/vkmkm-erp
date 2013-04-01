@@ -1,4 +1,5 @@
-After editing rows in this spreadsheet, set the date field to the current date and time (don't touch the Bijenpark Geuzenveld date column)
+After editing rows in this spreadsheet, set the date field to the
+current date and time (don't touch the Bubble Club date column)
 NEVER change the product_code
 To remove a product (because it's no longer sold), simply delete the row
 If you want to keep the product, but not offer it for sale, don't remove the row, use the Edit Product page.

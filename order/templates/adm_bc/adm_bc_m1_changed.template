@@ -1,5 +1,5 @@
-<h3>These produts products have changed in the Bijenpark Geuzenveld product product list<br>
-Each product has two rows, the top row is from the current Bijenpark Geuzenveld product list,
+<h3>These produts products have changed in the Bubble Club product product list<br>
+Each product has two rows, the top row is from the current Bubble Club product list,
 the second is from the current Vokomokum product list<br>
 The changed fields are marked in the upper row with a red background.<br>
 Some fields will be automatically updated (wholesale price, quantity
@@ -13,8 +13,8 @@ tick the 'Apply' checkbox in the top row.</h3>
 <table class="main">
   <tr class="title">
     <td class="ttlqty4">Product code</td>
-    <td class="ttlqty4">Bijenpark Geuzenveld Pr code</td>
-    <td class="ttldsc">Bijenpark Geuzenveld Description</td>
+    <td class="ttlqty4">Bubble Club Pr code</td>
+    <td class="ttldsc">Bubble Club Description</td>
     <td class="ttlqty4">Wh. Qty.</td>
     <td class="ttlprc4">Wh. Pr.</td>
     <td class="ttlprc4">Min. Pr.</td>

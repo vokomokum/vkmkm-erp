@@ -12,7 +12,7 @@
  <tr><td colspan="4">&nbsp;</td></tr>
  <tr>
    <td align = "center"><input type="submit" name="t2" value="Go" width="5%"></td>
-   <td align="left" width="30%">New products in the Bijenpark Geuzenveld product~
+   <td align="left" width="30%">New products in the Bubble Club product~
 line. You should decide if these should be added to the Vokomokum
 product list</td>
  <td width="30%">$new New products</b></td>
@@ -21,7 +21,7 @@ product list</td>
  <tr><td colspan="4">&nbsp;</td></tr>
  <tr>
    <td align = "center"><input type="submit" name="t3" value="Go" width="5%"></td>
-   <td align="left" width="30%">Bijenpark Geuzenveld products which Vokomokum doesn't
+   <td align="left" width="30%">Bubble Club products which Vokomokum doesn't
  currenty include in the product list, but might be considered for
  adding to it</td>
  <td width="30%">$maybe Products to consider</b></td>
@@ -30,7 +30,7 @@ product list</td>
  <tr><td colspan="4">&nbsp;</td></tr>
  <tr>
    <td align = "center"><input type="submit" name="t4" value="Go" width="5%"></td>
-   <td align="left" width="30%">All Bijenpark Geuzenveld products which Vokomokum doesn't
+   <td align="left" width="30%">All Bubble Club products which Vokomokum doesn't
  currently include in the product list, including ones that previously
  were considered to be unlikely to ever become Vokomokum products
 </td>
@@ -39,7 +39,7 @@ product list</td>
 </tr>
  <tr>
    <td align = "center"><input type="submit" name="t5" value="Go" width="5%"></td>
-   <td align="left" width="30%"><br><br>Upload a new Bijenpark Geuzenveld product file<br><br></td>
+   <td align="left" width="30%"><br><br>Upload a new Bubble Club product file<br><br></td>
  <td width="30%">&nbsp;r</td>
  <td width="30%">&nbsp;</td>
 </tr>
