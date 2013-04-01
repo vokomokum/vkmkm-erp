@@ -245,7 +245,7 @@ sub doit {
     my $buttons = {}; # 
     $tpl->define( header         => "common/header.template",
                   banner         => "common/adm-banner.template",
-		  buttons        => "adm_bclub/adm_bc_file_done.template",
+		  buttons        => "adm_bc/adm_bc_file_done.template",
 	);
     my %hdr_h =(  Pagename       => 'Bijenpark Geuzenveld File Processing Complete',
 		  Title          => 'Bijenpark Geuzenveld File Processing Complete',

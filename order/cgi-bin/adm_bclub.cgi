@@ -87,8 +87,8 @@ sub open_spreadsheet{
     $worksheet->merge_range('A1:G6', 'Vertical and Horizontal', $fmt_lckmerge);
     my $text = "";
     my $l;
-    open(INST, "../templates/adm_bclub/spreadsheet_inst.txt") or 
-	die "Can't open templates/adm_bclub/spreadsheet_inst.txt: $!";
+    open(INST, "../templates/adm_bc/spreadsheet_inst.txt") or 
+	die "Can't open templates/adm_bc/spreadsheet_inst.txt: $!";
     $text .= $l while($l = <INST>);
     close(INST);
     $worksheet->write('A1', $text, $fmt_lck);
@@ -299,7 +299,7 @@ sub get_choice {
     my $buttons = {}; # 
     $tpl->define( header         => "common/header.template",
                   banner         => "common/adm-banner.template",
-		  buttons        => "adm_bclub/bclub-prod-type.template");
+		  buttons        => "adm_bc/bclub-prod-type.template");
     my %hdr_h =(  Pagename       => $config->{title},
 		  Title          => $config->{title},
 		  Nextcgi        => $config->{nextcgi},
@@ -502,7 +502,7 @@ sub do_dropped_products {
 
     my $tpl = new CGI::FastTemplate($config->{templates});
     $tpl->strict();
-    $tpl->define( header  => "adm_bclub/adm_bc_m1_dropped.template",
+    $tpl->define( header  => "adm_bc/adm_bc_m1_dropped.template",
 	);
     $tpl->assign({});
     $tpl->parse(MAIN => "header");
@@ -522,7 +522,7 @@ sub do_dropped_products {
 	}
 	my $tpr = new CGI::FastTemplate($config->{templates});
 	$tpr->strict();
-	$tpr->define( row => "adm_bclub/adm_bc_m1_dropped_row.template");
+	$tpr->define( row => "adm_bc/adm_bc_m1_dropped_row.template");
 	$tpr->assign($h);
 	$tpr->parse(MAIN => "row");
 	$tpr->print("MAIN");
@@ -539,8 +539,8 @@ sub title_row {
     my $tpr = new CGI::FastTemplate($config->{templates});
     $tpr->strict();
     $tpr->define( title => ($config->{choice} & 8) ?
-		  "adm_bclub/adm_bc_m101112_table.template" : 
-		  "adm_bclub/adm_bc_m234_table.template");
+		  "adm_bc/adm_bc_m101112_table.template" : 
+		  "adm_bc/adm_bc_m234_table.template");
     $tpr->assign({});
     $tpr->parse(MAIN => "title");
     $tpr->print("MAIN");
@@ -552,7 +552,7 @@ sub do_changed_products {
 
     my $tpl = new CGI::FastTemplate($config->{templates});
     $tpl->strict();
-    $tpl->define( header  => "adm_bclub/adm_bc_m1_changed.template",
+    $tpl->define( header  => "adm_bc/adm_bc_m1_changed.template",
 	);
     $tpl->assign({});
     $tpl->parse(MAIN => "header");
@@ -586,7 +586,7 @@ sub do_changed_products {
 	    sprintf "%04.4d", $h->{wh_pr_id} : $h->{wh_pr_id};
 	my $tpr = new CGI::FastTemplate($config->{templates});
 	$tpr->strict();
-	$tpr->define( row => "adm_bclub/adm_bc_m1_changed_row.template",
+	$tpr->define( row => "adm_bc/adm_bc_m1_changed_row.template",
 		      url => (($h->{wh_url}) ? "common/bclub_url.template" : "common/no_url.template"));
 	$tpr->assign($h);
 	$tpr->parse("URL", "url");
@@ -613,7 +613,7 @@ sub mode_1 {
     my ($voko_changed, $voko_dropped, $config, $cgi, $dbh) = @_;
 
     html_header("Product File Changes from Bijenpark Geuzenveld Product List",
-		"adm_bclub/adm_bc_mode_1.template", $config, $cgi, $dbh);
+		"adm_bc/adm_bc_mode_1.template", $config, $cgi, $dbh);
 
     do_dropped_products($voko_dropped, $config, $cgi, $dbh)
 	if(scalar(@{$voko_dropped}));
@@ -629,7 +629,7 @@ sub mode_1 {
 sub mode_2 {
     my ($new_vals, $new_bclub, $config, $cgi, $dbh) = @_;
 
-    do_header_234("adm_bclub/adm_bc_m2_title.template", $config, $cgi, $dbh);
+    do_header_234("adm_bc/adm_bc_m2_title.template", $config, $cgi, $dbh);
     if($config->{choice} & 8) {
 	modes_101112($new_vals, $new_bclub, $config, $cgi, $dbh);
     }
@@ -639,7 +639,7 @@ sub mode_2 {
 sub mode_3 {
     my ($new_vals, $bclub_maybe, $config, $cgi, $dbh) = @_;
 
-    do_header_234("adm_bclub/adm_bc_m3_title.template", $config, $cgi, $dbh);
+    do_header_234("adm_bc/adm_bc_m3_title.template", $config, $cgi, $dbh);
     if($config->{choice} & 8) {
 	modes_101112($new_vals, $bclub_maybe, $config, $cgi, $dbh);
     }
@@ -649,7 +649,7 @@ sub mode_3 {
 sub mode_4 {
     my ($new_vals, $bclub_all, $config, $cgi, $dbh) = @_;
 
-    do_header_234("adm_bclub/adm_bc_m4_title.template", $config, $cgi, $dbh);
+    do_header_234("adm_bc/adm_bc_m4_title.template", $config, $cgi, $dbh);
     if($config->{choice} & 8) {
 	modes_101112($new_vals, $bclub_all, $config, $cgi, $dbh);
     }
@@ -659,7 +659,7 @@ sub mode_4 {
 sub do_header_234 {
     my ($template,  $config, $cgi, $dbh) = @_;
     html_header("New Products in the  Bijenpark Geuzenveld Product List",
-		"adm_bclub/adm_bc_mode_1.template", $config, $cgi, $dbh);
+		"adm_bc/adm_bc_mode_1.template", $config, $cgi, $dbh);
 
 
     my $tpl = new CGI::FastTemplate($config->{templates});
@@ -679,7 +679,7 @@ sub do_footer_234 {
 
     my $tpf = new CGI::FastTemplate($config->{templates});
     $tpf->strict();
-    $tpf->define( footer => "adm_bclub/adm_bc_m234_footer.template");
+    $tpf->define( footer => "adm_bc/adm_bc_m234_footer.template");
     $tpf->assign({ toggle => ($config->{choice} & 8) ?
 		       "Return to Bijenpark Geuzenveld list" : "Edit New Products"});
     $tpf->parse(MAIN => "footer");
@@ -722,7 +722,7 @@ sub modes_234 {
 	my $tpr = new CGI::FastTemplate($config->{templates});
 	$h->{wh_pr_id} = "" if(not $h->{wh_pr_id});
 	$tpr->strict();
-	$tpr->define( row => "adm_bclub/adm_bc_m2_row.template",
+	$tpr->define( row => "adm_bc/adm_bc_m2_row.template",
 		      url => (($h->{wh_url}) ? "common/bclub_url.template" : "common/no_url.template"));
 	$tpr->assign($h);
 	$tpr->parse("URL", "url");
@@ -770,7 +770,7 @@ sub modes_101112 {
 
 	my $tpr = new CGI::FastTemplate($config->{templates});
 	$tpr->strict();
-	$tpr->define( row => "adm_bclub/adm_bc_m101112_row.template",
+	$tpr->define( row => "adm_bc/adm_bc_m101112_row.template",
 		      url => (($h->{wh_url}) ? "common/bclub_url.template" : "common/no_url.template"));
 	$tpr->assign($h);
 	$tpr->parse("URL", "url");
@@ -791,7 +791,7 @@ sub mode_5 {
     my $buttons = {}; # 
     $tpl->define( header         => "common/header.template",
                   banner         => "common/adm-banner.template",
-		  buttons        => "adm_bclub/adm_bc_file_upload.template",
+		  buttons        => "adm_bc/adm_bc_file_upload.template",
 	);
     my %hdr_h =(  Pagename       => 'Upload Bijenpark Geuzenveld Product File',
 		  Title          => 'Upload Bijenpark Geuzenveld Product File',
