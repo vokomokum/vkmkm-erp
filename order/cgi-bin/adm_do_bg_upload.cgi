@@ -81,6 +81,7 @@ sub process {
 	    if(not $id or 
 	       $id !~ /Bijenpark Geuzenveld - (\d{4,4}.\d\d.\d\d \d\d:\d\d:\d\d)/);
 	$id = $1;
+	$id =~ s!/!-!g;
 	my $sth = prepare(
 	    'SELECT wh_update FROM wholesaler WHERE wh_id = ?', $dbh);
 	$sth->execute($config->{BG}->{bg_wh_id});
