@@ -17,7 +17,7 @@ cp -r git-repo git-repo-tmp
 rm -r git-repo-tmp/.git
 rm -r git-repo-tmp/members/members/tests
 
-cd git-repo-tmp
+cd git-repo-tmp/git-repo
 
 echo Temporary fixups - remove templates/templates/, remove RCS directories
 /usr/bin/sudo /bin/rm order/templates/templates
