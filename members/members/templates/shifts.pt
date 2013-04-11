@@ -47,7 +47,7 @@
                 <label for="people">
                 Member
                 </label>
-                <select name="mem_id" id="mem_id" class="chzn-select">
+                <select name="mem_id">
                   <option value="--">Leave open (will be set later)</option>  
                   <option tal:repeat="m wg.members" value="${m.mem_id}">${m}</option>
                 </select>

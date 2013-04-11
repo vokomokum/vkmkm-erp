@@ -228,6 +228,7 @@
                 <form tal:condition="t.ttype.mem_sup == 'memb'"
                       action="${portal_url}/transaction/${t.id}/edit/setmember" method="post">
                     <select onchange="this.form.submit();" name="mem_id"
+                        name="mem_id" class="chzn-select"
                         title="Select to update." style="width: 140px;">
                         <tal:block tal:repeat="m view.members">
                             <option tal:condition="m.mem_id == t.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
