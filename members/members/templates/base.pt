@@ -9,10 +9,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="shortcut icon" href="${portal_url}/static/img/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/static/members.css" />
-        <script type="text/javascript" src="${portal_url}/static/jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="${portal_url}/static/chosen.css" />
         <!-- Internet Explorer Fixes -->
         <tal:iefixstart replace="structure string:&lt;!--[if IE]&gt;" />
-        <link rel="stylesheet" type="text/css" href="${portal_url}/ie.css" />
+        <link rel="stylesheet" type="text/css" href="${portal_url}/static/ie.css" />
         <tal:iefixend replace="structure string:&lt;![endif]--&gt;" />
         <title tal:content="view.title | title | 'Vokomokum Members'">Vokomokum Members</title>
         <link rel="shortcut icon" type="image/x-icon" href="${portal_url}/static/img/favicon.ico" />
@@ -141,6 +141,8 @@
 
         </div>
 
+        <script type="text/javascript" src="${portal_url}/static/jquery.js"></script>
+        <script type="text/javascript" src="${portal_url}/static/chosen.jquery.min.js"></script>
         <script type="text/javascript">
             // shed outer layout when this is embedded (e.g. in an iframe)
             if (top != self) {
@@ -153,6 +155,9 @@
                 head.appendChild(css);
             }
         </script>
+        <script type="text/javascript"> $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true}); </script>
+
+
     </body>
 
 </html>

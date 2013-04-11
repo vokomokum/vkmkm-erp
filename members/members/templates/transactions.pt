@@ -48,7 +48,7 @@
                     </select>
                     <div id="member">
                         <label for="mem_id">Member:</label>
-                        <select name="mem_id">
+                        <select name="mem_id" id="mem_id" class="chzn-select">
                             <option id="mem-default-option" value="--">[ID] Name (active)</option>
                             <tal:block tal:repeat="m view.members">
                                 <option tal:define="active python:{True:'yes', False:'no'}[m.mem_active]"

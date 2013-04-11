@@ -43,11 +43,11 @@
                 </select>
                 <!--span class="small">How many shifts should be created?</span-->
               </div>
-              <div class="form-row">
+              <div class="form-row" id="member">
                 <label for="people">
                 Member
                 </label>
-                <select name="mem_id">
+                <select name="mem_id" id="mem_id" class="chzn-select">
                   <option value="--">Leave open (will be set later)</option>  
                   <option tal:repeat="m wg.members" value="${m.mem_id}">${m}</option>
                 </select>
