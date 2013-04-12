@@ -17,7 +17,7 @@
         </div>
     </div>
     <ul>
-        <li tal:repeat="file files">
+        <li class="file" tal:repeat="file files">
             <a href="${portal_url}/doc/${cur_folder}/${file}">${file}</a>
         </li>
     </ul>

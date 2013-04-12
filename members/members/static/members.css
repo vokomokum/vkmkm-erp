@@ -498,3 +498,9 @@ select#mem_id {
     background: #ffffff url(img/icons/folder.png) no-repeat;
     padding-left: 30px;
 }
+
+.file {
+    list-style: none;
+    background: #ffffff url(img/icons/file.png) no-repeat;
+    padding-left: 30px;
+}
