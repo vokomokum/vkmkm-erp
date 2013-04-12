@@ -31,7 +31,7 @@ class DocsListView(BaseView):
         settings = get_settings()
         docs_folder = settings['vokomokum.docs_folder']
         if not os.path.exists(docs_folder):
-            return dict(files=[], msg='The folder {} does not exist'\
+            return dict(files={}, msg='The folder {} does not exist'\
                        .format(docs_folder))
         # a dict with filenames in each subdirectory
         files = {'': [urllib.quote(f) for f in os.listdir(docs_folder)\
