@@ -76,8 +76,8 @@ def main(global_config, **settings):
     config.add_route('transactions-year-overview', '/transactions/{year}', factory=Transaction)
     config.add_route('charge-order', '/charge-order/{o_id}')
     config.add_route('mail-order-charges', '/mail-order-charges/{o_id}')
-    config.add_route('docs', '/docs')
-    config.add_route('doc', '/doc/{doc_id}')
+    config.add_route('docs', '/docs*folder')
+    config.add_route('doc', '/doc*doc_path')
 
     # custom error views, catching NotFound and all Exceptions
     config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')

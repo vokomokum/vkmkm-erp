@@ -5,16 +5,22 @@
         <div metal:fill-slot="content">
 
 
-    <h1>Documents</h1>
+    <h1>Documents <tal:block tal:condition="cur_folder != ''">: ${cur_folder}</tal:block></h1>
 
-    <div tal:repeat="folder python:files.keys()">
-        <div class="folder">${folder}</div>
-        <ul>
-            <li tal:repeat="file python:files[folder]">
-                <a href="${portal_url}/doc/${file}">${file}</a>
-            </li>
-        </ul>
+    <a tal:condition="cur_folder != ''" href="${portal_url}/docs/${cur_folder}/..">one level up</a>
+    <br/>
+    <br/>
+
+    <div tal:repeat="folder folders">
+        <div class="folder">
+            <a href="${portal_url}/docs/${cur_folder}/${folder}">${folder}</a>
+        </div>
     </div>
+    <ul>
+        <li tal:repeat="file files">
+            <a href="${portal_url}/doc/${cur_folder}/${file}">${file}</a>
+        </li>
+    </ul>
    
 
         </div>
