@@ -58,6 +58,9 @@
                         <li tal:attributes="class python: tab == 'finance' and 'current' or ''">
                             <a tal:attributes="href string:${portal_url}/transactions">Finance</a>
                         </li>
+                        <li tal:attributes="class python: tab == 'docs' and 'current' or ''">
+                            <a tal:attributes="href string:${portal_url}/docs">Docs</a>
+                        </li>
                     </tal:block>
                 </ul>
                 <ul id="submenu-items">

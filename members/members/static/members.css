@@ -490,3 +490,11 @@ select#mem_id {
 #form-data #member {
     margin-bottom: 10px;
 }
+
+
+/* Docs */
+
+.folder {
+    background: #ffffff url(img/icons/folder.png) no-repeat;
+    padding-left: 30px;
+}

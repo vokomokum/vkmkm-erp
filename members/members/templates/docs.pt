@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+
+    <h1>Documents</h1>
+
+    <div tal:repeat="folder python:files.keys()">
+        <div class="folder">${folder}</div>
+        <ul>
+            <li tal:repeat="file python:files[folder]">
+                <a href="${portal_url}/doc/${file}">${file}</a>
+            </li>
+        </ul>
+    </div>
+   
+
+        </div>
+    </div>
+</html>
