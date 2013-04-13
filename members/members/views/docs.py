@@ -28,11 +28,11 @@ class DocsListView(BaseView):
 
     def __call__(self):
         settings = get_settings()
+        folder = self.request.matchdict['folder']
         docs_folder = settings['vokomokum.docs_folder']
         if not os.path.exists(docs_folder):
             return dict(cur_folder=folder, folders=[], files=[],
                     msg='The folder {} does not exist'.format(docs_folder))
-        folder = self.request.matchdict['folder']
         folder = '/'.join(folder)
         folder_full_path = '{}/{}'.format(docs_folder, folder)
         # a dict with filenames in each subdirectory
