@@ -50,7 +50,10 @@ class BaseView(object):
         :param str loc: location (path after ${portal_url})
         :return: headers which should be returned by view
         """
-        headers = remember(self.request, self.user.mem_id)
+        uid = ''
+        if self.user:
+            uid = self.user.mem_id
+        headers = remember(self.request, uid)
         return HTTPFound(location = loc, headers = headers)
 
 

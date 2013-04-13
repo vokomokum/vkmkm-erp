@@ -49,10 +49,11 @@ class DocView(BaseView):
     '''
     This reads in a document and streams it out as response.
     Documents are identifiable by their path such that they can be linked to.
-    
     '''
 
     def __call__(self):
+        if not self.logged_in:
+            return self.redirect('/login') # not sure why this view needs this
         doc_path = self.request.matchdict['doc_path']
         doc_path = '/'.join(doc_path)
         doc_path = urllib.unquote(doc_path)
