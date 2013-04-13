@@ -27,7 +27,7 @@ def authenticated_user(request):
     :returns: a Member object or None
     """
     userid = authenticated_userid(request)
-    if userid is not None:
+    if userid:
         return get_member(userid)
 
 
