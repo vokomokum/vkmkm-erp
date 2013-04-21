@@ -6,7 +6,6 @@
 </table>
 <br>
 <div id="header">
-<input type="submit" name="Delete" value="Delete my default order"/>
 </div>
 </form>
 </body>
