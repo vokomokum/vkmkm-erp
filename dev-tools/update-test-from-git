@@ -14,7 +14,7 @@ else
 fi
 
 cp -r git-repo git-repo-tmp
-rm -rf git-repo-tmp/.git
+rm -r git-repo-tmp/.git
 rm -r git-repo-tmp/members/members/tests
 
 cd git-repo-tmp/git-repo
@@ -33,7 +33,25 @@ echo make template files group permissions 644
 echo make all directories under order/ 775
 /usr/bin/sudo /usr/bin/find order -type d -print0 | xargs -0 /usr/bin/sudo /bin/chmod 775 
 
-echo now move everything onto the vokotest server
-cd order
-sudo cp -rp cgi-bin templates /var/www/vokotest/
+echo now move everything onto the test server
+
+
+while [ 1 == 1 ]; do
+    echo -n 'Update the test site with the svn files? '
+    read answer
+    case $answer in 
+        yes|YES)
+            cd order
+            /usr/bin/sudo /bin/cp -rp cgi-bin templates data /var/www/vokotest/
+            exit 0
+            ;;
+        no|NO)
+             exit 0
+            ;;
+        *)
+            echo Please answer yes or no
+            ;;
+    esac
+done
+
 
