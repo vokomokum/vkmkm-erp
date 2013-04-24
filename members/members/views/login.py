@@ -43,9 +43,17 @@ class Login(BaseView):
                         headers = remember(self.request, member.mem_id)
                         return HTTPFound(location = came_from, headers = headers)
                     else:
-                        message += 'Note that the account of {} has been '\
-                                   ' set to inactive. Please contact '\
-                                   ' membership@vokomokum.nl.'.format(member)
+                        message += 'Login denied because the account of {} has been '\
+                                   ' set to inactive.'.format(member)
+                        if member.balance < 0:
+                            message += ' One possible reason for deactivation is'\
+                                       ' that the account balance is EUR {}. Please'\
+                                       ' transfer the missing amount to Vokomokum,'\
+                                       ' account no. 78.68.29.109, t.p.v. Amsterdam'\
+                                       ' and/or contact finance@vokomokum.nl.'\
+                                        .format(member.balance)   
+                        else:
+                            message += ' Please contact membership@vokomokum.nl.' 
                 else:
                     message += ' The password is not correct.'
             else:
