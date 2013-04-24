@@ -23,7 +23,6 @@
         <li>[<a href="/cgi-bin/edit_subcat.cgi">Edit/Create Sub-Category</a>]</li>
         <li>[<a href="/cgi-bin/order">My Orders</a>]</li>
         <li>[<a href="/cgi-bin/all-order">All Products</a>]</li>
-	<li>[ <a href="/cgi-bin/view_default.cgi">View/Clear Default Order</a> ]</li>
         <li>[<a href="/cgi-bin/adm_update_welcome.cgi">Update Welcome Page</a>]</li>
         <li>[<a href="/cgi-bin/adm_kassa.cgi">Kassa</a>]</li>
 	<li>[<a href="/cgi-bin/kassalist.pm">Kassa List</a>]</li>

@@ -12,7 +12,6 @@
     <ul id="order-system-menu">
         <li>[ <a href="/cgi-bin/order">My Orders</a> ]</li>
         <li>[ <a href="/cgi-bin/all-order">All Products</a> ]</li>
-	<li>[ <a href="/cgi-bin/view_default.cgi">View/Clear Default Order</a> ]</li>
         <li>[ <a href="/cgi-bin/who_ordered.pm">Who ordered this product?</a> ]</li>
         <li>[ <a href="/cgi-bin/edit_member.cgi">Edit Account Details</a> ]</li>
     </ul>

@@ -6,9 +6,6 @@
         <input type="submit" name="Reload" value="Preview Order" />
     </li>
     <li>
-        <input type="submit" name="SetDef" value="Set As Default" />
-    </li>
-    <li>
         <input type="reset" value="Reset Changes" name="Reset" /><br />
     </li>
     <li id="select-order-nr">

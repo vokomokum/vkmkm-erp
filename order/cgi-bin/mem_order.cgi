@@ -261,12 +261,21 @@ sub do_changes {
     # call get_products without passing new_vals, so we get the db values
     my ($pr_ar, $pr_hr) = get_products({}, $cgi, $dbh);
 
-    # if new_vals is not empty, then we want to set the quantity of any item in 
+    # if new_vals is not empty, then we want to set the quantity of any item i 
     # 
     my $changes = 0;
     foreach my $pr_id (keys %{$new_vals}) {
 	if(defined($pr_hr->{$pr_id})) {
 	    my $h = $pr_hr->{$pr_id};
+
+	    # bubble club - no changes in status 2
+	    if($status == 2 and $ord_no == $current_no and 
+	       $h->{pr_wh} == $config->{BUBBLE_CLUB}->{bc_wh_id}) {
+		dump_stuff("do_changes",  $pr_id, 
+			   $new_vals->{$pr_id}, $h->{order});
+		$new_vals->{$pr_id} = $h->{order};
+	    }
+	    
 	    if($h->{order} != $new_vals->{$pr_id}) {
 		$changes = 1;
 		last;
@@ -286,7 +295,9 @@ sub do_changes {
 	    my $h = $pr_hr->{$pr_id};
 	    if(($h->{order} != 0) and
 	       not defined($new_vals->{$pr_id})) {
-		   $new_vals->{$pr_id} = 0;
+		next if($h->{pr_wh} == $config->{BUBBLE_CLUB}->{bc_wh_id} and
+		    ($status == 2 and $ord_no == $current_no));
+		$new_vals->{$pr_id} = 0;
 		   $changes = 1;
 	    }
 	}

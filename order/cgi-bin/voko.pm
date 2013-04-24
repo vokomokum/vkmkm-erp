@@ -431,7 +431,9 @@ sub open_cgi {
 	eval {
 	    my $sth = prepare("SELECT p.pr_id, w.wh_url FROM product AS p, " .
 			      "zapatistadata AS w ".
-			      "where p.wh_prcode = w.wh_prcode", $dbh);
+			      "where p.wh_prcode = w.wh_prcode " .
+			      "and pr_wh = $config->{ZAPATISTA}->{zap_wh_id}",
+			      $dbh);
 	    $sth->execute;
 	    while(my $h = $sth->fetchrow_hashref) {
 		$config->{ZAPATISTA}->{$h->{pr_id}} = $h->{wh_url};
@@ -444,7 +446,9 @@ sub open_cgi {
 	eval {
 	    my $sth = prepare("SELECT p.pr_id, w.wh_url FROM product AS p, " .
 			      "bg_data AS w ".
-			      "where p.wh_prcode = w.wh_prcode", $dbh);
+			      "where p.wh_prcode = w.wh_prcode ".
+			      "and pr_wh = $config->{BG}->{bg_wh_id}",
+			      $dbh);
 	    $sth->execute;
 	    while(my $h = $sth->fetchrow_hashref) {
 		$config->{BG}->{$h->{pr_id}} = $h->{wh_url};
@@ -458,7 +462,9 @@ sub open_cgi {
 	eval {
 	    my $sth = prepare("SELECT p.pr_id, w.wh_url FROM product AS p, " .
 			      "bg_data AS w ".
-			      "where p.wh_prcode = w.wh_prcode", $dbh);
+			      "where p.wh_prcode = w.wh_prcode ".
+			      "and pr_wh = $config->{BUBBLE_CLUB}->{bc_wh_id}",
+			      $dbh);
 	    $sth->execute;
 	    while(my $h = $sth->fetchrow_hashref) {
 		$config->{BUBBLE_CLUB}->{$h->{pr_id}} = $h->{wh_url};
