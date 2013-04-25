@@ -50,7 +50,9 @@ class Login(BaseView):
                                        ' that the account balance is EUR {}. Please'\
                                        ' transfer the missing amount to Vokomokum,'\
                                        ' account no. 78.68.29.109, t.p.v. Amsterdam'\
-                                       ' and/or contact finance@vokomokum.nl.'\
+                                       ' (be sure to include your member number)'\
+                                       ' and contact finance@vokomokum.nl to report'\
+                                       ' that you have paid.'\
                                         .format(member.balance)   
                         else:
                             message += ' Please contact membership@vokomokum.nl.' 
