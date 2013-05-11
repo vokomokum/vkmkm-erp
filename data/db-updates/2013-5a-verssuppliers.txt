@@ -1,0 +1,6 @@
+
+INSERT INTO vers_suppliers (name, email, comment) VALUES ('Ridammerhoeve', 'info@geitenboerderij.nl', 'Goat cheese, contact person: Corine');
+INSERT INTO vers_suppliers (name, email, comment) VALUES ('De Vierhuizen', 'lideo@hetnet.nl', 'Cow cheese, contact person: Lidia');
+INSERT INTO vers_suppliers (name, email, comment) VALUES ('BioRomeo', 'info@bioromeo.nl', 'Veggies and Fruit, contact person: Krispijn');
+INSERT INTO vers_suppliers (name, telnr) VALUES ('Gerrit Groot', '06-49840293');
+INSERT INTO vers_suppliers (name, telnr) VALUES ('Michel Boon', '06-12919035');

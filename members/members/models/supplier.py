@@ -11,7 +11,7 @@ class VersSupplier(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(100))
     website = Column(Unicode(50))
-    email = Column(Unicode(50), unique=True)
+    email = Column(Unicode(50))
     telnr = Column(Unicode(20))
     faxnr = Column(Unicode(20))
     comment = Column(Unicode(500))
