@@ -112,7 +112,7 @@
                             else 
                                 $('#order-div').hide();
                         }
-                        $(document).ready(function(){
+                        window.onload = function(){ //$ is not known yet (bottom of page)
                             // perform showing/hiding once
                             togglePartnerOrderSelect();
                             // make sure we're empty (some browsers are too nice)
@@ -124,7 +124,7 @@
                                                      .removeAttr('selected');
                             $('#order-default-option').attr('selected', 'selected')
                                                       .removeAttr('selected');
-                        });
+                        };
                     </script>
                     <span id="order-div" style="display:none;">
                         <label for="ord_no">Order:</label>
