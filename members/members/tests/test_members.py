@@ -245,7 +245,21 @@ class TestMembers(VokoTestCase):
 
         # the key is now not longer valid
         self.assertNotEqual(key, mem.mem_pwd_url)
-        
+       
+    def test_valid_email(self):
+        m = self.get_peter()
+        m.mem_email = 'peter@gmail.com'
+        m.validate_email()
+        m.mem_email = '@gmail.com'
+        self.assertRaises(VokoValidationError, m.validate_email)
+        m.mem_email = 'peter@'
+        self.assertRaises(VokoValidationError, m.validate_email)
+        m.mem_email = 'peter@@'
+        self.assertRaises(VokoValidationError, m.validate_email)
+        m.mem_email = 'peter@post.de' # host has no MX record
+        self.assertRaises(VokoValidationError, m.validate_email)
+        m.mem_email = 'peter@hurzwurzburz.kl' # host doesn't exist
+        self.assertRaises(VokoValidationError, m.validate_email)
 
     def get_reset_info_from_mails(self):
         mail_folder = '{}/passwords'.format(get_settings()['vokomokum.mail_folder'])

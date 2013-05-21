@@ -6,6 +6,8 @@ The member class.
 Describes all attributes of the database we need here.
 '''
 from __future__ import unicode_literals
+import re
+import subprocess
 
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -97,11 +99,8 @@ class Member(Base):
         if len(missing) > 0:
             raise VokoValidationError('We still require you to fill in: %s'\
                                     % ', '.join([m[4:] for m in missing]))
-        # check email #TODO: better, with regex
-        if not '@' in self.mem_email:
-            raise VokoValidationError('The email address does not '\
-                                      'seem to be valid.')
-        # check unique constraint on email address here for nicer error msg
+        self.validate_email()
+        # also check unique constraint on email address here for nicer error msg
         session = DBSession()
         members = session.query(Member)\
                          .filter(Member.mem_email == self.mem_email).all()
@@ -139,6 +138,27 @@ class Member(Base):
         if self.mem_household_size < 1:
             raise VokoValidationError('Please specify how many people live '\
                                       'in the household.')
+
+    def validate_email(self):
+        ''' check email '''
+        # check general form: a valid name + @ + some host
+        if not re.match('[A-Za-z\-\_0-9]+@[^@]+', self.mem_email): 
+            raise VokoValidationError('The email address does not '\
+                                      'seem to be valid.')
+        # check host
+        h = re.findall('[^@]+', self.mem_email)[1]
+        host_checker = subprocess.Popen(['host', '-t', 'mx', h],
+                                        stdout=subprocess.PIPE)
+        host_checker.wait()
+        result = host_checker.stdout.read()
+        if 'no MX record' in result:
+            raise VokoValidationError('The host {} has no known MX record.'\
+                                      .format(h))
+        
+        if 'Host {} not found'.format(h) in result:
+            raise VokoValidationError('The host is not known in the DNS system.'\
+                                      ' Is it spelled correctly?'.format(h))
+
 
     def validate_pwd(self, req):
         '''
