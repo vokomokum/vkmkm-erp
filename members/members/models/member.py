@@ -7,7 +7,7 @@ Describes all attributes of the database we need here.
 '''
 from __future__ import unicode_literals
 import re
-import subprocess
+import dns.resolver
 
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -146,18 +146,13 @@ class Member(Base):
             raise VokoValidationError('The email address does not '\
                                       'seem to be valid.')
         # check host
-        h = re.findall('[^@]+', self.mem_email)[1]
-        host_checker = subprocess.Popen(['host', '-t', 'mx', h],
-                                        stdout=subprocess.PIPE)
-        host_checker.wait()
-        result = host_checker.stdout.read()
-        if 'no MX record' in result:
-            raise VokoValidationError('The host {} has no known MX record.'\
-                                      .format(h))
-        
-        if 'Host {} not found'.format(h) in result:
-            raise VokoValidationError('The host is not known in the DNS system.'\
-                                      ' Is it spelled correctly?'.format(h))
+        host = re.findall('[^@]+', self.mem_email)[1]
+        try:
+            _ = dns.resolver.query(host, 'MX')
+        except:
+            raise VokoValidationError('The host {} is not known in the DNS'\
+                                      ' system as a mail server.'\
+                                      ' Is it spelled correctly?'.format(host))
 
 
     def validate_pwd(self, req):

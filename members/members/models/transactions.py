@@ -167,7 +167,7 @@ class Transaction(Base):
             raise VokoValidationError('A transaction of this type should by '\
                                       'its definition represent something that '\
                                       'Vokomokum gives out or pays and thus '\
-                                      'and thus be negative.')
+                                      'be negative.')
         if (self.member and self.wholesaler) or\
            (self.member and self.vers_supplier):
             raise VokoValidationError('This transaction should not link to '\
