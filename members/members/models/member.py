@@ -148,7 +148,9 @@ class Member(Base):
         # check host
         host = re.findall('[^@]+', self.mem_email)[1]
         try:
-            _ = dns.resolver.query(host, 'MX')
+            # dns.resolver throws an exception when it can't find a mail (MX)
+            # host. The point at the end makes it not try to append domains
+            _ = dns.resolver.query('{}.'.format(host), 'MX')
         except:
             raise VokoValidationError('The host {} is not known in the DNS'\
                                       ' system as a mail server.'\
