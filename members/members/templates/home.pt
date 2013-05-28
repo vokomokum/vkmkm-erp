@@ -8,14 +8,14 @@
                 Howdy, ${view.user}
             </h4>
 
-            <div id="todos" tal:condition="view.logged_in">
-                <div id="todos-header">Some things you might want to check upon:</div>
+            <div id="dashboard-todos" tal:condition="view.logged_in">
+                <div id="todos-header">Some TODO items you should review:</div>
                 <div tal:condition="view.user.mem_admin" id="todos-toggle">
-                    <tal:block tal:condition="not: view.show_all">(These are only yours.
+                    <tal:block tal:condition="not: view.show_all">
                         <a href="${portal_url}?show-all-todos=1">
                             Show all TODOs in the system
                         </a> [admins only].
-                    )</tal:block>
+                    </tal:block>
                     <tal:block tal:condition="view.show_all">(These are all TODOs in the system.
                         <a href="${portal_url}">Show only your TODOs.</a>
                     )</tal:block>
@@ -35,12 +35,26 @@
                 </ul>
             </div>
 
-            <h6>
-                For help and/or questions in technical matters,
-                you can <a href="mailto:systems@vokomokum.nl">contact the admins</a>.
-                Organisational matters should be directed to your group coordinator
-                or <a href="mailto:membership@vokomokum.nl">Membership</a>.
-            </h6>
+            <div id="dashboard-graphs">
+                <tal:block tal:repeat="graph graphs">
+                <div id="graph">
+                </div>
+                <script type="text/javascript">
+                    window.onload = function(){ //$ is not known yet (bottom of page)
+                        $('#graph').highcharts(${graph});
+                    };
+                </script>
+                </tal:block>
+            </div>
+
+            <div id="dashboard-footer">
+                <h6>
+                    For help and/or questions in technical matters,
+                    you can <a href="mailto:systems@vokomokum.nl">contact the admins</a>.
+                    Organisational matters should be directed to your group coordinator
+                    or <a href="mailto:membership@vokomokum.nl">Membership</a>.
+                </h6>
+            </div>
 
         </div>
     </div>

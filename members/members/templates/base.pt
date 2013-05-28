@@ -16,7 +16,6 @@
         <tal:iefixend replace="structure string:&lt;![endif]--&gt;" />
         <title tal:content="view.title | title | 'Vokomokum Members'">Vokomokum Members</title>
         <link rel="shortcut icon" type="image/x-icon" href="${portal_url}/static/img/favicon.ico" />
- 
     </head>
 
     <body>
@@ -159,7 +158,7 @@
             }
         </script>
         <script type="text/javascript"> $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true}); </script>
-
+        <script type="text/javascript" src="${portal_url}/static/highcharts.js"></script>
 
     </body>
 

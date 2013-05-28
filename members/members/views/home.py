@@ -28,10 +28,10 @@ class HomeView(BaseView):
                 self.show_all = True
         if self.logged_in:
             todos = get_todos(session, self.user, self.show_all)
+            graphs = get_graphs()
         else:
-            todos = []
-        return dict(todos=todos)
-
+            todos = graphs = []
+        return dict(todos=todos, graphs=graphs)
 
 
 def get_todos(session, user, show_all):
@@ -176,3 +176,14 @@ def get_todos(session, user, show_all):
 # - Membership: no-show shifts?
 #               late payments?
 #               list all current applicants
+
+def get_graphs():
+    graphs = []
+    settings = get_settings()
+    gfolder = settings['vokomokum.graph_folder']
+    omp_path = '{}/orders_money_and_people.json'.format(gfolder)
+    if os.path.exists(omp_path):
+        gfile = open(omp_path, 'r')
+        graphs.append(gfile.read())
+    return graphs
+ 

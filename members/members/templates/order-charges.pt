@@ -9,7 +9,7 @@
         <h1>Charging order "${order.label}"</h1>
     
         <tal:block tal:condition="not: action">
-            No action given.
+            No known action given.
         </tal:block>
         <tal:block tal:condition="python: not view.user.mem_admin and not 'Finance' in view.user.workgroups">
             You have no right to use this page.

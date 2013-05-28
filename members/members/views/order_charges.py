@@ -13,6 +13,7 @@ from members.models.transactions import get_ttypeid_by_name
 from members.models.base import DBSession
 from members.utils.mail import sendmail
 from members.utils.misc import membership_fee
+from members.utils.graphs import orders_money_and_people
 
 
 @view_config(renderer='../templates/order-charges.pt', route_name='charge-order')
@@ -48,6 +49,9 @@ class ChargeOrder(BaseView):
             # show charges that would be made
             return dict(order=order, action='show', charges=charges)
         else:
+            # temporary backdoor to test this
+            if self.request.params['action'] == 'gggraph':
+                orders_money_and_people()
             if self.request.params['action'] == 'charge':
                 # confirmation: make charges
                 for c in charges:
@@ -77,6 +81,8 @@ class ChargeOrder(BaseView):
                         mf.member = c.member
                         mf.validate()
                         session.add(mf)
+                # use this opportunity to update graph data
+                orders_money_and_people()
                 return dict(order=order, action='done')
         return dict(order=order, action='')
 
