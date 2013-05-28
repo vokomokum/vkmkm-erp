@@ -28,7 +28,7 @@ def orders_money_and_people():
     '''
     # 1. preparing the data
     session = DBSession()
-    orders = session.query(Order).all()
+    orders = session.query(Order).order_by(Order.completed).all()
     members = session.query(Member).all()
     money_list = []
     people_list = []
@@ -41,15 +41,16 @@ def orders_money_and_people():
             if mo.amount > 0:
                 money += mo.amount
                 people += 1
-        money_list.append(money)    
-        people_list.append(people)
+        money_list.append(round(money, 1))    
+        people_list.append(int(people))
 
     # 2. writing graph configuration
     graph = dict(title=dict(text='Order history'), credits=dict(enabled=False))
-    graph['xAxis'] = dict(categories=[o.label for o in orders])
     graph['series'] = []
     graph['series'].append(dict(name='money', data=money_list))
     graph['series'].append(dict(name='people', data=people_list, yAxis=1))
+    graph['xAxis'] = dict(categories=[o.label for o in orders],
+                          tickPositions=[0, len(orders)/2, len(orders)-1])
     graph['yAxis'] = [dict(title=dict(text='money'), min=0, max=12000),
                       dict(title=dict(text='people'), min=0, max=200, opposite=True)]
 
