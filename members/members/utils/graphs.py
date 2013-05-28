@@ -32,6 +32,8 @@ def orders_money_and_people():
     members = session.query(Member).all()
     money_list = []
     people_list = []
+    max_money = 0
+    max_people = 0
 
     for o in orders:
         money = 0
@@ -41,8 +43,10 @@ def orders_money_and_people():
             if mo.amount > 0:
                 money += mo.amount
                 people += 1
-        money_list.append(round(money, 1))    
-        people_list.append(int(people))
+        money_list.append(round(money, 1))
+        max_money = max(money, max_money)
+        max_people = max(people, max_people)
+        people_list.append(people)
 
     # 2. writing graph configuration
     graph = dict(title=dict(text='Order history'), credits=dict(enabled=False))
@@ -51,8 +55,9 @@ def orders_money_and_people():
     graph['series'].append(dict(name='people', data=people_list, yAxis=1))
     graph['xAxis'] = dict(categories=[o.label for o in orders],
                           tickPositions=[0, len(orders)/2, len(orders)-1])
-    graph['yAxis'] = [dict(title=dict(text='money'), min=0, max=12000),
-                      dict(title=dict(text='people'), min=0, max=200, opposite=True)]
+    graph['yAxis'] = [dict(title=dict(text='money'), min=0, max=max_money*1.1),
+                      dict(title=dict(text='people'), min=0, max=max_people*1.1,
+                           opposite=True)]
 
     # 3. write to file 
     settings = get_settings()
