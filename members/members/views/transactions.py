@@ -47,11 +47,18 @@ class BaseTransactionView(BaseView):
         return session.query(Order)\
                     .order_by(desc(Order.completed)).all()
 
-    def redir_to_list(self, year, month, msg=''):
+    def redir_to_list(self, year, month, msg='', show_list=False, tid=None):
         ''' redirect to list view '''
         if msg != '':
-            msg = '?msg={}'.format(msg)
-        return self.redirect('/transactions/{}/{}{}'.format(year, month, msg))
+            msg = 'msg={}'.format(msg)
+        list_param = ''
+        if show_list:
+            list_param = 'ttype='
+        t_link = ''
+        if tid:
+            t_link = '#a_{}'.format(tid)
+        return self.redirect('/transactions/{}/{}?{}&{}{}'\
+            .format(year, month, msg, list_param, t_link))
 
             
 @view_config(renderer='../templates/transactions.pt',
@@ -154,7 +161,7 @@ class NewTransaction(BaseTransactionView):
         month = int(params['month'])
         
         if params['ttype_id'] == '--':
-            return self.redir_to_list(year, month, 'Please select a type.')
+            return self.redir_to_list(year, month, msg='Please select a type.')
         ttype = session.query(TransactionType).get(params['ttype_id'])
         transaction.ttype = ttype
         transaction.amount = float(params['amount'])
@@ -176,9 +183,8 @@ class NewTransaction(BaseTransactionView):
         transaction.validate()
         session.add(transaction)
         session.flush()
-        return self.redir_to_list(year, month, 'Transaction "{}" has been '\
-                        'added to the list.'\
-                        .format(str(transaction)))
+        return self.redir_to_list(year, month, msg='Transaction "{}" has been '\
+                        'added to the list.'.format(str(transaction)))
 
 
 @view_config(renderer='../templates/transactions.pt',
@@ -258,8 +264,9 @@ class EditTransaction(BaseTransactionView):
         transaction.validate()
         session.flush()
         return self.redir_to_list(transaction.date.year, transaction.date.month,
-                                  'Transaction has been saved. {}'\
-                                  .format(msg))
+                                  msg='Transaction has been saved. {}'\
+                                      .format(msg), show_list=True,
+                                  tid=transaction.id)
  
 
 @view_config(renderer='../templates/transactions.pt',
@@ -275,14 +282,14 @@ class DeleteTransaction(BaseTransactionView):
         t = get_transaction(session, t_id)
         if t.locked():
             return self.redir_to_list(t.year, t.month, 
-                                 'Cannot remove transaction "{}":'\
-                                 ' It is locked.'.format(t))
+                            msg='Cannot remove transaction "{}":'\
+                                 ' It is locked.'.format(t), show_list=True)
         else:
             session.delete(t)
             session.flush()
             return self.redir_to_list(t.date.year, t.date.month,
-                             'Transaction "{}" has been deleted.'\
-                              .format(t))
+                             msg='Transaction "{}" has been deleted.'\
+                                 .format(t), show_list=True)
 
 
 

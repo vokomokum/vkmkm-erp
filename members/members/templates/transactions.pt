@@ -223,7 +223,7 @@
             <td colspan="8">No transactions shown. Update list to see transactions of this month.</td>
         </tr>
         <tr tal:repeat="t transactions">
-            <td>${t.ttype}</td>
+            <td>${t.ttype} <a name="a_${t.id}"></a></td>
             <td>
                 <form tal:condition="t.ttype.mem_sup == 'memb'"
                       action="${portal_url}/transaction/${t.id}/edit/setmember" method="post">
