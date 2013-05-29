@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column
 from sqlalchemy import Integer, Unicode, Boolean, Numeric, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey
 
 from pyramid.security import Allow, DENY_ALL
@@ -90,7 +90,8 @@ class Transaction(Base):
     ttype = relationship(TransactionType, backref='transactions')
     amount = Column(Numeric)
     mem_id = Column(Integer, ForeignKey('members.mem_id'), nullable=False)
-    member = relationship(Member, backref='transactions')
+    member = relationship(Member, backref=backref('transactions',
+                                    order_by='desc(Transaction.date)'))
     whol_id = Column(Integer, ForeignKey('wholesaler.wh_id'), nullable=False)
     wholesaler = relationship(Wholesaler)
     vers_id = Column(Integer, ForeignKey('vers_suppliers.id'), nullable=False)

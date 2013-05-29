@@ -99,6 +99,11 @@
     <h2>Transactions</h2>
 
     <table class="list" align="center" tal:condition="transactions">
+        <tr class="list-content">
+            <td></td>
+            <td class="list-balance" colspan="3">Your balance:</td>
+            <td class="list-balance"><small>EUR</small>&nbsp;${python:round(m.balance,2)}</td>
+        </tr>
         <tr>
             <th>Type</th>
             <th>Date</th>
@@ -121,10 +126,7 @@
             </td>
             <td class="list-amount"><small>EUR</small>&nbsp;${python:round(t.amount,2)}</td>
         </tr>
-        <tr class="list-content">
-            <td colspan="4"/>
-            <td class="list-balance"><small>EUR</small>&nbsp;${python:round(m.balance,2)}</td>
-        </tr>
+        
     </table>
     <div tal:condition="not transactions" class="info">
         No transactions.
