@@ -66,6 +66,6 @@ def groupfinder(memid, request):
     if finance:
         if memid in [m.mem_id for m in finance.members]:
             groups.append('group:finance')
-
+    
     #print "+++++++++++++++++++++++++++++++++++++++ User is in groups:", groups
     return groups

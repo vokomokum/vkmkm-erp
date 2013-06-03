@@ -92,7 +92,15 @@ class EditWorkgroupView(BaseView):
         if 'action' in req.params:
             action = req.params['action']
             if action == "save":
+                old_name = wg.name
+                uwgs = [w.name for w in self.user.workgroups]
                 wg = fill_wg_from_request(wg, req, session)
+                if not wg.name == old_name\
+                   and 'Systems' in uwgs:
+                    raise Exception('Only members of Systems can change the'\
+                                    ' name of an existing workgroup, because'\
+                                    ' it changes the email addresses of the'\
+                                    ' group.')
                 wg.validate()
                 if not wg.exists:
                     session.add(wg)
