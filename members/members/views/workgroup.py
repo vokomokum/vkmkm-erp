@@ -95,8 +95,8 @@ class EditWorkgroupView(BaseView):
                 old_name = wg.name
                 uwgs = [w.name for w in self.user.workgroups]
                 wg = fill_wg_from_request(wg, req, session)
-                if not wg.name == old_name\
-                   and 'Systems' in uwgs:
+                if wg.exists and not wg.name == old_name\
+                   and not 'Systems' in uwgs:
                     raise Exception('Only members of Systems can change the'\
                                     ' name of an existing workgroup, because'\
                                     ' it changes the email addresses of the'\

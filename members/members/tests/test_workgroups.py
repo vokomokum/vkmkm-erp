@@ -60,7 +60,9 @@ class TestWorkgroups(VokoTestCase):
         request.matchdict = {'wg_id': 2}
         request.params['name'] = 'Wholesale Besteling'
         request.params['action'] = 'save'
-        view_info = EditWorkgroupView(None, request)()
+        view = EditWorkgroupView(None, request)
+        view.user = self.get_peter()
+        view_info = view()
         wg_bestel = self.DBSession.query(Workgroup).get(2)
         self.assertEqual(wg_bestel.name, 'Wholesale Besteling')
 
@@ -78,7 +80,9 @@ class TestWorkgroups(VokoTestCase):
         request.POST = MultiDict()
         request.POST['wg_leaders'] = ''
         request.params['action'] = 'save'
-        self.assertRaises(VokoValidationError, EditWorkgroupView(None, request))
+        view = EditWorkgroupView(None, request)
+        view.user = self.get_peter()
+        self.assertRaises(VokoValidationError, view)
 
     def test_create(self):
         '''The NewWorkgroupView only shows an empty form. Creation is done in EditWorkgroupView'''
@@ -89,8 +93,7 @@ class TestWorkgroups(VokoTestCase):
         request.POST['wg_leaders'] = '1'
         request.params['action'] = 'save'
         view = EditWorkgroupView(None, request)
-        peter = self.get_peter()
-        view.user = peter
+        view.user = self.get_peter()
         view()
         wg = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Cafe').first()
         self.assertEquals(wg.desc, 'Shake and Bake')
