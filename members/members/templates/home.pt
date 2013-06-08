@@ -5,7 +5,7 @@
         <div metal:fill-slot="content">
         
             <h4>
-                Howdy, ${view.user}
+                Howdy, ${view.user.fullname}
             </h4>
 
             <div id="dashboard-todos" tal:condition="view.logged_in">

@@ -9,6 +9,7 @@ from members.models.todo import Todo
 from members.models.member import Member
 from members.models.orders import Order
 from members.models.transactions import Transaction
+from members.models.transactions import get_ttypeid_by_name
 from members.models.workgroups import Workgroup
 from members.models.shift import Shift
 from members.views.base import BaseView
@@ -121,14 +122,21 @@ def get_todos(session, user, show_all):
     if 'Membership' in [w.name for w in user.workgroups] or show_all:
         # Members without a workgroup
         for m in [am for am in act_members if len(am.workgroups) == 0]:
-            todos.append(Todo(msg='Member {} is without a workgroup.'\
-                                  .format(ascii_save(m.fullname)),
-                              wg='Membership',
-                              link_act='member/{}'.format(m.mem_id),
-                              link_txt='See member profile.',
-                              link_title='You should contact the member and '\
-                                 'discuss which openings he/she would '\
-                                 'like. If they refuse, inactivate him/her.'))
+            # check if they ordered
+            mt = session.query(Transaction)\
+                .filter(Transaction.mem_id == m.mem_id)\
+                .filter(Transaction.ttype_id == \
+                        get_ttypeid_by_name('Order Charge')).first()
+            if mt:
+                todos.append(Todo(msg='Member {} has ordered but is still '\
+                                      'without a workgroup.'\
+                                      .format(ascii_save(m.fullname)),
+                                  wg='Membership',
+                                  link_act='member/{}'.format(m.mem_id),
+                                  link_txt='See member profile.',
+                                  link_title='You should contact the member and '\
+                                   'discuss which openings he/she would '\
+                                   'like. If they refuse, inactivate him/her.'))
     
     # ---- Todos for coordinators in general:
     # unfilled shifts

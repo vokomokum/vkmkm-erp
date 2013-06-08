@@ -44,6 +44,7 @@ class ChargeOrder(BaseView):
         charges = [c for c in charges if c.amount > 0 and not o_id in\
                                 [t.order.id for t in c.member.transactions\
                                             if t.ttype_id == charge_ttype_id]]
+        first_orderers = []
 
         if not 'action' in self.request.params:
             # show charges that would be made
@@ -67,6 +68,7 @@ class ChargeOrder(BaseView):
                     session.add(t)
                     # first order of this member? Charge Membership fee
                     if c.is_first_order():
+                        first_orderers.append(c.member)
                         mf = Transaction(\
                                 amount = membership_fee(c.member) * -1,
                                 comment = 'Automatically charged (for {}'\
@@ -83,6 +85,16 @@ class ChargeOrder(BaseView):
                         session.add(mf)
                 # use this opportunity to update graph data
                 orders_money_and_people()
+                # inform membership about people who ordered for first time
+                subject = 'First-time orderers'
+                body = 'FYI: Below is a list of people who ordered for the'\
+                       ' first time today. This mail was auto-generated.\n\n'
+                body += '\n'.join(['{} [ID:{}]'.format(m.fullname, m.mem_id)\
+                                  for m in first_orderers])
+                sendmail('membership@vokomokum.nl', subject, body,
+                        folder='order-charges/{}'.format(o_id),
+                        sender='finance@vokomokum.nl')
+
                 return dict(order=order, action='done')
         return dict(order=order, action='')
 
