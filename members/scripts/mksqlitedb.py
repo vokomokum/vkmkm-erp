@@ -16,6 +16,15 @@ from members.models.transactions import reserved_ttype_names
 
 from members.utils.md5crypt import md5crypt
 
+'''
+TODO:
+# Adalbert should be in Membership and Systems
+# shifts are all open, select some states randomly (mostly worked, some assigned and noshow)
+# Add some transactions
+# Some shifts and some transactions should be in the current & next month
+'''
+
+
 # this could be used to access .ini (for later reference)
 #from pyramid.paster import bootstrap
 #env = bootstrap('development.ini')
@@ -31,7 +40,7 @@ def addAdmin(DBSession):
     DBSession.add(admin)
     DBSession.flush()
     
-"""Ensure the backwards compatibility """
+"""Ensure the backwards compatibility, these settings are used in unit tests"""
 def addOldNames(DBSession):
     m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
     m1.mem_email = 'peter@dePan.nl'
@@ -51,11 +60,10 @@ def addOldNames(DBSession):
     wg2.members.append(m2)
     wg2.leaders.append(m2)
     DBSession.flush()
-    s = Shift(wg2.id, 'do stuff', 2012, 6, mem_id=m1.mem_id)
+    s = Shift(wg2.id, 'do stuff', 2012, 6, member=m1)
     DBSession.add(s)
     DBSession.flush()
     
-    return
 
 def createWGs(DBSession):
     wgs = []
@@ -64,7 +72,7 @@ def createWGs(DBSession):
     wgs.append(Workgroup(name=u'Cafe', desc=u'Cakes and coffee'))
     wgs.append(Workgroup(name=u'Finance', desc=u'Making sure money is where it is supposed to be'))
     wgs.append(Workgroup(name=u'Vers', desc=u'Fresh food!'))
-    wgs.append(Workgroup(name=u'Members', desc=u'Human resources'))
+    wgs.append(Workgroup(name=u'Membership', desc=u'Human resources'))
     for wg in wgs:
         DBSession.add(wg)
     DBSession.flush()
@@ -75,9 +83,9 @@ def fillDBRandomly(DBSession, names, seed):
     random.seed(seed)
     workgroups = createWGs(DBSession)
     namelist = sorted(list(names.keys()))
-    # 30% of the people are applicants
+    # 20% of the people are applicants
     members = []
-    for l in namelist[int(len(namelist)*0.7):]:
+    for l in namelist[int(len(namelist) * 0.8):]:
         m = Applicant(fname=l, lname=names[l])
         m.email = "%s@%s.nl"%(l,names[l])
         m.household_size = random.randint(1, 15)
@@ -120,16 +128,16 @@ def fillDBRandomly(DBSession, names, seed):
         shifts_wg = []
         for i in range(50):
             shift_dec  = random.choice(["clean", "buy", "feed", "fill", "write", "do", "play", "sleep"])
-            s = Shift(wg.id, shift_dec , random.choice([2011, 2012, 2013]), random.randint(1,13))    
+            s = Shift(wg.id, shift_dec, random.choice([2011, 2012, 2013]), random.randint(1,13))    
             shifts_wg.append(s)
             if s.state in states[1:]:
-                s.mem_id = random.choice(wg.members).mem_id
+                s.member = random.choice(wg.members)
         for s in shifts_wg:
             DBSession.add(s)
         DBSession.flush()
                 
     # create transactions: 
-    
+    transactions = [] 
 
     return
 
