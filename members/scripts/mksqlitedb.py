@@ -22,7 +22,15 @@ TODO:
 # shifts are all open, select some states randomly (mostly worked, some assigned and noshow)
 # Add some transactions
 # Some shifts and some transactions should be in the current & next month
+# Mention this script in the INSTALL file (or a better place)
+# Maybe even make a fab command?
 '''
+
+dbname = 'members-dev.db'
+seed='Miau'
+fakenamesname = 'scripts/fakenames.txt'
+DBSession = None
+default_pwd = 'testtest'
 
 
 # this could be used to access .ini (for later reference)
@@ -30,7 +38,8 @@ TODO:
 #env = bootstrap('development.ini')
 #print env['request'].route_url('home')
 
-def addAdmin(DBSession):
+
+def addAdmin():
     admin = Member(fname=u'Adalbert', lname='Adminovic')
     admin.mem_email = 'admin@vokomokum.nl'
     salt = md5crypt('notsecret', '') 
@@ -40,8 +49,9 @@ def addAdmin(DBSession):
     DBSession.add(admin)
     DBSession.flush()
     
+
 """Ensure the backwards compatibility, these settings are used in unit tests"""
-def addOldNames(DBSession):
+def addOldNames():
     m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
     m1.mem_email = 'peter@dePan.nl'
     m1.mem_enc_pwd = md5crypt('notsecret', 'notsecret')
@@ -65,7 +75,7 @@ def addOldNames(DBSession):
     DBSession.flush()
     
 
-def createWGs(DBSession):
+def createWGs():
     wgs = []
     wgs.append(Workgroup(name=u'Systems2', desc=u'IT stuff'))
     wgs.append(Workgroup(name=u'Besteling2', desc=u'Besteling at wholesale'))
@@ -79,43 +89,48 @@ def createWGs(DBSession):
     return wgs
     
 
-def fillDBRandomly(DBSession, names, seed):
+def fillDBRandomly(seed):
     random.seed(seed)
-    workgroups = createWGs(DBSession)
+    workgroups = createWGs()
+    # read in the fakenames
+    names = {}
+    for l in file(fakenamesname, 'r'):
+        fname,lname = l.strip().split()
+        names[fname] = lname
     namelist = sorted(list(names.keys()))
     # 20% of the people are applicants
     members = []
-    for l in namelist[int(len(namelist) * 0.8):]:
+    for l in namelist[int(len(namelist) * 0.2):]:
         m = Applicant(fname=l, lname=names[l])
-        m.email = "%s@%s.nl"%(l,names[l])
+        m.email = "%s@%s.nl"%(l, names[l])
         m.household_size = random.randint(1, 15)
-        m.telnr = "06"+unicode(random.randint(10000000, 100000000))
+        m.telnr = "06" + unicode(random.randint(10000000, 100000000))
         DBSession.add(m)
         # randomly select a number of workgroups m can be a member of
         DBSession.flush()
     # and the rest are members
-    for l in namelist[:int(len(namelist)*0.7)]:
+    for l in namelist[:int(len(namelist) * 0.8)]:
         prefix = random.choice([u"de", u"van", u"voor", u"van den", u"te"])
         m = Member(fname=l, prefix=prefix, lname=names[l])
-        m.mem_email = "%s@%s.nl"%(l,names[l])
-        m.mem_enc_pwd = md5crypt(names[l]+l, names[l]+l)
-        m.mem_mobile = "06"+unicode(random.randint(10000000, 100000000))
+        m.mem_email = "%s@%s.nl" % (l, names[l])
+        m.mem_enc_pwd = md5crypt(default_pwd, default_pwd)
+        m.mem_mobile = "06" + unicode(random.randint(10000000, 100000000))
         m.mem_membership_paid = True
-        if random.random()<0.01:
+        if random.random() < 0.01:
             m.mem_membership_paid = False
         m.mem_active = True
-        if random.random()<0.05:
+        if random.random() < 0.05:
             m.mem_active = False
-        m.mem_street = random.choice(namelist)+"street"
+        m.mem_street = random.choice(namelist) + "street"
         m.mem_house = random.randint(1, 200)
         m.mem_postcode = "1000AB"
         m.city = "Amsterdam"
         DBSession.add(m)
         # randomly select a number of workgroups m can be a member of
-        for wg in random.sample(workgroups, random.randint(1,len(workgroups))):
+        for wg in random.sample(workgroups, random.randint(1, len(workgroups))):
             wg.members.append(m)
             # randomly select if m is a leader of the workgroup: only 10 % of all members are leaders
-            if random.random()<0.1:
+            if random.random() < 0.1:
                 wg.leaders.append(m)
         members.append(m)
         DBSession.flush()
@@ -139,12 +154,8 @@ def fillDBRandomly(DBSession, names, seed):
     # create transactions: 
     transactions = [] 
 
-    return
 
-def main():
-    dbname = 'members-dev.db'
-    seed='Miau'
-    fakenamesname = 'scripts/fakenames.txt'
+if __name__ == '__main__':
     if len(sys.argv) > 1:
         dbname = sys.argv[1]
 
@@ -153,13 +164,7 @@ def main():
               'as argument.'.format(dbname))
         sys.exit(2)
 
-    # read in the fakenames
-    names = {}
-    for l in file(fakenamesname, 'r'):
-        fname,lname = l.strip().split()
-        names[fname] = lname
-    
-    # initalise database with some order data the members app relies on
+    # initalise database with some external data the members app relies on
     Popen('sqlite3 {} < members/tests/setup.sql'.format(dbname), shell=True).wait()
     engine = create_engine('sqlite:///{}'.format(dbname))
     DBSession = models.base.configure_session(engine)
@@ -169,21 +174,19 @@ def main():
     # turn on Foreign Keys in sqlite
     # (enforcement only works from version 3.6.19 though)
     engine.execute('pragma foreign_keys=on')
-
-    # add a default admin
-    addAdmin(DBSession)
-    # add old names, used in base.py and in testing (ask Nic what to do with it)
-    addOldNames(DBSession)
-    fillDBRandomly(DBSession, names, seed)
-
     # reserved transaction types
     for rt in reserved_ttype_names:
         DBSession.add(TransactionType(name=rt))
-    DBSession.flush()
 
+    # add a default admin
+    addAdmin()
+    # add old names, used in base.py and in testing (ask Nic what to do with it)
+    addOldNames()
+    # this applicants, members, shifts and transactions
+    fillDBRandomly(seed)
+
+    DBSession.flush()
     transaction.commit()
 
     print('Created database {}'.format(dbname))
 
-if __name__ == '__main__':
-    main()
