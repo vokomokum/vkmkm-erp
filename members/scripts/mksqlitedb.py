@@ -42,6 +42,8 @@ default_pwd = 'testtest'
 def addAdmin():
     admin = Member(fname=u'Adalbert', lname='Adminovic')
     admin.mem_email = 'admin@vokomokum.nl'
+    admin.mem_mobile = "06" + unicode(random.randint(10000000, 100000000))
+    admin.household_size = 1
     salt = md5crypt('notsecret', '') 
     admin.mem_enc_pwd = md5crypt('notsecret', salt)
     admin.mem_admin = True
@@ -115,6 +117,7 @@ def fillDBRandomly(seed):
         m.mem_email = "%s@%s.nl" % (l, names[l])
         m.mem_enc_pwd = md5crypt(default_pwd, default_pwd)
         m.mem_mobile = "06" + unicode(random.randint(10000000, 100000000))
+        m.household_size = random.randint(1, 5)
         m.mem_membership_paid = True
         if random.random() < 0.01:
             m.mem_membership_paid = False
