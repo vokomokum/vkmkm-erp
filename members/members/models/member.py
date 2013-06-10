@@ -141,8 +141,10 @@ class Member(Base):
 
     def validate_email(self):
         ''' check email '''
-        # check general form: a valid name + @ + some host
-        if not re.match('[A-Za-z\-\_0-9]+@[^@]+', self.mem_email): 
+        # check general form: a valid local name + @ + some host
+        # (for local name, see http://en.wikipedia.org/wiki/Email_address#Local_part)
+        if not re.match('[A-Za-z0-9\-\_\.\+\$\%\#\&\*\/\=\?\{\}\|\~]+@[^@]+',
+                        self.mem_email): 
             raise VokoValidationError('The email address does not '\
                                       'seem to be valid.')
         # check host
