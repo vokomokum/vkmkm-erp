@@ -1,5 +1,5 @@
 from pyramid.view import view_config
-from sqlalchemy import distinct, desc, asc
+from sqlalchemy import desc, asc
 
 import datetime
 import pytz

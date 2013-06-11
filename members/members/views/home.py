@@ -63,7 +63,7 @@ def get_todos(session, user, show_all):
                         .filter(Shift.state == 'assigned')\
                         .order_by(Shift.year, Shift.month).all()
     for s in ass_shifts:
-        todos.append(Todo(msg='You are assigned for shift in "{}" on ({}) '\
+        todos.append(Todo(msg='You are assigned for a shift in "{}" on ({}) '\
                               'in {}/{}.'.format(s.workgroup, 
                                             s.day and s.day or 'any day',
                                             df(s.month), df(s.year)),

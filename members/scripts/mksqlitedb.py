@@ -3,6 +3,7 @@ import sys
 from sqlalchemy import create_engine
 from subprocess import Popen
 import random
+import datetime
 import transaction
 
 from members import models
@@ -10,18 +11,18 @@ from members.models.member import Member
 from members.models.applicant import Applicant
 
 from members.models.workgroups import Workgroup
-from members.models.shift import Shift
+from members.models.shift import Shift, shift_states
+from members.models.transactions import Transaction
 from members.models.transactions import TransactionType
 from members.models.transactions import reserved_ttype_names
+from members.models.orders import Order
 
 from members.utils.md5crypt import md5crypt
+from members.utils.misc import month_info
 
 '''
 TODO:
-# Adalbert should be in Membership and Systems
-# shifts are all open, select some states randomly (mostly worked, some assigned and noshow)
-# Add some transactions
-# Some shifts and some transactions should be in the current & next month
+# create some MemberOrders (possible?)
 # Mention this script in the INSTALL file (or a better place)
 # Maybe even make a fab command?
 '''
@@ -40,6 +41,9 @@ default_pwd = 'testtest'
 
 
 def addAdmin():
+    '''
+    after old names are added, he has ID 3
+    '''
     admin = Member(fname=u'Adalbert', lname='Adminovic')
     admin.mem_email = 'admin@vokomokum.nl'
     admin.mem_mobile = "06" + unicode(random.randint(10000000, 100000000))
@@ -50,6 +54,10 @@ def addAdmin():
     admin.mem_active = True
     DBSession.add(admin)
     DBSession.flush()
+    wgs = DBSession.query(Workgroup).filter(Workgroup.name==u'Systems').first()
+    wgs.members.append(admin)
+    wgm = DBSession.query(Workgroup).filter(Workgroup.name==u'Membership').first()
+    wgm.members.append(admin)
     
 
 """Ensure the backwards compatibility, these settings are used in unit tests"""
@@ -91,9 +99,10 @@ def createWGs():
     return wgs
     
 
-def fillDBRandomly(seed):
+def fillDBRandomly(seed, workgroups):
     random.seed(seed)
-    workgroups = createWGs()
+    now = datetime.datetime.now()
+    mi = month_info(now.date())
     # read in the fakenames
     names = {}
     for l in file(fakenamesname, 'r'):
@@ -138,24 +147,43 @@ def fillDBRandomly(seed):
         members.append(m)
         DBSession.flush()
     
-    # next step: create new shifts with random sequences as descriptions
-    shifts = []
-    states = ["open", "assigned", "worked", "no-show"]
+    months = [(mi.prev_month, mi.prev_year), (now.month, now.year),
+              (mi.next_month, mi.next_year)]
+    # next step: create 50 new shifts in each wg with random state/description
     for wg in workgroups:
-        ### create 50 shifts
-        shifts_wg = []
         for i in range(50):
-            shift_dec  = random.choice(["clean", "buy", "feed", "fill", "write", "do", "play", "sleep"])
-            s = Shift(wg.id, shift_dec, random.choice([2011, 2012, 2013]), random.randint(1,13))    
-            shifts_wg.append(s)
-            if s.state in states[1:]:
+            task = random.choice(["clean", "buy", "feed", "fill", "write",
+                                  "do", "play", "sleep"])
+            month = random.choice(months)
+            s = Shift(wg.id, task, month[1], month[0], day=random.randint(1,30))    
+            s.state = random.choice(shift_states)
+            if not s.state == 'open':
                 s.member = random.choice(wg.members)
-        for s in shifts_wg:
             DBSession.add(s)
         DBSession.flush()
                 
-    # create transactions: 
-    transactions = [] 
+    # Finally: create 20 transactions per member
+    ttypes = DBSession.query(TransactionType).all()
+    orders = DBSession.query(Order).all()
+    for m in members:
+        for i in range(20):
+            month = random.choice(months)
+            ttype = random.choice(ttypes)
+            t = Transaction(ttype_id=ttype.id, amount=random.random() * 150,
+                            date=datetime.datetime(month[1], month[0],
+                                  random.randint(1, 30)), mem_id=m.mem_id,
+                            whol_id='', vers_id='')
+            t.ttype = ttype
+            t.member = m
+            if ttype.pos_neg == 'neg':
+                t.amount *= -1
+            if ttype.name == 'Order Charge':
+                o = random.choice(orders)
+                t.ord_no = o.id
+                t.order = o 
+            t.validate()
+            DBSession.add(t)
+        DBSession.flush()
 
 
 if __name__ == '__main__':
@@ -163,9 +191,12 @@ if __name__ == '__main__':
         dbname = sys.argv[1]
 
     if os.path.exists(dbname):
-        print('DB {} already exists. Delete it or pass a different filename '\
-              'as argument.'.format(dbname))
-        sys.exit(2)
+        answ = raw_input('DB {} already exists. Delete it? [y/N]'.format(dbname))
+        if answ.lower() == 'y':
+            os.remove(dbname)
+        else:
+            print "Aborted."
+            sys.exit(2)
 
     # initalise database with some external data the members app relies on
     Popen('sqlite3 {} < members/tests/setup.sql'.format(dbname), shell=True).wait()
@@ -181,12 +212,13 @@ if __name__ == '__main__':
     for rt in reserved_ttype_names:
         DBSession.add(TransactionType(name=rt))
 
-    # add a default admin
-    addAdmin()
+    workgroups = createWGs()
     # add old names, used in base.py and in testing (ask Nic what to do with it)
     addOldNames()
+    # add a default admin
+    addAdmin()
     # this applicants, members, shifts and transactions
-    fillDBRandomly(seed)
+    fillDBRandomly(seed, workgroups)
 
     DBSession.flush()
     transaction.commit()
