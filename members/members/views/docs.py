@@ -38,8 +38,11 @@ class DocsListView(BaseView):
         # a dict with filenames in each subdirectory
         files = [urllib.quote(f) for f in os.listdir(folder_full_path)\
                  if is_doc_file(f)]
+        files.sort()
+        files.reverse() # assuming file names often start with date
         folders = [d for d in os.listdir(folder_full_path)\
                    if os.path.isdir('{}/{}'.format(folder_full_path, d))]
+        folders.sort()
         return dict(cur_folder=folder, folders=folders, files=files, msg='')
 
 
