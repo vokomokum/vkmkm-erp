@@ -12,6 +12,7 @@ fab serve           # run local dev server
 fab test            # run test
 fab commit          # commit changed code (interactively)
 fab push            # push commits
+fab populate        # populate local test DB (sqlite) with dummy data
 fab prepare_deploy  # run tests and if successful, push all code to git
                     # (actually runs fab test, fab commit and fab push)
 fab deploy:user=you # deploy latest code on our server and set it 'live'
@@ -51,6 +52,12 @@ def commit():
 def push():
     ''' push commited code to server '''
     local("git push")
+
+def populate():
+    ''' populate local test DB (sqlite) with dummy data.
+        Uses members-dev.db, which is also named in development.ini as DB
+    '''
+    local("python scripts/mksqlitedb.py")
 
 def prepare_deploy():
     '''

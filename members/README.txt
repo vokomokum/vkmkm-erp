@@ -5,6 +5,10 @@ Installation instructions
 ------------------------------
 see INSTALL.txt
 
+Populate local test database with dummy data
+---------------------------------------------
+fab populate
+ 
 Starting the internal webserver 
 --------------------------------
 (use for development)
