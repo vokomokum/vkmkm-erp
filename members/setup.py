@@ -14,12 +14,13 @@ requires = [
     'pyramid_debugtoolbar',
     'zope.sqlalchemy',
     'waitress',
+    'pytz',
     'dnspython',
     ]
 
 setup(name='members',
-      version='0.0',
-      description='members',
+      version='1.0',
+      description='Vokomokum members application',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
         "Programming Language :: Python",
@@ -40,7 +41,7 @@ setup(name='members',
       [paste.app_factory]
       main = members:main
       [console_scripts]
-      populate_members = members.scripts.populate:main
+      populate_members = scripts.mksqlitedb:main
       """,
       )
 

@@ -23,24 +23,22 @@ Note that if you haven't got «wget« or if you have problems with the SSL certifi
 Also, make sure your virtual environment is built with the python you want. On some systems, several python interpreters are installed, for instance 2.6 and 2.7, or even two installations of the same version (e.g. Apples default vs a manual installation). 
 Here, we take the easy route: Simply saying "python" just uses the first in your path. Also, we call this environment «vopy«, which makes virtualenv.py create a directory with that name:
 $ python virtualenv.py vopy
-We don't need that script anymore now
+We don't need that script anymore now:
 $ rm virtualenv.py
 
 Also, from here on we denote the location of this environment as «$VIRPY«, assuming that you store the location in a system variable. 
 $ export VIRPY=~/vopy
-Note: You might want to permanently assign the location you chose to «VIRPY« in a configuration file(e.g. «~/.bashrc« or «~/.profile«).
+Note: You might want to permanently assign the location you chose to «VIRPY« in a configuration file that is executed when the console is started (e.g. «~/.bashrc« or «~/.profile«).
 Another note: If you want to configure the app for being served by Apache (most likely on a production setup), contents of the «VIRPY` directory need to be executable by the Apache user. 
-You might also want to add the bins to your path:
-$ export PATH=$VIRPY/bin/:$PATH
+We can now activate this python environment for the current console session (which has the same effect as adding the bins to your path, e.g. by doing ´export PATH=$VIRPY/bin/:$PATH´ but this way there will be no inteference with the rest of your system):
+$ source $VIRPY/bin/activate
 
-Now we're ready to install some libraries which our app will be using:
-$ cd $VIRPY/bin
-$ ./pip install paste
-$ ./pip install pyramid  # web framework + dependencies
-$ ./pip install psycopg2 # Postgres wrapper for Python, for sqlite you would install sqlite3
-$ ./pip install pytz     # Timezone support
-$ ./pip install fabric   # python build environment, handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
-                         # if you don't install fabric, look inside the fabfile for the actual commands
+Now we're ready to install some libraries into the python environment, which our app will be using:
+$ pip install paste
+$ pip install pyramid  # web framework + dependencies
+$ pip install psycopg2 # Postgres wrapper for Python, for sqlite you would install sqlite3
+$ pip install fabric   # python build environment, handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
+                       # if you don't install fabric, look inside the fabfile for the actual commands
 
 Now we get the code (if you don't have it already)
 ----------------------------------------------------
@@ -50,21 +48,26 @@ $ git clone git://git.assembla.com/vokomokum.git vokomokum
 
 Develop the app 
 --------------------
-(this also installs all needed python libs for the webapp, locally in that folder)
+(this also installs all other needed python libs for the webapp, locally in that folder)
 $ cd vokomokum/members
 $ fab develop
 
 
-Last configuration step: We need to set which database to use in the .ini file(s)
+Last step: Initialise the database
 ----------------------------------------------------------------------------------------------------
+If you want to simply create a test environment and if you are happy with some dummy data, then all you need to do is:
 
-Here is a typical line from development.ini:
+$ python scripts/mksqlitedb.py
+
+This will create an sqlite database and fill it with some data, so you can start. You may skip to the next step.
+
+If you want to use an existing sqlite database or run on Postgres, open the .ini file (development.ini [default] or production.ini) and change the database URL. Here is a typical line, when using Postgres:
 <<<
 sqlalchemy.url = postgresql+psycopg2://user:passwd@localhost:5432/vokotest
 >>>
 where vokotest is the database, and user and passwd have to be set by you.
 It seems reasonable that development.ini uses a different database than production.ini
-If you want to use sqlite, use the commented example in development.ini 
+
 
 Now it's time to see if the App is served correctly through its own simple development server 
 ----------------------------------------------------------------------------------------------------
@@ -147,6 +150,6 @@ On a web server, you might need to add a DNS entry (most likely via your webhost
 3. Now restart the Apache server
 $ sudo /usr/sbin/apachectl restart
 
-Note: To make Apache aware of code updates, it is usually enough to touch the Â´pyramid.wsgiÂ´ file
-(see also the deploy command within Âfabfile.pyÂ´), so restarting Apache is usually not necessary. 
+Note: To make Apache aware of code updates, it is usually enough to touch the ´pyramid.wsgi´ file
+(see also the deploy command within ´fabfile.py´), so restarting Apache is usually not necessary. 
 

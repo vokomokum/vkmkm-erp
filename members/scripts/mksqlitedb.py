@@ -185,7 +185,8 @@ def fillDBRandomly(seed, workgroups):
         DBSession.flush()
 
 
-if __name__ == '__main__':
+def main():
+    global dbname, DBSession
     if len(sys.argv) > 1:
         dbname = sys.argv[1]
 
@@ -224,3 +225,6 @@ if __name__ == '__main__':
 
     print('Created database {}'.format(dbname))
 
+
+if __name__ == '__main__':
+    main()
