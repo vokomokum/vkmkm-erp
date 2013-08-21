@@ -369,13 +369,14 @@ sub get_vars {
 			      "pr_wh_q = ?, pr_btw = ?, pr_wh_price = ?,".
 			      "wh_desc = ? ".
 			      "WHERE pr_id = (SELECT pr_id FROM ".
-			      "product where wh_prcode = ?)", $dbh);
+			      "product where wh_prcode = ? AND " .
+			      "pr_wh = ? )", $dbh);
 	    $sth->execute($inputs{$wid}->{m},
 			  $inputs{$wid}->{p},
 			  $inputs{$wid}->{d},
 			  $h->{wh_wh_q}, $h->{wh_btw}, 
 			  $h->{wh_whpri}, $h->{wh_descr},
-			  $wid);
+			  $wid, $config->{BG}->{bg_wh_id});
 	    $sth->finish;
 	    $dbh->commit;
 	    delete $inputs{$wid};
