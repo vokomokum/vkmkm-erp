@@ -300,7 +300,8 @@ class EditShiftView(BaseShiftView):
 
 
 @view_config(renderer='../templates/shifts.pt',
-             route_name='shift-list')
+             route_name='shift-list',
+             permission='view')
 class ListShiftView(BaseView):
 
     tab = 'work'

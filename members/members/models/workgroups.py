@@ -33,6 +33,7 @@ class Workgroup(Base):
     __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:wg-leaders', ('view', 'edit')),
                (Allow, 'group:wg-members', 'view'),
+               (Allow, 'group:members', 'view'),
                DENY_ALL]
 
     def __init__(self, request=None, name='', desc=''):
