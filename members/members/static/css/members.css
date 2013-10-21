@@ -1,0 +1,17 @@
+.content
+{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-height: 300px;
+}
+
+footer
+{
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+table.table-hover tbody tr[data-href]:hover td
+{
+	cursor: pointer;
+}

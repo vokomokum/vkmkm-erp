@@ -4,49 +4,59 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
             
-            <h1>Members</h1>
+	        <h1>Members</h1>
 
-            <form option="${portal_url}/members" method="post" id="list-options">
-                <span>Showing ${view.mem_count} member(s).</span>
-                <span>
-                    <input tal:condition="not: show_inactive" type="checkbox" name="include_inactive"></input>               
-                    <input tal:condition="show_inactive" type="checkbox" name="include_inactive" checked="checked"></input>               
-                    Include inactive
-                </span>
-                <input type="submit" value="List"/>
-            </form>
+			<div class="row">			
+	            <form class="col-sm-12 text-right form-inline" role="form" option="${portal_url}/members" method="post" id="list-options">
+	            	<div class="checkbox">
+	                	<label>
+							<!-- This is non-standard. Creating members should go via applicants -->
+				            <a href="members/new" tal:condition="view.user.mem_admin">
+				                <span class="glyphicon glyphicon-plus"></span> New member
+				            </a>
+		                	Showing ${view.mem_count} member(s).
+	                	</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input name="include_inactive" tal:attributes="checked python: show_inactive and 'checked' | nothing" type="checkbox"> Include inactive
+						</label>
+					</div>                
+	                <button class="btn btn-default" type="submit" value="List">List</button>
+	            </form>
+			</div>
 
-            <!-- This is non-standard. Creating members should go via applicants -->
-            <div id="action-box">
-                <a class="add-link" href="members/new" tal:condition="view.user.mem_admin">
-                    New member
-                </a>
-            </div>            
-
-            <table class="list" width="100%">
-                <tr>
-                    <th width="10%">
-                        <a href="${portal_url}/members?order_by=id&order_dir=${order_id_choice}">ID</a>
-                    </th>
-                    <th width="40%">
-                        <a href="${portal_url}/members?order_by=name&order_dir=${order_name_choice}">Name</a>
-                    </th>
-                    <th width="42%">Email</th>
-                    <th width="8%">active</th>
-                </tr>
-                <tr tal:repeat="m members" class="list-content">
-                    <td align="center">
-                        <a href="member/${m.mem_id}" tal:content="m.mem_id" title="show/edit"></a>
-                    </td>
-                     <td>
-                        <a href="member/${m.mem_id}" tal:content="m.fullname" title="show/edit"></a>
-                    </td>
-                    <td><span tal:content="m.mem_email" tal:condition="m.mem_email"></span></td>
-                    <td align="center">
-                        <span tal:condition="m.mem_active">yes</span>
-                        <span tal:condition="not:m.mem_active">no</span>
-                    </td>
-                </tr>
+            <table class="table table-striped table-bordered table-hover table-responsive">
+            	<thead>
+	                <tr>
+	                    <th>
+	                        <a href="${portal_url}/members?order_by=id&order_dir=${order_id_choice}">ID</a>
+	                    </th>
+	                    <th>
+	                        <a href="${portal_url}/members?order_by=name&order_dir=${order_name_choice}">Name</a>
+	                    </th>
+	                    <th>Email</th>
+	                    <th>Active</th>
+	                    <th>Actions</th>
+	                </tr>
+            	</thead>
+            	<tbody>
+	                <tr tal:repeat="m members" data-href="member/${m.mem_id}">
+	                    <td>
+	                    	<span tal:content="m.mem_id"></span>
+	                    </td>
+	                     <td>
+							 <span tal:content="m.fullname"></span>
+	                    </td>
+	                    <td><span tal:content="m.mem_email" tal:condition="m.mem_email"></span></td>
+	                    <td>
+	                        <span tal:attributes="class python: m.mem_active and 'glyphicon glyphicon-ok' or ''"></span>
+	                    </td>
+	                    <td>
+		                    <a href="member/${m.mem_id}" title="show/edit"><span class="glyphicon glyphicon-edit"></span></a>
+	                    </td>
+	                </tr>
+            	</tbody>
             </table>
 
         </div>
