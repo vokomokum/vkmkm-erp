@@ -74,7 +74,16 @@ class Workgroup(Base):
 
     @property
     def headcount(self):
-        return len(self.members)
+        return len(self.active_members)
+
+    @property
+    def active_members(self):
+        return [m for m in self.members if m.mem_active]
+
+    @property
+    def active_leaders(self):
+        return [m for m in self.leaders if m.mem_active]
+
 
 Workgroup.members = relationship('Member', secondary=membership)
 Member.workgroups = relationship('Workgroup', secondary=membership)

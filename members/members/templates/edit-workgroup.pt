@@ -50,11 +50,11 @@
                     data-placeholder="Start typing or click to select members"
                     class="chzn-select">
             <tal:block tal:repeat="pm view.possible_members">
-                <option tal:condition="python: pm in wg.leaders"
+                <option tal:condition="python: pm in wg.active_leaders"
                         tal:content="pm.fullname" selected="selected"
                         value="${pm.mem_id}">
                 </option>
-                <option tal:condition="python: not pm in wg.leaders"
+                <option tal:condition="python: not pm in wg.active_leaders"
                         tal:content="pm.fullname" value="${pm.mem_id}">
                 </option>
             </tal:block>
@@ -65,11 +65,11 @@
                     data-placeholder="Start typing or click to select members"
                     class="chzn-select">
                 <tal:block tal:repeat="pm view.possible_members">
-                    <option tal:condition="python:pm in wg.members"
+                    <option tal:condition="python:pm in wg.active_members"
                             tal:content="pm.fullname" 
                             value="${pm.mem_id}" selected="selected">
                     </option>
-                    <option tal:condition="python:pm not in wg.members"
+                    <option tal:condition="python:pm not in wg.active_members"
                             tal:content="pm.fullname" value="${pm.mem_id}">
                     </option>
                 </tal:block>

@@ -116,7 +116,6 @@ def wg_members(cur, wg_ids, ct_list):
             "members as m WHERE w.mem_id = m.mem_id AND mem_active " +
             "ORDER BY w.wg_id");
     last_wg = -1
-    all_list = ""
     all_sep  = ""
     members_cdb = cdb.cdbmake("/etc/exim/members/members.cdb",
                               "/etc/exim/members/members.cdb.tmp")
@@ -127,8 +126,6 @@ def wg_members(cur, wg_ids, ct_list):
             wg_id, mem_email = cur.fetchone()
         except:
             break
-        all_list += all_sep + mem_email
-        all_sep = ","
         if wg_id != last_wg:
             if last_wg >= 0:
                 members_cdb.add(wg_ids[last_wg], list)
@@ -141,7 +138,20 @@ def wg_members(cur, wg_ids, ct_list):
         
     members_cdb.add(wg_ids[last_wg], list)
     members_all_cdb.add("%s-all" % (wg_ids[last_wg],), list)
-    members_cdb.add("ct", ct_list)
+    members_cdb.add("ct", ct_list) 
+    all_list = ""
+    all_sep  = ""
+    doquery(cur, "SELECT mem_id, mem_email FROM members " +
+            "WHERE mem_active")
+    while True:
+        try:
+            mem_id, mem_email = cur.fetchone()
+        except:
+            break
+
+        all_list += all_sep + mem_email
+        all_sep = ","
+
     members_cdb.add("all", all_list)
     members_cdb.finish()
     members_all_cdb.finish()

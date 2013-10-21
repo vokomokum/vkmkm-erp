@@ -30,14 +30,14 @@ Usage of this address is limited to vokomokum members."
         </tr>
         <tr class="list-content">
             <td>
-                <tal:block tal:repeat="l wg.leaders">
+                <tal:block tal:repeat="l wg.active_leaders">
                    <a href="${portal_url}/member/${l.mem_id}">${l.fullname}</a>
                     <span tal:condition="not repeat.l.end">,</span>
                 </tal:block>
             
             </td>
             <td>
-                <tal:block tal:repeat="m wg.members">
+                <tal:block tal:repeat="m wg.active_members">
                     <a tal:content="m.fullname" href="${portal_url}/member/${m.mem_id}"></a>
                     <span tal:condition="not repeat.m.end">,</span>
                 </tal:block>

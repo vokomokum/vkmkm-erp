@@ -105,8 +105,11 @@ def get_todos(session, user, show_all):
                                     'confirm to actually make them.'))
             else:
                 settings = get_settings()
-                mail_folder = settings['vokomokum.mail_folder']
-                if not os.path.exists('{}/order-charges/{}'.format(mail_folder, no.id)):
+                order_mail_folder = '{}/order-charges/{}'\
+                        .format(settings['vokomokum.mail_folder'], no.id)
+                # we might have already sent a mail about firt-time orderers
+                if not os.path.exists(order_mail_folder)\
+                   or len(os.listdir(order_mail_folder)) <= 1:
                     todos.append(Todo(msg='Members have not gotten mail about '\
                                           'charges for order "{}".'.format(no.label),
                                   wg='Finance',
