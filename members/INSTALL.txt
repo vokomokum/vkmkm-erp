@@ -35,11 +35,10 @@ $ source $VIRPY/bin/activate
 
 Now we're ready to install some libraries into the python environment, which our app will be using:
 $ pip install paste
-$ pip install pyramid  # web framework + dependencies
-$ pip install sqlite3  # Sqlite wrapper for Python, install if you want to test/develop on Sqlite
-$ pip install psycopg2 # Postgres wrapper for Python, install for production-like system
-$ pip install fabric   # Unix/SSH scripting environment for Python, handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
+$ pip install pyramid==1.3  # web framework + dependencies
+$ pip install fabric        # Unix/SSH scripting environment for Python, handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
                        # if you don't install fabric, look inside the fabfile for the actual commands
+$ pip install psycopg2      # Postgres wrapper for Python, install if you install a production(-like) system
 
 Now we get the code (if you don't have it already)
 ----------------------------------------------------
