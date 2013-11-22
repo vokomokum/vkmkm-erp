@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import sys
 from sqlalchemy import create_engine
@@ -22,9 +23,8 @@ from members.utils.misc import month_info
 
 '''
 TODO:
+# add partners to randomly created transactions
 # create some MemberOrders (possible?)
-# Mention this script in the INSTALL file (or a better place)
-# Maybe even make a fab command?
 '''
 
 dbname = 'members-dev.db'
