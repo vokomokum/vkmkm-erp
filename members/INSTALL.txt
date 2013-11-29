@@ -38,8 +38,12 @@ Note: You might want to permanently assign the location you chose to ``VIRPY`` i
 Another note: If you want to configure the app for being served by Apache (most likely on a production setup), contents of the ``VIRPY` directory need to be executable by the Apache user. 
 We can now activate this python environment for the current console session (which has the same effect as adding the bins to your path, e.g. by doing ´export PATH=$VIRPY/bin/:$PATH´ but this way there will be no inteference with the rest of your system):
 $ source $VIRPY/bin/activate
+You should now see the name of the virtual environment in front of your console now, like this:
+[vopy] $
+Make sure you always activate your virtual environment, before you work with the web app in this local setup - otherwise, you might end up using different versions of these programs somewhere else on your computer, which can have any number of different outcomes (this kind of developer headache is what virtual environments are here to solve).
 
-Now we're ready to install some libraries into the python environment, which our app will be using:
+
+Now we're ready to install some libraries into the virtual python environment, which our app will be using:
 $ pip install paste
 $ pip install pyramid==1.3  # web framework + dependencies
 $ pip install fabric        # Unix/SSH scripting environment for Python, handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
