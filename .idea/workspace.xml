@@ -2,23 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5845c8c8-75a9-4246-8088-cc556be137e9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/fonts/glyphiconshalflings-regular.eot" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/fonts/glyphiconshalflings-regular.otf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/fonts/glyphiconshalflings-regular.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/fonts/glyphiconshalflings-regular.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/css/bootstrap-glyphicons.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/css/bootstrap.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/js/bootstrap.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/fonts/glyphiconshalflings-regular.svg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/js/jquery-1.10.2.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/js/jquery-1.10.2.min.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/members/members/static/css/members.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/members/members/templates/base.pt" afterPath="$PROJECT_DIR$/members/members/templates/base.pt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/members/members/templates/home.pt" afterPath="$PROJECT_DIR$/members/members/templates/home.pt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/members/members/static/js/vokomokum.js" afterPath="$PROJECT_DIR$/members/members/static/js/vokomokum.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="vokomokum.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="5845c8c8-75a9-4246-8088-cc556be137e9" time="1375965000519" ignored="false" />
+    <file path="/Dummy.txt" changelist="5845c8c8-75a9-4246-8088-cc556be137e9" time="1382426372947" ignored="false" />
     <file path="/development.ini" changelist="5845c8c8-75a9-4246-8088-cc556be137e9" time="1375813460136" ignored="false" />
     <file path="/base.pt" changelist="5845c8c8-75a9-4246-8088-cc556be137e9" time="1375826262045" ignored="false" />
     <file path="/__init__.py" changelist="5845c8c8-75a9-4246-8088-cc556be137e9" time="1375818046610" ignored="false" />
@@ -64,10 +54,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="setup.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="setup.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/members/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="18" selection-start="250" selection-end="250" vertical-scroll-proportion="0.125">
+            <state line="9" column="18" selection-start="250" selection-end="250" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="INSTALL.txt" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/members/INSTALL.txt">
+          <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -77,6 +79,24 @@
         <entry file="file://$PROJECT_DIR$/members/members/static/css/members.css">
           <provider selected="true" editor-type-id="text-editor">
             <state line="9" column="30" selection-start="123" selection-end="123" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/members/members/views/login.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="vokomokum.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/members/members/static/js/vokomokum.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="22" column="1" selection-start="664" selection-end="664" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -114,18 +134,18 @@
         <option value="$PROJECT_DIR$/members/members/static/js/jquery.1.10.2.min.js" />
         <option value="$PROJECT_DIR$/members/members/static/css/members.css" />
         <option value="$PROJECT_DIR$/members/members/templates/home.pt" />
-        <option value="$PROJECT_DIR$/members/members/templates/base.pt" />
         <option value="$PROJECT_DIR$/members/members/static/js/jquery-1.10.2.min.map" />
         <option value="$PROJECT_DIR$/members/members/static/js/jquery-1.10.2.min.js" />
+        <option value="$PROJECT_DIR$/members/members/templates/base.pt" />
+        <option value="$PROJECT_DIR$/members/members/static/js/vokomokum.js" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="1920" />
-    <option name="y" value="322" />
+    <option name="y" value="22" />
     <option name="width" value="1920" />
-    <option name="height" value="874" />
+    <option name="height" value="1174" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -141,7 +161,7 @@
     <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+    <navigator proportions="" version="1" splitterProportion="0.5">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -152,19 +172,7 @@
       <autoscrollFromSource />
       <sortByType />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vokomokum" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="true" />
@@ -204,7 +212,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="322" width="1920" height="874" extended-state="0" />
+    <frame x="0" y="22" width="1920" height="1174" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -212,7 +220,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25506938" sideWeight="0.6706349" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.258967" sideWeight="0.6706349" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -288,21 +296,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/members/members/static/embed.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/members/members/static/css/bootstrap.min.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/members/members/static/js/bootstrap.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/members/members/static/css/bootstrap-glyphicons.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
@@ -316,16 +309,6 @@
     <entry file="file://$PROJECT_DIR$/members/members/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="82" column="4" selection-start="4477" selection-end="4477" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/members/members/templates/home.pt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="0" selection-start="2395" selection-end="2395" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/members/members/templates/base.pt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="176" column="87" selection-start="9419" selection-end="9419" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/members/development.ini">
@@ -345,6 +328,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/members/members/static/js/jquery-1.10.2.min.map">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="140022" selection-start="140023" selection-end="140023" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/members/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="18" selection-start="250" selection-end="250" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/members/fabfile.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -352,14 +347,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/members/members/static/js/jquery-1.10.2.min.map">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="140022" selection-start="140023" selection-end="140023" vertical-scroll-proportion="0.0" />
+    <entry file="file://$PROJECT_DIR$/members/INSTALL.txt">
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/members/members/static/css/members.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="30" selection-start="123" selection-end="123" vertical-scroll-proportion="0.0">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -371,9 +364,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/members/setup.py">
+    <entry file="file://$PROJECT_DIR$/members/members/static/css/members.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="18" selection-start="250" selection-end="250" vertical-scroll-proportion="0.125">
+        <state line="9" column="30" selection-start="123" selection-end="123" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/members/members/views/login.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/members/members/templates/home.pt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="0" selection-start="2395" selection-end="2395" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/members/members/templates/base.pt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="179" column="91" selection-start="9599" selection-end="9599" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/members/members/static/js/vokomokum.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="1" selection-start="664" selection-end="664" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>

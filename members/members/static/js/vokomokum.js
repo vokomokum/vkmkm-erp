@@ -8,3 +8,16 @@ $(document).ready(function(){
 	});
 	
 });
+
+$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
+
+// shed outer layout when this is embedded (e.g. in an iframe)
+if (top != self) {
+  var head = document.getElementsByTagName("head")[0];
+  var css = document.createElement('link');
+  css.type = 'text/css';
+  css.rel = 'stylesheet';
+  css.href = '${portal_url}' + "/static/embed.css";
+  css.media = 'screen';
+  head.appendChild(css);
+}
