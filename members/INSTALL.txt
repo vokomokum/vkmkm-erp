@@ -7,7 +7,7 @@ First, the dependencies:
 -------------------------
 
 You should have a modern python (2.6+) and a database on your system.
-The production version uses postgres, locally you can also use sqlite, with probably not all features working.
+The production version uses postgres, locally you can also use sqlite3, with maybe not all features working, but a much easier installation.
 To get and update the member app code, you also need git.
 This app is meant to be run via Apache when in production (installation help for the link from Apache to this app are also below), but can be run locally with the simple, in-built server.
 
@@ -17,29 +17,38 @@ To begin, we create a virtual python environment with all needed Python librarie
 In this tutorial, let's pretend that it goes in your home dir (but you can put it anywhere you want):
 $ cd ~
 
-Now we get the standard python script that will set up the virtual python environment:
+Now we get the standard python script that will set up the virtual python environment.
+If you have the ``virtualenv`` command, great. Do this:
+$ virtualenv vopy
+
+If not, do this:
 $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
-Note that if you haven't got «wget« or if you have problems with the SSL certificate, you can also access this file with your browser and do a "Save as ..." to get the script.
+Note that if you haven't got ``wget`` or if you have problems with the SSL certificate, you can also access this file with your browser and do a "Save as ..." to get the script.
+
 Also, make sure your virtual environment is built with the python you want. On some systems, several python interpreters are installed, for instance 2.6 and 2.7, or even two installations of the same version (e.g. Apples default vs a manual installation). 
-Here, we take the easy route: Simply saying "python" just uses the first in your path. Also, we call this environment «vopy«, which makes virtualenv.py create a directory with that name:
+Here, we take the easy route: Simply saying "python" just uses the first in your path. Also, we call this environment ``vopy``, which makes virtualenv.py create a directory with that name:
 $ python virtualenv.py vopy
-We don't need that script anymore now:
+
+If you downloaded it, you can remove that script now:
 $ rm virtualenv.py
 
-Also, from here on we denote the location of this environment as «$VIRPY«, assuming that you store the location in a system variable. 
+Also, from here on we denote the location of this environment as ``$VIRPY``, assuming that you store the location in a system variable. 
 $ export VIRPY=~/vopy
-Note: You might want to permanently assign the location you chose to «VIRPY« in a configuration file that is executed when the console is started (e.g. «~/.bashrc« or «~/.profile«).
-Another note: If you want to configure the app for being served by Apache (most likely on a production setup), contents of the «VIRPY` directory need to be executable by the Apache user. 
+Note: You might want to permanently assign the location you chose to ``VIRPY`` in a configuration file that is executed when the console is started (e.g. ``~/.bashrc`` or ``~/.profile``).
+Another note: If you want to configure the app for being served by Apache (most likely on a production setup), contents of the ``VIRPY` directory need to be executable by the Apache user. 
 We can now activate this python environment for the current console session (which has the same effect as adding the bins to your path, e.g. by doing ´export PATH=$VIRPY/bin/:$PATH´ but this way there will be no inteference with the rest of your system):
 $ source $VIRPY/bin/activate
+You should now see the name of the virtual environment in front of your console now, like this:
+[vopy] $
+Make sure you always activate your virtual environment, before you work with the web app in this local setup - otherwise, you might end up using different versions of these programs somewhere else on your computer, which can have any number of different outcomes (this kind of developer headache is what virtual environments are here to solve).
 
-Now we're ready to install some libraries into the python environment, which our app will be using:
+
+Now we're ready to install some libraries into the virtual python environment, which our app will be using:
 $ pip install paste
-$ pip install pyramid  # web framework + dependencies
-$ pip install sqlite3  # Sqlite wrapper for Python, install if you want to test/develop on Sqlite
-$ pip install psycopg2 # Postgres wrapper for Python, install for production-like system
-$ pip install fabric   # Unix/SSH scripting environment for Python, handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
+$ pip install pyramid==1.3  # web framework + dependencies
+$ pip install fabric        # Unix/SSH scripting environment for Python, handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
                        # if you don't install fabric, look inside the fabfile for the actual commands
+$ pip install psycopg2      # Postgres wrapper for Python, install if you install a production(-like) system
 
 Now we get the code (if you don't have it already)
 ----------------------------------------------------
@@ -76,9 +85,14 @@ Now it's time to see if the App is served correctly through its own simple devel
 
 $ fab serve
 The Member application should now respond under http://localhost:6543.
-This is very useful for local testing of the app. Note that the serve command loads development.ini by default (because the local server is usually used for testing).
+
+If you ran the mksqlitedb script in the step above, you can log in with ID 3 and password "notsecret".
+This is a convenient way to test if everything is there.
+To stop the server, do a CTRL-C.
+
+Note that the serve command loads development.ini by default (because the local server is usually used for testing).
 You can change that (in the fabfile) if you need production.ini.
-Do a CTRL-C to stop it.
+
 
 
 We now turn to installation for what we need to let Apache serve the app (via mod_wsgi).
@@ -99,17 +113,17 @@ Note that I am not using the $VIRPY variable here to refer to the virtual enviro
 because I haven't tested using $VIRPY yet (which would probably be better practice).
 
 2. Now make sure that Apache knows about mod_wsgi - add the following line to /etc/apache2/httpd.conf:
-«LoadModule wsgi_module modules/mod_wsgi.so«
+``LoadModule wsgi_module modules/mod_wsgi.so``
 Or, on OSX 10.6:
-«LoadModule wsgi_module libexec/apache2/mod_wsgi.so«
+``LoadModule wsgi_module libexec/apache2/mod_wsgi.so``
 
 3. Restart the Apache server
 $ sudo /etc/init.d/apache2 restart
 Or, on OSX 10.6:
 $ sudo /usr/sbin/apachectl restart
 In /var/log/apache2/error_log, there should be a mention of mod_wsgi being reconfigured like this:
-«[Mon Jan 02 00:06:56 2012] [notice] Apache/2.2.20 (Unix) mod_ssl/2.2.20
-OpenSSL/0.9.8r DAV/2 mod_wsgi/3.3 Python/2.7.1 configured -- resuming normal operations«
+``[Mon Jan 02 00:06:56 2012] [notice] Apache/2.2.20 (Unix) mod_ssl/2.2.20
+OpenSSL/0.9.8r DAV/2 mod_wsgi/3.3 Python/2.7.1 configured -- resuming normal operations``
 
 See also: http://code.google.com/p/modwsgi/wiki/QuickInstallationGuide
 
@@ -139,13 +153,13 @@ NameVirtualHost 127.0.0.1
 </VirtualHost>
 >>>
 
-Replace «WSGIPythonHome« with the path to the virtual python environment we made earlier, «ServerName« with the URL you want the app to be reachable,
-and 127.0.0.1 with *:80 if you are on a web server. Also adapt the path to the «pyramid.wsgi« script.
-Hint 1: In «pyramid.wsgi«, «production.ini« can be replaced by «development.ini« for easier debugging and such niceties. This is useful if you are running a test or developing version.
-Hint 2: You can look for documentation on mod_wsgi directives here: «http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives«
+Replace ``WSGIPythonHome`` with the path to the virtual python environment we made earlier, ``ServerName`` with the URL you want the app to be reachable,
+and 127.0.0.1 with *:80 if you are on a web server. Also adapt the path to the ``pyramid.wsgi`` script.
+Hint 1: In ``pyramid.wsgi``, ``production.ini`` can be replaced by ``development.ini`` for easier debugging and such niceties. This is useful if you are running a test or developing version.
+Hint 2: You can look for documentation on mod_wsgi directives here: ``http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives``
 
 2. You also need to make the URL on which the app should be reachable known to the server.
-On my local machine, I want to reach it at 'members.localhost', so I add a line to «/etc/hosts« (in this case: «127.0.0.1      members.localhost«).
+On my local machine, I want to reach it at 'members.localhost', so I add a line to ``/etc/hosts`` (in this case: ``127.0.0.1      members.localhost``).
 On a web server, you might need to add a DNS entry (most likely via your webhosters administration).
 
 3. Now restart the Apache server
