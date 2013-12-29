@@ -1,9 +1,0 @@
-pyramid<1.4
-SQLAlchemy
-transaction
-pyramid_tm
-pyramid_debugtoolbar
-zope.sqlalchemy
-waitress
-pytz
-dnspython
