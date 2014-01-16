@@ -4,7 +4,6 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
 
-
 <!-- show toggle active state confirmation -->
 <form tal:condition="python: hasattr(view, 'confirm_toggle_active') and m.mem_id"
       action="${portal_url}/member/${m.mem_id}/edit" method="post">
@@ -22,9 +21,9 @@
 <!-- show member form -->
 <form tal:condition="python: m and not hasattr(view, 'confirm_deletion')"
       tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else 'new')"
-      method="post">
+      method="post" role="form">
     
-    <h1>Editing Member Details</h1>
+    <h1><tal:block tal:content="m.exists and 'Editing' or 'New'"></tal:block> Member Details</h1>
     
     <div class="warn" tal:condition="not m.exists">
         You are about to create a new member. Note that this will not charge

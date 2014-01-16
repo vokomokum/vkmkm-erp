@@ -7,7 +7,7 @@
 	        <h1>Members</h1>
 
 			<div class="row">			
-	            <form class="col-sm-12 text-right form-inline" role="form" option="${portal_url}/members" method="post" id="list-options">
+	            <form class="col-sm-12 text-right form-inline" role="form" option="${portal_url}/members" method="get" id="list-options">
 	            	<div class="checkbox">
 	                	<label>
 							<!-- This is non-standard. Creating members should go via applicants -->
@@ -22,7 +22,6 @@
 							<input name="include_inactive" tal:attributes="checked python: show_inactive and 'checked' | nothing" type="checkbox"> Include inactive
 						</label>
 					</div>                
-	                <button class="btn btn-default" type="submit" value="List">List</button>
 	            </form>
 			</div>
 

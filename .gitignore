@@ -2,5 +2,7 @@
 .idea
 .svn
 *.pyc
-members/members-dev.db
+*.db
+members/members/members.egg-info
 members/members/members.egg-info/*
+/members/members.egg-info/
