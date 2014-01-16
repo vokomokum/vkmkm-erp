@@ -109,7 +109,7 @@
             <section class="content">
 
                 <div class="row">
-                    <div tal:condition="msg | nothing" class="alert col-sm-6 col-sm-offset-3">
+                    <div tal:condition="msg | nothing" class="alert alert-info col-sm-6 col-sm-offset-3">
                       <button type="button" class="close" data-dismiss="alert">&times;</button>
                       ${msg}
                     </div>

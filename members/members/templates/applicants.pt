@@ -7,49 +7,54 @@
     <h1>Applicants (who joined orientation)</h1>
     
     <form action="${portal_url}/applicants/new"
-          method="post">
-        
-        <table class="main" align="center">
-            <tr class="list-content" align="center">
-                <td width="25%">First Name:</td>
-                <td width="25%">
-                    <input type="text" size="10" maxlength="50" name="fname" />
-                </td>
-                <td width="25%">Last Name:</td>
-                <td width="25%">
-                    <input type="text" size="10" maxlength="50" name="lname" />
-                </td>
-            </tr>
-            <tr class="list-content" align="center">
-                <td width="25%">Email address:</td>
-                <td width="25%">
-                    <input type="text" size="10" maxlength="50" name="email" />
-                </td>
-                <td width="25%">Telephone:</td>
-                <td width="25%">
-                    <input type="text" size="10" maxlength="20" name="telnr" />
-                </td>
-            </tr>
-            <tr class="list-content" align="center">
-                <td width="80%">Household size:</td>
-                <td width="20%">
-                    <input type="text" size="2" maxlength="2" name="household_size" value="0"/>
-                </td>
-                <td width="50%" colspan="2">Comment:
-                    <textarea rows="5" cols="50" size="500" name="comment"></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td width="50%" colspan="3"></td>
-                <td width="50%">
-                    <input type="submit" name="add" value="Add"/>
-                </td>
-            </tr>
-        </table>
+          method="post" class="form-horizontal">
+
+          <div class="form-group">
+            <label for="fname" class="col-sm-2 control-label">Firstname</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="fname" name="fname" placeholder="Firstname">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lname" class="col-sm-2 control-label">Lastname</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="lname" name="lname" placeholder="Lastname">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-6">
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="telnr" class="col-sm-2 control-label">Phonenumber</label>
+            <div class="col-sm-6">
+              <input type="tel" class="form-control" id="telnr" name="telnr" placeholder="Phonenumer">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="household_size" class="col-sm-2 control-label">Household size</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="household_size" name="household_size" placeholder="Household size">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="comment" class="col-sm-2 control-label">Comment</label>
+            <div class="col-sm-6">
+              <textarea class="form-control" rows="5" name="comment" id="comment"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+          </div>
     </form>
 
     <!-- List existing ones -->
-    <table class="list" width="100%">
+    <table class="table table-striped table-bordered table-hover table-responsive">
+      <thead>
         <tr>
             <th>Name</th>
             <th>Month</th>
@@ -57,7 +62,10 @@
             <th>email</th>
             <th>Tel.</th>
             <th>Household size</th>
+            <th><!-- Actions --></th>
         </tr>
+      </thead>
+      <tbody>
         <tr tal:repeat="a applicants">
             <td width="20%">
                 <span tal:content="a.fname"></span>
@@ -71,13 +79,14 @@
             <td width="12%">
                 <a title="Make this applicant into a member (with own member ID)"
                        href="${portal_url}/applicant/${a.id}/mkmember">
-                    <button>M</button>
+                    <span class="glyphicon glyphicon-thumbs-up"><span>
                 </a>
                 <a title="Delete from list" href="${portal_url}/applicant/${a.id}/delete">
-                    <button>X</button>
+                    <span class="glyphicon glyphicon-remove"><span>
                 </a>
             </td>
         </tr>
+      </tbody>
     </table>
 
         </div>

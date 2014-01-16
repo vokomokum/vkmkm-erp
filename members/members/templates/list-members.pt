@@ -28,10 +28,12 @@
             	<thead>
 	                <tr>
 	                    <th>
-	                        <a href="${portal_url}/members?order_by=id&order_dir=${order_id_choice}">ID</a>
+	                        <a href="${portal_url}/members?order_by=id&order_dir=${order_id_choice}">ID
+	                        <span tal:condition="order_by == u'id'" class="glyphicon glyphicon-chevron-${order_id_choice == u'desc' and 'up' or 'down'}"></span></a>
 	                    </th>
 	                    <th>
-	                        <a href="${portal_url}/members?order_by=name&order_dir=${order_name_choice}">Name</a>
+	                        <a href="${portal_url}/members?order_by=name&order_dir=${order_name_choice}">Name
+	                        <span tal:condition="order_by == u'name'" class="glyphicon glyphicon-chevron-${order_name_choice == u'desc' and 'up' or 'down'}"></span></a>
 	                    </th>
 	                    <th>Email</th>
 	                    <th>Active</th>
