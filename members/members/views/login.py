@@ -75,3 +75,11 @@ class Logout(BaseView):
         headers = forget(self.request)
         return HTTPFound(location = route_url('home', self.request),
                          headers = headers)
+
+
+@view_config(renderer='json', route_name='mem_info')
+def member_info(request):
+    mid = request.params.get('mid')
+    member = get_member(mid) 
+    return dict(mem_id=member.mem_id, fname=member.mem_fname,
+                lname=member.mem_lname)
