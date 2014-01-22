@@ -17,10 +17,14 @@ class BaseView(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        self.logged_in = authenticated_userid(request)
+        self.logged_in = authenticated_userid(request) > -1
         # only show content if this is False or user is logged in
         # (otherwise, show login screen)
-        self.login_necessary = True
+        self.login_necessary = True    
+        self.came_from = self.request.path
+        if 'came_from' in self.request.params:
+            # TODO: check if came_from is among the uris we allow
+            self.came_from = self.request.params.get('came_from')
         # for submenus
         now = datetime.datetime.now()
         self.year = now.year
@@ -28,6 +32,7 @@ class BaseView(object):
         # every template asks for the layout to look for the macros
         self.layout = get_renderer('../templates/base.pt').implementation()
         self.user = authenticated_user(self.request)
+        print self.user
 
     @property
     def user(self):
@@ -47,7 +52,7 @@ class BaseView(object):
     def redirect(self, loc):
         """
         Redirect request to another location
-        :param str loc: location (path after ${portal_url})
+        :param str loc: location (path after ${portal_url} or full URL)
         :return: headers which should be returned by view
         """
         uid = -1

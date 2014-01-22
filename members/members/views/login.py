@@ -25,12 +25,7 @@ class Login(BaseView):
                 referrer = '/' # never use the login form itself as came_from
         except:
             pass
-        came_from = self.request.params.get('came_from', referrer)
         message = ''
-        if came_from != '/':
-            message = 'You are not allowed to access this resource.'\
-                      ' You may want to login as a member with the'\
-                      ' sufficient access rights.'
         if 'form.submitted' in self.request.params:
             login = self.request.params['login']
             passwd = self.request.params['passwd']
@@ -42,7 +37,7 @@ class Login(BaseView):
                     if member.mem_active:
                         self.logged_in = True
                         headers = remember(self.request, member.mem_id)
-                        return HTTPFound(location = came_from, headers = headers)
+                        return HTTPFound(location = self.came_from, headers = headers)
                     else:
                         message += 'Login denied because the account of {} has been '\
                                    ' set to inactive.'.format(member)
@@ -64,9 +59,7 @@ class Login(BaseView):
             message += ' The Login failed.'
 
         return dict(msg = message,
-                    url = self.request.application_url + '/login',
-                    came_from = came_from,
-                   )
+                    url = self.request.application_url + '/login')
 
 
 @view_config(renderer='../templates/base.pt', route_name='logout')

@@ -168,4 +168,4 @@ class ListMemberView(BaseView):
         return dict(members=members, msg=msg, order_by=order_by,
                     order_id_choice=order_id_choice,
                     order_name_choice=order_name_choice,
-                    show_inactive=show_inactive, came_from='/members')
+                    show_inactive=show_inactive)
