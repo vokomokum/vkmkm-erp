@@ -68,7 +68,7 @@ def prepare_deploy():
     commit()
     push()
 
-def deploy(user='you', mode=""):
+def deploy(user='you', mode="test", branch="master"):
     '''
     deploy latest code on our server and set it 'live'
     (you need admin rights for this on the server)
@@ -85,7 +85,7 @@ def deploy(user='you', mode=""):
             sudo("git clone git@git.assembla.com:vokomokum.git {}".\
                      format(code_dir), user=user)
     with cd(code_dir):
-        sudo("./dev-tools/update-members-site-from-git {}".format(mode))
+        sudo("./dev-tools/update-members-site-from-git {} {}".format(mode, branch))
         # no need to restart apache, simply touch wsgi file (when in daemon mode)
         # (see http://code.google.com/p/modwsgi/wiki/ReloadingSourceCode)
         if mode == 'production':
