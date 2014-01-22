@@ -6,6 +6,7 @@ from pyramid.url import route_url
 from pyramid.view import view_config
 
 from members.utils.security import get_member
+from members.utils.security import authenticated_user
 from members.utils.md5crypt import md5crypt
 from members.views.base import BaseView
 
@@ -77,9 +78,15 @@ class Logout(BaseView):
                          headers = headers)
 
 
-@view_config(renderer='json', route_name='mem_info')
-def member_info(request):
-    mid = request.params.get('mid')
-    member = get_member(mid) 
-    return dict(mem_id=member.mem_id, fname=member.mem_fname,
-                lname=member.mem_lname)
+@view_config(renderer='json', route_name='userinfo')
+def userinfo(request):
+    '''
+    This view is used from outside apps (currently: vers foodcoop) to check
+    if a user is logged in here. If (s)he is, we return some info.
+    '''
+    member = authenticated_user(request)
+    if not member:
+        return dict(error='Could not authenticate member.') 
+    return dict(user_id=member.mem_id, given_name=member.mem_fname,
+                middle_name=member.mem_prefix, family_name=member.mem_lname,
+                email=member.mem_email)

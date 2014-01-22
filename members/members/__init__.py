@@ -46,7 +46,7 @@ def main(global_config, **settings):
     config.add_route('home', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
-    config.add_route('mem_info', '/mem_info')
+    config.add_route('userinfo', '/userinfo')
     config.add_route('member', '/member/{mem_id}', factory=Member)
     config.add_route('member-list', '/members', factory=Member)
     config.add_route('member-new', '/members/new', factory=Member)
