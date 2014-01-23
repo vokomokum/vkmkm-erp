@@ -32,7 +32,6 @@ class BaseView(object):
         # every template asks for the layout to look for the macros
         self.layout = get_renderer('../templates/base.pt').implementation()
         self.user = authenticated_user(self.request)
-        print self.user
 
     @property
     def user(self):
