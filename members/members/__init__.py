@@ -33,7 +33,8 @@ def main(global_config, **settings):
             authkey,
             callback=groupfinder,
             cookie_name='Mem',
-            include_ip=True)
+            include_ip=False,
+            parent_domain=True)
     authz_policy = ACLAuthorizationPolicy()
     config = Configurator(settings=settings,
         #root_factory = 'members.models.auth.RootFactory',
