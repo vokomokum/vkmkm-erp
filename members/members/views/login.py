@@ -5,6 +5,9 @@ from pyramid.security import remember, forget
 from pyramid.url import route_url
 from pyramid.view import view_config
 
+import os
+import base64
+
 from members.utils.security import get_member
 from members.utils.security import authenticated_user
 from members.utils.md5crypt import md5crypt
@@ -36,6 +39,8 @@ class Login(BaseView):
                 if (member.mem_enc_pwd and str(member.mem_enc_pwd) == enc_pwd):
                     if member.mem_active:
                         self.logged_in = True
+                        if member.mem_cookie == "":
+                            member.mem_cookie = base64.urlsafe_b64encode(os.urandom(16))
                         headers = remember(self.request, member.mem_id)
                         return HTTPFound(location = self.came_from, headers = headers)
                     else:
@@ -66,6 +71,8 @@ class Login(BaseView):
 class Logout(BaseView):
 
     def __call__(self):
+        m = get_member(self.request.cookies.get("Mem"))
+        m.mem_cookie = ""
         headers = forget(self.request)
         return HTTPFound(location = route_url('home', self.request),
                          headers = headers)

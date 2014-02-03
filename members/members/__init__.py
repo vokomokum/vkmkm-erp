@@ -6,6 +6,7 @@ from pyramid.exceptions import NotFound
 
 from members.models.base import configure_session
 from members.utils.security import groupfinder
+from members.utils.auth import VokoAuthenticationPolicy
 from members.views.base import NotFoundView
 from members.views.base import ErrorView
 # import all our types here once, important
@@ -25,16 +26,8 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     configure_session(engine)
 
-    # authentication setup TODO: use order app cookies
-    #f = open('auth.key', 'r')
-    #authkey = f.readline()
-    authkey = 'pretty_secret'
-    authn_policy = AuthTktAuthenticationPolicy(
-            authkey,
-            callback=groupfinder,
-            cookie_name='Mem',
-            include_ip=False,
-            parent_domain=True)
+    # authentication setup
+    authn_policy = VokoAuthenticationPolicy(settings)
     authz_policy = ACLAuthorizationPolicy()
     config = Configurator(settings=settings,
         #root_factory = 'members.models.auth.RootFactory',
