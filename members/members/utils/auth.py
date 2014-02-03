@@ -32,8 +32,8 @@ class VokoAuthenticationPolicy(object):
         self.cookieKey = AuthTktCookieHelper(secret, cookie_name='Key',
             timeout=ti, reissue_time=rt, max_age=self.max_age)
         if not self.pyramid_lt_15:
-            self.CookieMem.parent_domain = True
-            self.CookieKey.parent_domain = True
+            self.cookieMem.parent_domain = True
+            self.cookieKey.parent_domain = True
 
     def remember(self, request, principal, **kw):
         m = DBSession().query(Member).filter(Member.mem_id == principal).first()
