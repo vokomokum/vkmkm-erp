@@ -86,7 +86,7 @@ sub set_cookie {
                     -value => $mem_id,
 		    -path=>'/',
 		    -expires=>'+1y', 
-		    -domain=>$config=>{'cookie_subdomain'},
+		    -domain=>$config->{'cookie_subdomain'},
 		    -secure=>0);
 
 
@@ -94,7 +94,7 @@ sub set_cookie {
                     -value => $key,
 		    -path=>'/',
 		    -expires=>'+1y',
-		    -domain=>$config=>{'cookie_subdomain'},
+		    -domain=>$config->{'cookie_subdomain'},
                     -secure=>0);
 
     my $cookie = sprintf "%s", $cgi->header(-cookie=>[$cookiem, $cookiek]);
