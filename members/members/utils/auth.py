@@ -21,12 +21,13 @@ class VokoAuthenticationPolicy(object):
     '''
 
     def __init__(self, settings):
+        secret = ""
         self.pyramid_lt_15 =\
                 pkg_resources.get_distribution("pyramid").version < "1.5"
         self.max_age = 9999999999
-        self.cookieMem = AuthTktCookieHelper(s, cookie_name='Mem',
+        self.cookieMem = AuthTktCookieHelper(secret, cookie_name='Mem',
             timeout=ti, reissue_time=rt, max_age=ma)
-        self.cookieKey = AuthTktCookieHelper(s, cookie_name='Key',
+        self.cookieKey = AuthTktCookieHelper(secret, cookie_name='Key',
             timeout=ti, reissue_time=rt, max_age=ma)
         if not self.pyramid_lt_15:
             self.CookieMem.parent_domain = True
