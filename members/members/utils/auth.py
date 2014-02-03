@@ -5,7 +5,7 @@ import pkg_resources
 
 from members.models.base import DBSession
 from members.models.member import Member
-from members.utils.security import get_member, groupfinder
+from members.utils.security import groupfinder, authenticated_userid
 
 
 class VokoAuthenticationPolicy(object):
@@ -58,9 +58,7 @@ class VokoAuthenticationPolicy(object):
             return result['userid']  # TODO: does this work?
 
     def authenticated_userid(self, request):
-        m = get_member(request.cookies.get("Mem"))
-        if m and m.mem_cookie == request.cookies.get("Key"):  # TODO: check IP?
-            return m.mem_id
+        return authenticated_userid(request)
 
     def effective_principals(self, request):
         return groupfinder(self.authenticated_userid(request), request)
