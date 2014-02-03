@@ -39,7 +39,7 @@ class Login(BaseView):
                 if (member.mem_enc_pwd and str(member.mem_enc_pwd) == enc_pwd):
                     if member.mem_active:
                         self.logged_in = True
-                        if member.mem_cookie == "":
+                        if not member.mem_cookie or member.mem_cookie == "":
                             member.mem_cookie = base64.urlsafe_b64encode(os.urandom(16))
                         headers = remember(self.request, member.mem_id)
                         return HTTPFound(location = self.came_from, headers = headers)
