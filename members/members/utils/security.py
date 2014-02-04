@@ -20,9 +20,15 @@ def get_member(login):
 
 def authenticated_userid(request):
     '''
-    Get authenticated user ID from cookie
+    Here, we validate the cookie(s) and return the user ID stored in them.
     '''
-    m = get_member(request.cookies.get("Mem"))
+    if not request.cookies.get('Mem'):
+        return None
+    try:
+        cid = int(request.cookies.get('Mem'))
+    except ValueError:
+        return None
+    m = get_member(cid)
     if m and m.mem_cookie == request.cookies.get("Key"):  # TODO: check IP?
         return m.mem_id
 

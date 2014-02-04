@@ -11,13 +11,11 @@ from members.utils.security import groupfinder, authenticated_userid
 class VokoAuthenticationPolicy(object):
     '''
     Policy that mimics what the wholesale order app does: two cookies,
-    one for mem_id one for a key in the DB.
+    one for mem_id and one for a key in the DB.
     We want to store this on the parent domain, which is easy if pyramid version
     >= 1.5, otherwise a little custom str-replace is needed.
 
-    TODO: 
-    - test if memberstest can use his cookies or set them new correctly (use custom replace in remember!)
-    - problem: the test apps should still use specific domains, bcs they work on outdated data!
+    TODO: the test app should still use specific domains, bcs they work on outdated data!
     '''
 
     def __init__(self, settings):
@@ -42,8 +40,7 @@ class VokoAuthenticationPolicy(object):
         if self.pyramid_lt_15: 
             new_headers = []
             for h in headers:
-                #new_headers.append((h[0], h[1].replace('members.vokomokum.nl', 'vokomokum.nl')))
-                new_headers.append((h[0], h[1].replace('memberstest.vokomokum.nl', 'vokomokum.nl')))
+                new_headers.append((h[0], h[1].replace('members.vokomokum.nl', 'vokomokum.nl')))
             headers = new_headers
         return headers
 
