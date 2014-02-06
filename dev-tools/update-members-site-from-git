@@ -60,3 +60,5 @@ echo develop app ...
 cd /var/www/$DEST
 /usr/bin/sudo /var/www/vopy/bin/python setup.py develop 
 
+# go back to default branch
+git checkout master
