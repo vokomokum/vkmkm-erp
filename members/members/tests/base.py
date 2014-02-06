@@ -48,6 +48,7 @@ class VokoTestCase(unittest.TestCase):
 
     def setUp(self):
         self.config = testing.setUp()
+        self.config.include('pyramid_chameleon')
         if db_type == 'sqlite':
             # initalise a temporary database with some order data the members app relies on
             if os.path.exists('members-test.db'):

@@ -1,5 +1,3 @@
-from pyramid.security import authenticated_userid
-
 from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.base import DBSession
@@ -18,6 +16,21 @@ def get_member(login):
     else: # then assume id
         mem = session.query(Member).filter(Member.mem_id == login).first()
     return mem
+
+
+def authenticated_userid(request):
+    '''
+    Here, we validate the cookie(s) and return the user ID stored in them.
+    '''
+    if not request.cookies.get('Mem'):
+        return None
+    try:
+        cid = int(request.cookies.get('Mem'))
+    except ValueError:
+        return None
+    m = get_member(cid)
+    if m and m.mem_cookie == request.cookies.get("Key"):  # TODO: check IP?
+        return m.mem_id
 
 
 def authenticated_user(request):

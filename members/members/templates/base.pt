@@ -98,7 +98,7 @@
                             <tr>
                                 <td>Id or email-address:</td>
                                 <td>
-                                    <input tal:define="origin came_from | '/'" type="hidden" name="came_from" length="30" value="${origin}"/>
+                                    <input tal:define="origin view.came_from | '/'" type="hidden" name="came_from" value="${origin}"/>
                                     <input type="text" name="login" length="30"/>
                                 </td>
                             </tr>

@@ -6,6 +6,7 @@ from pyramid.exceptions import NotFound
 
 from members.models.base import configure_session
 from members.utils.security import groupfinder
+from members.utils.auth import VokoAuthenticationPolicy
 from members.views.base import NotFoundView
 from members.views.base import ErrorView
 # import all our types here once, important
@@ -25,20 +26,14 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     configure_session(engine)
 
-    # authentication setup TODO: use order app cookies
-    #f = open('auth.key', 'r')
-    #authkey = f.readline()
-    authkey = 'pretty_secret'
-    authn_policy = AuthTktAuthenticationPolicy(
-            authkey,
-            callback=groupfinder,
-            cookie_name='Mem',
-            include_ip=True)
+    # authentication setup
+    authn_policy = VokoAuthenticationPolicy(settings)
     authz_policy = ACLAuthorizationPolicy()
     config = Configurator(settings=settings,
         #root_factory = 'members.models.auth.RootFactory',
         authentication_policy = authn_policy,
         authorization_policy = authz_policy)
+    config.include('pyramid_chameleon') # needed for pyramid >= 1.5
 
     # routes to our views
     # (each view indicates a route pattern it applies to) 
@@ -46,6 +41,7 @@ def main(global_config, **settings):
     config.add_route('home', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
+    config.add_route('userinfo', '/userinfo')
     config.add_route('member', '/member/{mem_id}', factory=Member)
     config.add_route('member-list', '/members', factory=Member)
     config.add_route('member-new', '/members/new', factory=Member)
