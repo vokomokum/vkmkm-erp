@@ -73,6 +73,7 @@ class TestMembers(VokoTestCase):
     def test_login(self):
         ''' test if basic login works '''
         request = testing.DummyRequest()
+        request.client_addr = '127.0.0.1'
         request.params['form.submitted'] = True
         request.params['login'] = '1'
         request.params['passwd'] = 'notsecret'
