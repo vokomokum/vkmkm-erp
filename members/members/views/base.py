@@ -1,12 +1,13 @@
 from webob import Response
 from pyramid.renderers import get_renderer
-from pyramid.security import authenticated_userid, remember
+from pyramid.security import remember
 from pyramid.httpexceptions import HTTPFound
 
 import datetime
 
-from members.utils.security import authenticated_user
+from members.utils.security import authenticated_user, authenticated_userid
 from members.models.base import VokoValidationError
+from members.utils.misc import get_settings
 
 
 class BaseView(object):
@@ -23,8 +24,11 @@ class BaseView(object):
         self.login_necessary = True    
         self.came_from = self.request.path
         if 'came_from' in self.request.params:
-            # TODO: check if came_from is among the uris we allow
-            self.came_from = self.request.params.get('came_from')
+            s = get_settings()
+            for url in s.get('vokomokum.whitelist_came_from').split(' '):
+                if self.came_from.startswith(url):
+                    self.came_from = self.request.params.get('came_from')
+                    break
         # for submenus
         now = datetime.datetime.now()
         self.year = now.year

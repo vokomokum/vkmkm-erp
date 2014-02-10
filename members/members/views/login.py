@@ -21,13 +21,6 @@ class Login(BaseView):
 
     def __call__(self):
         self.logged_in = False
-        referrer = self.request.url
-        try: # to protect tests from failing, as this is not critical
-            login_url = route_url('login', self.request)
-            if referrer == login_url:
-                referrer = '/' # never use the login form itself as came_from
-        except:
-            pass
         message = ''
         if 'form.submitted' in self.request.params:
             login = self.request.params['login']
@@ -42,6 +35,8 @@ class Login(BaseView):
                         member.mem_cookie = base64.urlsafe_b64encode(os.urandom(24))
                         member.mem_ip = self.request.client_addr
                         headers = remember(self.request, member.mem_id)
+                        if self.came_from == '/login':
+                            self.came_from = '/'
                         return HTTPFound(location = self.came_from, headers = headers)
                     else:
                         message += 'Login denied because the account of {} has been '\
