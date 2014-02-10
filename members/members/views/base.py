@@ -26,7 +26,7 @@ class BaseView(object):
         if 'came_from' in self.request.params:
             s = get_settings()
             for url in s.get('vokomokum.whitelist_came_from').split(' '):
-                if self.came_from.startswith(url):
+                if len(url) > 0 and self.came_from.startswith(url):
                     self.came_from = self.request.params.get('came_from')
                     break
         # for submenus
