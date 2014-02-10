@@ -24,9 +24,11 @@ class BaseView(object):
         self.login_necessary = True    
         self.came_from = self.request.path
         if 'came_from' in self.request.params:
+            cf = self.request.params.get('came_from')
             s = get_settings()
             for url in s.get('vokomokum.whitelist_came_from').split(' '):
-                if len(url) > 0 and self.came_from.startswith(url):
+                if (cf.startswith('http://{}'.format(url)) \
+                    or cf.startswith('https://{}'.format(url))):
                     self.came_from = self.request.params.get('came_from')
                     break
         # for submenus
