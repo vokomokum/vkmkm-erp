@@ -308,6 +308,7 @@ sub handle_cookie {
     my $key;
     my $sth;
     my $cookie = $cgi->raw_cookie();
+    $cookie = "$cookie;" if($cookie =~ /.*;\s*Mem=\d+$/);
     #dump_stuff("handle_cookie", $cookie, "", {});
     if($cookie =~ /.*Key=([^\s;]*).*/) {
 	$key = unescape($1);
