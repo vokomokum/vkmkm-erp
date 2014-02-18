@@ -78,8 +78,10 @@ def userinfo(request):
     '''
     This view is used from outside apps (currently: vers foodcoop) to check
     if a user is logged in here. If (s)he is, we return some info.
+    This view allows to bypass th IP address check in the cookie, but requires
+    a client_secret in the request.
     '''
-    member = authenticated_user(request)
+    member = authenticated_user(request, bypass_ip=True)
     if not member:
         return dict(error='Could not authenticate member.') 
     return dict(user_id=member.mem_id, given_name=member.mem_fname,

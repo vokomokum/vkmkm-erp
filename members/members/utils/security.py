@@ -1,6 +1,7 @@
 from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.base import DBSession
+from members.utils.misc import get_settings
 
 
 def get_member(login):
@@ -18,7 +19,7 @@ def get_member(login):
     return mem
 
 
-def authenticated_userid(request):
+def authenticated_userid(request, bypass_ip=False):
     '''
     Here, we validate the cookie(s) and return the user ID stored in them.
     '''
@@ -35,11 +36,20 @@ def authenticated_userid(request):
         if not m.mem_cookie == request.cookies.get("Key"):
             return None
         if not m.mem_ip == request.client_addr:
-            return None
+            if bypass_ip:
+                p = request.params
+                s = get_settings()
+                if not 'client_id' in p or not 'client_secret' in p:
+                    return None
+                if p['client_id'] != 'external_app'\
+                   or p['client_secret'] != s.get('vokomokum.client_secret'):
+                    return None 
+            else:
+                return None
         return m.mem_id
 
 
-def authenticated_user(request):
+def authenticated_user(request, bypass_ip=False):
     """
     extract logged in userid from request, return associated Account instance
     :param Request request: request object
