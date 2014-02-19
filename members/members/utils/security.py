@@ -55,7 +55,7 @@ def authenticated_user(request, bypass_ip=False):
     :param Request request: request object
     :returns: a Member object or None
     """
-    userid = authenticated_userid(request)
+    userid = authenticated_userid(request, bypass_ip=bypass_ip)
     if userid:
         return get_member(userid)
 
