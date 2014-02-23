@@ -25,20 +25,14 @@
 
   <p class="help-block">Fields marked with * are required.</p>
 
-  <a class="view-link" tal:condition="m.exists" href="${portal_url}/member/${m.mem_id}"><span class="glyphicon glyphicon-eye-open"></span> View this member</a>
+  <a class="btn btn-link" tal:condition="m.exists" href="${portal_url}/member/${m.mem_id}"><span class="glyphicon glyphicon-eye-open"></span> view this member</a>
+  <button tal:condition="m.exists and view.user_may_edit_admin_settings"
+                  name="action" type="submit" value="toggle-active"
+                  class="btn btn-link">
+              <span class="glyphicon glyphicon-thumbs-${m.mem_active and 'down' or 'up'}"></span> make ${m.mem_active and 'inactive' or 'active'}
+          </button>
 
   <input tal:condition="m.exists" type="hidden" name="id" value="${m.mem_id}"/>
-
-  <div class="form-group">
-    <div class="col-sm-10">
-      <button tal:condition="m.exists and view.user_may_edit_admin_settings"
-                  name="action" type="submit" value="toggle-active"
-                  class="btn btn-default">
-              <span tal:condition="m.mem_active">Make inactive</span>
-              <span tal:condition="not:m.mem_active">Make active</span>
-          </button>
-    </div>
-  </div>
 
   <fieldset>
     <legend>Name & email</legend>

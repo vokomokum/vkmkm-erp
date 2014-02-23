@@ -8,22 +8,18 @@
     <h1>The ${wg.name} Workgroup</h1>
 
     <div id="wg-description" tal:content="wg.desc"></div>
- 
-    <div id="action-box">
-        <a class="mail-link" href="mailto:${wg.main_mailing_list_address}"
-           title="The coordinators of this workgroup can be reached at ${wg.main_mailing_list_address}."
-        >Mail the coordinators</a>
-        <a class="mail-link" href="mailto:${wg.all_mailing_list_address}"
-           title="All members of this workgroup can be reached at ${wg.all_mailing_list_address}.
-Usage of this address is limited to vokomokum members."
-        >Mail all members of ${wg.name}</a>
-        <a tal:condition="python: view.user_is_wgleader or view.user.mem_admin"
-            class="edit-link" href="${portal_url}/workgroup/${wg.id}/edit">Edit this group</a>
-        <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}/${now.month}">Monthly shift schedule</a>
-        <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}">Yearly shift overview</a>
-    </div>
 
-    <table class="list" align="center">
+    <a class="mail-link" href="mailto:${wg.main_mailing_list_address}"
+           title="The coordinators of this workgroup can be reached at ${wg.main_mailing_list_address}."><span class="glyphicon glyphicon-envelope"></span> Mail the coordinators</a>
+    <a class="mail-link" href="mailto:${wg.all_mailing_list_address}"
+           title="All members of this workgroup can be reached at ${wg.all_mailing_list_address}.
+Usage of this address is limited to vokomokum members."><span class="glyphicon glyphicon-envelope"></span> Mail all members of ${wg.name}</a>
+    <a tal:condition="python: view.user_is_wgleader or view.user.mem_admin"
+            class="edit-link" href="${portal_url}/workgroup/${wg.id}/edit"><span class="glyphicon glyphicon-edit"></span> Edit this group</a>
+    <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}/${now.month}"><span class="glyphicon glyphicon-calendar"></span> Monthly shift schedule</a>
+    <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}"><span class="glyphicon glyphicon-list-alt"></span> Yearly shift overview</a>
+
+    <table class="table table-striped table-bordered table-hover table-responsive" align="center">
         <tr>
             <th>Coordinators</th>
             <th>Members</th>

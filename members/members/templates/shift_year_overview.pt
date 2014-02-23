@@ -8,49 +8,53 @@
         Shift summary for workgroup ${view.wg} in ${view.year}
     </h1>
 
-    <table width="100%" border="1">
-        <tr>
-            <th width="12%"/>
-            <th width="6.2%" tal:repeat="month view.months">
-                <a href="${portal_url}/workgroup/${view.wg.id}/shifts/${view.year}/${python:view.months.index(month)+1}">${month}</a>
-            </th>
-            <th width="6.2%"/>
-        </tr>
-        <tr tal:repeat="mem view.wg.active_members">
-            <td><a href="${portal_url}/member/${mem.mem_id}">${mem}</a></td>
-            <td tal:repeat="month view.months">
-                <tal:block tal:define="mm python:view.all_shift_data[month][mem.mem_id]">
-                    ${mm[0]}/${mm[1]}
-                </tal:block>
-            </td>
-            <td id="shift-sums-per-member">
-                <tal:block tal:define="mm python:view.member_sums[mem.mem_id]">
-                    ${mm[0]}/${mm[1]}
-                </tal:block>
-            </td>
-        </tr>
-        <tr id="shift-sums-per-month">
-            <td/>
-            <td tal:repeat="month view.months">
-                <tal:block tal:define="mm python:view.month_sums[month]">
-                    ${mm[0]}/${mm[1]}
-                </tal:block>
-            </td>
-            <td>
-                <tal:block tal:define="sum python:view.sum_overall">
-                    ${sum[0]}/${sum[1]}
-                </tal:block>
-            </td>
-        </tr>
-        <tr id="shift-open-per-month">
-            <td>still open</td>
-            <td tal:repeat="month view.months">
-                <tal:block tal:define="mm python:view.all_shift_data[month][-1]">
-                    ${mm}
-                </tal:block>
-            </td>
-            <td tal:content="view.sum_open_overall"></td>
-        </tr>
+    <table class="table table-striped table-bordered table-hover table-responsive">
+        <thead>
+          <tr>
+              <th/>
+              <th tal:repeat="month view.months">
+                  <a href="${portal_url}/workgroup/${view.wg.id}/shifts/${view.year}/${python:view.months.index(month)+1}">${month}</a>
+              </th>
+              <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr tal:repeat="mem view.wg.active_members">
+              <td><a href="${portal_url}/member/${mem.mem_id}">${mem}</a></td>
+              <td tal:repeat="month view.months">
+                  <tal:block tal:define="mm python:view.all_shift_data[month][mem.mem_id]">
+                      ${mm[0]}/${mm[1]}
+                  </tal:block>
+              </td>
+              <td id="shift-sums-per-member">
+                  <tal:block tal:define="mm python:view.member_sums[mem.mem_id]">
+                      ${mm[0]}/${mm[1]}
+                  </tal:block>
+              </td>
+          </tr>
+          <tr id="shift-sums-per-month">
+              <td/>
+              <td tal:repeat="month view.months">
+                  <tal:block tal:define="mm python:view.month_sums[month]">
+                      ${mm[0]}/${mm[1]}
+                  </tal:block>
+              </td>
+              <td>
+                  <tal:block tal:define="sum python:view.sum_overall">
+                      ${sum[0]}/${sum[1]}
+                  </tal:block>
+              </td>
+          </tr>
+          <tr id="shift-open-per-month">
+              <td>still open</td>
+              <td tal:repeat="month view.months">
+                  <tal:block tal:define="mm python:view.all_shift_data[month][-1]">
+                      ${mm}
+                  </tal:block>
+              </td>
+              <td tal:content="view.sum_open_overall"></td>
+          </tr>
+        </tbody>
     </table> 
 
     <div id="stylized-sums">

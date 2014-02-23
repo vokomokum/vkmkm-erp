@@ -1,5 +1,13 @@
 $(document).ready(function(){
-	
+
+    //Workgroup add shift form
+    function toggleUntilSpec(){
+      if ($('#repeat').val() == 'once')
+        $('#until-spec').hide();
+      else
+        $('#until-spec').show();
+    }
+
 	//Clickable table rows
 	$(document)
 	.on('click', 'table tbody tr[data-href]', function(){
@@ -8,11 +16,13 @@ $(document).ready(function(){
 			window.location = href;
 	})
 	.on('change', '#list-options input[name="include_inactive"]', function(){
-		//Members list inxactive
+		//Members list inactive
 		$(this).closest('form').submit();
-	});
-	
-	
+	})
+    .on('change', '#repeat', function() { toggleUntilSpec() });
+
+    toggleUntilSpec();
+
 });
 
 $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});

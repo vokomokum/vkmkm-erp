@@ -10,107 +10,106 @@
     </h1>
  
     <!-- New shifts form -->
-        <div class="new-shift-form" id="stylized-form"
+    Create new shift(s) <a onclick="$('#form-data').toggle()">show/hide</a>
+        <div id="form-data" style="display:none;"
              tal:condition="(view.user_is_wgleader or view.user.mem_admin)"><!--and not view.month_info.month_lies_in_past"-->
-        <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post">
-          <div class="form-title">
-                Create new shift(s) <a onclick="$('#form-data').toggle()">show/hide</a>
-          </div>
-          <div id="form-data" style="display:none;">
+        <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post" role="form" class="form-horizontal">
               <p>Create one or more shifts.</p>
-              <div class="form-row">
-                <label for="task">
+              <div class="form-group">
+                <label for="task" class="col-sm-2 control-label">
                   Task
                 </label>
-                <input name="task" value="" size="40" maxlenght="100"/>
-                <!--span class="small">What job has to be done?</span-->
-              </div>
-              <div class="form-row">
-                <label for="day">
+                <div class="col-sm-4">
+                  <input class="form-control" id="task" name="task" value="" maxlenght="100"/>
+                 </div>
+                <label for="day" class="col-sm-2 control-label">
                   Day
                 </label>
-                <select name="day">
-                  <option tal:repeat="d view.days" value="${d}">${d}</option>
-                </select>
-                <input name="month" type="hidden" value="${view.month}" />
-                <input name="year" type="hidden" value="${view.year}"/>
-                <!--span class="small">On what day of this month?</span-->
-                <label for="people">
+                <div class="col-sm-4">
+                    <select name="day" id="day" class="form-control">
+                      <option tal:repeat="d view.days" value="${d}">${d}</option>
+                    </select>
+                    <input name="month" type="hidden" value="${view.month}" />
+                    <input name="year" type="hidden" value="${view.year}"/>
+                 </div>
+              </div>
+              <div class="form-group">
+                <label for="shifts" class="col-sm-2 control-label">
                   Shifts
                 </label>
-                <select name="people">
-                  <option tal:repeat="p python:range(1,10,1)" value="${p}">${p}</option>
-                </select>
-                <!--span class="small">How many shifts should be created?</span-->
-              </div>
-              <div class="form-row" id="member">
-                <label for="people">
-                Member
+                <div class="col-sm-4">
+                    <select id="shifts" name="shifts" class="form-control">
+                      <option tal:repeat="p python:range(1,10,1)" value="${p}">${p}</option>
+                    </select>
+                 </div>
+                <label for="mem_id" class="col-sm-2 control-label">
+                  Member
                 </label>
-                <select name="mem_id">
-                  <option value="--">Leave open (will be set later)</option>  
-                  <option tal:repeat="m wg.active_members" value="${m.mem_id}">${m}</option>
-                </select>
+                <div class="col-sm-4">
+                    <select name="mem_id" id="mem_id" class="form-control">
+                      <option value="--">Leave open (will be set later)</option>
+                      <option tal:repeat="m wg.active_members" value="${m.mem_id}">${m}</option>
+                    </select>
+                 </div>
               </div>
-              <div class="form-row">
-                  <label for="repeat">
-                    Create
-                  </label>
-                  <script language="javascript">
-                    function toggleUntilSpec(){
-                        if ($('#repeat').val() == 'once')
-                            $('#until-spec').hide();
-                        else 
-                            $('#until-spec').show();
-                    }
-                  </script>
-                  <select id="repeat" name="repeat" 
-                      onchange="javascript:toggleUntilSpec();">
-                    <option value="once" selected="selected">only in this month</option>
-                    <option value="monthly">monthly</option>
-                    <option value="bi-monthly-startnow">bi-monthly (starting in this month)</option>
-                    <option value="bi-monthly-startnext">bi-monthly (starting in next month)</option>
-                  </select>
-                  <span id="until-spec" style="display:none;">
-                      <label for="until_month">until</label>
-                      <select name="until_month">
-                        <tal:block tal:repeat="m python:xrange(1, 13, 1)">
-                            <option tal:condition="m == view.month" value="${m}" selected="selected">${m}</option>
-                            <option tal:condition="m != view.month" value="${m}">${m}</option>
-                        </tal:block>
-                      </select>
-                      <span>/</span>
-                      <select name="until_year">
-                        <option tal:repeat="y python:xrange(view.year,view.year+3)" value="${y}">${y}</option>
-                      </select>
-                      <!--span class="small">You can automatically create shifts that recur over time.</span-->
-                  </span>
+              <div class="form-group">
+                <label for="repeat" class="col-sm-2 control-label">
+                  Repeat
+                </label>
+                <div class="col-sm-4">
+                    <select id="repeat" name="repeat" class="form-control">
+                      <option value="once" selected="selected">only in this month</option>
+                      <option value="monthly">monthly</option>
+                      <option value="bi-monthly-startnow">bi-monthly (starting in this month)</option>
+                      <option value="bi-monthly-startnext">bi-monthly (starting in next month)</option>
+                    </select>
+                 </div>
+                 <span id="until-spec">
+                    <label for="until_month" class="col-sm-2 control-label">until</label>
+                    <div class="col-sm-2">
+                          <select name="until_month" class="form-control">
+                            <tal:block tal:repeat="m python:xrange(1, 13, 1)">
+                                <option tal:condition="m == view.month" value="${m}" selected="selected">${m}</option>
+                                <option tal:condition="m != view.month" value="${m}">${m}</option>
+                            </tal:block>
+                          </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <select name="until_year" class="form-control">
+                          <option tal:repeat="y python:xrange(view.year,view.year+3)" value="${y}">${y}</option>
+                        </select>
+                    </div>
+                </span>
               </div>
-              <button type="submit">Create</button>
-            </div>
-        </form>   
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button class="btn btn-primary" type="submit">Create</button>
+                </div>
+              </div>
+        </form>
     </div>
 
-    <div id="prevnext">
-        <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.month_info.prev_year}/${view.month_info.prev_month}">
-            &lt;&lt;&nbsp;${view.month_info.prev_month}/${view.month_info.prev_year}
-        </a>
-        &nbsp; &nbsp; &nbsp;
-        <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.month_info.next_year}/${view.month_info.next_month}">
-            ${view.month_info.next_month}/${view.month_info.next_year}&nbsp;&gt;&gt;
-        </a>
-    </div>
-
+    <ul class="pager">
+      <li><a href="${portal_url}/workgroup/${wg.id}/shifts/${view.month_info.prev_year}/${view.month_info.prev_month}">
+                                       &larr; ${view.month_info.prev_month}/${view.month_info.prev_year}
+                                   </a></li>
+      <li><a href="${portal_url}/workgroup/${wg.id}/shifts/${view.month_info.next_year}/${view.month_info.next_month}">
+                                   ${view.month_info.next_month}/${view.month_info.next_year} &rarr;
+                               </a></li>
+    </ul>
 
     <!-- List existing shifts --> 
-    <table class="list" width="100%">
-        <tr>
-            <th width="10%">Day</th>
-            <th width="35%">Task</th>
-            <th width="32%">Member</th>
-            <th width="18%">Status</th>
-            <th width="5%"></th>
-        </tr>
+    <table class="table table-striped table-bordered table-hover table-responsive">
+        <thead>
+          <tr>
+              <th>Day</th>
+              <th>Task</th>
+              <th>Member</th>
+              <th>Status</th>
+              <th></th>
+          </tr>
+        </thead>
+        <tbody>
         <tr tal:condition="python:len(shifts)==0">
             <td align="center" class="list-content" colspan="5">
                 No shifts in this month yet.
@@ -123,21 +122,25 @@
                 <td tal:condition="shift.day">${shift.day}</td>
             </tal:block>
             <td tal:condition="view.user_is_wgleader">
-                <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setday" method="post">
-                    <select onchange="this.form.submit()" name="day">
+                <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setday" method="post" role="form">
+                    <div class="form-group">
+                    <select onchange="this.form.submit()" name="day" class="form-control">
                         <tal:block repeat="d view.days">
                             <option tal:condition="python: str(d) != str(shift.day)" value="${d}">${d}</option>
                             <option tal:condition="python: str(d) == str(shift.day)" selected="selected" value="${d}">${d}</option>
                         </tal:block> 
                    </select>
+                   </div>
                 </form>
             </td>
             <!-- Task -->
             <td align="center">
-                <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/settask" method="post"
+                <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/settask" method="post" role="form"
                        tal:condition="view.user_is_wgleader or view.user.mem_admin">
-                    <input name="task" value="${shift.task}"
-                        onkeydown="if (event.keyCode == 13) this.form.submit()"/>
+                    <div class="form-group">
+                      <input name="task" value="${shift.task}" class="form-control"
+                          onkeydown="if (event.keyCode == 13) this.form.submit()"/>
+                    </div>
                 </form>
                 <span tal:condition="not:(view.user_is_wgleader or view.user.mem_admin)">
                     ${shift.task}
@@ -145,19 +148,21 @@
             </td>
             <!-- Member -->
             <td>
-                <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setmember" method="post">
+                <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setmember" method="post" role="form">
                     <tal:block tal:condition="view.user_is_wgleader or view.user.mem_admin">
                         <tal:block tal:condition="python:shift.state not in ['worked', 'no-show']">
-                            <select onchange="this.form.submit()" name="mem_id">
-                                <option value="--">--</option>
-                                <tal:block tal:repeat="m wg.members">
-                                    <option tal:condition="m.mem_id == shift.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
-                                    <option tal:condition="m.mem_id != shift.mem_id" value="${m.mem_id}">${m.fullname}</option>
-                                </tal:block>
-                                <tal:block tal:condition="python: shift.state == 'assigned' and shift.member not in wg.members">
-                                    <option value="${shift.mem_id}" selected="selected">${shift.member}</option>
-                                </tal:block>
-                            </select>
+                            <div class="form-group">
+                              <select onchange="this.form.submit()" name="mem_id" class="form-control">
+                                  <option value="--">--</option>
+                                  <tal:block tal:repeat="m wg.members">
+                                      <option tal:condition="m.mem_id == shift.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
+                                      <option tal:condition="m.mem_id != shift.mem_id" value="${m.mem_id}">${m.fullname}</option>
+                                  </tal:block>
+                                  <tal:block tal:condition="python: shift.state == 'assigned' and shift.member not in wg.members">
+                                      <option value="${shift.mem_id}" selected="selected">${shift.member}</option>
+                                  </tal:block>
+                              </select>
+                            </div>
                             <a tal:condition="shift.member" id="profile-link" 
                                 href="${portal_url}/member/${shift.member.mem_id}"
                                 title="Click to see ${shift.member}'s profile (e.g. to write an email)">&nbsp;&nbsp;
@@ -167,6 +172,7 @@
                             ${shift.member}
                             <a tal:condition="shift.member" id="profile-link" 
                                 href="${portal_url}/member/${shift.member.mem_id}"
+                                class="btn btn-link"
                                 title="Click to see ${shift.member}'s profile (e.g. to write an email)">&nbsp;&nbsp;
                             </a>
                         </tal:block>
@@ -175,14 +181,17 @@
                         ${shift.member}
                         <a tal:condition="shift.member" id="profile-link" 
                             href="${portal_url}/member/${shift.member.mem_id}"
+                            class="btn btn-link"
                             title="Click to see ${shift.member}'s profile (e.g. to write an email)">&nbsp;&nbsp;
                         </a>
                         <span tal:condition="not:shift.member">No one yet</span>
                         <button tal:condition="shift.state == 'open'"
+                            class="btn btn-link"
                             type="submit" name="mem_id" value="${view.user.mem_id}">
                             Sign up
                         </button>
                         <button tal:condition="shift.mem_id == view.user.mem_id and shift.state == 'assigned' and not(shift.is_locked)"
+                            class="btn btn-link"
                             type="submit" name="mem_id" value="--">
                             Sign out
                         </button>
@@ -193,14 +202,14 @@
             <td align="center">
                 ${shift.state}
                 <tal:block tal:condition="view.user_is_wgleader or view.user.mem_admin">
-                    <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setstate" method="post">
-                        <button type="submit" name="state"
+                    <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setstate" method="post" role="form">
+                        <button class="btn btn-link" type="submit" name="state"
                                 tal:condition="python:shift.state in ['assigned','no-show'] " value="worked">
                             Worked
                         </button>
                     </form>
-                    <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setstate" method="post">
-                        <button type="submit" name="state"
+                    <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setstate" method="post" role="form">
+                        <button class="btn btn-link"  type="submit" name="state"
                                 tal:condition="python:shift.state in ['assigned', 'worked']" value="no-show">
                             No-show!
                         </button>
@@ -211,10 +220,11 @@
             <td>
                 <a href="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/delete"
                     tal:condition="view.user_is_wgleader or view.user.mem_admin">
-                    <img src="${portal_url}/static/img/icons/delete.gif"/>
+                    <span class="glyphicon glyphicon-remove"></span> delete
                 </a>
             </td>
         </tr>
+        </tbody>
     </table>
 
 
