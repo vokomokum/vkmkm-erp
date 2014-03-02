@@ -7,27 +7,28 @@ README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'pyramid<1.4',
-    'SQLAlchemy',
-    'transaction',
-    'pyramid_tm',
-    'pyramid_debugtoolbar',
-    'zope.sqlalchemy',
-    'waitress',
-    'pytz',
-    'dnspython',
-    ]
+            'pyramid==1.5a4',
+            'pyramid_chameleon',
+            'SQLAlchemy',
+            'transaction',
+            'pyramid_tm',
+            'pyramid_debugtoolbar',
+            'zope.sqlalchemy',
+            'waitress',
+            'pytz',
+            'dnspython',
+            ]
 
 setup(name='members',
       version='1.0',
       description='Vokomokum members application',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
-        "Programming Language :: Python",
-        "Framework :: Pylons",
-        "Topic :: Internet :: WWW/HTTP",
-        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-        ],
+                   "Programming Language :: Python",
+                   "Framework :: Pylons",
+                   "Topic :: Internet :: WWW/HTTP",
+                   "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+                   ],
       author='',
       author_email='',
       url='',
@@ -38,10 +39,10 @@ setup(name='members',
       test_suite='members',
       install_requires = requires,
       entry_points = """\
-      [paste.app_factory]
-      main = members:main
-      [console_scripts]
-      populate_members = scripts.mksqlitedb:main
-      """,
+          [paste.app_factory]
+          main = members:main
+          [console_scripts]
+          populate_members = scripts.mksqlitedb:main
+          """,
       )
 
