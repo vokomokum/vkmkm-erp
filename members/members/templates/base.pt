@@ -11,11 +11,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="${portal_url}/static/img/favicon.ico" type="image/x-icon" />
-<!--         <link rel="stylesheet" type="text/css" href="${portal_url}/static/members.css" /> -->
         <link rel="stylesheet" type="text/css" href="${portal_url}/static/css/members.css" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/static/chosen.css" />
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
-<!--         <link rel="stylesheet" type="text/css" href="${portal_url}/static/css/bootstrap-glyphicons.css" /> -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
         <!-- Internet Explorer Fixes -->
         <tal:iefixstart replace="structure string:&lt;!--[if IE]&gt;" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/static/ie.css" />
@@ -25,101 +25,93 @@
     </head>
 
     <body tal:attributes="class python: view.logged_in and 'logged_in' or ''">
-    
-<tal:block tal:condition="view.logged_in">		    
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <!-- Brand and toggle get grouped for better mobile display -->
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="${portal_url}">Vokomokum</a>
-  </div>
 
-  <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav">
-		<li class="dropdown" tal:attributes="class python: view.tab == 'members' and 'active' or ''">
-			<a class="dropdown-toggle" data-toggle="dropdown" href="${portal_url}/members">Members <b class="caret"></b></a>
-			<ul class="dropdown-menu">
-				<li><a href="${portal_url}/members">Members</a></li>
-				<li><a href="${portal_url}/applicants">Applicants</a></li>
-			</ul>
-		</li>
-      <li class="dropdown" tal:attributes="class python: view.tab == 'work' and 'active' or ''">
-        <a href="${portal_url}/workgroups" class="dropdown-toggle" data-toggle="dropdown">Work <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="${portal_url}/workgroups">Workgroups</a></li>
-	        <tal:block tal:repeat="wg view.user.workgroups">
-	            <li class="divider"></li>
-	            <li class="disabled"><a href="#">${wg.name}</a></li>
-	            <li class="divider"></li>
-	            <li><a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}/${view.month}">Schedule</a></li>
-				<li><a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}">Overview</a></li>
-	        </tal:block>          
-        </ul>
-      </li>
-      <li class="dropdown" tal:attributes="class python: view.tab == 'finance' and 'active' or ''">
-        <a href="${portal_url}/transactions" class="dropdown-toggle" data-toggle="dropdown">Finance <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="${portal_url}/transactions">Monthly</a></li>
-          <li><a href="${portal_url}/transactions/2013">2013</a></li>
-          <li><a href="${portal_url}/transaction-types">Transaction Types</a></li>          
-        </ul>
-      </li> 
-	    <li tal:attributes="class python: view.tab == 'docs' and 'active' or ''">
-	        <a href="${portal_url}/docs">Docs</a>
-	    </li>    
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-        <tal:block tal:condition="view.logged_in">
-            <li><a href="${portal_url}/member/${view.user.mem_id}" title="My Account"><span class="glyphicon glyphicon-user"></span>  <span tal:content="view.user.fullname">Account</span></a></li>
-            <li><a href="${portal_url}/logout" title="Log out"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
-        </tal:block>
-
-        <tal:block tal:condition="not view.logged_in and not view.login_necessary">
-            <!-- Only used seldom, bcs if login is necessary, we show login form automatically anyway -->
-            <li><a href="/login">Log In</a></li>
-        </tal:block>    
-    </ul>
-  </div><!-- /.navbar-collapse -->
-</nav>  
-</tal:block>  
         <div class="container">
 
             <header>
+                 <tal:block tal:condition="view.logged_in">
+                    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+                      <!-- Brand and toggle get grouped for better mobile display -->
+                      <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                          <span class="sr-only">Toggle navigation</span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="${portal_url}">Vokomokum</a>
+                      </div>
+
+                      <!-- Collect the nav links, forms, and other content for toggling -->
+                      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown" tal:attributes="class python: view.tab == 'members' and 'active' or ''">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="${portal_url}/members">Members <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="${portal_url}/members">Members</a></li>
+                                    <li><a href="${portal_url}/applicants">Applicants</a></li>
+                                </ul>
+                            </li>
+                          <li class="dropdown" tal:attributes="class python: view.tab == 'work' and 'active' or ''">
+                            <a href="${portal_url}/workgroups" class="dropdown-toggle" data-toggle="dropdown">Work <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                              <li><a href="${portal_url}/workgroups">Workgroups</a></li>
+                                <tal:block tal:repeat="wg view.user.workgroups">
+                                    <li class="divider"></li>
+                                    <li class="disabled"><a href="#">${wg.name}</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}/${view.month}">Schedule</a></li>
+                                    <li><a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}">Overview</a></li>
+                                </tal:block>
+                            </ul>
+                          </li>
+                          <li class="dropdown" tal:attributes="class python: view.tab == 'finance' and 'active' or ''">
+                            <a href="${portal_url}/transactions" class="dropdown-toggle" data-toggle="dropdown">Finance <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                              <li><a href="${portal_url}/transactions">Monthly</a></li>
+                              <li><a href="${portal_url}/transactions/2013">2013</a></li>
+                              <li><a href="${portal_url}/transaction-types">Transaction Types</a></li>
+                            </ul>
+                          </li>
+                            <li tal:attributes="class python: view.tab == 'docs' and 'active' or ''">
+                                <a href="${portal_url}/docs">Docs</a>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <tal:block tal:condition="view.logged_in">
+                                <li><a href="${portal_url}/member/${view.user.mem_id}" title="My Account"><span class="glyphicon glyphicon-user"></span>  <span tal:content="view.user.fullname">Account</span></a></li>
+                                <li><a href="${portal_url}/logout" title="Log out"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+                            </tal:block>
+
+                            <tal:block tal:condition="not view.logged_in and not view.login_necessary">
+                                <!-- Only used seldom, bcs if login is necessary, we show login form automatically anyway -->
+                                <li><a href="/login">Log In</a></li>
+                            </tal:block>
+                        </ul>
+                      </div><!-- /.navbar-collapse -->
+                    </nav>
+                </tal:block>
 
                 <div class="row">
-
                     <div class="col-sm-6">
                         <img src="${portal_url}/static/img/logo-vokomokum.jpg" class="img-responsive"/>
                     </div>
-
                     <div class="col-sm-6">
                         <a href="${portal_url}"><h1>Members</h1></a>
                     </div>
-
                 </div>
-
             </header>
             
             <section class="content">
 
-                <div class="row">
-                    <div tal:condition="msg | nothing" class="alert alert-info col-sm-6 col-sm-offset-3">
-                      <button type="button" class="close" data-dismiss="alert">&times;</button>
-                      ${msg}
-                    </div>
-                <div>
+                <div tal:condition="msg | nothing" class="alert alert-info col-sm-12">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  ${msg}
+                </div>
 
-                <div class="row">
-                    <div tal:condition="info | nothing" class="alert alert-danger col-sm-12">
-                      <button type="button" class="close" data-dismiss="alert">&times;</button>
-                      ${info}
-                    </div>
+                <div tal:condition="info | nothing" class="alert alert-danger col-sm-12">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  ${info}
                 </div>
 
                 <tal:block tal:condition="not view.logged_in and view.login_necessary">
@@ -175,7 +167,7 @@
 
         <script type="text/javascript" src="${portal_url}/static/js/jquery.js"></script>
         <script type="text/javascript" src="${portal_url}/static/chosen.jquery.min.js"></script>
-		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="${portal_url}/static/js/vokomokum.js"></script>
         <script type="text/javascript" src="${portal_url}/static/highcharts.js"></script>
 

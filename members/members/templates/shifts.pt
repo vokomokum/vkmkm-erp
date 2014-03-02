@@ -218,9 +218,9 @@
             </td>
             <!-- Delete-Button -->
             <td>
-                <a href="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/delete"
+                <a class="btn btn-link" href="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/delete"
                     tal:condition="view.user_is_wgleader or view.user.mem_admin">
-                    <span class="glyphicon glyphicon-remove"></span> delete
+                    <span class="glyphicon glyphicon-remove"></span>
                 </a>
             </td>
         </tr>

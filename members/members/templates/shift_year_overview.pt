@@ -57,17 +57,15 @@
         </tbody>
     </table> 
 
-    <div id="stylized-sums">
-        <p>This table shows x/y - two numbers per member and per month, which mean the following:
-            <ul>
-                <li>x: the number of worked shifts</li>
-                <li>y: the number of assigned shifts (no matter if yet to come, worked or no-show).</li>
-            </ul>
-            The sums are in bold at the end of colums and rows. Click the month name (column headings) to see the month
-            schedule, for more detail about the shifts. Click member names to get to their profile, which also lists their shifts.
-        </p>
-        <p>In addition, the last row shows the number of shifts that are still open (not assigned to anyone yet).</p>
-    </div>
+    <p class="help-block">This table shows x/y - two numbers per member and per month, which mean the following:
+        <ul>
+            <li>x: the number of worked shifts</li>
+            <li>y: the number of assigned shifts (no matter if yet to come, worked or no-show).</li>
+        </ul>
+        The sums are in bold at the end of colums and rows. Click the month name (column headings) to see the month
+        schedule, for more detail about the shifts. Click member names to get to their profile, which also lists their shifts.
+    </p>
+    <p class="help-block">In addition, the last row shows the number of shifts that are still open (not assigned to anyone yet).</p>
    
 
         </div>

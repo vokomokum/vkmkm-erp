@@ -8,8 +8,8 @@
     <h1>${m.fullname}</h1>
 
     <div id="action-box">
-        <a tal:condition="view.user_can_edit" class="edit-link" href="${portal_url}/member/${m.mem_id}/edit"><span class="glyphicon glyphicon-edit"></span> edit this member</a>
-        <a tal:condition="view.user_can_edit" class="reset-link" href="${portal_url}/reset-pwd?mem_id=${m.mem_id}"><span class="glyphicon glyphicon-refresh"></span> send reset-password email</a>
+        <a tal:condition="view.user_can_edit" class="btn btn-link" href="${portal_url}/member/${m.mem_id}/edit"><span class="glyphicon glyphicon-edit"></span> edit this member</a>
+        <a tal:condition="view.user_can_edit" class="btn btn-link" href="${portal_url}/reset-pwd?mem_id=${m.mem_id}"><span class="glyphicon glyphicon-refresh"></span> send reset-password email</a>
     </div>
     
     <div class="panel panel-default">

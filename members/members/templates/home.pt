@@ -26,7 +26,6 @@
                         <li tal:repeat="todo todos" class="todo-${todo.wg}">
                             <span class="todo-classifier"
                                   title="This TODO is shown to all people or coordinators in workgroup ${todo.wg}">
-                                &nbsp;&nbsp;&nbsp;
                             </span>
                             <span class="todo-msg" tal:content="todo.msg">
                             <a href="${portal_url}/${todo.link_act}"
@@ -51,14 +50,12 @@
 
             </div>
 
-            <div class="text-center">
-                <h6>
-                    For help and/or questions in technical matters,
-                    you can <a href="mailto:systems@vokomokum.nl">contact the admins</a>.
-                    Organisational matters should be directed to your group coordinator
-                    or <a href="mailto:membership@vokomokum.nl">Membership</a>.
-                </h6>
-            </div>
+            <p class="help-block">
+                For help and/or questions in technical matters,
+                you can <a href="mailto:systems@vokomokum.nl">contact the admins</a>.
+                Organisational matters should be directed to your group coordinator
+                or <a href="mailto:membership@vokomokum.nl">Membership</a>.
+            </p>
 
         </div>
     </div>

@@ -8,7 +8,7 @@
         Transaction summary for ${view.year}
     </h1>
 
-    <table width="100%" border="1">
+    <table class="table table-striped table-bordered table-hover table-responsive">
         <tr>
             <th width="15%"/>
             <th width="6%" tal:repeat="month view.months">
@@ -18,13 +18,13 @@
         </tr>
         <tr tal:repeat="type view.transaction_types">
             <td>${type.name}</td>
-            <td tal:repeat="month view.months">${python:view.all_sums[month][type.name]}</td>
-            <td id="financial-sums-per-type">${python:view.type_sums[type.name]}</td>
+            <td tal:repeat="month view.months">${python: "%0.2f" % view.all_sums[month][type.name]}</td>
+            <td id="financial-sums-per-type">${python: "%0.2f" % view.type_sums[type.name]}</td>
         </tr>
         <tr id="financial-sums-per-month">
             <td/>
-            <td tal:repeat="month view.months">${python:view.month_sums[month]}</td>
-            <td>${view.sum_overall}</td>
+            <td tal:repeat="month view.months">${python: "%0.2f" %view.month_sums[month]}</td>
+            <td>${python: "%0.2f" % view.sum_overall}</td>
         </tr>
     </table> 
 
