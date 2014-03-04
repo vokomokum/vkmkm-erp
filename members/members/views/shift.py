@@ -325,7 +325,7 @@ class ListShiftView(BaseView):
         shifts = db_session.query(Shift).filter(Shift.wg_id == wg.id)\
                                      .filter(Shift.month == self.month)\
                                      .filter(Shift.year == self.year)\
-                                     .order_by(Shift.day)\
+                                     .order_by(Shift.day, Shift.task, Shift.mem_id)\
                                      .all()
 
         # show msg
