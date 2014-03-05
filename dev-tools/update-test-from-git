@@ -37,12 +37,12 @@ echo now move everything onto the test server
 
 
 while [ 1 == 1 ]; do
-    echo -n 'Update the test site with the svn files? '
+    echo -n 'Update the test site with the git files? '
     read answer
     case $answer in 
         yes|YES)
             cd order
-            /usr/bin/sudo /bin/cp -rp cgi-bin templates data /var/www/vokotest/
+            /usr/bin/sudo /bin/cp -rp cgi-bin templates /var/www/vokotest/
             exit 0
             ;;
         no|NO)
