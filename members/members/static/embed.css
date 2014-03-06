@@ -6,20 +6,12 @@ body {
     padding: 0px;
 }
 
-#title {
-    display: none;
-}
-
-#menu-items{
+nav, header, footer {
     display: none;
 }
 
 #container { 
-    width: 870px; /*900 (iframe width on vk.nl) minus eventual vertical scrollbars*/
     background: #ffffff;
     border: none;
 }
 
-#footer{
-    display: none;
-}
