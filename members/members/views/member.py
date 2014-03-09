@@ -115,12 +115,18 @@ class EditMemberView(BaseView):
                 return dict(m=member)
             elif action == 'toggle-active-confirmed':
                 member.mem_active = not member.mem_active
+                msg='Member {} is now {}active.'.\
+                    format(member, {False:'in', True:''}[member.mem_active])
                 if not member.mem_active and not running_sqlite():
                     query = "select remove_inactive_member_order({});"\
                             .format(member.mem_id)
-                    session.connection().engine.execute(query)
-                return dict(m=member, msg='Member {} is now {}active.'.\
-                         format(member, {False:'in', True:''}[member.mem_active]))
+                    try:
+                        session.connection().engine.execute(query)
+                    except:
+                        msg += ' Warning: Their current order could not be removed,'\
+                               ' (e.g. because it has already been sent to suppliers)'\
+                               ' so the member will probably still need to pay.' 
+                return dict(m=member, msg=msg)
         return dict(m=member, msg='')
 
 
