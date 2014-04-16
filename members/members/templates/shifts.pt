@@ -207,9 +207,7 @@
                                 tal:condition="python:shift.state in ['assigned','no-show'] " value="worked">
                             Worked
                         </button>
-                    </form>
-                    <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setstate" method="post" role="form">
-                        <button class="btn btn-link"  type="submit" name="state"
+						<button class="btn btn-link"  type="submit" name="state"
                                 tal:condition="python:shift.state in ['assigned', 'worked']" value="no-show">
                             No-show!
                         </button>
