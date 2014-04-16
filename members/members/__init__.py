@@ -39,7 +39,7 @@ def main(global_config, **settings):
         #root_factory = 'members.models.auth.RootFactory',
         authentication_policy = authn_policy,
         authorization_policy = authz_policy)
-
+    config.include('pyramid_chameleon')
     # routes to our views
     # (each view indicates a route pattern it applies to) 
     config.add_static_view('static', 'members:static')
