@@ -111,7 +111,7 @@
 		            <td tal:condition="t.ttype.name == 'Order Charge'">
 		                Charge for Order:
 		                <a href="http://order.vokomokum.nl/cgi-bin/adm_view_memord.cgi?order_no=${t.order.id}&amp;Member=${m.mem_id}"
-		                   title="Click to see the details of this order (you might need to login).">${t.order}</a>
+		                   title="Click to see the details of this order (you need admin rights).">${t.order}</a>
 		            </td>
 		            <td>${t.date.date()}</td>
 		            <td>${t.comment}</td>

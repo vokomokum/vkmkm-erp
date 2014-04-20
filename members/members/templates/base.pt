@@ -13,8 +13,8 @@
         <link rel="shortcut icon" href="${portal_url}/static/img/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/static/css/members.css" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/static/chosen.css" />
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="${portal_url}/static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="${portal_url}/static/css/bootstrap-theme.min.css">
 
         <!-- Internet Explorer Fixes -->
         <tal:iefixstart replace="structure string:&lt;!--[if IE]&gt;" />
@@ -136,7 +136,7 @@
                                     </a>
                                 </div>
                                 <div class="col-sm-2">
-									<button type="submit" class="btn btn-primary" name="form.submitted">Login</button>
+                                    <button type="submit" class="btn btn-primary" name="form.submitted">Login</button>
                                 </div>
                             </div>
                         </form>
@@ -167,7 +167,7 @@
 
         <script type="text/javascript" src="${portal_url}/static/js/jquery.js"></script>
         <script type="text/javascript" src="${portal_url}/static/chosen.jquery.min.js"></script>
-		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="${portal_url}/static/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="${portal_url}/static/js/vokomokum.js"></script>
         <script type="text/javascript" src="${portal_url}/static/highcharts.js"></script>
 
