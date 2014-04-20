@@ -33,7 +33,7 @@ if (top != self) {
   var css = document.createElement('link');
   css.type = 'text/css';
   css.rel = 'stylesheet';
-  css.href = '${portal_url}' + "/static/embed.css";
+  css.href = '${portal_url}' + "/static/css/embed.css";
   css.media = 'screen';
   head.appendChild(css);
 }

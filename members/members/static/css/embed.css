@@ -6,12 +6,7 @@ body {
     padding: 0px;
 }
 
-nav, header, footer {
+header, footer {
     display: none;
-}
-
-#container { 
-    background: #ffffff;
-    border: none;
 }
 
