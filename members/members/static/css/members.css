@@ -1,6 +1,13 @@
 body.logged_in
 {
-	padding-top: 55px;
+    padding-top: 55px;
+}
+
+.navbar-brand
+{
+    background-image: url(../img/vokodot.png);
+    background-repeat: no-repeat;
+    background-position: 40px 0;
 }
 
 .content

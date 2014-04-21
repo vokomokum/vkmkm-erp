@@ -39,7 +39,9 @@
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="${portal_url}">Vokomokum</a>
+                        <a class="navbar-brand" href="${portal_url}">
+                            Vokomokum
+                        </a>
                       </div>
 
                       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -70,6 +72,7 @@
                             <ul class="dropdown-menu">
                               <li><a href="${portal_url}/transactions">Monthly</a></li>
                               <li><a href="${portal_url}/transactions/2013">2013</a></li>
+                              <li><a href="${portal_url}/transactions/2014">2014</a></li>
                               <li><a href="${portal_url}/transaction-types">Transaction Types</a></li>
                             </ul>
                           </li>
@@ -92,14 +95,6 @@
                     </nav>
                 </tal:block>
 
-                <div class="row">
-                    <div class="col-sm-6">
-                        <img src="${portal_url}/static/img/logo-vokomokum.jpg" class="img-responsive"/>
-                    </div>
-                    <div class="col-sm-6">
-                        <a href="${portal_url}"><h1>Members</h1></a>
-                    </div>
-                </div>
             </header>
             
             <section class="content">
