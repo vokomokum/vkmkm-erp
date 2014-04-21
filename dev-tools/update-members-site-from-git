@@ -59,6 +59,8 @@ rm -r git-repo-tmp
 echo develop app ...
 cd /var/www/$DEST
 /usr/bin/sudo /var/www/vopy/bin/python setup.py develop 
+sudo touch /var/www/$DEST/pyramid.wsgi
 
 # go back to default branch
+cd /var/voko/git-repo
 git checkout master
