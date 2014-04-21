@@ -5,7 +5,11 @@ from pyramid.security import remember, forget
 from pyramid.url import route_url
 from pyramid.view import view_config
 
+import os
+import base64
+
 from members.utils.security import get_member
+from members.utils.security import authenticated_user
 from members.utils.md5crypt import md5crypt
 from members.views.base import BaseView
 
@@ -17,19 +21,7 @@ class Login(BaseView):
 
     def __call__(self):
         self.logged_in = False
-        referrer = self.request.url
-        try: # to protect tests from failing, as this is not critical
-            login_url = route_url('login', self.request)
-            if referrer == login_url:
-                referrer = '/' # never use the login form itself as came_from
-        except:
-            pass
-        came_from = self.request.params.get('came_from', referrer)
         message = ''
-        if came_from != '/':
-            message = 'You are not allowed to access this resource.'\
-                      ' You may want to login as a member with the'\
-                      ' sufficient access rights.'
         if 'form.submitted' in self.request.params:
             login = self.request.params['login']
             passwd = self.request.params['passwd']
@@ -40,8 +32,12 @@ class Login(BaseView):
                 if (member.mem_enc_pwd and str(member.mem_enc_pwd) == enc_pwd):
                     if member.mem_active:
                         self.logged_in = True
+                        member.mem_cookie = base64.urlsafe_b64encode(os.urandom(24))
+                        member.mem_ip = self.request.client_addr
                         headers = remember(self.request, member.mem_id)
-                        return HTTPFound(location = came_from, headers = headers)
+                        if self.came_from == '/login':
+                            self.came_from = '/'
+                        return HTTPFound(location = self.came_from, headers = headers)
                     else:
                         message += 'Login denied because the account of {} has been '\
                                    ' set to inactive.'.format(member)
@@ -63,15 +59,31 @@ class Login(BaseView):
             message += ' The Login failed.'
 
         return dict(msg = message,
-                    url = self.request.application_url + '/login',
-                    came_from = came_from,
-                   )
+                    url = self.request.application_url + '/login')
 
 
 @view_config(renderer='../templates/base.pt', route_name='logout')
 class Logout(BaseView):
 
     def __call__(self):
+        m = get_member(self.request.cookies.get("Mem"))
+        m.mem_cookie = ""
         headers = forget(self.request)
         return HTTPFound(location = route_url('home', self.request),
                          headers = headers)
+
+
+@view_config(renderer='json', route_name='userinfo')
+def userinfo(request):
+    '''
+    This view is used from outside apps (currently: vers foodcoop) to check
+    if a user is logged in here. If (s)he is, we return some info.
+    This view allows to bypass th IP address check in the cookie, but requires
+    a client_secret in the request.
+    '''
+    member = authenticated_user(request, bypass_ip=True)
+    if not member:
+        return dict(error='Could not authenticate member.') 
+    return dict(user_id=member.mem_id, given_name=member.mem_fname,
+                middle_name=member.mem_prefix, family_name=member.mem_lname,
+                email=member.mem_email)

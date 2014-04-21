@@ -1,12 +1,13 @@
 from webob import Response
 from pyramid.renderers import get_renderer
-from pyramid.security import authenticated_userid, remember
+from pyramid.security import remember
 from pyramid.httpexceptions import HTTPFound
 
 import datetime
 
-from members.utils.security import authenticated_user
+from members.utils.security import authenticated_user, authenticated_userid
 from members.models.base import VokoValidationError
+from members.utils.misc import get_settings
 
 
 class BaseView(object):
@@ -17,10 +18,19 @@ class BaseView(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        self.logged_in = authenticated_userid(request)
+        self.logged_in = authenticated_userid(request) > -1
         # only show content if this is False or user is logged in
         # (otherwise, show login screen)
-        self.login_necessary = True
+        self.login_necessary = True    
+        self.came_from = self.request.path
+        if 'came_from' in self.request.params:
+            cf = self.request.params.get('came_from')
+            s = get_settings()
+            for url in s.get('vokomokum.whitelist_came_from').split(' '):
+                if (cf.startswith('http://{}'.format(url)) \
+                    or cf.startswith('https://{}'.format(url))):
+                    self.came_from = self.request.params.get('came_from')
+                    break
         # for submenus
         now = datetime.datetime.now()
         self.year = now.year
@@ -47,7 +57,7 @@ class BaseView(object):
     def redirect(self, loc):
         """
         Redirect request to another location
-        :param str loc: location (path after ${portal_url})
+        :param str loc: location (path after ${portal_url} or full URL)
         :return: headers which should be returned by view
         """
         uid = -1

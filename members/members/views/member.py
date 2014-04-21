@@ -7,6 +7,7 @@ import datetime
 from members.models.member import Member, get_member
 from members.models.orders import Order, MemberOrder
 from members.models.base import DBSession
+from members.utils.misc import running_sqlite
 from members.views.base import BaseView
 from members.views.pwdreset import send_pwdreset_request
 
@@ -114,8 +115,18 @@ class EditMemberView(BaseView):
                 return dict(m=member)
             elif action == 'toggle-active-confirmed':
                 member.mem_active = not member.mem_active
-                return dict(m=member, msg='Member {} is now {}active.'.\
-                         format(member, {False:'in', True:''}[member.mem_active]))
+                msg='Member {} is now {}active.'.\
+                    format(member, {False:'in', True:''}[member.mem_active])
+                if not member.mem_active and not running_sqlite():
+                    query = "select remove_inactive_member_order({});"\
+                            .format(member.mem_id)
+                    try:
+                        session.connection().engine.execute(query)
+                    except:
+                        msg += ' Warning: Their current order could not be removed,'\
+                               ' (e.g. because it has already been sent to suppliers)'\
+                               ' so the member will probably still need to pay.' 
+                return dict(m=member, msg=msg)
         return dict(m=member, msg='')
 
 
@@ -168,4 +179,4 @@ class ListMemberView(BaseView):
         return dict(members=members, msg=msg, order_by=order_by,
                     order_id_choice=order_id_choice,
                     order_name_choice=order_name_choice,
-                    show_inactive=show_inactive, came_from='/members')
+                    show_inactive=show_inactive)

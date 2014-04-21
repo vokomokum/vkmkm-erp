@@ -48,6 +48,7 @@ class VokoTestCase(unittest.TestCase):
 
     def setUp(self):
         self.config = testing.setUp()
+        self.config.include('pyramid_chameleon')
         if db_type == 'sqlite':
             # initalise a temporary database with some order data the members app relies on
             if os.path.exists('members-test.db'):
@@ -82,12 +83,18 @@ class VokoTestCase(unittest.TestCase):
         Add custom settings that the application expects to be in the .ini file 
         (in app[main])
         '''
+        settings = get_settings()
+        if db_type == 'sqlite':
+            settings['sqlalchemy.url'] = 'sqlite:xxxxxxxxxxx'
+        else:
+            settings['sqlalchemy.url'] = 'postgres:xxxxxxxxxxx'
+        settings['vokomokum.whitelist_came_from'] = ''
+        settings['vokomokum.client_secret'] = 'xxxxxxxxxxx'
         # make a mail folder
         mail_folder = '{0}/.testmails'.format(self.path_to_here())
         if os.path.exists(mail_folder):
             rmtree(mail_folder)
         os.mkdir(mail_folder)
-        settings = get_settings()
         # workaround: this will not send mails, just save copies in mails-dir
         settings['vokomokum.mail_exec'] = '/opt/local/sbin/eximDONOTACTUALLYSEND'
         settings['vokomokum.mail_folder'] = mail_folder

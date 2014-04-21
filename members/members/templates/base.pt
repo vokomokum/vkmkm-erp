@@ -115,6 +115,7 @@
                             <div class="form-group">
                                 <label for="inputEmail" class="col-sm-2 control-label">ID or Email</label>
                                 <div class="col-sm-4">
+                                    <input tal:define="origin view.came_from | '/'" type="hidden" name="came_from" value="${origin}"/>
                                     <input type="text" class="form-control" id="inputEmail" placeholder="Id or Email" name="login">
                                 </div>
                             </div>

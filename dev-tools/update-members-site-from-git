@@ -9,16 +9,24 @@ if [ "$1" = "production" ]; then
     echo I will be updating the PRODUCTION application ...
 fi
 
+BRANCH=$2
+if [ "$2" = "" ]; then
+    BRANCH="master"
+fi
+
+
 # make sure we have latest changes
 if [ -e git-repo ];
 then
   echo Updating git-repo ...
   cd git-repo
   git pull
+  git checkout $BRANCH
   cd ..
 else
   echo Checking out code into git-repo ...
   git clone git@git.assembla.com:vokomokum.git git-repo
+  git checkout $BRANCH
 fi
 
 # make ourselves a nice copy to deploy from
@@ -52,3 +60,5 @@ echo develop app ...
 cd /var/www/$DEST
 /usr/bin/sudo /var/www/vopy/bin/python setup.py develop 
 
+# go back to default branch
+git checkout master

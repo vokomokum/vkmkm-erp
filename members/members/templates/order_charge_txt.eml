@@ -9,9 +9,7 @@ Waarschijnlijk weet je dat de kosten voor de maandelijkse bestelling aan Vokomok
 
 Volgens onze administratie is EUR {amount} je huidige saldo. 
 
-Zou je zo vriendelijk willen zijn om dit bedrag zo snel mogelijk, maar uiterlijk op {deadline_nl}, over te maken op de Vokomokum Triodos rekening 78.68.29.109, onder vermelding van VOKOMOKUM. 
-
-Graag  bij de opmerkingen ook je naam en lidmaatschapsnummer vermelden. Zonder deze informatie kan de werkgroep Financien je betaling niet goed verwerken!
+Zou je zo vriendelijk willen zijn om dit bedrag zo snel mogelijk, maar uiterlijk op {deadline_nl}, over te maken op de Vokomokum Triodos rekening 78.68.29.109 (IBAN: NL49 TRIO 0786 8291 09), onder vermelding van VOKOMOKUM. Attentie: bij de opmerkingen ook je naam en lidmaatschapsnummer (#{mem_id}) vermelden. Zonder deze informatie kan de werkgroep Financien je betaling niet goed verwerken!
 
 Mocht het bovenstaand bedrag niet kloppen: Maak nog geen geld over, maar probeer eerst de problemen op te lossen. Door in te loggen op de Vokomokum website: 
 http://www.vokomokum.nl/member-area/dashboard, 
@@ -29,15 +27,13 @@ De werkgroep Finance
 
 Dear Vokomokum member,
 
-Every month, our collective orders support local farmers, healthy organic food markets, and development of our community here in Amsterdam. Great that you were a part of it again!
+Every month, our combined orders support local farmers, healthy organic food markets, and development of our community here in Amsterdam. Great that you were a part of it again!
 
 As you probably know, Vokomokum is billed for the entire order on the day of delivery, and therefore we need to receive all member payments very quickly in order to pay our VERS and bulk goods suppliers. Now that the pick-up is complete, we would like to request that you pay for your order of {label}. 
 
 Our records show that EUR {amount} is your current balance.
 
-Please pay as soon as possible, but at the latest by {deadline_en}. Please transfer the exact amount above to Vokomokum's Triodos account number 78.68.29.109 in the name of VOKOMOKUM. 
-
-Please be sure to include your name and membership number in your bank transfer description. Without this information, the Finance team cannot process your payment properly!
+Please pay as soon as possible, but at the latest by {deadline_en}. Please transfer the exact amount above to Vokomokum's Triodos account number 78.68.29.109 (IBAN: NL49 TRIO 0786 8291 09), in the name of VOKOMOKUM. Important: please be sure to include your membership number (#{mem_id}) and your name in your bank transfer description. Without this information, the Finance team cannot process your payment properly!
 
 If you believe the amount above is wrong, please resolve any problems before making your payment. First log into the Vokomokum website:
 http://www.vokomokum.nl/member-area/dashboard,
@@ -53,13 +49,13 @@ the Finance workgroup
 
 ----------------------
 VOKOMOKUM
-[ biologische voedsel ko-operatie / organic food co-operative ] amsterdam
+[ biologische voedsel ko-operatie / organic food co-operative ] Amsterdam
 ----------------------
-@ plantagedok /// plantagedoklaan 8, 1018CM
+@ plantagedok /// Plantagedoklaan 8, 1018CM
 ----------------------
 finance@vokomokum.nl
 www.vokomokum.nl
 ----------------------
-rek.nr. 78.68.29.109
+IBAN nr. NL49 TRIO 0786 8291 09
 ten name van VOKOMOKUM
 

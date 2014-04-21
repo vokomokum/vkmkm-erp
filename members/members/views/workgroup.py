@@ -157,5 +157,4 @@ class ListWorkgroupView(BaseView):
 
         wg_query = wg_query.order_by(odir('id'))
         return dict(workgroups=wg_query.all(), msg=msg,
-                    order_name_choice=order_name_choice,
-                    came_from='/workgroups')
+                    order_name_choice=order_name_choice)

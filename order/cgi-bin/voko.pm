@@ -85,14 +85,16 @@ sub set_cookie {
     my $cookiem = $cgi->cookie(-name =>'Mem',
                     -value => $mem_id,
 		    -path=>'/',
-		    -expires=>'+1y',
-                    -secure=>0);
+		    -expires=>'+1y', 
+		    -domain=>$config->{'cookie_subdomain'},
+		    -secure=>0);
 
 
     my $cookiek = $cgi->cookie(-name =>'Key',
                     -value => $key,
 		    -path=>'/',
 		    -expires=>'+1y',
+		    -domain=>$config->{'cookie_subdomain'},
                     -secure=>0);
 
     my $cookie = sprintf "%s", $cgi->header(-cookie=>[$cookiem, $cookiek]);
@@ -255,7 +257,7 @@ sub test_cookie {
     } else {
 	return -1;
     }
-    if($cookie =~ /.*Mem=([^;]*).*/) {
+    if($cookie =~ /.*Mem=(\d+);.*/) {
 	$mem_id = int($1);
     } else {
 	return -2;
@@ -306,13 +308,14 @@ sub handle_cookie {
     my $key;
     my $sth;
     my $cookie = $cgi->raw_cookie();
+    $cookie = "$cookie;" if($cookie =~ /.*;\s*Mem=\d+$/);
     #dump_stuff("handle_cookie", $cookie, "", {});
     if($cookie =~ /.*Key=([^\s;]*).*/) {
 	$key = unescape($1);
     } else {
 	force_login($config, $cgi, $dbh);
     }
-    if($cookie =~ /.*Mem=([^;]*).*/) {
+    if($cookie =~ /.*Mem=(\d+);.*/) {
 	$mem_id = int($1);
     } else {
 	force_login($config, $cgi, $dbh);
