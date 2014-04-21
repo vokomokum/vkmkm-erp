@@ -23,17 +23,19 @@ $(document).ready(function(){
 
     toggleUntilSpec();
 
+
+    // initialise chosen selectors (if any)
+    $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
+
+    // shed outer layout when this is embedded (e.g. in an iframe)
+    if (top != self) {
+      var head = document.getElementsByTagName("head")[0];
+      var css = document.createElement('link');
+      css.type = 'text/css';
+      css.rel = 'stylesheet';
+      css.href = "/static/css/embed.css";
+      css.media = 'screen';
+      head.appendChild(css);
+    }
+
 });
-
-$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
-
-// shed outer layout when this is embedded (e.g. in an iframe)
-if (top != self) {
-  var head = document.getElementsByTagName("head")[0];
-  var css = document.createElement('link');
-  css.type = 'text/css';
-  css.rel = 'stylesheet';
-  css.href = '${portal_url}' + "/static/css/embed.css";
-  css.media = 'screen';
-  head.appendChild(css);
-}
