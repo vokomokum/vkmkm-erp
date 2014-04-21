@@ -21,16 +21,21 @@ class BaseView(object):
         self.logged_in = authenticated_userid(request) > -1
         # only show content if this is False or user is logged in
         # (otherwise, show login screen)
-        self.login_necessary = True    
+        self.login_necessary = True
+        # came_from is actual path, or a special requested param.
         self.came_from = self.request.path
+        # check URLs in came_from parameter against a whitelist if they are URLs    
         if 'came_from' in self.request.params:
             cf = self.request.params.get('came_from')
-            s = get_settings()
-            for url in s.get('vokomokum.whitelist_came_from').split(' '):
-                if (cf.startswith('http://{}'.format(url)) \
-                    or cf.startswith('https://{}'.format(url))):
-                    self.came_from = self.request.params.get('came_from')
-                    break
+            if "://" in cf:
+                s = get_settings()
+                for url in s.get('vokomokum.whitelist_came_from').split(' '):
+                    if (cf.startswith('http://{}'.format(url)) \
+                        or cf.startswith('https://{}'.format(url))):
+                        self.came_from = cf
+                        break
+            else:            
+                self.came_from = cf
         # for submenus
         now = datetime.datetime.now()
         self.year = now.year
