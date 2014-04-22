@@ -10,6 +10,11 @@ body.logged_in
     background-position: 40px 0;
 }
 
+.navbar-nav.navbar-right:last-child 
+{
+    margin-right: 0px !important;
+}
+
 .content
 {
     margin-top: 15px;

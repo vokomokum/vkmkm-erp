@@ -56,27 +56,27 @@
     <table class="table table-striped table-bordered table-hover table-responsive">
       <thead>
         <tr>
-            <th>Name</th>
-            <th>Month</th>
-            <th>Comment</th>
-            <th>email</th>
-            <th>Tel.</th>
-            <th>Household size</th>
-            <th><!-- Actions --></th>
+            <th width="20%">Name</th>
+            <th width="8%">Month</th>
+            <th width="30%">Comment</th>
+            <th width="19%">email</th>
+            <th width="13%">Tel.</th>
+            <th width="5%">Household size</th>
+            <th width="5%"><!-- Actions --></th>
         </tr>
       </thead>
       <tbody>
         <tr tal:repeat="a applicants">
-            <td width="20%">
+            <td>
                 <span tal:content="a.fname"></span>
                 <span tal:content="a.lname"></span>
             </td>
-            <td width="8%" tal:content="a.month"></td>
-            <td width="23%" tal:content="a.comment"></td>
-            <td width="19%" tal:content="a.email"></td>
-            <td width="13%" tal:content="a.telnr"></td>
-            <td width="5%" tal:content="a.household_size"></td>
-            <td width="12%">
+            <td tal:content="a.month"></td>
+            <td tal:content="a.comment"></td>
+            <td tal:content="a.email"></td>
+            <td tal:content="a.telnr"></td>
+            <td tal:content="a.household_size"></td>
+            <td>
                 <a title="Make this applicant into a member (with own member ID)"
                        href="${portal_url}/applicant/${a.id}/mkmember">
                     <span class="glyphicon glyphicon-thumbs-up"><span>
