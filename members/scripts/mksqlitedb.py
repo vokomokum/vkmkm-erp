@@ -15,7 +15,6 @@ from members.models.workgroups import Workgroup
 from members.models.shift import Shift, shift_states
 from members.models.transactions import Transaction
 from members.models.transactions import TransactionType
-from members.models.transactions import reserved_ttype_names
 from members.models.orders import Order
 
 from members.utils.md5crypt import md5crypt
@@ -163,12 +162,11 @@ def fillDBRandomly(seed, workgroups):
         DBSession.flush()
                 
     # Finally: create 20 transactions per member
-    ttypes = DBSession.query(TransactionType).all()
+    ttype = DBSession.query(TransactionType).filter(TransactionType.name=='Order Charge').first()
     orders = DBSession.query(Order).all()
     for m in members:
         for i in range(20):
             month = random.choice(months)
-            ttype = random.choice(ttypes)
             t = Transaction(ttype_id=ttype.id, amount=random.random() * 150,
                             date=datetime.datetime(month[1], month[0],
                                   random.randint(1, 28)), mem_id=m.mem_id)
@@ -209,8 +207,13 @@ def main():
     # (enforcement only works from version 3.6.19 though)
     engine.execute('pragma foreign_keys=on')
     # reserved transaction types
-    for rt in reserved_ttype_names:
-        DBSession.add(TransactionType(name=rt))
+    DBSession.add(TransactionType(name='Membership Fee', mem_sup='memb', pos_neg='neg'))
+    DBSession.add(TransactionType(name='Order Charge', mem_sup='memb', pos_neg='neg'))
+    # others
+    DBSession.add(TransactionType(name='Pay Wholesaler', mem_sup='whol', pos_neg='pos'))
+    DBSession.add(TransactionType(name='Pay Vers supplier', mem_sup='vers', pos_neg='neg'))
+    DBSession.add(TransactionType(name='Payment to Member', mem_sup='memb', pos_neg='pos'))
+    DBSession.add(TransactionType(name='Late order change', mem_sup='memb', pos_neg='---'))
 
     workgroups = createWGs()
     # add old names, used in base.py and in testing (ask Nic what to do with it)
