@@ -30,42 +30,46 @@
                 </label>
                 <div class="col-sm-4">
                     <select class="form-control" onchange="javascript:togglePartnerOrderSelect();"
-                            name="ttype_id" id="ttype_id">
+                            name="ttype_id" id="ttype-select">
                         <option value="--">--</option>
                         <tal:block tal:repeat="tt view.transaction_types">
                             <option value="${tt.id}">${tt} (${python:{'pos':'+', 'neg':'-', '---':'+ or -'}[tt.pos_neg]})</option>
                         </tal:block>
                     </select>
                 </div>
-                <label class="col-sm-2 control-label" for="mem_id">Member:</label>
-                <div class="col-sm-4">
-                    <select name="mem_id" id="mem_id" class="chzn-select form-control">
-                        <option id="mem-default-option" value="--">[ID] Name (active)</option>
-                        <tal:block tal:repeat="m view.members">
-                            <option tal:define="active python:{True:'yes', False:'no'}[m.mem_active]"
-                                    value="${m.mem_id}">[${m.mem_id}] ${m.fullname} (${active})</option>
-                        </tal:block>
-                    </select>
+                <div id="member">
+                    <label class="col-sm-2 control-label" for="mem_id">Member:</label>
+                    <div class="col-sm-4">
+                        <select name="mem_id" id="mem_id" class="chzn-select form-control" style="width:200px;">
+                            <option id="mem-default-option" value="--">[ID] Name (active)</option>
+                            <tal:block tal:repeat="m view.members">
+                                <option tal:define="active python:{True:'yes', False:'no'}[m.mem_active]"
+                                        value="${m.mem_id}">[${m.mem_id}] ${m.fullname} (${active})</option>
+                            </tal:block>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="wh_id">Wholesaler:</label>
-                <div class="col-sm-4">
-                    <select class="form-control" name="wh_id">
-                        <option id="wh-default-option" value="--">--</option>
-                        <tal:block tal:repeat="w view.wholesalers">
-                            <option value="${w.wh_id}">${w}</option>
-                        </tal:block>
-                    </select>
+                <div id="wholesaler">
+                    <label class="col-sm-2 control-label" for="wh_id">Wholesaler:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="wh_id">
+                            <option id="wh-default-option" value="--">--</option>
+                            <tal:block tal:repeat="w view.wholesalers">
+                                <option value="${w.wh_id}">${w}</option>
+                            </tal:block>
+                        </select>
+                    </div>
                 </div>
-                <label class="col-sm-2 control-label" for="vers_id">Vers Supplier:</label>
-                <div class="col-sm-4">
-                    <select class="form-control" name="vers_id">
-                        <option id="vers-default-option" value="--">--</option>
-                        <tal:block tal:repeat="vs view.vers_suppliers">
-                            <option value="${vs.id}">${vs}</option>
-                        </tal:block>
-                    </select>
+                <div id="vers_supplier">
+                    <label class="col-sm-2 control-label" for="vers_id">Vers Supplier:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="vers_id">
+                            <option id="vers-default-option" value="--">--</option>
+                            <tal:block tal:repeat="vs view.vers_suppliers">
+                                <option value="${vs.id}">${vs}</option>
+                            </tal:block>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -228,9 +232,9 @@
 
     <table class="table table-striped table-bordered table-hover table-responsive">
         <tr class="list-content" align="center">
-            <th width="50%">Type</th>
+            <th>Type</th>
             <th>Partner</th>
-            <th>Amount</th>
+            <th width="110px">Amount</th>
             <th>Order</th>
             <th>Day</th>
             <th>Comment</th>
@@ -300,7 +304,7 @@
             </td>
             <td>
                 <form action="${portal_url}/transaction/${t.id}/edit/setcomment" method="post" class="form-inline">
-                    <input type="text" size="500" maxlength="500" name="comment" value="${t.comment}" class="form-control"
+                    <input type="text" size="50" maxlength="500" name="comment" value="${t.comment}" class="form-control"
                         onkeydown="if (event.keyCode == 13) this.form.submit()"
                         title="Edit, then press Enter/Return key to update."/>
                 </form>
