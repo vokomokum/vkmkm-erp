@@ -63,11 +63,11 @@ def addAdmin():
 """Ensure the backwards compatibility, these settings are used in unit tests"""
 def addOldNames():
     m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
-    m1.mem_email = 'peter@dePan.nl'
+    m1.mem_email = 'peter@gmail.com'
     m1.mem_enc_pwd = md5crypt('notsecret', 'notsecret')
     DBSession.add(m1)
     m2 = Member(fname=u'Hans', prefix=u'de', lname='Wit')
-    m1.mem_email = 'hans@deWit.nl'
+    m1.mem_email = 'hans@gmail.com'
     DBSession.add(m2)
     wg1 = Workgroup(name=u'Systems', desc=u'IT stuff')
     DBSession.add(wg1)
@@ -113,8 +113,8 @@ def fillDBRandomly(seed, workgroups):
     members = []
     for l in namelist[int(len(namelist) * 0.2):]:
         m = Applicant(fname=l, lname=names[l])
-        m.email = "%s@%s.nl"%(l, names[l])
-        m.household_size = random.randint(1, 15)
+        m.email = "%s-app@gmail.com"%(l)
+        m.household_size = random.randint(1, 5)
         m.telnr = "06" + unicode(random.randint(10000000, 100000000))
         DBSession.add(m)
         # randomly select a number of workgroups m can be a member of
@@ -123,7 +123,7 @@ def fillDBRandomly(seed, workgroups):
     for l in namelist[:int(len(namelist) * 0.8)]:
         prefix = random.choice([u"de", u"van", u"voor", u"van den", u"te"])
         m = Member(fname=l, prefix=prefix, lname=names[l])
-        m.mem_email = "%s@%s.nl" % (l, names[l])
+        m.mem_email = "%s@gmail.com" % (l)
         m.mem_enc_pwd = md5crypt(default_pwd, default_pwd)
         m.mem_mobile = "06" + unicode(random.randint(10000000, 100000000))
         m.household_size = random.randint(1, 5)
