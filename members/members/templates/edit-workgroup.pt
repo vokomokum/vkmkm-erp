@@ -29,7 +29,7 @@
     <div class="form-group">
       <label class="col-sm-2" for="name">Name:</label>
       <div class="col-sm-6">
-        <input type="text" class="form-control" action="name" value="${wg.name}"/>
+        <input type="text" class="form-control" name="name" value="${wg.name}"/>
       </div>
     </div>
     <div class="form-group">

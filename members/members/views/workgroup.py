@@ -91,6 +91,8 @@ class EditWorkgroupView(BaseView):
         self.possible_members = get_possible_members(session, wg)
         if 'action' in req.params:
             action = req.params['action']
+            print "action:", action
+            print req
             if action == "save":
                 old_name = wg.name
                 uwgs = [w.name for w in self.user.workgroups]

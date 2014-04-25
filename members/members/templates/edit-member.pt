@@ -57,7 +57,7 @@
     <div class="form-group">
       <label for="mem_email" class="col-sm-2 control-label">Email *</label>
       <div class="col-sm-6">
-        <input type="email" class="form-control" id="mem_lname" name="mem_lname" placeholder="Email" value="${m.mem_email}">
+        <input type="email" class="form-control" id="mem_email" name="mem_email" placeholder="Email" value="${m.mem_email}">
       </div>
     </div>
     <div class="form-group">
@@ -147,7 +147,7 @@
   </fieldset>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" name="action" value="save" class="btn btn-primary">Save</button>
     </div>
   </div>
 </form>
