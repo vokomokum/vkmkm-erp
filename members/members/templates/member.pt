@@ -42,53 +42,53 @@
     </div>
 
 	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h2 class="panel-title">Workgroups</h2>		
-		</div>
-		<div class="panel-body">
-			<div class="col-sm-6">
-                <div tal:condition="not m.workgroups" class="label label-warning">... is not a member of any workgroup.</div> 
-                <tal:block tal:condition="m.workgroups">
-					... is a member in 
-					<tal:block tal:repeat="wg m.workgroups">
-	                	<a href="${portal_url}/workgroup/${wg.id}">${wg.name}</a>
-	                	<span tal:condition="not repeat.wg.end">,</span>
-	                </tal:block>
-                </tal:block>
-			</div>			
-			<div class="col-sm-6">
-				... coordinates 
-                <tal:block tal:repeat="wg m.led_workgroups">
-                    <a href="${portal_url}/workgroup/${wg.id}">${wg.name}</a>
-                    <span tal:condition="not repeat.wg.end">,</span>
-                </tal:block>				
-			</div>
-		</div>
+            <div class="panel-heading">
+                <h2 class="panel-title">Workgroups</h2>		
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-6">
+                    <div tal:condition="not m.workgroups" class="label label-warning">... is not a member of any workgroup.</div> 
+                        <tal:block tal:condition="m.workgroups">
+                            ... is a member in 
+                            <tal:block tal:repeat="wg m.workgroups">
+                                <a href="${portal_url}/workgroup/${wg.id}">${wg.name}</a>
+                                <span tal:condition="not repeat.wg.end">,</span>
+                            </tal:block>
+                         </tal:block>
+                    </div>			
+                <div class="col-sm-6">
+                            ... coordinates 
+                    <tal:block tal:repeat="wg m.led_workgroups">
+                        <a href="${portal_url}/workgroup/${wg.id}">${wg.name}</a>
+                        <span tal:condition="not repeat.wg.end">,</span>
+                    </tal:block>				
+                </div>
+            </div>
 	</div>
 	
 	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h2 class="panel-title">Shifts</h2>		
-		</div>
-		<table class="table table-striped table-hover" tal:condition="shifts">
-			<thead>
-				<th>Task</th>
-	            <th>Month</th>
-	            <th>Workgroup</th>
-	            <th>Status</th>					
-			</thead>
-			<tbody>
-		        <tr tal:repeat="s shifts">
-		            <td>${s.task}</td>
-		            <td><a href="${portal_url}/workgroup/${s.workgroup.id}/shifts/${s.year}/${s.month}">${s.month}/${s.year}</td>
-		            <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
-		            <td>${s.state}</td>
-		        </tr>				
-			</tbody>
-		</table>
-		<div tal:condition="not shifts" class="panel-body">
-        	No shifts.
-		</div>
+            <div class="panel-heading">
+                <h2 class="panel-title">Shifts</h2>		
+            </div>
+            <table class="table table-striped table-hover" tal:condition="shifts">
+                <thead>
+                    <th>Task</th>
+                    <th>Month</th>
+                    <th>Workgroup</th>
+                    <th>Status</th>					
+                </thead>
+                <tbody>
+                    <tr tal:repeat="s shifts">
+                        <td>${s.task}</td>
+                        <td><a href="${portal_url}/workgroup/${s.workgroup.id}/shifts/${s.year}/${s.month}">${s.month}/${s.year}</td>
+                        <td><a href="${portal_url}/workgroup/${s.workgroup.id}">${s.workgroup}</a></td>
+                        <td>${s.state}</td>
+                    </tr>				
+                </tbody>
+            </table>
+            <div tal:condition="not shifts" class="panel-body">
+            No shifts.
+            </div>
 	</div>	
 	
 	<div class="panel panel-default" tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in view.user.workgroups or 'Membership' in view.user.workgroups">
