@@ -41,10 +41,10 @@
                     <label class="col-sm-2 control-label" for="mem_id">Member:</label>
                     <div class="col-sm-4">
                         <select name="mem_id" id="mem_id" class="chzn-select form-control" style="width:200px;">
-                            <option id="mem-default-option" value="--">[ID] Name (active)</option>
+                            <option id="mem-default-option" value="--">[ID] Name</option>
                             <tal:block tal:repeat="m view.members">
-                                <option tal:define="active python:{True:'yes', False:'no'}[m.mem_active]"
-                                        value="${m.mem_id}">[${m.mem_id}] ${m.fullname} (${active})</option>
+                                <option tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[m.mem_active]"
+                                        value="${m.mem_id}">[${m.mem_id}] ${m.fullname}${active}</option>
                             </tal:block>
                         </select>
                     </div>

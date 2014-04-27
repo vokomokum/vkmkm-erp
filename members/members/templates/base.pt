@@ -99,6 +99,16 @@
             
             <section class="content">
 
+                <div tal:condition="view.msg | nothing" class="alert alert-info col-sm-12">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  ${view.msg}
+                </div>
+
+                <div tal:condition="view.info | nothing" class="alert alert-danger col-sm-12">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  ${view.info}
+                </div>
+    
                 <div tal:condition="msg | nothing" class="alert alert-info col-sm-12">
                   <button type="button" class="close" data-dismiss="alert">&times;</button>
                   ${msg}

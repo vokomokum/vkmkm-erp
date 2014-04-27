@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr tal:repeat="mem view.wg.active_members">
+          <tr tal:repeat="mem view.members_with_shifts">
               <td><a href="${portal_url}/member/${mem.mem_id}">${mem}</a></td>
               <td tal:repeat="month view.months">
                   <tal:block tal:define="mm python:view.all_shift_data[month][mem.mem_id]">

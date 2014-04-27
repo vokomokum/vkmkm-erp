@@ -39,13 +39,15 @@
                   data-placeholder="Start typing or click to select members"
                   class="chzn-select">
           <tal:block tal:repeat="pm view.possible_members">
-              <option tal:condition="python: pm in wg.active_leaders"
-                      tal:content="pm.fullname" selected="selected"
-                      value="${pm.mem_id}">
+            <tal:block tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[pm.mem_active]">
+              <option tal:condition="python: pm in wg.leaders"
+                      selected="selected" value="${pm.mem_id}">
+                  [${pm.mem_id}] ${pm.fullname}${active}
               </option>
-              <option tal:condition="python: not pm in wg.active_leaders"
-                      tal:content="pm.fullname" value="${pm.mem_id}">
+              <option tal:condition="python: not pm in wg.leaders" value="${pm.mem_id}">
+                  [${pm.mem_id}] ${pm.fullname}${active}
               </option>
+            </tal:block>
           </tal:block>
         </select>
       </div>
@@ -60,13 +62,15 @@
                   data-placeholder="Start typing or click to select members"
                   class="chzn-select">
               <tal:block tal:repeat="pm view.possible_members">
-                  <option tal:condition="python:pm in wg.active_members"
-                          tal:content="pm.fullname"
+               <tal:block tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[pm.mem_active]">
+                  <option tal:condition="python:pm in wg.members"
                           value="${pm.mem_id}" selected="selected">
+                      [${pm.mem_id}] ${pm.fullname}${active}
                   </option>
-                  <option tal:condition="python:pm not in wg.active_members"
-                          tal:content="pm.fullname" value="${pm.mem_id}">
+                  <option tal:condition="python:pm not in wg.members" value="${pm.mem_id}">
+                      [${pm.mem_id}] ${pm.fullname}${active}
                   </option>
+                </tal:block>
               </tal:block>
           </select>
       </div>

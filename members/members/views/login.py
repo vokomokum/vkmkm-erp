@@ -30,28 +30,14 @@ class Login(BaseView):
                 # jim uses encrypted pwd as salt
                 enc_pwd = md5crypt(str(passwd), str(member.mem_enc_pwd))
                 if (member.mem_enc_pwd and str(member.mem_enc_pwd) == enc_pwd):
-                    if member.mem_active:
-                        self.logged_in = True
-                        member.mem_cookie = base64.urlsafe_b64encode(os.urandom(24))
-                        member.mem_ip = self.request.client_addr
-                        headers = remember(self.request, member.mem_id)
-                        if self.came_from == '/login':
-                            self.came_from = '/'
-                        return HTTPFound(location = self.came_from, headers = headers)
-                    else:
-                        message += 'Login denied because the account of {} has been '\
-                                   ' set to inactive.'.format(member)
-                        if member.balance < 0:
-                            message += ' One possible reason for deactivation is'\
-                                       ' that the account balance is EUR {}. Please'\
-                                       ' transfer the missing amount to Vokomokum,'\
-                                       ' account no. 78.68.29.109, t.p.v. Amsterdam'\
-                                       ' (be sure to include your member number)'\
-                                       ' and contact finance@vokomokum.nl to report'\
-                                       ' that you have paid.'\
-                                        .format(member.balance)   
-                        else:
-                            message += ' Please contact membership@vokomokum.nl.' 
+                    self.logged_in = True
+                    member.mem_cookie = base64.urlsafe_b64encode(os.urandom(24))
+                    member.mem_ip = self.request.client_addr
+                    headers = remember(self.request, member.mem_id)
+                    if self.came_from == '/login':
+                        self.came_from = '/'
+                    self.came_from += ""
+                    return HTTPFound(location = self.came_from, headers = headers)
                 else:
                     message += ' The password is not correct.'
             else:

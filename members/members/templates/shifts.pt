@@ -48,7 +48,7 @@
                 <div class="col-sm-4">
                     <select name="mem_id" id="mem_id" class="form-control">
                       <option value="--">Leave open (will be set later)</option>
-                      <option tal:repeat="m wg.active_members" value="${m.mem_id}">${m}</option>
+                      <option tal:repeat="m wg.members" value="${m.mem_id}">${m}</option>
                     </select>
                  </div>
               </div>

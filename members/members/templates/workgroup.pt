@@ -26,15 +26,17 @@ Usage of this address is limited to vokomokum members."><span class="glyphicon g
         </tr>
         <tr class="list-content">
             <td>
-                <tal:block tal:repeat="l wg.active_leaders">
-                   <a href="${portal_url}/member/${l.mem_id}">${l.fullname}</a>
+                <tal:block tal:repeat="l wg.leaders">
+                    <a tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[l.mem_active]"
+                       href="${portal_url}/member/${l.mem_id}">[${l.mem_id}] ${l.fullname}${active}</a>
                     <span tal:condition="not repeat.l.end">,</span>
                 </tal:block>
             
             </td>
             <td>
-                <tal:block tal:repeat="m wg.active_members">
-                    <a tal:content="m.fullname" href="${portal_url}/member/${m.mem_id}"></a>
+                <tal:block tal:repeat="m wg.members">
+                    <a tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[m.mem_active]"
+                       href="${portal_url}/member/${m.mem_id}">[${l.mem_id}] ${m.fullname}${active}</a>
                     <span tal:condition="not repeat.m.end">,</span>
                 </tal:block>
             </td>
