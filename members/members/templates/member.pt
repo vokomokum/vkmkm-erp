@@ -124,12 +124,11 @@
 		</table>
 	</div>
 	
-	<div class="panel panel-default" tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in view.user.workgroups or 'Membership' in view.user.workgroups">
+	<div class="panel panel-default" tal:condition="python: len(old_orders) > 0 and (view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in view.user.workgroups or 'Membership' in view.user.workgroups)">
             <div class="panel-heading">
                 <h2 class="panel-title">Orders before Nov 2012</h2>
             </div>
-            <div class="panel-body" tal:condition="not:old_orders">No orders before Nov 2012</div>
-            <table tal:condition="old_orders" class="table table-striped table-hover">
+            <table class="table table-striped table-hover">
                 <thead>
                     <th>Label</th>
                     <th>Amount</th>		
