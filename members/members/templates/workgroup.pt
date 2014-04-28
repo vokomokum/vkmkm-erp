@@ -36,7 +36,7 @@ Usage of this address is limited to vokomokum members."><span class="glyphicon g
             <td>
                 <tal:block tal:repeat="m wg.members">
                     <a tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[m.mem_active]"
-                       href="${portal_url}/member/${m.mem_id}">[${l.mem_id}] ${m.fullname}${active}</a>
+                       href="${portal_url}/member/${m.mem_id}">[${m.mem_id}] ${m.fullname}${active}</a>
                     <span tal:condition="not repeat.m.end">,</span>
                 </tal:block>
             </td>
