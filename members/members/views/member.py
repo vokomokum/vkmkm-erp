@@ -73,7 +73,8 @@ class MemberView(BaseView):
         nov12 = datetime.datetime(2012, 11, 1)
         orders = [MemberOrder(self.m, o) for o in session.query(Order)\
                     .order_by(desc(Order.completed)).all()]
-        old_orders = [o for o in orders if str(o.order.completed).strip() != ''\
+        old_orders = [o for o in orders if o.amount > 0\
+                                      and str(o.order.completed).strip() != ''\
                                       and str(o.order.completed) < str(nov12)]
         return dict(m=self.m, msg=msg, shifts=self.m.shifts,
                     old_orders=old_orders, transactions=self.m.transactions)

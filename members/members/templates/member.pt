@@ -135,7 +135,7 @@
                 </thead>
                 <tbody>
                     <tal:block tal:repeat="o old_orders">			
-                    <tr class="list-content" tal:condition="o.amount > 0.0">
+                    <tr class="list-content">
                         <td>
                             <a href="http://order.vokomokum.nl/cgi-bin/adm_view_memord.cgi?order_no=${o.order.id}&amp;Member=${m.mem_id}">${o.order.label}</a>
                         </td>
