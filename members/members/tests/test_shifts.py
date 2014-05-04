@@ -102,7 +102,7 @@ class TestShifts(VokoTestCase):
         self.assertEquals(shift.state, 'assigned')  # peter can't do it
         view.user = self.get_hans()
         view()
-        self.assertEquals(shift.state, 'worked')  # hasn can
+        self.assertEquals(shift.state, 'worked')  # hans can
         request.params['state'] = 'assigned'
         view.user = self.get_hans()
         view()
