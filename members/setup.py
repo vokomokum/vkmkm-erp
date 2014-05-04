@@ -1,6 +1,7 @@
 import os
 
 from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
@@ -19,6 +20,19 @@ requires = [
     'dnspython',
     ]
 
+
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+        errcode = pytest.main(self.test_args)
+        sys.exit(errcode)
+
+
 setup(name='members',
       version='1.0',
       description='Vokomokum members application',
@@ -36,7 +50,8 @@ setup(name='members',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      test_suite='members',
+      tests_require=['pytest', 'splinter'],
+      test_suite='members.tests',
       install_requires = requires,
       entry_points = """\
       [paste.app_factory]
