@@ -369,7 +369,6 @@ class ShiftYearOverview(BaseView):
             self.month_sums[month] = [0, 0]
             qm = q.filter(Shift.month == self.months.index(month)+1)
             for m in self.wg.members:
-                print m.mem_id, m
                 qmm = qm.filter(Shift.mem_id == m.mem_id)
                 # worked shifts shifts of this member this month
                 wmm = qmm.filter(Shift.state == 'worked').count()        
