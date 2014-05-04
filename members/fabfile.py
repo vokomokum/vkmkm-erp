@@ -9,7 +9,7 @@ $VIRPY/bin/pip install fabric
 Then it suffices to issue 
 fab develop         # develop the webapp locally
 fab serve           # run local dev server
-fab test            # run test
+fab test            # run test, add module=test-module-name if you want 
 fab commit          # commit changed code (interactively)
 fab push            # push commits
 fab populate        # populate local test DB (sqlite) with dummy data
@@ -31,9 +31,10 @@ def serve():
     ''' run local dev server '''
     local('$VIRPY/bin/pserve development.ini --reload')
 
-def test(standalone=True):
+def test(standalone=True, module=None):
     '''
-    perfom tests
+    Perfom tests. You can pick a module (leave members.tests." off and also ".py").
+    standalone means other commands follow, so an error prompts if to quit.
     '''
     # Note: The setuptools environment is notorious for uninformative error messages 
     # when imports went bad. It will tell you which module is the problem, but only
@@ -41,7 +42,10 @@ def test(standalone=True):
     # $ $VIRPY/bin/python setup.py develop
     # $ $VIRPY/bin/python -c "import members.tests.<The module in question>"
     with settings(warn_only=True):
-        result = local('$VIRPY/bin/python setup.py test -q', capture=False)
+        if not module:
+            result = local('$VIRPY/bin/python setup.py test -q', capture=False)
+        else:
+            result = local('$VIRPY/bin/python setup.py test -s members.tests.{}'.format(module), capture=False)
     if result.failed and not standalone and not confirm("Tests failed. Continue anyway?"):
         abort("Aborting at user request.")
 
