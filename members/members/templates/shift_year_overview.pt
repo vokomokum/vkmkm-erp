@@ -22,8 +22,10 @@
           <tr tal:repeat="mem view.members_with_shifts">
               <td><a href="${portal_url}/member/${mem.mem_id}">${mem}</a></td>
               <td tal:repeat="month view.months">
-                  <tal:block tal:define="mm python:view.all_shift_data[month][mem.mem_id]">
+                  <tal:block tal:condition="python:mem.mem_id in view.all_shift_data[month]">
+                    <tal:block tal:define="mm python:view.all_shift_data[month][mem.mem_id]">
                       ${mm[0]}/${mm[1]}
+                    </tal:block>
                   </tal:block>
               </td>
               <td id="shift-sums-per-member">
