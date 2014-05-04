@@ -5,6 +5,7 @@ import os
 from shutil import rmtree
 
 from pyramid import testing
+from splinter import Browser
 
 from sqlalchemy import create_engine, engine_from_config
 from sqlalchemy.orm import sessionmaker
@@ -65,7 +66,6 @@ class VokoTestCase(unittest.TestCase):
             self.DBSession = models.base.configure_session(create_engine('postgres://'))
         self.add_custom_settings()
         self.fill_data()
-
 
     def tearDown(self):
         if db_type == 'sqlite':
@@ -141,5 +141,21 @@ class VokoTestCase(unittest.TestCase):
     def get_hans(self):
         return self.DBSession.query(Member).get(2)
     
+
+class VokoE2ETestCase(VokoTestCase):
+
+    def setUp(self):
+        '''
+        Establish the browser and login the admin user.
+        Cleanup: close browser 
+        '''
+        super(VokoE2ETestCase, self).setUp()
+        # self.browser = Browser('phantomjs')  # currently doesn't work (for me)
+        self.browser = Browser()  #  default: Firefox
+        self.browser.visit('http://localhost:6543')
+        self.browser.find_by_id('inputEmail').fill('3')
+        self.browser.find_by_id('inputPassword').fill('notsecret')
+        self.browser.find_by_id('login-btn').click()
+        self.addCleanup(self.browser.quit)
 
 
