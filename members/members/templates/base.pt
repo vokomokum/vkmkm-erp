@@ -142,7 +142,7 @@
                                     </a>
                                 </div>
                                 <div class="col-sm-2">
-                                    <button type="submit" class="btn btn-primary" name="form.submitted">Login</button>
+                                    <button id="login-btn" type="submit" class="btn btn-primary" name="form.submitted">Login</button>
                                 </div>
                             </div>
                         </form>

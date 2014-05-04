@@ -10,7 +10,7 @@
     </h1>
  
     <!-- New shifts form -->
-    Create new shift(s) <a onclick="$('#form-data').toggle()">show/hide</a>
+    Create new shift(s) <a id="shift_creation_toggle" onclick="$('#form-data').toggle()">show/hide</a>
         <div id="form-data" style="display:none;"
              tal:condition="(view.user_is_wgleader or view.user.mem_admin)"><!--and not view.month_info.month_lies_in_past"-->
         <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post" role="form" class="form-horizontal">
@@ -83,7 +83,7 @@
               </div>
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                  <button class="btn btn-primary" type="submit">Create</button>
+                  <button id="create-btn" class="btn btn-primary" type="submit">Create</button>
                 </div>
               </div>
         </form>
