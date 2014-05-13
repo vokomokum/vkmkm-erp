@@ -171,7 +171,7 @@ def fillDBRandomly(seed, workgroups):
             ttype = random.choice(ttypes)
             t = Transaction(ttype_id=ttype.id, amount=random.random() * 150,
                             date=datetime.datetime(month[1], month[0],
-                                  random.randint(1, 30)), mem_id=m.mem_id)
+                                  random.randint(1,28)), mem_id=m.mem_id)
             t.ttype = ttype
             t.member = m
             if ttype.pos_neg == 'neg':
