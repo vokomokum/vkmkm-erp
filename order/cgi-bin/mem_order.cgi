@@ -268,15 +268,15 @@ sub do_changes {
 	if(defined($pr_hr->{$pr_id})) {
 	    my $h = $pr_hr->{$pr_id};
 
-	    # bubble club - no changes allowed in status 2
-	    if($status == 2 and $ord_no == $current_no and 
-	       $h->{pr_wh} == $config->{BUBBLE_CLUB}->{bc_wh_id}) {
-		dump_stuff("do_changes",  $pr_id, 
-			   $new_vals->{$pr_id}, $h->{order});
-		# copy order value to new value
-		$new_vals->{$pr_id} = $h->{order};
-	    }
-	    
+#	    # bubble club - no changes allowed in status 2
+#	    if($status == 2 and $ord_no == $current_no and 
+#	       $h->{pr_wh} == $config->{BUBBLE_CLUB}->{bc_wh_id}) {
+#		dump_stuff("do_changes",  $pr_id, 
+#			   $new_vals->{$pr_id}, $h->{order});
+#		# copy order value to new value
+#		$new_vals->{$pr_id} = $h->{order};
+#	    }
+#	    
 	    if($h->{order} != $new_vals->{$pr_id}) {
 		$changes = 1;
 	    }
@@ -295,9 +295,9 @@ sub do_changes {
 	    my $h = $pr_hr->{$pr_id};
 	    if(($h->{order} != 0) and
 	       not defined($new_vals->{$pr_id})) {
-		# don't lose Bubble club orders here
-		next if($h->{pr_wh} == $config->{BUBBLE_CLUB}->{bc_wh_id} and
-		    ($status == 2 and $ord_no == $current_no));
+#		# don't lose Bubble club orders here
+#		next if($h->{pr_wh} == $config->{BUBBLE_CLUB}->{bc_wh_id} and
+#		    ($status == 2 and $ord_no == $current_no));
 		$new_vals->{$pr_id} = 0;
 		   $changes = 1;
 	    }

@@ -8,37 +8,35 @@
     <h1>The ${wg.name} Workgroup</h1>
 
     <div id="wg-description" tal:content="wg.desc"></div>
- 
-    <div id="action-box">
-        <a class="mail-link" href="mailto:${wg.main_mailing_list_address}"
-           title="The coordinators of this workgroup can be reached at ${wg.main_mailing_list_address}."
-        >Mail the coordinators</a>
-        <a class="mail-link" href="mailto:${wg.all_mailing_list_address}"
-           title="All members of this workgroup can be reached at ${wg.all_mailing_list_address}.
-Usage of this address is limited to vokomokum members."
-        >Mail all members of ${wg.name}</a>
-        <a tal:condition="python: view.user_is_wgleader or view.user.mem_admin"
-            class="edit-link" href="${portal_url}/workgroup/${wg.id}/edit">Edit this group</a>
-        <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}/${now.month}">Monthly shift schedule</a>
-        <a class="shift-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}">Yearly shift overview</a>
-    </div>
 
-    <table class="list" align="center">
+    <a class="btn btn-link" href="mailto:${wg.main_mailing_list_address}"
+           title="The coordinators of this workgroup can be reached at ${wg.main_mailing_list_address}."><span class="glyphicon glyphicon-envelope"></span> Mail the coordinators</a>
+    <a class="btn btn-link" href="mailto:${wg.all_mailing_list_address}"
+           title="All members of this workgroup can be reached at ${wg.all_mailing_list_address}.
+Usage of this address is limited to vokomokum members."><span class="glyphicon glyphicon-envelope"></span> Mail all members of ${wg.name}</a>
+    <a tal:condition="python: view.user_is_wgleader or view.user.mem_admin"
+            class="btn btn-link" href="${portal_url}/workgroup/${wg.id}/edit"><span class="glyphicon glyphicon-edit"></span> Edit this group</a>
+    <a class="btn btn-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}/${now.month}"><span class="glyphicon glyphicon-calendar"></span> Monthly shift schedule</a>
+    <a class="btn btn-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}"><span class="glyphicon glyphicon-list-alt"></span> Yearly shift overview</a>
+
+    <table class="table table-striped table-bordered table-hover table-responsive" align="center">
         <tr>
             <th>Coordinators</th>
             <th>Members</th>
         </tr>
         <tr class="list-content">
             <td>
-                <tal:block tal:repeat="l wg.active_leaders">
-                   <a href="${portal_url}/member/${l.mem_id}">${l.fullname}</a>
+                <tal:block tal:repeat="l wg.leaders">
+                    <a tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[l.mem_active]"
+                       href="${portal_url}/member/${l.mem_id}">[${l.mem_id}] ${l.fullname}${active}</a>
                     <span tal:condition="not repeat.l.end">,</span>
                 </tal:block>
             
             </td>
             <td>
-                <tal:block tal:repeat="m wg.active_members">
-                    <a tal:content="m.fullname" href="${portal_url}/member/${m.mem_id}"></a>
+                <tal:block tal:repeat="m wg.members">
+                    <a tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[m.mem_active]"
+                       href="${portal_url}/member/${m.mem_id}">[${m.mem_id}] ${m.fullname}${active}</a>
                     <span tal:condition="not repeat.m.end">,</span>
                 </tal:block>
             </td>

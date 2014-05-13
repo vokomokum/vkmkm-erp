@@ -353,6 +353,7 @@ class ShiftYearOverview(BaseView):
         self.all_shift_data = {}
         self.month_sums = {}
         self.member_sums = {}
+        self.members_with_shifts = set()
         for m in self.wg.members:
             self.member_sums[m.mem_id] = [0, 0]
         self.sum_overall = [0, 0]
@@ -367,20 +368,22 @@ class ShiftYearOverview(BaseView):
             self.all_shift_data[month] = {} 
             self.month_sums[month] = [0, 0]
             qm = q.filter(Shift.month == self.months.index(month)+1)
-            for m in self.wg.active_members:
+            for m in self.wg.members:
                 qmm = qm.filter(Shift.mem_id == m.mem_id)
                 # worked shifts shifts of this member this month
                 wmm = qmm.filter(Shift.state == 'worked').count()        
                 # all assigned (assigned, worked or not-worked) 
                 amm = wmm + qmm.filter(Shift.state == 'assigned').count()        
-                amm += qmm.filter(Shift.state == 'no-show').count()        
-                self.all_shift_data[month][m.mem_id] = wmm, amm
-                self.month_sums[month][0] += wmm
-                self.month_sums[month][1] += amm
-                self.member_sums[m.mem_id][0] += wmm
-                self.member_sums[m.mem_id][1] += amm
-                self.sum_overall[0] += wmm 
-                self.sum_overall[1] += amm 
+                amm += qmm.filter(Shift.state == 'no-show').count()
+                if amm > 0:
+                    self.members_with_shifts.add(m)
+                    self.all_shift_data[month][m.mem_id] = wmm, amm
+                    self.month_sums[month][0] += wmm
+                    self.month_sums[month][1] += amm
+                    self.member_sums[m.mem_id][0] += wmm
+                    self.member_sums[m.mem_id][1] += amm
+                    self.sum_overall[0] += wmm 
+                    self.sum_overall[1] += amm 
             # now open (not assigned) shifts   
             om = qm.filter(Shift.state == 'open').count()
             self.all_shift_data[month][-1] = om

@@ -1,0 +1,79 @@
+body.logged_in
+{
+    padding-top: 55px;
+}
+
+.navbar-brand
+{
+    background-image: url(../img/vokodot.png);
+    background-repeat: no-repeat;
+    background-position: 40px 0;
+}
+
+.navbar-nav.navbar-right:last-child 
+{
+    margin-right: 0px !important;
+}
+
+.content
+{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-height: 300px;
+}
+
+footer
+{
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+table.table-hover tbody tr[data-href]:hover td
+{
+	cursor: pointer;
+}
+
+.dashboard-todo ul li
+{
+	list-style: none;
+}
+
+.todo-classifier {
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  margin-right: 5px;
+  background-color: #04176D;
+}
+
+.todo-Membership .todo-classifier{
+  background-color: pink;
+}
+
+.todo-Finance .todo-classifier{
+  background-color: black;
+}
+
+.todo-System .todo-classifier{
+  background-color: gray;
+}
+
+.todo-Vers .todo-classifier{
+  background-color: green;
+}
+
+.todo-Bestelling .todo-classifier{
+  background-color: yellow;
+}
+
+.todo-Setup .todo-classifier{
+  background-color: orange;
+}
+
+.todo-Cafe .todo-classifier{
+  background-color: brown;
+}
+
+.todo-Communication .todo-classifier{
+  background-color: purple;
+}

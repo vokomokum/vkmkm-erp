@@ -8,73 +8,73 @@
         Transactions in month ${view.month}/${view.year}
     </h1>
     
-    <div id="prevnext">
-        <a href="${portal_url}/transactions/${view.month_info.prev_year}/${view.month_info.prev_month}">
-            &lt;&lt;&nbsp;${view.month_info.prev_month}/${view.month_info.prev_year}
-        </a>
-        &nbsp; &nbsp; &nbsp;
-        <a href="${portal_url}/transactions/${view.month_info.next_year}/${view.month_info.next_month}">
-            ${view.month_info.next_month}/${view.month_info.next_year}&nbsp;&gt;&gt;
-        </a>
-    </div>
-    
     <!-- show deletion confirmation -->
     <div id="deletion-confirmation" tal:condition="python: hasattr(view, 'cdo')">
-        <div class="warn">Really delete transaction "${view.cdo}"?</div>
-        <a href="${portal_url}/transaction/${view.cdo.id}/delete">
-            <button>Yes</button>
+        <p class="help-block">Really delete transaction "${view.cdo}"?</p>
+        <a class="btn btn-default" href="${portal_url}/transaction/${view.cdo.id}/delete">
+            Yes
         </a>    
-        <a onclick="javascript:$('#deletion-confirmation').hide()">
-            <button>No</button>
+        <a class="btn btn-default" onclick="javascript:$('#deletion-confirmation').hide()">
+            No
         </a>    
     </div>
 
-    <div class="new-transaction-form" id="stylized-form">
+    <p class="help-block">Create new transaction: <a onclick="$('#form-data').toggle()">show/hide</a></p>
+    <div id="form-data" style="display:none;">
         <form action="${portal_url}/transactions/new"
-              method="post">
-        
-            <div class="form-title">
-                Create new transaction: <a onclick="$('#form-data').toggle()">show/hide</a>
-            </div>
-            <div id="form-data" style="display:none;">
-                <div class="form-row">
-                    <label for="ttype_id">Type:</label>
-                    <select onchange="javascript:togglePartnerOrderSelect();"
+              method="post" class="form-horizontal" role="form">
+
+            <div class="form-group">
+                <label for="ttype_id" class="control-label col-sm-2">
+                    Type:
+                </label>
+                <div class="col-sm-4">
+                    <select class="form-control" onchange="javascript:togglePartnerOrderSelect();"
                             name="ttype_id" id="ttype-select">
                         <option value="--">--</option>
                         <tal:block tal:repeat="tt view.transaction_types">
                             <option value="${tt.id}">${tt} (${python:{'pos':'+', 'neg':'-', '---':'+ or -'}[tt.pos_neg]})</option>
                         </tal:block>
                     </select>
-                    <div id="member">
-                        <label for="mem_id">Member:</label>
-                        <select name="mem_id" id="mem_id" class="chzn-select">
-                            <option id="mem-default-option" value="--">[ID] Name (active)</option>
+                </div>
+                <div id="member">
+                    <label class="col-sm-2 control-label" for="mem_id">Member:</label>
+                    <div class="col-sm-4">
+                        <select name="mem_id" id="mem_id" class="chzn-select form-control" style="width:200px;">
+                            <option id="mem-default-option" value="--">[ID] Name</option>
                             <tal:block tal:repeat="m view.members">
-                                <option tal:define="active python:{True:'yes', False:'no'}[m.mem_active]"
-                                        value="${m.mem_id}">[${m.mem_id}] ${m.fullname} (${active})</option>
+                                <option tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[m.mem_active]"
+                                        value="${m.mem_id}">[${m.mem_id}] ${m.fullname}${active}</option>
                             </tal:block>
                         </select>
                     </div>
-                    <div id="wholesaler">
-                        <label for="wh_id">Wholesaler:</label>
-                        <select name="wh_id">
+                </div>
+                <div id="wholesaler">
+                    <label class="col-sm-2 control-label" for="wh_id">Wholesaler:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="wh_id">
                             <option id="wh-default-option" value="--">--</option>
                             <tal:block tal:repeat="w view.wholesalers">
                                 <option value="${w.wh_id}">${w}</option>
                             </tal:block>
                         </select>
                     </div>
-                    <div id="vers_supplier">
-                        <label for="vers_id">Vers Supplier:</label>
-                        <select name="vers_id">
+                </div>
+                <div id="vers_supplier">
+                    <label class="col-sm-2 control-label" for="vers_id">Vers Supplier:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="vers_id">
                             <option id="vers-default-option" value="--">--</option>
                             <tal:block tal:repeat="vs view.vers_suppliers">
                                 <option value="${vs.id}">${vs}</option>
                             </tal:block>
                         </select>
                     </div>
-                    <script language="javascript">
+                </div>
+            </div>
+
+            <div id="order-div" style="display:none" class="form-group">
+                <script language="javascript">
                         var member_types = Array();
                         var wholesaler_types = Array();
                         var vers_supplier_types = Array();
@@ -96,20 +96,20 @@
                             // toggle the partner with whom to associate
                             if (member_types.indexOf(sel_ttid) >= 0)
                                 $('#member').show();
-                            else 
+                            else
                                 $('#member').hide();
                             if (wholesaler_types.indexOf(sel_ttid) >= 0)
                                 $('#wholesaler').show();
-                            else 
+                            else
                                 $('#wholesaler').hide();
                             if (vers_supplier_types.indexOf(sel_ttid) >= 0)
                                 $('#vers_supplier').show();
-                            else 
+                            else
                                 $('#vers_supplier').hide();
                             // also toggle the order selection for some type(s)
                             if (sel_txt == 'Order Charge')
                                 $('#order-div').show();
-                            else 
+                            else
                                 $('#order-div').hide();
                         }
                         window.onload = function(){ //$ is not known yet (bottom of page)
@@ -126,44 +126,69 @@
                                                       .removeAttr('selected');
                         };
                     </script>
-                    <span id="order-div" style="display:none;">
-                        <label for="ord_no">Order:</label>
+
+                    <label class="control-label col-sm-2" for="ord_no">Order:</label>
+                    <div class="col-sm-4">
                         <select name="ord_no" id="order-select">
                             <option id="order-default-option" value="--">--</option>
                             <tal:block tal:repeat="o view.orders">
                                 <option value="${o.id}">${o.label}</option>
                             </tal:block>
                         </select>
-                    </span>
+                    </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="amount">Amount <span id="amount-posneg"></span>:</label>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">&euro;</span>
+                        <input class="form-control" type="text" size="7" maxlength="7" name="amount" />
+                    </div>
                 </div>
-                <div class="form-row">
-                    <label for="amount">Amount <span id="amount-posneg"></span>:</label>
-                    <small>EUR</small> <input type="text" size="7" maxlength="7" name="amount" />
-                    <label for="day">Day:</label>
-                    <select name="day">
+                <label class="col-sm-2 control-label" for="day">Day:</label>
+                <div class="col-sm-2">
+                    <select class="form-control" name="day">
                         <tal:block repeat="d view.days">
                             <option value="${d}" tal:condition="d != view.today">${d}</option>
                             <option value="${d}" tal:condition="d == view.today" selected="selected">${d}</option>
-                        </tal:block> 
+                        </tal:block>
                     </select>
                     <input type="hidden" name="month" value="${view.month}" />
                     <input type="hidden" name="year" value="${view.year}" />
-                    <label for="late">Late:</label>
-                    <input type="checkbox" name="late" />
                 </div>
-                <div class="form-row">
-                    <label for="comment">Comment:</label>
-                    <textarea name="comment" rows="2" cols="50"></textarea>
+                <label class="col-sm-1 control-label" for="late">Late:</label>
+                <div class="col-sm-1">
+                    <input class="form-control" type="checkbox" name="late" id="late" />
                 </div>
-                <button type="submit">Create</button>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="comment">Comment:</label>
+                <div class="col-sm-4">
+                    <textarea class="form-control" name="comment" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary" type="submit">Create</button>
+                </div>
             </div>
         </form>
     </div>
+
+    <ul class="pager">
+      <li><a href="${portal_url}/transactions/${view.month_info.prev_year}/${view.month_info.prev_month}">
+                      &lt;&lt;&nbsp;${view.month_info.prev_month}/${view.month_info.prev_year}
+                  </a></li>
+      <li><a href="${portal_url}/transactions/${view.month_info.next_year}/${view.month_info.next_month}">
+                      ${view.month_info.next_month}/${view.month_info.next_year}&nbsp;&gt;&gt;
+                  </a></li>
+    </ul>
     
     <h2>Summary:</h2>
     
     <div id="stylized-sums">
-        <table width="100%">
+        <table class="table table-striped table-bordered table-hover table-responsive">
             <tr id="sums-header">
                 <th width="60%">Type</th>
                 <th width="15%">Count</th>
@@ -173,48 +198,48 @@
                 <tal:block tal:condition="python: view.sums[tt.name]['count'] > 0">
                     <td>${tt.name}</td>
                     <td>${python: view.sums[tt.name]['count']}</td>
-                    <td><small>EUR</small> ${python: view.sums[tt.name]['amount']}</td>
+                    <td><small>EUR</small> ${python: "%0.2f" % view.sums[tt.name]['amount']}</td>
                 </tal:block>
             </tr>
             <tr id="sums-overall">
                 <td/>
                 <td> ${python:view.overall['count']}</td>
-                <td><small>EUR</small> ${python: view.overall['amount']}</td>
+                <td><small>EUR</small> ${python: "%0.2f" % view.overall['amount']}</td>
             </tr>
         </table> 
     </div>
     
     <h2>List:</h2>
 
-    <form action="${portal_url}/transactions/${view.year}/${view.month}">
-        Type:
-        <select name="ttype">
+    <form action="${portal_url}/transactions/${view.year}/${view.month}" class="form-inline" role="form">
+        <label class="form-label">Type:</label>
+        <select name="ttype" class="form-control">
             <option value="">All types</option>
             <tal:block tal:repeat="tt view.transaction_types">
                 <option tal:condition="tt.id == view.ttid" selected="selected" value="${tt.id}">${tt.name}</option>
                 <option tal:condition="tt.id != view.ttid" value="${tt.id}">${tt.name}</option>
             </tal:block>
         </select>
-        Order by:
-        <select name="order_by">
+        <label class="form-label">Order by:</label>
+        <select name="order_by" class="form-control">
             <tal:block tal:repeat="oc view.order_criteria">
                 <option tal:condition="oc == view.order_criterion" selected="selected" value="${oc}">${oc}</option>
                 <option tal:condition="oc != view.order_criterion" value="${oc}">${oc}</option>
             </tal:block>
         </select>
-        <button type="submit">Update List</button>
+        <button type="submit" class="btn btn-primary">Update List</button>
     </form>
 
-    <table class="list" width="100%" align="center">
+    <table class="table table-striped table-bordered table-hover table-responsive">
         <tr class="list-content" align="center">
-            <th width="20%">Type</th>
-            <th width="17%">Partner</th>
-            <th width="6%">Amount</th>
-            <th width="10%">Order</th>
-            <th width="5%">Day</th>
-            <th width="28%">Comment</th>
-            <th width="5%">Late</th>
-            <th width="5%"></th>
+            <th>Type</th>
+            <th>Partner</th>
+            <th width="110px">Amount</th>
+            <th>Order</th>
+            <th>Day</th>
+            <th>Comment</th>
+            <th>Late</th>
+            <th></th>
         </tr>
         <tr tal:condition="view.show_items and not transactions">
             <td colspan="8">No transactions found.</td>
@@ -228,7 +253,7 @@
                 <form tal:condition="t.ttype.mem_sup == 'memb'"
                       action="${portal_url}/transaction/${t.id}/edit/setmember" method="post">
                     <select onchange="this.form.submit();" name="mem_id"
-                        name="mem_id" class="chzn-select"
+                        name="mem_id" class="chzn-select form-control"
                         title="Select to update." style="width: 140px;">
                         <tal:block tal:repeat="m view.members">
                             <option tal:condition="m.mem_id == t.mem_id" value="${m.mem_id}" selected="selected">${m.fullname}</option>
@@ -237,8 +262,8 @@
                     </select>
                 </form>
                 <form tal:condition="t.ttype.mem_sup == 'whol'"
-                      action="${portal_url}/transaction/${t.id}/edit/setwholesaler" method="post">
-                    <select onchange="this.form.submit();" name="wh_id"
+                      action="${portal_url}/transaction/${t.id}/edit/setwholesaler" method="post" class="form-inline">
+                    <select onchange="this.form.submit();" name="wh_id" class="form-control"
                         title="Select to update." style="width: 140px;">
                         <tal:block tal:repeat="w view.wholesalers">
                             <option tal:condition="w.wh_id == t.whol_id" value="${w.wh_id}" selected="selected">${w}</option>
@@ -247,8 +272,8 @@
                     </select>
                 </form>
                 <form tal:condition="t.ttype.mem_sup == 'vers'"
-                      action="${portal_url}/transaction/${t.id}/edit/setverssupplier" method="post">
-                    <select onchange="this.form.submit();" name="vers_id"
+                      action="${portal_url}/transaction/${t.id}/edit/setverssupplier" method="post" class="form-inline">
+                    <select onchange="this.form.submit();" name="vers_id" class="form-control"
                         title="Select to update." style="width: 140px;">
                         <tal:block tal:repeat="vs view.vers_suppliers">
                             <option tal:condition="vs.id == t.vers_id" value="${vs.id}" selected="selected">${vs}</option>
@@ -258,15 +283,18 @@
                 </form>
             </td>
             <td>
-                <form action="${portal_url}/transaction/${t.id}/edit/setamount" method="post">
-                    <small>EUR</small>
-                    <input type="text" size="5" maxlength="7" name="amount" value="${round(t.amount, 2)}"
-                        onkeydown="if (event.keyCode == 13) this.form.submit()"
-                        title="Edit, then press Enter/Return key to update."/>
+                <form action="${portal_url}/transaction/${t.id}/edit/setamount" method="post" class="form-inline">
+                    <div class="input-group">
+                        <span class="input-group-addon">&euro;</span>
+                        <input type="text" size="5" maxlength="7" name="amount" value="${round(t.amount, 2)}" class="form-control"
+                                            onkeydown="if (event.keyCode == 13) this.form.submit()"
+                                            title="Edit, then press Enter/Return key to update." />
+                    </div>
                 </form>
             </td>
             <td>
                 <a tal:condition="t.ttype.name == 'Order Charge'"
+                    class="btn btn-link"
                    href="http://order.vokomokum.nl/cgi-bin/order?order_no=${t.ord_no}&amp;mem_id=${t.mem_id}"
                    title="Click to see the details of this order (you might need to login)."
                    tal:content="t.order.label">
@@ -275,24 +303,28 @@
             <td tal:content="t.date.day">
             </td>
             <td>
-                <form action="${portal_url}/transaction/${t.id}/edit/setcomment" method="post">
-                    <input type="text" size="30" maxlength="500" name="comment" value="${t.comment}"
+                <form action="${portal_url}/transaction/${t.id}/edit/setcomment" method="post" class="form-inline">
+                    <input type="text" size="50" maxlength="500" name="comment" value="${t.comment}" class="form-control"
                         onkeydown="if (event.keyCode == 13) this.form.submit()"
                         title="Edit, then press Enter/Return key to update."/>
                 </form>
             </td>
             <td>
-                <form action="${portal_url}/transaction/${t.id}/edit/setlate" method="post">
-                    <input type="checkbox" name="late" tal:condition="t.late" 
-                           checked="checked" onchange="this.form.submit();" title="Click to update."/> 
-                    <input type="checkbox" name="late" tal:condition="not t.late"
-                           onchange="this.form.submit();" title="Click to update."/> 
+                <form action="${portal_url}/transaction/${t.id}/edit/setlate" method="post" role="form" class="form-inline">
+                    <label tal:condition="t.late">
+                        <input type="checkbox" name="late" class="form-control"
+                             checked="checked" onchange="this.form.submit();" title="Click to update."/>
+                    </label>
+                    <label tal:condition="not t.late">
+                        <input type="checkbox" name="late" class="form-control"
+                               onchange="this.form.submit();" title="Click to update."/>
+                    </label>
                 </form>
             </td>
             <td>
-                <a href="${portal_url}/transactions/${t.date.year}/${t.date.month}?confirm-deletion-of=${t.id}"
+                <a class="btn btn-link" href="${portal_url}/transactions/${t.date.year}/${t.date.month}?confirm-deletion-of=${t.id}"
                    tal:condition="not:t.locked()" title="Delete this transaction.">
-                    <img src="${portal_url}/static/img/icons/delete.gif"/>
+                    <span class="glyphicon glyphicon-remove"></span>
                 </a>
             </td>
         </tr>

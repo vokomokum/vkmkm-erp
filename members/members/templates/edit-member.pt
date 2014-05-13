@@ -4,186 +4,152 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
 
+<h1><tal:block tal:content="m.exists and 'Editing' or 'New'"></tal:block> Member Details</h1>
 
 <!-- show toggle active state confirmation -->
 <form tal:condition="python: hasattr(view, 'confirm_toggle_active') and m.mem_id"
       action="${portal_url}/member/${m.mem_id}/edit" method="post">
-    <div class="warn" tal:condition="m.mem_active">
-        Really set member ${m.fullname} to inactive?
-    </div>
-    <div class="warn" tal:condition="not:m.mem_active">
-        Really set member ${m.fullname} to active?
-    </div>
-    <button type="submit" value="toggle-active-confirmed" name="action">Yes</button>
-    <button type="submit" value="donothing" name="action">No</button>
+  <p class="help-block">Really set member ${m.fullname} to ${m.mem_active and 'inactive' or 'active'}?</p>
+
+  <button type="submit" value="toggle-active-confirmed" name="action" class="btn btn-default">Yes</button>
+  <button type="submit" value="donothing" name="action" class="btn btn-default">No</button>
 </form>
 
 
 <!-- show member form -->
-<form tal:condition="python: m and not hasattr(view, 'confirm_deletion')"
-      tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else 'new')"
-      method="post">
-    
-    <h1>Editing Member Details</h1>
-    
-    <div class="warn" tal:condition="not m.exists">
-        You are about to create a new member. Note that this will not charge
-        membership fee (you can do that manually in the Finance section).
+<form class="form-horizontal" tal:condition="python: m and not hasattr(view, 'confirm_deletion')"
+  tal:attributes="action python: '%s/member/%s/edit' % (portal_url, str(m.mem_id) if m.mem_id else 'new')" method="post">
+
+  <p class="help-block" tal:condition="not m.exists">You are about to create a new member. Note that this will not charge
+                                membership fee (you can do that manually in the Finance section).</p>
+
+  <p class="help-block">Fields marked with * are required.</p>
+
+  <a class="btn btn-link" tal:condition="m.exists" href="${portal_url}/member/${m.mem_id}"><span class="glyphicon glyphicon-eye-open"></span> view this member</a>
+  <button tal:condition="m.exists and view.user_may_edit_admin_settings"
+                  name="action" type="submit" value="toggle-active"
+                  class="btn btn-link">
+              <span class="glyphicon glyphicon-thumbs-${m.mem_active and 'down' or 'up'}"></span> make ${m.mem_active and 'inactive' or 'active'}
+          </button>
+
+  <input tal:condition="m.exists" type="hidden" name="id" value="${m.mem_id}"/>
+
+  <fieldset>
+    <legend>Name & email</legend>
+    <div class="form-group">
+      <label for="mem_fname" class="col-sm-2 control-label">Firstname *</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="mem_fname" name="mem_fname" placeholder="Firstname" value="${m.mem_fname}">
+      </div>
     </div>
-
-    <div id="action-box">
-        <a class="view-link" tal:condition="m.exists"
-           href="${portal_url}/member/${m.mem_id}">view this member</a>
+    <div class="form-group">
+      <label for="mem_prefix" class="col-sm-2 control-label">Prefix</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="mem_prefix" name="mem_prefix" placeholder="Prefix" value="${m.mem_prefix}">
+      </div>
     </div>
-
-    <button tal:condition="m.exists and view.user_may_edit_admin_settings"
-            name="action" type="submit" value="toggle-active"
-            class="action-button action-button-red">
-        <span tal:condition="m.mem_active">Make inactive</span>
-        <span tal:condition="not:m.mem_active">Make active</span>
-    </button>
-
-    <span class="warn">(fields with * are required)</span>
-
-    <input tal:condition="m.exists"
-           type="hidden" name="id" value="${m.mem_id}">
-    </input>
-
-    <!-- Name & email -->
-    <span class="bold">
-    <table class="list" width="100%">
-      <tr class="list-content">
-        <td align="center" colspan="4">Name and Email</td>
-      </tr>
-      <tr class="list-content">
-        <td align="left" width="25%"> <span class="warn">*</span> Forename:</td> 
-        <td align="left" width="10%">Prefix:</td>
-        <td align="left" width="25%"> <span class="warn">*</span> Last Name:</td>
-        <td align="left" width="40%"> <span class="warn">*</span> Email:</td>
-      </tr>
-      <tr class="list-content">
-        <td><input type="text" align="left" size="15" name="mem_fname"
-                   value="${m.mem_fname}" maxlength="20"></input></td> 
-        <td><input type="text" align="left" size="5" name="mem_prefix"
-                   value="${m.mem_prefix}" maxlength="10"></input></td>
-        <td><input type="text" align="left" size="18" name="mem_lname"
-                   value="${m.mem_lname}" maxlength="20"></input></td>
-        <td><input type="text" align="left" size="35" name="mem_email"
-                   value="${m.mem_email}" maxlength="50"></input></td>
-      </tr>
-    </table>
-    </span>
-
-    <!-- Address -->
-    <table class="list" width="100%"> 
-      <tr class="list-content">
-        <td align="center" colspan="5">Address</td>
-      </tr>
-      <tr class="list-content">
-        <td align="left" width="42%">Street:</td>
-        <td align="left" width="10%">House No.:</td>
-        <td align="left" width="10%">Hs./Apt. No:</td>
-        <td align="left" width="10%">Postcode:</td>
-        <td align="left" width="25%">City:</td>
-        <td align="left" width="8%">Household size:</td>
-      </tr>
-      <tr class="list-content">
-        <td><input type="text" align="left" size="40" name="mem_street"
-                value="${m.mem_street}" maxlength="30"></input></td>
-        <td><input type="text" align="left" size="7" name="mem_house"
-                value="${m.mem_house}" maxlength="7"></input></td>
-        <td><input type="text" align="left" size="7" name="mem_flatno"
-                value="${m.mem_flatno}" maxlength="7"></input></td>
-        <td><input type="text" align="left" size="7" name="mem_postcode"
-                value="${m.mem_postcode}" maxlength="7"></input></td>
-        <td><input type="text" align="left" size="15" name="mem_city"
-                value="${m.mem_city}" maxlength="60"></input></td>
-        <td><input type="text" align="left" size="2" name="mem_household_size"
-                value="${m.mem_household_size}" maxlength="2" />
-        </td>
-      </tr>
-    </table>
-
-
-    <!-- Phone -->
-
-    <table class="list" width="100%"> 
-      <tr class="list-content">
-        <td align="center" colspan="3">Telephone <span class="warn">(At least one is required)</span></td>
-      </tr>
-      <tr class="list-content">
-        <td align="left" width="33%">Home:</td> 
-        <td align="left" width="33%">Work:</td>
-        <td align="left" width="33%">Mobile:</td> 
-      </tr>
-      <tr class="list-content">
-        <td><input type="text" align="left" size="20" name="mem_home_tel"
-                 Value="${m.mem_home_tel}" maxlength="20"></input></td>
-        <td><input type="text" align="left" size="20" name="mem_work_tel"
-                 Value="${m.mem_work_tel}" maxlength="20"></input></td>
-        <td><input type="text" align="left" size="20" name="mem_mobile"
-                 Value="${m.mem_mobile}" maxlength="20"></input></td>
-      </tr>
-    </table>
-
-
-    <!-- Bank details: We actually do not need nor want this anymore -->
-
-    <!--table class="main" width="100%">
-       <tr class="list-content" align="center">
-         <td colspan="2">Bank Account</td>
-       </tr>
-       <tr class="list-content" align="center">
-         <td><input type="text" align="left" size="12" name="mem_bank_no"
-                 Value="${m.mem_bank_no}" maxlength="12"></input></td>
-      </tr>
-    </table-->
-
-
-    <table width="100%" class="main" id="admin-settings" tal:condition="view.user_may_edit_admin_settings">
-        <!-- Admin Settings TODO: add admin comment box -->
-           <tr class="list-content">
-             <td align="center" colspan="2">Account Settings</td>
-           </tr>
-           <!--tr class="list-content">
-             <td align="right">
-                <input type="checkbox" name="mem_membership_paid" checked="${m.mem_membership_paid}" /></td>
-             <td align="left"><label for="mem_membership_paid">Membership fee is paid</label></td>
-           </tr-->
-           <tr class="list-content">
-             <td align="right"> 
-                <input type="checkbox" name="mem_admin" checked="${m.mem_admin}" /></td>
-             <td align="left"><label for="mem_admin">Member has general administrator privileges</label></td>
-           </tr>
-           <tr class="list-content">
-             <td align="right"> 
-                <input type="checkbox" name="mem_adm_adj" checked="${m.mem_adm_adj}" /></td>
-             <td align="left"><label for="mem_adm_adj">Order admin account - can order goods after commits are closed</label></td>
-           </tr>
-           <tr class="list-content">
-             <td colspan="2" align="center">Admin Comments for this member:</td>
-           </tr>
-           <tr class="list-content">
-             <td colspan="2" align="center"> 
-                <textarea name="mem_adm_comment"
-                       tal:content="m.mem_adm_comment" rows="7" cols="60">
-                </textarea>
-             </td>
-           </tr>
-    </table>
-
-    <!-- Submit -->
-    <table width="100%">
-        <tr align="center">
-            <td width="80%"></td>
-            <td width="20%" align="center">
-                <button name="action" type="submit" value="save">
-                    <img src="${portal_url}/static/img/icons/save.png"/>
-                </button>
-            </td>
-        </tr>
-    </table>
-
+    <div class="form-group">
+      <label for="mem_lname" class="col-sm-2 control-label">Lastname *</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="mem_lname" name="mem_lname" placeholder="Lastname" value="${m.mem_lname}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mem_email" class="col-sm-2 control-label">Email *</label>
+      <div class="col-sm-6">
+        <input type="email" class="form-control" id="mem_email" name="mem_email" placeholder="Email" value="${m.mem_email}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mem_home_tel" class="col-sm-2 control-label">Phone (home)</label>
+      <div class="col-sm-6">
+        <input type="tel" class="form-control" id="mem_home_tel" name="mem_home_tel" placeholder="Phone (home)" value="${m.mem_home_tel}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mem_work_tel" class="col-sm-2 control-label">Phone (work)</label>
+      <div class="col-sm-6">
+        <input type="tel" class="form-control" id="mem_work_tel" name="mem_work_tel" placeholder="Phone (work)" value="${m.mem_work_tel}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mem_mobile" class="col-sm-2 control-label">Mobile</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="mem_mobile" name="mem_mobile" placeholder="Mobile" value="${m.mem_mobile}">
+      </div>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Address</legend>
+    <div class="form-group">
+      <label for="mem_street" class="col-sm-2 control-label">Street</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="mem_street" name="mem_street" placeholder="Street" value="${m.mem_street}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mem_house" class="col-sm-2 control-label">Number</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="mem_house" name="mem_house" placeholder="Number" value="${m.mem_house}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mem_flatno" class="col-sm-2 control-label">Hs./Apt. no</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="mem_flatno" name="mem_flatno" placeholder="Hs./Apt. no" value="${m.mem_flatno}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mem_postcode" class="col-sm-2 control-label">Zipcode</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="mem_postcode" name="mem_postcode" placeholder="Zipcode" value="${m.mem_postcode}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mem_city" class="col-sm-2 control-label">City</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="mem_city" name="mem_city" placeholder="City" value="${m.mem_city}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mem_household_size" class="col-sm-2 control-label">Household size</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="mem_household_size" name="mem_household_size" placeholder="Household size" value="${m.mem_household_size}">
+      </div>
+    </div>
+  </fieldset>
+  <fieldset tal:condition="view.user_may_edit_admin_settings">
+    <legend>Account settings</legend>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="mem_admin" checked="${m.mem_admin}"> Member has general administrator privileges
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="mem_adm_adj" checked="${m.mem_adm_adj}"> Order admin account - can order goods after commits are closed
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mem_adm_comment" class="col-sm-2 control-label">Admin comment</label>
+      <div class="col-sm-6">
+        <textarea class="form-control" rows="3" name="mem_adm_comment">${m.mem_adm_comment}</textarea>
+      </div>
+    </div>
+  </fieldset>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" name="action" value="save" class="btn btn-primary">Save</button>
+    </div>
+  </div>
 </form>
 
 

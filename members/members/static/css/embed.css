@@ -1,0 +1,12 @@
+/*
+ * This is used when the app is embedded in an iframe of a main website
+ * */
+body {
+    background-color: #ffffff;
+    padding: 0px;
+}
+
+footer {
+    display: none;
+}
+

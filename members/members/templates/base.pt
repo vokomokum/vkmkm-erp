@@ -1,15 +1,21 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       metal:define-macro="master"
-      tal:define="portal_url request.application_url">
+      tal:define="portal_url request.application_url"
+      lang="en">
 
     <head profile="http://www.w3.org/2005/10/profile">
 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="${portal_url}/static/img/favicon.ico" type="image/x-icon" />
-        <link rel="stylesheet" type="text/css" href="${portal_url}/static/members.css" />
-        <link rel="stylesheet" type="text/css" href="${portal_url}/static/chosen.css" />
+        <link rel="stylesheet" type="text/css" href="${portal_url}/static/css/members.css" />
+        <link rel="stylesheet" type="text/css" href="${portal_url}/static/css/chosen.css" />
+        <link rel="stylesheet" href="${portal_url}/static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="${portal_url}/static/css/bootstrap-theme.min.css">
+
         <!-- Internet Explorer Fixes -->
         <tal:iefixstart replace="structure string:&lt;!--[if IE]&gt;" />
         <link rel="stylesheet" type="text/css" href="${portal_url}/static/ie.css" />
@@ -18,107 +24,129 @@
         <link rel="shortcut icon" type="image/x-icon" href="${portal_url}/static/img/favicon.ico" />
     </head>
 
-    <body>
+    <body tal:attributes="class python: view.logged_in and 'logged_in' or ''">
 
-        <div id="container">
+        <div class="container">
 
-            <div id="header">
-                <div id="title"><a href="${portal_url}">Members</a></div>
-
-                <ul id="menu-actions">
-                    <tal:block tal:condition="view.logged_in">
-                    <li>
-                        <a id="logout-link" href="${portal_url}/logout" title="Log out">Log Out</a>
-                    </li>
-                    <li>
-                        <a id="profile-link" href="${portal_url}/member/${view.user.mem_id}" title="My Account" tal:content="view.user.fullname">Account</a>
-                    </li>
-                    </tal:block>
-                    
-                    <tal:block tal:condition="not view.logged_in and not view.login_necessary">
-                    <!-- Only used seldom, bcs if login is necessary, we show login form automatically anyway -->
-                    <li>
-                        <a href="/login">Log In</a>
-                    </li>
-                    </tal:block>
-                </ul>
-
-                <ul id="menu-items">
-                    <tal:block tal:condition="tab and view.logged_in" tal:define="tab view.tab | None">
-                        <li tal:attributes="class python: tab == 'home' and 'current' or ''">
-                            <a tal:attributes="href string:${portal_url}">Home</a>
-                        </li>
-                        <li tal:attributes="class python: tab == 'members' and 'current' or ''">
-                            <a tal:attributes="href string:${portal_url}/members">Members</a>
-                        </li>
-                        <li tal:attributes="class python: tab == 'work' and 'current' or ''">
-                            <a tal:attributes="href string:${portal_url}/workgroups">Work</a>
-                        </li>
-                        <li tal:attributes="class python: tab == 'finance' and 'current' or ''">
-                            <a tal:attributes="href string:${portal_url}/transactions">Finance</a>
-                        </li>
-                        <li tal:attributes="class python: tab == 'docs' and 'current' or ''">
-                            <a tal:attributes="href string:${portal_url}/docs">Docs</a>
-                        </li>
-                    </tal:block>
-                </ul>
-                <ul id="submenu-items">
-                    <tal:block tal:condition="tab and view.logged_in"
-                               tal:define="tab view.tab | None">
-                        <tal:block tal:condition="tab == 'members'">
-                            <li><a href="${portal_url}/members">Members</a></li>
-                            <li><a href="${portal_url}/applicants">Applicants</a></li>
-                        </tal:block>
-                        <tal:block tal:condition="tab == 'work'">
-                            <li><a href="${portal_url}/workgroups">Workgroup List</a></li>
-                            <li tal:repeat="wg view.user.workgroups">
-                                ${wg.name}:
-                                <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}/${view.month}">Schedule,</a>
-                                <a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}">Overview</a>
-                            </li>
-                        </tal:block>
-                        <tal:block tal:condition="tab == 'finance'">
-                            <li><a href="${portal_url}/transactions">Monthly</a></li>
-                            <li><a href="${portal_url}/transactions/2013">2013</a></li>
-                            <li><a href="${portal_url}/transaction-types">Transaction Types</a></li>
-                        </tal:block>
-                    </tal:block>
-                </ul>
-            </div>
-
-            <div id="content">
-                
-                <h4 tal:condition="msg | False">${msg}</h4>
-
-                <h5 class="warn" tal:condition="info | False">${info}</h5>
-                
-                <tal:block tal:condition="not view.logged_in and view.login_necessary">
-                    <form action="${portal_url}/login" method="post">
-                        <table class="main" align="center">
-                            <tr>
-                                <td>Id or email-address:</td>
-                                <td>
-                                    <input tal:define="origin view.came_from | '/'" type="hidden" name="came_from" value="${origin}"/>
-                                    <input type="text" name="login" length="30"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Password:</td>
-                                <td>
-                                    <input type="password" name="passwd" length="30"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input type="submit" name="form.submitted" value="Login"/>
-                                </td>
-                            </tr>
-                        </table>
-                        <a href="reset-pwd">
-                            Forgot Password?
+            <header>
+                 <tal:block tal:condition="view.logged_in">
+                    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+                      <!-- Brand and toggle get grouped for better mobile display -->
+                      <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                          <span class="sr-only">Toggle navigation</span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="${portal_url}">
+                            Vokomokum
                         </a>
-                    </form>
+                      </div>
+
+                      <!-- Collect the nav links, forms, and other content for toggling -->
+                      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown" tal:attributes="class python: view.tab == 'members' and 'active' or ''">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="${portal_url}/members">Members <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="${portal_url}/members">Members</a></li>
+                                    <li><a href="${portal_url}/applicants">Applicants</a></li>
+                                </ul>
+                            </li>
+                          <li class="dropdown" tal:attributes="class python: view.tab == 'work' and 'active' or ''">
+                            <a href="${portal_url}/workgroups" class="dropdown-toggle" data-toggle="dropdown">Work <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                              <li><a href="${portal_url}/workgroups">Workgroups</a></li>
+                                <tal:block tal:repeat="wg view.user.workgroups">
+                                    <li class="divider"></li>
+                                    <li class="disabled"><a href="#">${wg.name}</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}/${view.month}">Schedule</a></li>
+                                    <li><a href="${portal_url}/workgroup/${wg.id}/shifts/${view.year}">Overview</a></li>
+                                </tal:block>
+                            </ul>
+                          </li>
+                          <li class="dropdown" tal:attributes="class python: view.tab == 'finance' and 'active' or ''">
+                            <a href="${portal_url}/transactions" class="dropdown-toggle" data-toggle="dropdown">Finance <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                              <li><a href="${portal_url}/transactions">Monthly</a></li>
+                              <li><a href="${portal_url}/transactions/2013">2013</a></li>
+                              <li><a href="${portal_url}/transactions/2014">2014</a></li>
+                              <li><a href="${portal_url}/transaction-types">Transaction Types</a></li>
+                            </ul>
+                          </li>
+                            <li tal:attributes="class python: view.tab == 'docs' and 'active' or ''">
+                                <a href="${portal_url}/docs">Docs</a>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <tal:block tal:condition="view.logged_in">
+                                <li><a href="${portal_url}/member/${view.user.mem_id}" title="My Account"><span class="glyphicon glyphicon-user"></span>  <span tal:content="view.user.fullname">Account</span></a></li>
+                                <li><a href="${portal_url}/logout" title="Log out"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+                            </tal:block>
+
+                            <tal:block tal:condition="not view.logged_in and not view.login_necessary">
+                                <!-- Only used seldom, bcs if login is necessary, we show login form automatically anyway -->
+                                <li><a href="/login">Log In</a></li>
+                            </tal:block>
+                        </ul>
+                      </div><!-- /.navbar-collapse -->
+                    </nav>
+                </tal:block>
+
+            </header>
+            
+            <section class="content">
+
+                <div tal:condition="view.msg | nothing" class="alert alert-info col-sm-12">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  ${view.msg}
+                </div>
+
+                <div tal:condition="view.info | nothing" class="alert alert-danger col-sm-12">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  ${view.info}
+                </div>
+    
+                <div tal:condition="msg | nothing" class="alert alert-info col-sm-12">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  ${msg}
+                </div>
+
+                <div tal:condition="info | nothing" class="alert alert-danger col-sm-12">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  ${info}
+                </div>
+
+                <tal:block tal:condition="not view.logged_in and view.login_necessary">
+                    <div class="row">
+                        <form class="form-horizontal col-sm-offset-3" action="${portal_url}/login" method="post">
+                            <div class="form-group">
+                                <label for="inputEmail" class="col-sm-2 control-label">ID or Email</label>
+                                <div class="col-sm-4">
+                                    <input tal:define="origin view.came_from | '/'" type="hidden" name="came_from" value="${origin}"/>
+                                    <input type="text" class="form-control" id="inputEmail" placeholder="Id or Email" name="login">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+                                <div class="col-sm-4">
+                                    <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="passwd">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <a href="reset-pwd" class="btn btn-link">
+                                        Forgot Password?
+                                    </a>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-primary" name="form.submitted">Login</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </tal:block>
 
                 <tal:block tal:condition="view.logged_in or not view.login_necessary">
@@ -126,39 +154,28 @@
                         <div metal:define-macro="content" />
                     </metal:block>
                 </tal:block>
-            </div>
 
-            <div id="footer">
-                >>>
+            </section>
+
+            <footer class="text-center">
                 <a href="mailto:info@vokomokum.nl">
                     info@vokomokum.nl
                 </a>
-                :::
+                |
                 <a href="http://vokomokum.nl"
                     alt="Vokomokum Food Cooperative"
                     title="Go to Vokomokum Food Cooperative">
                     www.vokomokum.nl
                 </a>
-            </div>
+            </footer>
 
         </div>
 
-        <script type="text/javascript" src="${portal_url}/static/jquery.js"></script>
-        <script type="text/javascript" src="${portal_url}/static/chosen.jquery.min.js"></script>
-        <script type="text/javascript">
-            // shed outer layout when this is embedded (e.g. in an iframe)
-            if (top != self) {
-                var head = document.getElementsByTagName("head")[0];
-                var css = document.createElement('link');
-                css.type = 'text/css';
-                css.rel = 'stylesheet';
-                css.href = '${portal_url}' + "/static/embed.css";
-                css.media = 'screen';
-                head.appendChild(css);
-            }
-        </script>
-        <script type="text/javascript"> $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true}); </script>
-        <script type="text/javascript" src="${portal_url}/static/highcharts.js"></script>
+        <script type="text/javascript" src="${portal_url}/static/js/jquery.js"></script>
+        <script type="text/javascript" src="${portal_url}/static/js/chosen.jquery.min.js"></script>
+        <script type="text/javascript" src="${portal_url}/static/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="${portal_url}/static/js/vokomokum.js"></script>
+        <script type="text/javascript" src="${portal_url}/static/js/highcharts.js"></script>
 
     </body>
 

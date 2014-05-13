@@ -4,3 +4,12 @@ members/members.egg-info/
 members/members/.idea/
 order/.idea/
 venv/
+.DS_Store
+.idea
+.idea/*
+.svn
+*.pyc
+*.db
+members/members/members.egg-info
+members/members/members.egg-info/*
+members/members.egg-info/

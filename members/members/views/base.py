@@ -18,26 +18,46 @@ class BaseView(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
+        self.user = authenticated_user(self.request)
         self.logged_in = authenticated_userid(request) > -1
         # only show content if this is False or user is logged in
         # (otherwise, show login screen)
-        self.login_necessary = True    
+        self.login_necessary = True
+        # came_from is actual path, or a special requested param.
         self.came_from = self.request.path
+        # check URLs in came_from parameter against a whitelist if they are URLs    
         if 'came_from' in self.request.params:
             cf = self.request.params.get('came_from')
-            s = get_settings()
-            for url in s.get('vokomokum.whitelist_came_from').split(' '):
-                if (cf.startswith('http://{}'.format(url)) \
-                    or cf.startswith('https://{}'.format(url))):
-                    self.came_from = self.request.params.get('came_from')
-                    break
+            if "://" in cf:
+                s = get_settings()
+                for url in s.get('vokomokum.whitelist_came_from').split(' '):
+                    if (cf.startswith('http://{}'.format(url)) \
+                        or cf.startswith('https://{}'.format(url))):
+                        self.came_from = cf
+                        break
+            else:            
+                self.came_from = cf
         # for submenus
         now = datetime.datetime.now()
         self.year = now.year
         self.month = now.month
+        
+        # general infos, messages
+        if self.user and self.user.balance < 0:
+            self.info = ' Your account balance is EUR {}! Please'\
+                       ' transfer the missing amount to Vokomokum,'\
+                       ' IBAN: NL49 TRIO 0786 8291 09, t.p.v. Amsterdam'\
+                       ' (be sure to include your member number)'\
+                       ' and contact finance@vokomokum.nl to report'\
+                       ' that you have paid.'\
+                       .format(round(self.user.balance, 2))   
+        if self.user and not self.user.mem_active:
+            self.msg = 'Your account is currently not active. This means you'\
+                       ' cannot place or change orders. Contact membership@vokomokum.nl'\
+                       ' for any questions.' 
+
         # every template asks for the layout to look for the macros
         self.layout = get_renderer('../templates/base.pt').implementation()
-        self.user = authenticated_user(self.request)
 
     @property
     def user(self):

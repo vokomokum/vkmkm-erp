@@ -13,7 +13,8 @@
 
     <div tal:repeat="folder folders">
         <div class="folder">
-            <a href="${portal_url}/docs/${cur_folder}/${folder}">${folder}</a>
+            <a href="${portal_url}/docs/${cur_folder}/${folder}">
+            	<span class="glyphicon glyphicon-folder-close"></span>  ${folder}</a>
         </div>
     </div>
     <ul>

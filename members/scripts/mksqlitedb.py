@@ -15,7 +15,6 @@ from members.models.workgroups import Workgroup
 from members.models.shift import Shift, shift_states
 from members.models.transactions import Transaction
 from members.models.transactions import TransactionType
-from members.models.transactions import reserved_ttype_names
 from members.models.orders import Order
 
 from members.utils.md5crypt import md5crypt
@@ -63,11 +62,11 @@ def addAdmin():
 """Ensure the backwards compatibility, these settings are used in unit tests"""
 def addOldNames():
     m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
-    m1.mem_email = 'peter@dePan.nl'
+    m1.mem_email = 'peter@gmail.com'
     m1.mem_enc_pwd = md5crypt('notsecret', 'notsecret')
     DBSession.add(m1)
     m2 = Member(fname=u'Hans', prefix=u'de', lname='Wit')
-    m1.mem_email = 'hans@deWit.nl'
+    m1.mem_email = 'hans@gmail.com'
     DBSession.add(m2)
     wg1 = Workgroup(name=u'Systems', desc=u'IT stuff')
     DBSession.add(wg1)
@@ -113,8 +112,8 @@ def fillDBRandomly(seed, workgroups):
     members = []
     for l in namelist[int(len(namelist) * 0.2):]:
         m = Applicant(fname=l, lname=names[l])
-        m.email = "%s@%s.nl"%(l, names[l])
-        m.household_size = random.randint(1, 15)
+        m.email = "%s-app@gmail.com"%(l)
+        m.household_size = random.randint(1, 5)
         m.telnr = "06" + unicode(random.randint(10000000, 100000000))
         DBSession.add(m)
         # randomly select a number of workgroups m can be a member of
@@ -123,7 +122,7 @@ def fillDBRandomly(seed, workgroups):
     for l in namelist[:int(len(namelist) * 0.8)]:
         prefix = random.choice([u"de", u"van", u"voor", u"van den", u"te"])
         m = Member(fname=l, prefix=prefix, lname=names[l])
-        m.mem_email = "%s@%s.nl" % (l, names[l])
+        m.mem_email = "%s@gmail.com" % (l)
         m.mem_enc_pwd = md5crypt(default_pwd, default_pwd)
         m.mem_mobile = "06" + unicode(random.randint(10000000, 100000000))
         m.household_size = random.randint(1, 5)
@@ -163,15 +162,18 @@ def fillDBRandomly(seed, workgroups):
         DBSession.flush()
                 
     # Finally: create 20 transactions per member
-    ttypes = DBSession.query(TransactionType).all()
+    ttype = DBSession.query(TransactionType).filter(TransactionType.name=='Order Charge').first()
     orders = DBSession.query(Order).all()
     for m in members:
         for i in range(20):
             month = random.choice(months)
-            ttype = random.choice(ttypes)
             t = Transaction(ttype_id=ttype.id, amount=random.random() * 150,
                             date=datetime.datetime(month[1], month[0],
+<<<<<<< HEAD
                                   random.randint(1,28)), mem_id=m.mem_id)
+=======
+                                  random.randint(1, 28)), mem_id=m.mem_id)
+>>>>>>> fa9f7dc104d8dc27d51b6fe366aa6d89c1487580
             t.ttype = ttype
             t.member = m
             if ttype.pos_neg == 'neg':
@@ -209,8 +211,13 @@ def main():
     # (enforcement only works from version 3.6.19 though)
     engine.execute('pragma foreign_keys=on')
     # reserved transaction types
-    for rt in reserved_ttype_names:
-        DBSession.add(TransactionType(name=rt))
+    DBSession.add(TransactionType(name='Membership Fee', mem_sup='memb', pos_neg='neg'))
+    DBSession.add(TransactionType(name='Order Charge', mem_sup='memb', pos_neg='neg'))
+    # others
+    DBSession.add(TransactionType(name='Pay Wholesaler', mem_sup='whol', pos_neg='pos'))
+    DBSession.add(TransactionType(name='Pay Vers supplier', mem_sup='vers', pos_neg='neg'))
+    DBSession.add(TransactionType(name='Payment to Member', mem_sup='memb', pos_neg='pos'))
+    DBSession.add(TransactionType(name='Late order change', mem_sup='memb', pos_neg='---'))
 
     workgroups = createWGs()
     # add old names, used in base.py and in testing (ask Nic what to do with it)

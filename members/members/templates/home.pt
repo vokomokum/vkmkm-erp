@@ -8,53 +8,54 @@
                 Howdy, ${view.user.fullname}
             </h4>
 
-            <div id="dashboard-todos" tal:condition="view.logged_in">
-                <div id="todos-header">Some TODO items you should review:</div>
-                <div tal:condition="view.user.mem_admin" id="todos-toggle">
-                    <tal:block tal:condition="not: view.show_all">
-                        <a href="${portal_url}?show-all-todos=1">
-                            Show all TODOs in the system
-                        </a> [admins only].
+            <div class="row">
+
+                <div class="col-sm-6 dashboard-todo" tal:condition="view.logged_in">
+                    <div id="todos-header">Some TODO items you should review:</div>
+                    <div tal:condition="view.user.mem_admin" id="todos-toggle">
+                        <tal:block tal:condition="not: view.show_all">
+                            <a href="${portal_url}?show-all-todos=1">
+                                Show all TODOs in the system
+                            </a> [admins only].
+                        </tal:block>
+                        <tal:block tal:condition="view.show_all">(These are all TODOs in the system.
+                            <a href="${portal_url}">Show only your TODOs.</a>
+                        )</tal:block>
+                    </div>
+                    <ul>
+                        <li tal:repeat="todo todos" class="todo-${todo.wg}">
+                            <span class="todo-classifier"
+                                  title="This TODO is shown to all people or coordinators in workgroup ${todo.wg}">
+                            </span>
+                            <span class="todo-msg" tal:content="todo.msg">
+                            <a href="${portal_url}/${todo.link_act}"
+                               title="${todo.link_title}">
+                                ${todo.link_txt}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-sm-6 dashboard-graphs">
+                    <tal:block tal:repeat="graph graphs">
+                    <div id="graph">
+                    </div>
+                    <script type="text/javascript">
+                        window.onload = function(){ //$ is not known yet (bottom of page)
+                            $('#graph').highcharts(${graph});
+                        };
+                    </script>
                     </tal:block>
-                    <tal:block tal:condition="view.show_all">(These are all TODOs in the system.
-                        <a href="${portal_url}">Show only your TODOs.</a>
-                    )</tal:block>
                 </div>
-                <ul>
-                    <li tal:repeat="todo todos" class="todo-${todo.wg}">
-                        <span class="todo-classifier"
-                              title="This TODO is shown to all people or coordinators in workgroup ${todo.wg}">
-                            &nbsp;&nbsp;&nbsp;
-                        </span>
-                        <span class="todo-msg" tal:content="todo.msg">
-                        <a href="${portal_url}/${todo.link_act}"
-                           title="${todo.link_title}">
-                            ${todo.link_txt}
-                        </a>
-                    </li>
-                </ul>
+
             </div>
 
-            <div id="dashboard-graphs">
-                <tal:block tal:repeat="graph graphs">
-                <div id="graph">
-                </div>
-                <script type="text/javascript">
-                    window.onload = function(){ //$ is not known yet (bottom of page)
-                        $('#graph').highcharts(${graph});
-                    };
-                </script>
-                </tal:block>
-            </div>
-
-            <div id="dashboard-footer">
-                <h6>
-                    For help and/or questions in technical matters,
-                    you can <a href="mailto:systems@vokomokum.nl">contact the admins</a>.
-                    Organisational matters should be directed to your group coordinator
-                    or <a href="mailto:membership@vokomokum.nl">Membership</a>.
-                </h6>
-            </div>
+            <p class="help-block">
+                For help and/or questions in technical matters,
+                you can <a href="mailto:systems@vokomokum.nl">contact the admins</a>.
+                Organisational matters should be directed to your group coordinator
+                or <a href="mailto:membership@vokomokum.nl">Membership</a>.
+            </p>
 
         </div>
     </div>
