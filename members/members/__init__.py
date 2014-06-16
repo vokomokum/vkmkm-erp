@@ -17,6 +17,7 @@ from members.models.orders import Order
 from members.models.supplier import VersSupplier
 from members.models.applicant import Applicant
 from members.models.transactions import Transaction, TransactionType
+#from twisted.conch.openssh_compat import factory
 
 
 def main(global_config, **settings):
@@ -78,6 +79,11 @@ def main(global_config, **settings):
     # custom error views, catching NotFound and all Exceptions
     config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')
     config.add_view(ErrorView, context=Exception, renderer='templates/base.pt')
+
+    config.add_route('bank_feedback_index', '/bank', factory=Transaction)
+    config.add_route('bank_feedback_upload', '/bank_upload', factory=Transaction)
+
+    config.add_route('bank_get_upload_data', '/get_upload_data', factory=Transaction)
 
     config.scan()
 

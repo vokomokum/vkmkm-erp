@@ -39,7 +39,7 @@ class Login(BaseView):
                     self.came_from += ""
                     return HTTPFound(location = self.came_from, headers = headers)
                 else:
-                    message += ' The password is not correct.'
+                    print message
             else:
                 message += ' Member not found. '
             message += ' The Login failed.'

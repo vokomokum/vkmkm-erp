@@ -58,4 +58,27 @@ CREATE TABLE vers_suppliers (
 INSERT INTO "vers_suppliers" VALUES(1,'Geijtenboerderij', '', '', '', '', 1, '');
 INSERT INTO "vers_suppliers" VALUES(2,'Boerderij B', '', '', '', '', 1, '');
 
+CREATE TABLE uploads (
+  id INTEGER PRIMARY KEY,
+  datetime DATETIME,
+  member_id INTEGER,
+  upload VARCHAR(512)
+);
+
+CREATE TABLE mutations (
+  id INTEGER PRIMARY KEY,
+  upload_id INTEGER,
+  tx_id INTEGER,
+  created DATETIME,
+  processed DATETIME,
+  transferred DATETIME,
+  account INTEGER,
+  contra_account
+  amount VARCHAR(20),
+  `type` ENUM,
+  `name` VARCHAR(64),
+  code VARCHAR(20),
+  description VARCHAR(128)
+);
+
 COMMIT;

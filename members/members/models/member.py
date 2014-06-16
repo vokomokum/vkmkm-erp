@@ -14,11 +14,13 @@ from sqlalchemy import Integer
 from sqlalchemy import Unicode
 from sqlalchemy import Boolean
 from sqlalchemy import DateTime
+from sqlalchemy.orm import relationship, backref
 
 from pyramid.security import Allow, DENY_ALL
 
 from base import Base, VokoValidationError
-from members.models.base import DBSession
+from base import DBSession
+#from members.models.upload import Upload
 
 
 class Member(Base):
@@ -27,37 +29,39 @@ class Member(Base):
     '''
     __tablename__ = 'members'
 
-    mem_id = Column(Integer, primary_key=True)
-    mem_fname = Column(Unicode(255), default='')
-    mem_prefix = Column(Unicode(255), default='')
-    mem_lname = Column(Unicode(255), default='')
-    mem_email = Column(Unicode(255), default='')
-    mem_street = Column(Unicode(255), default='')
-    mem_house = Column(Integer, default=0)
-    mem_flatno = Column(Unicode(255), default='')
-    mem_city = Column(Unicode(255), default='')
-    mem_postcode = Column(Unicode(6), default='')
-    mem_home_tel = Column(Unicode(25), default='')
-    mem_work_tel = Column(Unicode(255), default='')
-    mem_mobile = Column(Unicode(25), default='')
-    mem_enc_pwd = Column(Unicode(255), default='')
-    mem_pwd_url = Column(Unicode(255), default='')
+    #uploads = relationship("Upload", backref="members")
+
+    mem_id              = Column(Integer, primary_key=True)
+    mem_fname           = Column(Unicode(255), default='')
+    mem_prefix          = Column(Unicode(255), default='')
+    mem_lname           = Column(Unicode(255), default='')
+    mem_email           = Column(Unicode(255), default='')
+    mem_street          = Column(Unicode(255), default='')
+    mem_house           = Column(Integer, default=0)
+    mem_flatno          = Column(Unicode(255), default='')
+    mem_city            = Column(Unicode(255), default='')
+    mem_postcode        = Column(Unicode(6), default='')
+    mem_home_tel        = Column(Unicode(25), default='')
+    mem_work_tel        = Column(Unicode(255), default='')
+    mem_mobile          = Column(Unicode(25), default='')
+    mem_enc_pwd         = Column(Unicode(255), default='')
+    mem_pwd_url         = Column(Unicode(255), default='')
     # tracking
-    mem_cookie = Column(Unicode(255), default='')
-    mem_ip = Column(Unicode(255), default='')
+    mem_cookie          = Column(Unicode(255), default='')
+    mem_ip              = Column(Unicode(255), default='')
     # admin-editable
-    mem_active = Column(Boolean(), default=True)
+    mem_active          = Column(Boolean(), default=True)
     mem_membership_paid = Column(Boolean(), default=False)
-    mem_admin = Column(Boolean(), default=False)
-    mem_adm_adj = Column(Boolean(), default=False)
-    mem_adm_comment = Column(Unicode(255), default='')
+    mem_admin           = Column(Boolean(), default=False)
+    mem_adm_adj         = Column(Boolean(), default=False)
+    mem_adm_comment     = Column(Unicode(255), default='')
     # unused fields - TODO: do we need them?
-    mem_bank_no = Column(Unicode(255), default='')
+    mem_bank_no         = Column(Unicode(255), default='')
     #mem_message = Column(Unicode(255), default='')
     #mem_news = Column(Unicode(255), default='')
     #mem_message_auth = Column(Integer())
     #mem_message_date = Column(DateTime()) #timestamp
-    mem_household_size = Column(Integer, default=0)
+    mem_household_size  = Column(Integer, default=0)
 
     __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:this-member', ('view', 'edit')),
