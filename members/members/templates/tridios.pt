@@ -1,0 +1,52 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content" >
+
+            <h1>
+                Tridios bank feedback..
+            </h1>
+
+            <form action="/bank_upload" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                <label for="file">Add a mutations file..</label>
+                <input id="file" name="file" type="file" value="" />
+                <input type="submit" value="submit" />
+            </form>
+
+            <hr />
+            Select upload:
+            <select id="uploads">
+                <option tal:repeat="upload uploads">${upload.id}</option>
+            </select>
+
+        </div>
+
+        <script metal:fill-slot="scripts">
+            $('select#uploads option:last').attr('selected', 'selected');
+            $('select#uploads').on('change', function (i, elm) {
+                select_upload($('select#uploads option:selected').val())
+            });
+            select_upload($('select#uploads option:last').val());
+            function select_upload(upload_id) {
+                console.log('selected_upload:'+upload_id);
+                $.ajax({
+                    type: "GET",
+                    url: "/get_upload_data",
+                    data: {'upload_id': upload_id},
+                    datatype: 'json',
+                    success: function(data) {
+                        console.log('success! data:');
+                        console.log(data);
+                    },
+                    error: function(errorData, statusCode) {
+                        console.log(errorData);
+                        var mssg = $.parseJSON(errorData.responseText);
+                        alert('Oops! message: '+mssg);
+                    }
+                })
+            }
+        </script>
+
+     </div>
+</html>
