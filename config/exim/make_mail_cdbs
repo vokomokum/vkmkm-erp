@@ -76,7 +76,7 @@ def wg_leaders(cur, wg_ids):
     # who can decide if they want to forward it to the members of the wg
     leaders = {}
     doquery(cur, "SELECT w.wg_id, m.mem_email FROM wg_leadership AS w, " + \
-            "members as m WHERE w.mem_id = m.mem_id AND mem_active " +
+            "members as m WHERE w.mem_id = m.mem_id " +
             "ORDER BY w.wg_id");
     last_wg = -1
     leaders_cdb = cdb.cdbmake("/etc/exim/members/leaders.cdb",
@@ -113,7 +113,7 @@ def wg_members(cur, wg_ids, ct_list):
     # for mail to a wg_name sent from an address matching a
     # leader's email address (the mail will go to all  the wg members)
     doquery(cur, "SELECT w.wg_id, m.mem_email FROM wg_membership AS w, " + \
-            "members as m WHERE w.mem_id = m.mem_id AND mem_active " +
+            "members as m WHERE w.mem_id = m.mem_id " +
             "ORDER BY w.wg_id");
     last_wg = -1
     all_sep  = ""
@@ -141,8 +141,7 @@ def wg_members(cur, wg_ids, ct_list):
     members_cdb.add("ct", ct_list) 
     all_list = ""
     all_sep  = ""
-    doquery(cur, "SELECT mem_id, mem_email FROM members " +
-            "WHERE mem_active")
+    doquery(cur, "SELECT mem_id, mem_email FROM members ")
     while True:
         try:
             mem_id, mem_email = cur.fetchone()
