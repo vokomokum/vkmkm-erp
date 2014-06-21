@@ -78,7 +78,7 @@
     <div class="form-group">
       <label class="col-sm-2" for="description">Description:</label>
       <div class="col-sm-6">
-        <textarea tal:content="wg.desc" rows="6" class="form-control"></textarea>
+        <textarea name="desc" id="desc" tal:content="wg.desc" rows="6" class="form-control"></textarea>
       </div>
     </div>
     <div class="form-group">

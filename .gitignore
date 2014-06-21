@@ -1,3 +1,9 @@
+*.pyc
+members/members-dev.db
+members/members.egg-info/
+members/members/.idea/
+order/.idea/
+venv/
 .DS_Store
 .idea
 .idea/*
@@ -6,4 +12,4 @@
 *.db
 members/members/members.egg-info
 members/members/members.egg-info/*
-/members/members.egg-info/
+members/members.egg-info/
