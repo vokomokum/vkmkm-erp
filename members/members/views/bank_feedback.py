@@ -1,3 +1,4 @@
+from members.models.mutation import Mutation
 from members.utils.mutations import process_upload
 from pyramid.security import has_permission
 
@@ -25,8 +26,12 @@ class JsonHandler(BaseView):
 
     @view_config(route_name = 'bank_get_upload_data', request_method = 'GET')
     def bank_get_upload_data(self):
-        return {'id':'7', 'secret':'geheim'}
-
+        upload_id = self.request.GET['upload_id']
+        session = DBSession()
+        mutations = session.query(Mutation).filter(Mutation.upload_id == upload_id).order_by(Mutation.id).all()
+        result = dict((i, x.json) for i, x in enumerate(mutations)) #dict((x.id, x.json) for x in mutations)
+        result[-1]=len(mutations)
+        return result
 
 @view_defaults(renderer = '../templates/tridios.pt', permission = 'view')
 class IndexView(BaseView):
@@ -46,7 +51,8 @@ class IndexView(BaseView):
     def bank_feedback(self):
         session = DBSession()
         uploads = session.query(Upload).order_by(Upload.id).all()
-        return { 'uploads': uploads }
+        return { 'uploads': uploads, 'id_': '${id}', 'amount_': '${amount}', 'contra_account_': '${contra_account}',
+                 'description_': '${description}', 'name_': '${name}', 'type_': '${type}' }
 
     @view_config(route_name = 'bank_feedback_upload', request_method = 'POST')
     def bank_feedback_upload(self):

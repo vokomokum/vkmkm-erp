@@ -77,3 +77,13 @@ table.table-hover tbody tr[data-href]:hover td
 .todo-Communication .todo-classifier{
   background-color: purple;
 }
+table.table {
+    font-size: 10px;
+}
+table.table td.credit {
+    color: #0d6405;
+    font-weight: bold;
+}
+table.table td.debet {
+    color: #871b15;
+}

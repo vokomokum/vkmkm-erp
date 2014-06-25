@@ -172,14 +172,16 @@
         </div>
 
         <script type="text/javascript" src="${portal_url}/static/js/jquery.js"></script>
+        <script type="text/javascript" src="${portal_url}/static/js/jquery.tmpl.min.js"></script>
         <script type="text/javascript" src="${portal_url}/static/js/chosen.jquery.min.js"></script>
         <script type="text/javascript" src="${portal_url}/static/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="${portal_url}/static/js/vokomokum.js"></script>
         <script type="text/javascript" src="${portal_url}/static/js/highcharts.js"></script>
 
         <metal:block define-slot="scripts">
-            <div metal:define-macro="scripts" />
+            <script metal:define-macro="script" />
         </metal:block>
+
 
     </body>
 

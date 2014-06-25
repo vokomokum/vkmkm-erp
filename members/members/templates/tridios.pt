@@ -1,6 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:tal="http://xml.zope.org/namespaces/tal">
+
+
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content" >
 
@@ -20,24 +22,54 @@
                 <option tal:repeat="upload uploads">${upload.id}</option>
             </select>
 
+            <table id="matationTable" class="table table-striped table-bordered table-hover table-condensed" style="max-width:1024px;">
+                <tr>
+                    <td><i id="clearFilters" class="icon-remove"></td>
+                    <td><input type="text" id="nameFilter" class="input-medium search-query"></td>
+                    <td><input type="text" id="emailFilter" class="input-medium search-query"></td>
+                    <td colspan="5"><!--button id="filterBtn" class="btn btn-small" type="button">Filter</button--></td>
+                </tr>
+                <tr>
+                    <th order="id" class="sortable center" style="width:10px">Id <i /></th>
+                    <th order="amount" class="sortable">Amount <br /><i /></th>
+                    <th order="name" class="sortable">Name <br /><i /></th>
+                    <th order="contra_account" class="sortable">Account <br /><i /></th>
+                    <th order="desc" class="sortable center">Description <br /><i /></th>
+                </tr>
+            </table>
+            <div id="paging"></div>
+
         </div>
 
-        <script metal:fill-slot="scripts">
+        <div tal:omit-tag="" metal:fill-slot="scripts">
+        <script id="mutationTableTmpl" type="text/x-jquery-tmpl" xmlns="http://www.w3.org/1999/html" >
+            <tr class="transient clickable" meta="${id_}">
+               <td class="center">${id_}</td>
+               <td nowrap="nowrap" class="${type_}">${amount_}</td>
+               <td nowrap="nowrap">${name_}</td>
+               <td nowrap="nowrap">${contra_account_}</td>
+               <td nowrap="nowrap">${description_}</td>
+            </tr>
+        </script>
+        <script>
             $('select#uploads option:last').attr('selected', 'selected');
             $('select#uploads').on('change', function (i, elm) {
                 select_upload($('select#uploads option:selected').val())
             });
             select_upload($('select#uploads option:last').val());
+
             function select_upload(upload_id) {
                 console.log('selected_upload:'+upload_id);
+                $('tr.transient').remove();
                 $.ajax({
                     type: "GET",
                     url: "/get_upload_data",
                     data: {'upload_id': upload_id},
                     datatype: 'json',
                     success: function(data) {
-                        console.log('success! data:');
-                        console.log(data);
+                        var arr = [];// the template expects an array:
+                        for (i=0; i< data['-1']; i++) arr.push(eval("("+data[i]+")"));
+                        $("#mutationTableTmpl").tmpl(arr).appendTo("#matationTable");
                     },
                     error: function(errorData, statusCode) {
                         console.log(errorData);
@@ -47,6 +79,6 @@
                 })
             }
         </script>
-
+        </div>
      </div>
 </html>
