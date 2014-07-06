@@ -72,6 +72,8 @@ sub print_pickup_lists{
             color: #fff;
             background-color: #333;
             padding: 2px;
+            font-weight: bold;
+            font-size: 1.6em;
         }
         .pickup-table thead td { 
             border-bottom: 1px solid #aaa;
