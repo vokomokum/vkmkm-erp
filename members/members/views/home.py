@@ -22,12 +22,12 @@ class HomeView(BaseView):
 
     def __call__(self):
         session = DBSession()
-        self.show_all = False
-        if 'show-all-todos' in self.request.params:
-            if self.request.params['show-all-todos'] == '1'\
-               and self.user.mem_admin:
-                self.show_all = True
         if self.logged_in:
+            self.show_all = False
+            if 'show-all-todos' in self.request.params:
+                if self.request.params['show-all-todos'] == '1'\
+                   and self.user.mem_admin:
+                    self.show_all = True
             todos = get_todos(session, self.user, self.show_all)
             graphs = get_graphs()
         else:
