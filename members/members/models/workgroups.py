@@ -1,6 +1,6 @@
 import re
 
-from sqlalchemy import Table, Column, Integer, Unicode, Boolean
+from sqlalchemy import Table, Column, Integer, Unicode
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
 
