@@ -8,6 +8,7 @@ from members.models.base import DBSession
 from members.models.todo import Todo
 from members.models.member import Member
 from members.models.orders import Order
+from members.models.orders import number_of_current_orderers
 from members.models.transactions import Transaction
 from members.models.transactions import get_ttypeid_by_name
 from members.models.workgroups import Workgroup
@@ -32,7 +33,8 @@ class HomeView(BaseView):
             graphs = get_graphs()
         else:
             todos = graphs = []
-        return dict(todos=todos, graphs=graphs)
+        co = number_of_current_orderers()
+        return dict(todos=todos, graphs=graphs, cur_orderers=co)
 
 
 def get_todos(session, user, show_all):

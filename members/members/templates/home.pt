@@ -37,6 +37,9 @@
                 </div>
 
                 <div class="col-sm-6 dashboard-graphs">
+                    <div>Members who have ordered in current order:
+                        ${cur_orderers}
+                    </div>
                     <tal:block tal:repeat="graph graphs">
                     <div id="graph">
                     </div>

@@ -3,9 +3,7 @@ Models of second order in this app
 '''
 
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
-from sqlalchemy.orm import relationship
-
-from datetime import datetime
+#from sqlalchemy.orm import relationship
 
 from base import Base, DBSession, CreationForbiddenException
 from members.models.member import Member
@@ -39,6 +37,22 @@ def get_order_amount(mem_id, ord_no):
     if running_sqlite():
         return -1
     return list(DBSession().connection().engine.execute(query))[0][11] / 100.
+
+
+def number_of_current_orderers():
+    if running_sqlite():
+        return -1
+    query = """SELECT max(ord_no) from wh_line;"""
+    cur_ord_no =list(DBSession().connection().engine.execute(query))[0][1]
+    print "CURRENT ORD_NO: {}".format(cur_ord_no)
+    cur_order = DBSession.query(Order).filter(Order.id == cur_ord_no).first()
+    members = DBSession.query(Member).all()
+    orderers = 0
+    for m in members:
+        mo = MemberOrder(m, cur_order)
+        if mo.amount > 0:
+            orderers += 1
+    return orderers
 
 
 class MemberOrder(object):

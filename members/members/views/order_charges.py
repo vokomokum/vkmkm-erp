@@ -1,6 +1,3 @@
-import os
-import base64
-
 from pyramid.view import view_config
 import datetime
 
