@@ -1,0 +1,2 @@
+ALTER TABLE workgroups ADD COLUMN required_members INTEGER DEFAULT 1;
+ALTER TABLE workgroups ALTER COLUMN required_members SET NOT NULL;

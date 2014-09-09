@@ -86,12 +86,12 @@ def addOldNames():
 
 def createWGs():
     wgs = []
-    wgs.append(Workgroup(name=u'Systems2', desc=u'IT stuff'))
-    wgs.append(Workgroup(name=u'Besteling2', desc=u'Besteling at wholesale'))
-    wgs.append(Workgroup(name=u'Cafe', desc=u'Cakes and coffee'))
-    wgs.append(Workgroup(name=u'Finance', desc=u'Making sure money is where it is supposed to be'))
-    wgs.append(Workgroup(name=u'Vers', desc=u'Fresh food!'))
-    wgs.append(Workgroup(name=u'Membership', desc=u'Human resources'))
+    wgs.append(Workgroup(name=u'Systems2', desc=u'IT stuff', required_members=3))
+    wgs.append(Workgroup(name=u'Besteling2', desc=u'Besteling at wholesale', required_members=8))
+    wgs.append(Workgroup(name=u'Cafe', desc=u'Cakes and coffee', required_members=14))
+    wgs.append(Workgroup(name=u'Finance', desc=u'Making sure money is where it is supposed to be', required_members=8))
+    wgs.append(Workgroup(name=u'Vers', desc=u'Fresh food!', required_members=14))
+    wgs.append(Workgroup(name=u'Membership', desc=u'Human resources', required_members=4))
     for wg in wgs:
         DBSession.add(wg)
     DBSession.flush()

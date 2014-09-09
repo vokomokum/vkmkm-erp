@@ -21,7 +21,7 @@ def get_possible_members(session, wg):
 def fill_wg_from_request(wg, request, session):
     '''overwrite workgroup properties from request'''
     if request and wg:
-        for attr in ['name', 'desc']:
+        for attr in ['name', 'desc', 'required_members']:
             if attr in request.params:
                 wg.__setattr__(attr, request.params[attr])
         if 'wg_leaders' in request.POST:
@@ -70,7 +70,6 @@ class WorkgroupView(BaseView):
 
         session = DBSession()
         wg = get_wg(session, self.request)
-        now = datetime.now()
         self.user_is_wgleader = self.user in wg.leaders
 
         return dict(wg=wg, msg=msg, now=datetime.now())

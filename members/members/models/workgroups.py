@@ -29,6 +29,7 @@ class Workgroup(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(255), unique=True)
     desc = Column(Unicode(255))
+    required_members = Column(Integer, default=1)
 
     __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:wg-leaders', ('view', 'edit')),
@@ -36,11 +37,12 @@ class Workgroup(Base):
                (Allow, 'group:members', 'view'),
                DENY_ALL]
 
-    def __init__(self, request=None, name='', desc=''):
+    def __init__(self, request=None, name='', desc='', required_members=1):
         ''' receiving request makes this class a factory for views '''
         self.exists = False
         self.name = name
         self.desc = desc
+        self.required_members = required_members
 
     def __repr__(self):
         return self.name
@@ -71,6 +73,8 @@ class Workgroup(Base):
         if len(self.leaders) == 0:
             raise VokoValidationError('A workgroup needs at least '\
                                       'one coordinator.')
+        if self.required_members < 1:
+            raise VokoValidationError('A workgroup needs at least one member.')
 
     @property
     def headcount(self):

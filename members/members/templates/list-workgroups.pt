@@ -22,6 +22,7 @@
                     <th>Coordinator(s)</th>
                     <th>Description</th>
                     <th>Member count</th>
+                    <th>Required Members</th>
                 </tr>
               </thead>
               <tbody>
@@ -38,6 +39,7 @@
                     </td>
                     <td tal:content="wg.desc"></td>
                     <td tal:content="wg.headcount"></td>
+                    <td tal:content="wg.required_members"></td>
                 </tr>
               </tbody>
             </table>

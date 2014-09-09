@@ -13,7 +13,6 @@ from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import Unicode
 from sqlalchemy import Boolean
-from sqlalchemy import DateTime
 
 from pyramid.security import Allow, DENY_ALL
 
@@ -53,10 +52,6 @@ class Member(Base):
     mem_adm_comment = Column(Unicode(255), default='')
     # unused fields - TODO: do we need them?
     mem_bank_no = Column(Unicode(255), default='')
-    #mem_message = Column(Unicode(255), default='')
-    #mem_news = Column(Unicode(255), default='')
-    #mem_message_auth = Column(Integer())
-    #mem_message_date = Column(DateTime()) #timestamp
     mem_household_size = Column(Integer, default=0)
 
     __acl__ = [(Allow, 'group:admins', ('view', 'edit')),

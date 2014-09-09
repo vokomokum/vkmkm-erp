@@ -43,6 +43,7 @@ def get_todos(session, user, show_all):
     If show_all is true, find all TODOs system-wide
     '''
     todos = []
+    workgroups = session.query(Workgroup).all()
     all_members = session.query(Member).all()
     act_members = [m for m in all_members if m.mem_active]
     now = datetime.datetime.now()
@@ -143,7 +144,19 @@ def get_todos(session, user, show_all):
                                   link_title='You should contact the member and '\
                                    'discuss which openings he/she would '\
                                    'like. If they refuse, inactivate him/her.'))
-    
+   
+        # Workgroups lacking members
+        for wg in workgroups:
+            if wg.required_members > wg.headcount:
+                todos.append(Todo(msg='Workgroup {} needs {} more member(s).'\
+                                      .format(wg.name, wg.required_members - wg.headcount),
+                                wg='Membership',
+                                link_act='workgroup/{}'.format(wg.id),
+                                link_txt='See workgroup profile.',
+                                link_title='You should contact the coordinators '\
+                                           'in order to reduce the amount of '\
+                                           'required members or assign more members '\
+                                           'to the group.'))
     # ---- Todos for coordinators in general:
     # unfilled shifts
     wgs = user.led_workgroups
