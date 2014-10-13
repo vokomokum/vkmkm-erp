@@ -69,7 +69,11 @@ def userinfo(request):
     '''
     member = authenticated_user(request, bypass_ip=True)
     if not member:
-        return dict(error='Could not authenticate member.') 
+        return dict(error='Could not authenticate member.')
+    wgs = []
+    for wg in member.workgroups:
+        wgs.append(dict(id=wg.id, name=wg.name,
+                        coordinates=member in wg.leaders))
     return dict(user_id=member.mem_id, given_name=member.mem_fname,
                 middle_name=member.mem_prefix, family_name=member.mem_lname,
-                email=member.mem_email)
+                email=member.mem_email, groups=wgs)
