@@ -128,7 +128,8 @@ def get_todos(session, user, show_all):
     if 'Membership' in [w.name for w in user.workgroups] or show_all:
         # Members without a workgroup
         for m in [am for am in act_members if len(am.workgroups) == 0\
-                        or 'new members' in [wg.name.lower() for wg in am.workgroups]]:
+                  or ('new members' in [wg.name.lower() for wg in am.workgroups]\
+                      and len(am.workgroups) == 1)]:
             # check if they ordered
             mt = session.query(Transaction)\
                 .filter(Transaction.mem_id == m.mem_id)\
