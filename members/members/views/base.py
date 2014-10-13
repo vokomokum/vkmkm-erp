@@ -1,4 +1,3 @@
-from webob import Response
 from pyramid.renderers import get_renderer
 from pyramid.security import remember
 from pyramid.httpexceptions import HTTPFound

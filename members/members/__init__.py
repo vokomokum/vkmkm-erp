@@ -1,20 +1,15 @@
 from pyramid.config import Configurator
-from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from sqlalchemy import engine_from_config
 from pyramid.exceptions import NotFound
 
 from members.models.base import configure_session
-from members.utils.security import groupfinder
 from members.utils.auth import VokoAuthenticationPolicy
 from members.views.base import NotFoundView
 from members.views.base import ErrorView
 # import all our types here once, important
 from members.models.member import Member
 from members.models.workgroups import Workgroup
-from members.models.shift import Shift
-from members.models.orders import Order
-from members.models.supplier import VersSupplier
 from members.models.applicant import Applicant
 from members.models.transactions import Transaction, TransactionType
 
