@@ -73,7 +73,7 @@ def userinfo(request):
     wgs = []
     for wg in member.workgroups:
         wgs.append(dict(id=wg.id, name=wg.name,
-                        coordinates=member in wg.leaders))
+                        coordinator=member in wg.leaders))
     return dict(user_id=member.mem_id, given_name=member.mem_fname,
                 middle_name=member.mem_prefix, family_name=member.mem_lname,
                 email=member.mem_email, groups=wgs)
