@@ -354,9 +354,19 @@ sub main {
 
     if($program =~ /login/) {
 	$mem_id = process_login(1, $config, $cgi, $dbh); 
+    } elsif($cgi->param('client_id')) {
+        # vers upload from external system
+        if ($cgi->param('client_id') ne 'external_app' or
+            $cgi->param('client_secret') ne $config->{'client_secret'}) {
+            print $cgi->header(-type=>'text/plain', -status=>'403 Access denied');
+            print "Access denied";
+            exit 0;
+        }
+        $mem_id = 0; # no real user
     } else {
 	$mem_id = handle_cookie(1, $config, $cgi, $dbh);
     }
+
     $config->{mem_id} = $mem_id;
     my $sth = prepare('SELECT ord_no, ord_status FROM order_header', $dbh);
     $sth->execute;
