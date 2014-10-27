@@ -1,7 +1,7 @@
 INSERT INTO vers_suppliers (name, website, email, telnr, comment) VALUES ('Kwekerij Sjerps', 'http://kwekerijsjerps.nl/', 'Richard.Sjerps@quicknet.nl', '06-12931807', 'Levert van voorjaar (mei) tot eind september, contact person: Richard');
-INSERT INTO vers_suppliers (name, telnr, email, website, comment) VALUES ('Van Dam', '0229-543290	06-10875675', 'hvdambruyns@hetnet.nl', '', 'Kan als nodig bestelling klaarzetten bij Gerrit Groot, contact person: Kees and Hannie');
+INSERT INTO vers_suppliers (name, telnr, email, website, comment) VALUES ('Van Dam', '06-10875675', 'hvdambruyns@hetnet.nl', '', 'Kan als nodig bestelling klaarzetten bij Gerrit Groot, contact person: Kees and Hannie');
 INSERT INTO vers_suppliers (name, telnr, email, website, comment) VALUES ('Knotwilg', '0299-683128', 'jaapvanderboon@live.nl', 'http://www.tuinderijdeknotwilg.nl/', 'Contact: Yvonne');
 INSERT INTO vers_suppliers (name, telnr, email, website, comment) VALUES ('Kaasboerderij de Vierhuizen', '(0)715801415', 'lideo5@hetnet.nl', 'www.kaasboerderijdevierhuizen.nl', 'Bezorgen in Amsterdam, contact: Lidia van Leeuwen');
-INSERT INTO vers_suppliers (name, telnr, email, website, comment) VALUES ('Iambe', '020 664 42 27	020 664 37 85', 'bestellingen@iambe.nl', 'http://www.raphaelstichting.nl/iambe/', '10% korting bij >20 broden, Contact: Dave');
+INSERT INTO vers_suppliers (name, telnr, email, website, comment) VALUES ('Iambe', '020 664 42 27', 'bestellingen@iambe.nl', 'http://www.raphaelstichting.nl/iambe/', '10% korting bij >20 broden, Contact: Dave');
 INSERT INTO vers_suppliers (name, telnr, email, website, comment) VALUES ('Jan Knook', '06-53353765', 'janknook@planet.nl', 'www.janknook.nl', 'Prijzen zijn exclusief btw!');
 
