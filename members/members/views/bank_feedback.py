@@ -24,14 +24,33 @@ class JsonHandler(BaseView):
         self.dict       = request.matchdict
         self.settings = get_settings()
 
+
     @view_config(route_name = 'bank_get_upload_data', request_method = 'GET')
     def bank_get_upload_data(self):
-        upload_id = self.request.GET['upload_id']
+        upload_id       = self.request.GET['upload_id']
+        page_nr         = int(self.request.GET['page_nr'] ) if 'page_nr'  in self.request.GET else 0
+        per_page        = int(self.request.GET['per_page']) if 'per_page' in self.request.GET else 10
+        amount_filter   = self.request.GET['amount_filter'] if 'amount_filter' in self.request.GET else None
+        name_filter     = self.request.GET['name_filter']   if 'name_filter' in self.request.GET else None
+        offset          = page_nr * per_page
         session = DBSession()
-        mutations = session.query(Mutation).filter(Mutation.upload_id == upload_id).order_by(Mutation.id).all()
+        query = session.query(Mutation).filter(Mutation.upload_id == upload_id).order_by(Mutation.id)
+
+        if amount_filter:
+            query = query.filter(Mutation.amount == amount_filter )
+            print 'amount_filter:'+str(amount_filter)
+        if name_filter:
+            query = query.filter(Mutation.name.like('%'+name_filter+'%'))
+            print 'name_filter:'+name_filter
+
+        total = query.count()
+        mutations = query.limit(per_page).offset(offset).all()
         result = dict((i, x.json) for i, x in enumerate(mutations)) #dict((x.id, x.json) for x in mutations)
-        result[-1]=len(mutations)
+        page_nr = page_nr if page_nr * per_page < total else 0
+        result[-1]=dict(total=total, this_page=len(mutations), page_nr=page_nr, per_page=per_page)
         return result
+
+
 
 @view_defaults(renderer = '../templates/tridios.pt', permission = 'view')
 class IndexView(BaseView):
@@ -41,6 +60,7 @@ class IndexView(BaseView):
         self.request    = request
         self.dict       = request.matchdict
         self.settings = get_settings()
+
 
     def match(self, key):
         value = self.dict[key] if key in self.dict else None
@@ -53,6 +73,7 @@ class IndexView(BaseView):
         uploads = session.query(Upload).order_by(Upload.id).all()
         return { 'uploads': uploads, 'id_': '${id}', 'amount_': '${amount}', 'contra_account_': '${contra_account}',
                  'description_': '${description}', 'name_': '${name}', 'type_': '${type}' }
+
 
     @view_config(route_name = 'bank_feedback_upload', request_method = 'POST')
     def bank_feedback_upload(self):

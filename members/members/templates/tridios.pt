@@ -21,12 +21,11 @@
             <select id="uploads">
                 <option tal:repeat="upload uploads">${upload.id}</option>
             </select>
-
             <table id="matationTable" class="table table-striped table-bordered table-hover table-condensed" style="max-width:1024px;">
                 <tr>
                     <td><i id="clearFilters" class="icon-remove"></td>
+                    <td><input type="text" id="amountFilter" class="input-medium search-query"></td>
                     <td><input type="text" id="nameFilter" class="input-medium search-query"></td>
-                    <td><input type="text" id="emailFilter" class="input-medium search-query"></td>
                     <td colspan="5"><!--button id="filterBtn" class="btn btn-small" type="button">Filter</button--></td>
                 </tr>
                 <tr>
@@ -37,7 +36,8 @@
                     <th order="desc" class="sortable center">Description <br /><i /></th>
                 </tr>
             </table>
-            <div id="paging"></div>
+            <ul class="pagination"></ul>
+
 
         </div>
 
@@ -52,24 +52,75 @@
             </tr>
         </script>
         <script>
-            $('select#uploads option:last').attr('selected', 'selected');
-            $('select#uploads').on('change', function (i, elm) {
-                select_upload($('select#uploads option:selected').val())
-            });
-            select_upload($('select#uploads option:last').val());
 
-            function select_upload(upload_id) {
+            $.fn.enterKey = function (fnc) {
+                return this.each(function () {
+                    $(this).keypress(function (ev) {
+                        var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+                        if (keycode == '13') {
+                            fnc.call(this, ev);
+                        }
+                    })
+                })
+            }
+
+            var upload_id_ = undefined;
+            var page_nr_ = undefined;
+            $(function() {
+                $('select#uploads option:last').attr('selected', 'selected');
+                $('select#uploads').on('change', function (i, elm) {
+                    select_upload($('select#uploads option:selected').val())
+                });
+                select_upload($('select#uploads option:last').val(), 0);
+                $("input.search-query").enterKey(function () {
+                    select_upload(upload_id_, page_nr_);
+                })
+            });
+
+            // pages start counting with index: 0
+            function set_paging(per_page, page_nr, total, upload_id) {
+                var page_count = Math.ceil(parseInt(total) / parseInt(per_page));
+                var p = $('ul.pagination').empty();
+                p.append('<li class="back step"><a href="javascript:select_upload(\''+upload_id+'\', \''+(page_nr-1)+'\')">&laquo;</a></li>');
+                for (i=0; i< page_count; i++) {
+                    p.append('<li class="'+(i+1)+'"><a href="javascript:select_upload(\''+upload_id+'\', \''+i+'\')">'+(i+1)+'</a></li>');
+                }
+                p.append('<li class="forward step"><a href="javascript:select_upload(\''+upload_id+'\', \''+(page_nr+1)+'\')">&raquo;</a></li>');
+                // disable the right page buttons:
+                for (i=0; i< page_count; i++) {
+                    $('ul.pagination li.'+(i+1)).addClass(page_nr == i ? 'active':'disabled');
+                }
+                // disable the right stepper(s) (back and/or forward button(s))
+                if (page_nr == 0) $('ul.pagination li.back').addClass('disabled');
+                if (page_nr == (page_count -1)) $('ul.pagination li.forward').addClass('disabled');
+                // psysically remove the href of the disabled stepper(s) (back and/or forward button(s))
+                $('ul.pagination li.disabled.step a').each(function(i){ $(this).removeAttr('href') });
+            }
+
+            function select_upload(upload_id, page_nr) {
+                upload_id_ = upload_id;
+                page_nr_ = page_nr
                 console.log('selected_upload:'+upload_id);
                 $('tr.transient').remove();
                 $.ajax({
                     type: "GET",
                     url: "/get_upload_data",
-                    data: {'upload_id': upload_id},
+                    data: { 'upload_id': upload_id, 'page_nr': page_nr, 'per_page': 10,
+                            'amount_filter': $('#amountFilter').val(),
+                            'name_filter': $('#nameFilter').val()
+                    },
                     datatype: 'json',
                     success: function(data) {
-                        var arr = [];// the template expects an array:
-                        for (i=0; i< data['-1']; i++) arr.push(eval("("+data[i]+")"));
+                        var meta        = data['-1'];
+                        var arr         = [];
+                        var total       = meta.total;
+                        var this_page   = meta.this_page;
+                        var per_page    = meta.per_page;
+                        var page_nr     = meta.page_nr;
+                        console.log('total:'+total+', this_page:'+this_page+', per_page:'+per_page+', page_nr:'+page_nr);
+                        for (i=0; i< this_page; i++) arr.push(eval("("+data[i]+")"));
                         $("#mutationTableTmpl").tmpl(arr).appendTo("#matationTable");
+                        set_paging(per_page, page_nr, total, upload_id);
                     },
                     error: function(errorData, statusCode) {
                         console.log(errorData);
