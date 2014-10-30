@@ -62,7 +62,7 @@ CREATE TABLE uploads (
   id INTEGER PRIMARY KEY,
   datetime DATETIME,
   member_id INTEGER,
-  upload VARCHAR(512)
+  file VARCHAR(512)
 );
 
 CREATE TABLE mutations (
