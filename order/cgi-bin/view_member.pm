@@ -191,7 +191,7 @@ our %cols = (mo_stgeld_rxed=>{text => "Statiegeld for items in this order",
 	     mo_misc_refunded=>{text => "Miscellaneous credits (see notes)",
 				ord => 7, credit => "Credit"},
 	     mo_vers_groente=>{text => "Vers groente", ord =>  8, credit => ""},
-	     mo_vers_kaas   =>{text => "Vers kaas",    ord =>  9, credit => ""},
+	     mo_vers_kaas   =>{text => "Vers kaas, eieren en brood",    ord =>  9, credit => ""},
 	     mo_vers_misc   =>{text => "Vers misc",    ord => 10, credit => ""},
 );
 

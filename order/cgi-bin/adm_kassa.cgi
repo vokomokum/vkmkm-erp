@@ -438,7 +438,7 @@ my %pymnts = ( stgeld_rxed => {col => 'mo_stgeld_rxed', type =>'&nbsp;',
 	      vers_g_rxed  => {col => 'mo_vers_groente', type=>'&nbsp', 
 				desc => "Vers groente", ord => 7},
 	      vers_k_rxed  => {col => 'mo_vers_kaas', type=>'&nbsp', 
-				desc => "Vers kaas", ord => 8},
+				desc => "Vers kaas, eieren en brood", ord => 8},
 	      vers_m_rxed  => {col => 'mo_vers_misc', type=>'&nbsp', 
 				desc => "Vers misc.", ord => 9},
 );
