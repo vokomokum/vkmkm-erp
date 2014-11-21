@@ -1,8 +1,8 @@
-from sqlalchemy import Table, Column, Boolean, Integer, Unicode
+from sqlalchemy import Column, Boolean, Integer, Unicode
 
 from pyramid.security import Allow, DENY_ALL
 
-from base import Base, VokoValidationError
+from base import Base
 
 
 class VersSupplier(Base):

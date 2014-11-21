@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column
+from sqlalchemy import Column
 from sqlalchemy import Integer, Unicode, Boolean, Numeric, DateTime
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey
@@ -34,6 +34,8 @@ class TransactionType(Base):
 
     __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:finance', ('view', 'edit')),
+               (Allow, 'group:vers-bestel', ('view', 'edit')),
+               (Allow, 'group:bestelling', ('view', 'edit')),
                (Allow, 'group:members', 'view'),
                DENY_ALL]
 

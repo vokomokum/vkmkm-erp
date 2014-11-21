@@ -1,0 +1,5 @@
+
+INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Vokomokum Payment To Wholesaler', 'neg', 'whol');
+INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Wholesaler Order Charge', 'pos', 'whol');
+INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Vokomokum Payment To Vers Supplier', 'neg', 'vers');
+INSERT INTO transaction_types (name, pos_neg, mem_sup) VALUES ('Vers supplier Order Charge', 'pos', 'vers');

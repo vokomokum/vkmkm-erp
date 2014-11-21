@@ -95,6 +95,19 @@ def groupfinder(memid, request):
     if finance:
         if memid in [m.mem_id for m in finance.members]:
             groups.append('group:finance')
-    
+    # bestelling people:
+    bestelling = session.query(Workgroup).\
+                    filter(Workgroup.name == 'Bestelling').first()
+    if bestelling:
+        if memid in [m.mem_id for m in bestelling.members]:
+            groups.append('group:bestelling')
+    # vers bestel people:
+    vers_bestel = session.query(Workgroup).\
+                    filter(Workgroup.name == 'Vers bestel').first()
+    if vers_bestel:
+        if memid in [m.mem_id for m in vers_bestel.members]:
+            groups.append('group:vers-bestel')
+
+
     #print "+++++++++++++++++++++++++++++++++++++++ User is in groups:", groups
     return groups
