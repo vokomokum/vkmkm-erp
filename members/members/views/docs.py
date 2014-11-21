@@ -13,7 +13,10 @@ from members.utils.misc import get_settings
 
 
 def is_doc_file(filename):
-    return filename.endswith('.html') or filename.endswith('.txt')
+    return filename.endswith('.html')\
+            or filename.endswith('.txt')\
+            or filename.endswith('.pdf')
+
 
 
 @view_config(renderer='../templates/docs.pt',
@@ -67,6 +70,8 @@ class DocView(BaseView):
         else:
             if file_format == 'html':
                 content_type = 'text/html'
+            elif file_format == 'pdf':
+                content_type = 'application/pdf'
             else:
                 content_type = 'text'
             settings = get_settings()
