@@ -64,7 +64,7 @@ class DocView(BaseView):
         doc_path = '/'.join(doc_path)
         doc_path = urllib.unquote(doc_path)
         file_format = doc_path.split('.')[-1]
-        if file_format not in ('txt', 'html'):
+        if file_format not in ('txt', 'html', 'pdf'):
             data = 'Unknown filetype: {}'.format(doc_path.split('.')[-1])
             content_type = 'text'
         else:
