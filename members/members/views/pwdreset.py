@@ -22,7 +22,7 @@ def send_pwdreset_request(member, app_url, first=False):
     '''
     code = base64.urlsafe_b64encode(os.urandom(16))
     member.mem_pwd_url = code
-    subject = 'Set a new pasword for your Vokomokum account.'
+    subject = 'Set a new password for your Vokomokum account.'
     if first:
         subject = 'Welcome to Vokomokum. Please set a password.'
     mail_templ = open('members/templates/pwdreset_txt.eml', 'r')
