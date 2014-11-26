@@ -212,7 +212,7 @@ class EditTransaction(BaseTransactionView):
 
         if action == "setttype":
             transaction.ttype = session.query(TransactionType)\
-                                       .get(request.params['ttype_id'])
+                                       .get(self.request.params['ttype_id'])
             msg = 'Transaction Type was updated.'
         if action == "setmember":
             if not 'mem_id' in self.request.params:
@@ -245,7 +245,7 @@ class EditTransaction(BaseTransactionView):
             transaction.comment = self.request.params['comment'] 
             msg = "Comment was updated."
         if action == "setdate":
-            adate = dateimte.now()
+            adate = datetime.datetime.now()
             adate.day = self.request.params['day']
             adate.month = self.request.params['month']
             adate.year = self.request.params['year']
@@ -259,7 +259,7 @@ class EditTransaction(BaseTransactionView):
             msg = "Late-status of transaction was set to {}."\
                    .format(transaction.late)
         if action == 'setorder':
-            transaction.ord_no = int(params['ord_no'])
+            transaction.ord_no = int(self.request.params['ord_no'])
             msg = "order was set."
         transaction.validate()
         session.flush()
@@ -301,15 +301,8 @@ class TransactionsYearOverview(BaseTransactionView):
     tab = 'finance'
 
     def __call__(self):
-        session = DBSession()
         self.year = int(self.request.matchdict['year'])
-        start_sec = datetime.datetime(self.year, 1, 1, 0, 0, 0)
-        end_sec = datetime.datetime(self.year, 12, 31, 23, 59, 59)
-        #self.start_month_info = month_info(start_date) 
 
-        tz = pytz.timezone('Europe/Amsterdam')
-        first = tz.localize(start_sec)
-        last = tz.localize(end_sec)
         self.all_sums = {}
         self.month_sums = {}
         self.type_sums = {}

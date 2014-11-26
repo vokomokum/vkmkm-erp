@@ -13,7 +13,6 @@ class VersSupplier(Base):
     website = Column(Unicode(50))
     email = Column(Unicode(50))
     telnr = Column(Unicode(20))
-    faxnr = Column(Unicode(20))
     comment = Column(Unicode(500))
     active = Column(Boolean(), default=True)
     
