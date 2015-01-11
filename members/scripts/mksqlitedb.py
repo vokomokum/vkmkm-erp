@@ -169,11 +169,7 @@ def fillDBRandomly(seed, workgroups):
             month = random.choice(months)
             t = Transaction(ttype_id=ttype.id, amount=random.random() * 150,
                             date=datetime.datetime(month[1], month[0],
-<<<<<<< HEAD
-                                  random.randint(1,28)), mem_id=m.mem_id)
-=======
                                   random.randint(1, 28)), mem_id=m.mem_id)
->>>>>>> fa9f7dc104d8dc27d51b6fe366aa6d89c1487580
             t.ttype = ttype
             t.member = m
             if ttype.pos_neg == 'neg':
