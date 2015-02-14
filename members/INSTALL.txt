@@ -54,6 +54,13 @@ Now we get the code (if you don't have it already)
 
 $ cd <location where you want vokomokum code to live>
 $ git clone git://git.assembla.com/vokomokum.git vokomokum 
+This will give you a read-only clone of the code.
+To get a clone you can commit back to the server as a member of the vokomokum
+dev team, you should do this:
+$ git clone git@git.assembla.com:vokomokum.git
+However, to authenticate with assembla, you need an assembla account and an
+authenticatioin setup. See here: https://www.assembla.com/code/vokomokum/git/repo/instructions
+
 
 Develop the app 
 --------------------
