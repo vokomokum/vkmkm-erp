@@ -7,6 +7,16 @@
     <h1>
         Shift summary for workgroup ${view.wg} in ${view.year}
     </h1>
+    
+    <ul class="pager">
+      <li><a href="${portal_url}/workgroup/${view.wg.id}/shifts/${view.year-1}">
+
+                                    &larr; ${view.year-1}
+                                   </a></li>
+      <li><a href="${portal_url}/workgroup/${view.wg.id}/shifts/${view.year+1}">
+                                   ${view.year+1} &rarr;
+                               </a></li>
+	</ul>
 
     <table class="table table-striped table-bordered table-hover table-responsive">
         <thead>
