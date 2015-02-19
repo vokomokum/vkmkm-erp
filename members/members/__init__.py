@@ -11,6 +11,7 @@ from members.views.base import ErrorView
 from members.models.member import Member
 from members.models.workgroups import Workgroup
 from members.models.applicant import Applicant
+from members.models.supplier import Supplier
 from members.models.transactions import Transaction, TransactionType
 
 
@@ -55,6 +56,10 @@ def main(global_config, **settings):
     config.add_route('applicant-new', '/applicants/new', factory=Applicant)
     config.add_route('applicant-delete', '/applicant/{a_id}/delete', factory=Applicant)
     config.add_route('applicant-mkmember', '/applicant/{a_id}/mkmember', factory=Applicant)
+    config.add_route('supplier-list', '/suppliers', factory=Supplier)
+    config.add_route('supplier-new', '/suppliers/new', factory=Supplier)
+    config.add_route('supplier', '/supplier/{s_id}', factory=Supplier)
+    config.add_route('supplier-delete', '/supplier/{s_id}/delete', factory=Supplier)
     config.add_route('transaction-type-list', '/transaction-types', factory=TransactionType)
     config.add_route('transaction-type-new', '/transaction-types/new', factory=TransactionType)
     config.add_route('transaction-type-save', '/transaction-type/{tt_id}/save', factory=TransactionType)

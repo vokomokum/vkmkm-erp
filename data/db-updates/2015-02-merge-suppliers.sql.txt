@@ -1,0 +1,13 @@
+# use vers_supplier table as base
+ALTER TABLE vers_suppliers RENAME TO suppliers;
+
+# introduce a distinction for two supplier types
+ALTER TABLE suppliers ADD COLUMN whol_vers VARCHAR(4) DEFAULT 'vers'; -- whol or vers
+
+# get wholesalers
+INSERT INTO suppliers (name, telnr, email, whol_vers) VALUES ('De Nieuwe Band', '059 464 53 00', '', 'whol');
+INSERT INTO suppliers (name, telnr, email, whol_vers) VALUES ('Bijenpark Geuzenveld', '', 'info@geitenboerderij.nl', 'whol');
+INSERT INTO suppliers (name, telnr, email, whol_vers) VALUES ('Libertad Kollektiv eG', '0049 40 20 90 68 92', '', 'whol');
+
+# TODO: transactions table: drop whol_id and vers_id, add supplier_id. Do we need to move values or can we just add the few ones we have by individual UPDATE statements?
+# TODO: TransactionType field mem_sup needs to get the value 'sup' whereever it is 'whol' or 'vers' Let's use individual UPDATE statements here, as well.

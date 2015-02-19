@@ -10,7 +10,7 @@ import pytz
 
 from base import Base, VokoValidationError, DBSession
 from member import Member
-from supplier import Wholesaler, VersSupplier
+from supplier import Supplier
 from orders import Order
 from members.utils.misc import ascii_save
 from members.utils.misc import month_info
@@ -92,10 +92,8 @@ class Transaction(Base):
     mem_id = Column(Integer, ForeignKey('members.mem_id'), nullable=True)
     member = relationship(Member, backref=backref('transactions',
                                     order_by='desc(Transaction.date)'))
-    whol_id = Column(Integer, ForeignKey('wholesaler.wh_id'))
-    wholesaler = relationship(Wholesaler)
-    vers_id = Column(Integer, ForeignKey('vers_suppliers.id'), nullable=True)
-    vers_supplier = relationship(VersSupplier)
+    supplier_id = Column(Integer, ForeignKey('suppliers.id'), nullable=True)
+    supplier = relationship(Supplier)
     comment = Column(Unicode(500))
     ord_no = Column(Integer, ForeignKey('wh_order.ord_no'), nullable=True)
     order = relationship(Order, backref='transactions')
@@ -125,10 +123,8 @@ class Transaction(Base):
         fromto = {True: 'from', False: 'to'}[self.amount > 0]
         if self.ttype.mem_sup == 'memb':
             partner = ascii_save(self.member.fullname)
-        elif self.ttype.mem_sup == 'whol':
-            partner = ascii_save(self.wholesaler.wh_name)
-        elif self.ttype.mem_sup == 'vers':
-            partner = ascii_save(self.vers_supplier.name)
+        elif self.ttype.mem_sup == 'sup':
+            partner = ascii_save(self.supplier.name)
         else:
             partner = 'Other'
         
@@ -156,12 +152,9 @@ class Transaction(Base):
         if self.ttype.mem_sup == 'memb' and not self.member:
             raise VokoValidationError('A transaction of type {} needs a '\
                                       'member.'.format(self.ttype))
-        if self.ttype.mem_sup == 'whol' and not self.wholesaler:
+        if self.ttype.mem_sup == 'sup' and not self.supplier:
             raise VokoValidationError('A transaction of type {} needs a '\
-                                      'wholesaler.'.format(self.ttype))
-        if self.ttype.mem_sup == 'vers' and not self.vers_supplier:
-            raise VokoValidationError('A transaction of type {} needs a '\
-                                      'vers supplier.'.format(self.ttype))
+                                      'Supplier.'.format(self.ttype))
         if self.ttype.pos_neg == 'pos' and self.amount < 0:
             raise VokoValidationError('A transaction of this type should by '\
                                       'its definition be benefitting Vokomokum '\
@@ -171,8 +164,7 @@ class Transaction(Base):
                                       'its definition represent something that '\
                                       'Vokomokum gives out or pays and thus '\
                                       'be negative.')
-        if (self.member and self.wholesaler) or\
-           (self.member and self.vers_supplier):
+        if self.member and self.supplier:
             raise VokoValidationError('This transaction should not link to '\
                                       'both a member and a supplier.')
         if self.ttype.name == 'Order Charge' and not self.order:
