@@ -9,7 +9,7 @@ from members.models.transactions import TransactionType
 from members.models.transactions import get_ttypeid_by_name
 from members.models.base import DBSession
 from members.utils.mail import sendmail
-from members.utils.misc import membership_fee
+from members.utils.misc import membership_fee, ascii_save
 from members.utils.graphs import orders_money_and_people
 
 
@@ -86,7 +86,7 @@ class ChargeOrder(BaseView):
                 subject = 'First-time orderers'
                 body = 'FYI: Below is a list of people who ordered for the'\
                        ' first time today. This mail was auto-generated.\n\n'
-                body += '\n'.join(['{} [ID:{}]'.format(m.fullname, m.mem_id)\
+                body += '\n'.join(['{} [ID:{}]'.format(ascii_save(m.fullname), m.mem_id)\
                                   for m in first_orderers])
                 sendmail('membership@vokomokum.nl', subject, body,
                         folder='order-charges/{}'.format(o_id),
