@@ -1,6 +1,6 @@
 import re
 
-from sqlalchemy import Table, Column, Integer, Unicode
+from sqlalchemy import Table, Column, Integer, Unicode, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
 
@@ -30,6 +30,7 @@ class Workgroup(Base):
     name = Column(Unicode(255), unique=True)
     desc = Column(Unicode(255))
     required_members = Column(Integer, default=1)
+    active = Column(Boolean(), default=True)
 
     __acl__ = [(Allow, 'group:admins', ('view', 'edit')),
                (Allow, 'group:wg-leaders', ('view', 'edit')),
@@ -42,6 +43,7 @@ class Workgroup(Base):
         self.exists = False
         self.name = name
         self.desc = desc
+        self.active = True
         self.required_members = required_members
 
     def __repr__(self):

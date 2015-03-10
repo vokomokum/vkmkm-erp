@@ -108,21 +108,15 @@ class EditWorkgroupView(BaseView):
                                          'Workgroup was created.' % wg.id)
                 return dict(wg=wg, msg='Workgrup has been saved.')
 
-            elif action == 'delete':
+            elif action == 'toggle-active':
                 wg = get_wg(session, self.request)
-                self.confirm_deletion = True
+                self.confirm_toggle_active = True
                 return dict(wg=wg)
-            elif action == 'delete-confirmed':
-                shifts = session.query(Shift)\
-                                .filter(Shift.wg_id == wg.id).all()
-                if len(shifts) == 0:
-                    session.delete(wg)
-                else:
-                    raise Exception('Cannot delete workgroup, as there '\
-                                    'are shifts in the history for this '\
-                                    'workgroup.')
-                return dict(wg=None, msg='Workgroup %s has been deleted.'\
-                                          % wg.name)
+            elif action == 'toggle-active-confirmed':
+                wg.active = not wg.active
+                msg='Workgroup {} is now {}active.'.\
+                    format(wg.name, {False:'in', True:''}[wg.active])
+                return dict(wg=wg, msg=msg)
 
         return dict(wg=wg, msg='')
 
@@ -136,6 +130,14 @@ class ListWorkgroupView(BaseView):
     def __call__(self):
         dbsession = DBSession()
         wg_query = dbsession.query(Workgroup)
+
+        # -- inactive workgroups? --
+        show_inactive = True
+        if not 'include_inactive' in self.request.params\
+           or not self.request.params['include_inactive']:
+            show_inactive = False
+            wg_query = wg_query.filter(Workgroup.active == True)
+
 
         # show msg
         if 'msg' in self.request.params:
@@ -155,5 +157,8 @@ class ListWorkgroupView(BaseView):
             order_name_choice = 'desc'
 
         wg_query = wg_query.order_by(odir('id'))
-        return dict(workgroups=wg_query.all(), msg=msg,
-                    order_name_choice=order_name_choice)
+        workgroups = wg_query.all()
+        self.wg_count = len(workgroups)
+        return dict(workgroups=workgroups, msg=msg,
+                    order_name_choice=order_name_choice,
+                    show_inactive=show_inactive)

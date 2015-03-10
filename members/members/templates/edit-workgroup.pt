@@ -4,24 +4,33 @@
     <div metal:use-macro="view.layout.macros['master']">
         <div metal:fill-slot="content">
 
-<!-- show deletion confirmation -->
-<form tal:condition="python: hasattr(view, 'confirm_deletion') and wg.id"
+<h1>Editing Workgroup ${wg.name}</h1>
+
+<!-- show toggle active state confirmation -->
+<form tal:condition="python: hasattr(view, 'confirm_toggle_active') and wg.id"
       action="${portal_url}/workgroup/${wg.id}/edit" method="post">
-    <div class="warn">Really delete workgroup ${wg.name}?</div>
-    <button type="submit" value="delete-confirmed" name="action" class="btn btn-default">Yes</button>
-    <button type="submit" value="donothing" name="action" class="btn btn-default">No</button>
+  <p class="help-block">Really set workgroup ${wg.name} to ${wg.active and 'inactive' or 'active'}?</p>
+
+  <button type="submit" value="toggle-active-confirmed" name="action" class="btn btn-default">Yes</button>
+  <button type="submit" value="donothing" name="action" class="btn btn-default">No</button>
 </form>
 
-<!-- show wg form and tasks -->
-<div tal:condition="not: python: hasattr(view, 'confirm_deletion')">
-<form tal:attributes="action python: '%s/workgroup/%s/edit' % (portal_url, str(wg.id) if wg.id else 'new')"
-      method="post" tal:condition="wg" role="form" class="form-horizontal">
 
-    <h1>Editing Workgroup ${wg.name}</h1>
+<!-- show wg form -->
+<form tal:condition="wg" tal:attributes="action python: '%s/workgroup/%s/edit' % (portal_url, str(wg.id) if wg.id else 'new')"
+      method="post" tal:condition="wg" role="form" class="form-horizontal">
     
     <div id="action-box" tal:condition="wg.exists">
-        <a class="btn btn-link" href="${portal_url}/workgroup/${wg.id}"><span class="glyphicon glyphicon-eye-open"></span> view this group</a>
-        <button tal:condition="wg.exists" type="image" title="delete" value="delete" name="action" class="btn btn-link"><span class="glyphicon glyphicon-remove"></span> delete</button>
+        <a class="btn btn-link" href="${portal_url}/workgroup/${wg.id}"><span class="glyphicon glyphicon-eye-open"></span>
+            view this group
+        </a>
+        <button tal:condition="wg.exists" name="action" type="submit" value="toggle-active" class="btn btn-link">
+            <span class="glyphicon glyphicon-thumbs-${wg.active and 'down' or 'up'}"></span> make ${wg.active and 'inactive' or 'active'}
+        </button>
+        <div tal:condition="not:wg.active" class="label label-warning">
+            This workgroup is set to inactive, therefore the core data (members,
+            coordinators, number of required members) cannot be edited.
+        </div>
         <input type="hidden" name="id" value="${wg.id}"></input>
     </div> 
 
@@ -32,56 +41,60 @@
         <input type="text" class="form-control" name="name" value="${wg.name}"/>
       </div>
     </div>
-    <div class="form-group">
-      <label class="col-sm-2" for="wg_leaders">Coordinators:</label>
-      <div class="col-sm-6">
-        <select name="wg_leaders" id="wg_leaders" multiple="multiple"
-                  data-placeholder="Start typing or click to select members"
-                  class="chzn-select">
-          <tal:block tal:repeat="pm view.possible_members">
-            <tal:block tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[pm.mem_active]">
-              <option tal:condition="python: pm in wg.leaders"
-                      selected="selected" value="${pm.mem_id}">
-                  [${pm.mem_id}] ${pm.fullname}${active}
-              </option>
-              <option tal:condition="python: not pm in wg.leaders" value="${pm.mem_id}">
-                  [${pm.mem_id}] ${pm.fullname}${active}
-              </option>
-            </tal:block>
-          </tal:block>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-2" for="wg_members">Members:</label>
-      <div class="col-sm-6">
-        <span class="help-block">
-          To add members, click in the boxes and then start typing names or select from the list.
-        </span>
-          <select name="wg_members" id="wg_members" multiple="multiple"
-                  data-placeholder="Start typing or click to select members"
-                  class="chzn-select">
-              <tal:block tal:repeat="pm view.possible_members">
-               <tal:block tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[pm.mem_active]">
-                  <option tal:condition="python:pm in wg.members"
-                          value="${pm.mem_id}" selected="selected">
-                      [${pm.mem_id}] ${pm.fullname}${active}
-                  </option>
-                  <option tal:condition="python:pm not in wg.members" value="${pm.mem_id}">
-                      [${pm.mem_id}] ${pm.fullname}${active}
-                  </option>
+
+
+    <tal:block tal:condition="wg.active">
+        <div class="form-group">
+        <label class="col-sm-2" for="wg_leaders">Coordinators:</label>
+        <div class="col-sm-6">
+            <select name="wg_leaders" id="wg_leaders" multiple="multiple"
+                    data-placeholder="Start typing or click to select members"
+                    class="chzn-select">
+            <tal:block tal:repeat="pm view.possible_members">
+                <tal:block tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[pm.mem_active]">
+                <option tal:condition="python: pm in wg.leaders"
+                        selected="selected" value="${pm.mem_id}">
+                    [${pm.mem_id}] ${pm.fullname}${active}
+                </option>
+                <option tal:condition="python: not pm in wg.leaders" value="${pm.mem_id}">
+                    [${pm.mem_id}] ${pm.fullname}${active}
+                </option>
                 </tal:block>
-              </tal:block>
-          </select>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label class="col-sm-2" for="required_members">Required number of members:</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" name="required_members" value="${wg.required_members}" maxlength="2"/>
-      </div>
-    </div>
+            </tal:block>
+            </select>
+        </div>
+        </div>
+        <div class="form-group">
+        <label class="col-sm-2" for="wg_members">Members:</label>
+        <div class="col-sm-6">
+            <span class="help-block">
+            To add members, click in the boxes and then start typing names or select from the list.
+            </span>
+            <select name="wg_members" id="wg_members" multiple="multiple"
+                    data-placeholder="Start typing or click to select members"
+                    class="chzn-select">
+                <tal:block tal:repeat="pm view.possible_members">
+                <tal:block tal:define="active python:{True:'', False:' (NOT ACTIVE)'}[pm.mem_active]">
+                    <option tal:condition="python:pm in wg.members"
+                            value="${pm.mem_id}" selected="selected">
+                        [${pm.mem_id}] ${pm.fullname}${active}
+                    </option>
+                    <option tal:condition="python:pm not in wg.members" value="${pm.mem_id}">
+                        [${pm.mem_id}] ${pm.fullname}${active}
+                    </option>
+                    </tal:block>
+                </tal:block>
+            </select>
+        </div>
+        </div>
+        
+        <div class="form-group">
+        <label class="col-sm-2" for="required_members">Required number of members:</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="required_members" value="${wg.required_members}" maxlength="2"/>
+        </div>
+        </div>
+    </tal:block>
 
     <div class="form-group">
       <label class="col-sm-2" for="description">Description:</label>
@@ -97,9 +110,6 @@
 
 
 </form>
-
-</div>
-
 
 
         </div>

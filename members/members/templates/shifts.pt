@@ -9,8 +9,13 @@
         Shift schedule for workgroup <a href="${portal_url}/workgroup/${wg.id}">${wg.name}</a> in month ${view.month}/${view.year}
     </h1>
  
-    <!-- New shifts form -->
-    Create new shift(s) <a onclick="$('#form-data').toggle()">show/hide</a>
+    <div tal:condition="not:wg.active" class="label label-warning">
+        This workgroup is set to inactive, therefore shifts cannot be edited.
+    </div>
+    
+    <div tal:condition="wg.active">
+        <!-- New shifts form -->
+        Create new shift(s) <a onclick="$('#form-data').toggle()">show/hide</a>
         <div id="form-data" style="display:none;"
              tal:condition="(view.user_is_wgleader or view.user.mem_admin)"><!--and not view.month_info.month_lies_in_past"-->
         <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post" role="form" class="form-horizontal">
@@ -87,6 +92,7 @@
                 </div>
               </div>
         </form>
+        </div>
     </div>
 
     <ul class="pager">
@@ -117,11 +123,11 @@
         </tr>
         <tr class="list-content" tal:repeat="shift shifts">
             <!-- Day -->
-            <tal:block tal:condition="not:view.user_is_wgleader">
+            <tal:block tal:condition="python: not view.user_is_wgleader or not wg.active">
                 <td tal:condition="not:shift.day">any day</td>
                 <td tal:condition="shift.day">${shift.day}</td>
             </tal:block>
-            <td tal:condition="view.user_is_wgleader">
+            <td tal:condition="view.user_is_wgleader or wg.active">
                 <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setday" method="post" role="form">
                     <div class="form-group">
                     <select onchange="this.form.submit()" name="day" class="form-control">
@@ -136,20 +142,20 @@
             <!-- Task -->
             <td align="center">
                 <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/settask" method="post" role="form"
-                       tal:condition="view.user_is_wgleader or view.user.mem_admin">
+                       tal:condition="wg.active and (view.user_is_wgleader or view.user.mem_admin)">
                     <div class="form-group">
                       <input name="task" value="${shift.task}" class="form-control"
                           onkeydown="if (event.keyCode == 13) this.form.submit()"/>
                     </div>
                 </form>
-                <span tal:condition="not:(view.user_is_wgleader or view.user.mem_admin)">
+                <span tal:condition="python: not (view.user_is_wgleader or view.user.mem_admin) or not wg.active">
                     ${shift.task}
                 </span>
             </td>
             <!-- Member -->
             <td>
                 <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setmember" method="post" role="form">
-                    <tal:block tal:condition="view.user_is_wgleader or view.user.mem_admin">
+                    <tal:block tal:condition="wg.active and (view.user_is_wgleader or view.user.mem_admin)">
                         <tal:block tal:condition="python:shift.state not in ['worked', 'no-show']">
                             <div class="form-group">
                               <select onchange="this.form.submit()" name="mem_id" class="form-control">
@@ -177,7 +183,7 @@
                             </a>
                         </tal:block>
                     </tal:block>
-                    <tal:block tal:condition="python:not(view.user_is_wgleader or view.user.mem_admin)">
+                    <tal:block tal:condition="python:not(view.user_is_wgleader or view.user.mem_admin) or not wg.active">
                         ${shift.member}
                         <a tal:condition="shift.member" id="profile-link" 
                             href="${portal_url}/member/${shift.member.mem_id}"
@@ -185,7 +191,7 @@
                             title="Click to see ${shift.member}'s profile (e.g. to write an email)">&nbsp;&nbsp;
                         </a>
                         <span tal:condition="not:shift.member">No one yet</span>
-                        <button tal:condition="shift.state == 'open'"
+                        <button tal:condition="shift.state == 'open' and wg.active"
                             class="btn btn-link"
                             type="submit" name="mem_id" value="${view.user.mem_id}">
                             Sign up

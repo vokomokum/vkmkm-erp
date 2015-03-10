@@ -1,12 +1,11 @@
 from pyramid.view import view_config
-from pyramid.security import remember
 
 import datetime
 
 from members.models.shift import Shift, get_shift
 from members.models.workgroups import Workgroup, get_wg
 from members.models.member import Member, get_member
-from members.models.base import DBSession, Base
+from members.models.base import DBSession
 from members.views.base import BaseView
 from members.utils.misc import month_info
 from members.utils.misc import ascii_save
@@ -68,6 +67,11 @@ class NewShiftView(BaseShiftView):
         params = self.request.params
         wg_id = self.request.matchdict['wg_id']
         wg = get_wg(db_session, self.request)
+        if not wg.active:
+            return self.redir_to_shiftlist(wg,
+                    int(params['year']), int(params['month']),
+                    'This workgroup is inactive, no new shifts can be added.')
+        
         if not 'people' in params:
             people = 1
         else:
@@ -163,14 +167,17 @@ class EditShiftView(BaseShiftView):
         wg = get_wg(db_session, self.request)
         if not wg:
             raise Exception("Don't know which workgroup this is supposed to be.")
-
+        
         shift = get_shift(db_session, self.request)
         if not shift:
             raise Exception("No shift with id %d" % self.request.matchdict['s_id'])
 
         def redir(msg):
             return self.redir_to_shiftlist(wg, shift.year, shift.month, msg)
-    
+ 
+        if not wg.active:
+            return redir('Workgroup is inactive, editing shifts therefore not possible.')
+   
         action = self.request.matchdict['action']
         if action == "":
             raise Exception('No action given.')
@@ -314,7 +321,6 @@ class ListShiftView(BaseView):
 
         # we view shifts per-month here
         # use parameters to determine month, default is current month
-        now = datetime.datetime.now()
         self.month = int(self.request.matchdict['month'])
         self.year = int(self.request.matchdict['year'])
         schedule_date = datetime.date(self.year, self.month, 1)

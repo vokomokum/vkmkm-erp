@@ -19,6 +19,10 @@ Usage of this address is limited to vokomokum members."><span class="glyphicon g
     <a class="btn btn-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}/${now.month}"><span class="glyphicon glyphicon-calendar"></span> Monthly shift schedule</a>
     <a class="btn btn-link" href="${portal_url}/workgroup/${wg.id}/shifts/${now.year}"><span class="glyphicon glyphicon-list-alt"></span> Yearly shift overview</a>
 
+    <div class="col-sm-12">
+        <div tal:condition="not:wg.active" class="label label-warning">This workgroup is not active.</div>
+    </div>
+    
     <table class="table table-striped table-bordered table-hover table-responsive" align="center">
         <tr>
             <th>Coordinators</th>

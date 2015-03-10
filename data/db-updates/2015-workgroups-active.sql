@@ -1,0 +1,4 @@
+ALTER TABLE workgroups ADD COLUMN active BOOLEAN DEFAULT true;
+ALTER TABLE workgroups ALTER COLUMN active SET NOT NULL;
+
+
