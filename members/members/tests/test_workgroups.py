@@ -98,34 +98,17 @@ class TestWorkgroups(VokoTestCase):
         wg = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Cafe').first()
         self.assertEquals(wg.desc, 'Shake and Bake')
 
-    def test_delete(self):
+    def test_deactivate(self):
         request = testing.DummyRequest()
         def get_sys_wg():
             return self.DBSession.query(Workgroup).filter(Workgroup.name==u'Systems').first()
         wg_system = get_sys_wg()
         request.matchdict = {'wg_id': wg_system.id}
-        request.params['action'] = 'delete'
+        request.params['action'] = 'toggle-active'
         view = EditWorkgroupView(None, request)
         view()
-        self.assertTrue(view.confirm_deletion)
-        request.params['action'] = 'delete-confirmed'
+        self.assertTrue(view.confirm_toggle_active)
+        request.params['action'] = 'toggle-active-confirmed'
         view()
-        self.assertIsNone(get_sys_wg())
-
-    def test_delete_withshift(self):
-        ''' no delete possible when shift exists '''
-        request = testing.DummyRequest()
-        wg_bestel = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Besteling').first()
-        request.matchdict = {'wg_id': wg_bestel.id}
-        request.params['action'] = 'delete'
-        view = EditWorkgroupView(None, request)
-        view()
-        self.assertTrue(view.confirm_deletion)
-        request.params['action'] = 'delete-confirmed'
-        ex = None
-        try:
-            view()
-        except Exception, e:
-            ex = e
-        self.assertIn('there are shifts', str(ex))
+        self.assertFalse(get_sys_wg().active)
 
