@@ -41,8 +41,8 @@
                 </table>
                 <h3 tal:condition="charges" class="info">
                     <a href="${portal_url}/charge-order/${order.id}?action=charge">
-                        Go ahead, create these charges.
-                    </a>
+                        Go ahead, create these charges!
+                    </a> (be patient though, this takes a while to complete)
                 </h3>
                 <h3 tal:condition="not charges" class="info">
                     None found.

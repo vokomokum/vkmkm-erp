@@ -155,6 +155,7 @@
             <!-- Member -->
             <td>
                 <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setmember" method="post" role="form">
+                    <!-- Admins and WG leaders an change the assigned member-->
                     <tal:block tal:condition="wg.active and (view.user_is_wgleader or view.user.mem_admin)">
                         <tal:block tal:condition="python:shift.state not in ['worked', 'no-show']">
                             <div class="form-group">
@@ -183,6 +184,7 @@
                             </a>
                         </tal:block>
                     </tal:block>
+                    <!-- All others can only see the assigned member or sign up for a shift -->
                     <tal:block tal:condition="python:not(view.user_is_wgleader or view.user.mem_admin) or not wg.active">
                         ${shift.member}
                         <a tal:condition="shift.member" id="profile-link" 
@@ -196,11 +198,13 @@
                             type="submit" name="mem_id" value="${view.user.mem_id}">
                             Sign up
                         </button>
-                        <button tal:condition="shift.mem_id == view.user.mem_id and shift.state == 'assigned' and not(shift.is_locked)"
+                        <!-- Members signing themselves out is deactivated for the time being, 
+                             since many workgroups want this to go through coordinators-->
+                        <!--button tal:condition="shift.mem_id == view.user.mem_id and shift.state == 'assigned' and not(shift.is_locked)"
                             class="btn btn-link"
-                            type="submit" name="mem_id" value="--">
+                            type="submit" name="mem_id" value="-">
                             Sign out
-                        </button>
+                        </button-->
                     </tal:block>
                 </form>
             </td>

@@ -6,7 +6,6 @@ from datetime import datetime
 from members.models.workgroups import Workgroup, get_wg
 from members.models.member import Member
 from members.models.base import DBSession
-from members.models.shift import Shift
 from members.views.base import BaseView
 
 
