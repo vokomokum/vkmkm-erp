@@ -127,7 +127,7 @@
                 <td tal:condition="not:shift.day">any day</td>
                 <td tal:condition="shift.day">${shift.day}</td>
             </tal:block>
-            <td tal:condition="view.user_is_wgleader or wg.active">
+            <td tal:condition="view.user_is_wgleader and wg.active">
                 <form action="${portal_url}/workgroup/${wg.id}/edit-shift/${shift.id}/setday" method="post" role="form">
                     <div class="form-group">
                     <select onchange="this.form.submit()" name="day" class="form-control">
