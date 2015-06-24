@@ -13,12 +13,11 @@
         This workgroup is set to inactive, therefore shifts cannot be edited.
     </div>
     
-    <div tal:condition="wg.active">
+    <div tal:condition="wg.active and (view.user_is_wgleader or view.user.mem_admin)"><!--and not view.month_info.month_lies_in_past"-->
         <!-- New shifts form -->
         Create new shift(s) <a onclick="$('#form-data').toggle()">show/hide</a>
-        <div id="form-data" style="display:none;"
-             tal:condition="(view.user_is_wgleader or view.user.mem_admin)"><!--and not view.month_info.month_lies_in_past"-->
-        <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post" role="form" class="form-horizontal">
+        <div id="form-data" style="display:none;">
+            <form action="${portal_url}/workgroup/${wg.id}/new-shift" method="post" role="form" class="form-horizontal">
               <p>Create one or more shifts.</p>
               <div class="form-group">
                 <label for="task" class="col-sm-2 control-label">
@@ -91,7 +90,7 @@
                   <button class="btn btn-primary" type="submit">Create</button>
                 </div>
               </div>
-        </form>
+            </form>
         </div>
     </div>
 
