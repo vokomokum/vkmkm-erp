@@ -6,7 +6,8 @@ import logging
 from members.utils.misc import get_settings
 
 
-def sendmail(to, subject, body, folder='other', sender=None):
+def sendmail(to, subject, body, sender=None,
+             folder='other', filename=None):
     '''
     Send a mail using a local mail program (like exim).
     Will save a time-stamped copy in a local folder, as well.
@@ -14,9 +15,10 @@ def sendmail(to, subject, body, folder='other', sender=None):
     :param string to: addressee
     :param string subject: subject of mail
     :param string body: content of mail
+    :param string sender: senders address
     :param string folder: a subfolder in which to put a copy
               (within the main mail_folder)
-    :param string sender: senders address
+    :param string filename: name of copy file
     :returns: True if mail could be sent
               (if mail process returned successfully)
     '''
@@ -34,7 +36,8 @@ Subject: %s
 %s
 """ % (sender, to, subject, body)
     error = ""
-    mail_time = str(datetime.now()).replace(' ', '_').replace(':', '-')
+    if not filename:
+        filename = str(datetime.now()).replace(' ', '_').replace(':', '-')
     try:
         # try to send mail if our little custom test-workaround is not in place 
         if not 'DONOTACTUALLYSEND' in mail_exec:
@@ -51,13 +54,13 @@ Subject: %s
         target_folder = '{}/{}'.format(mail_folder, folder)
         if not os.path.exists(target_folder):
             os.mkdir(target_folder)
-        mf = open('{}/{}.eml'.format(target_folder, mail_time), 'w')
+        mf = open('{}/{}.eml'.format(target_folder, filename), 'w')
         mf.write(mail)
         mf.close()
     except OSError, e:
         # log that it didn't work
         log = logging.getLogger(__name__)
         log.warn('Could not send mail to %s, subject "%s"'\
-                 '(mail identifier is %s): %s'\
-                  % (to, subject, mail_time, error))
+                 '(mail filename is %s): %s'\
+                  % (to, subject, filename, error))
         raise e

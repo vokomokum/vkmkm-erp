@@ -96,45 +96,39 @@ class ChargeOrder(BaseView):
         return dict(order=order, action='')
 
 
-@view_config(renderer='../templates/base.pt', route_name='mail-order-charges')
-class MailOrderCharges(BaseView):
-
-    tab = 'finance'
+@view_config(renderer='json', route_name='mail-payment-reminders')
+class MailPaymentReminders(BaseView):
 
     def __call__(self):
         '''
         Send members an email about their negative balance.
-        We send these mails after orders, that is why this action is tied
-        to an order number (it also helps us to keep track a little over
-        when we already sent these reminders). 
+        We keep copies of the mails in folders, by date.
         '''
-        o_id = self.request.matchdict['o_id']
-        session = DBSession()
-        order = session.query(Order).\
-                    filter(Order.id == o_id).first()
-        if not order:
-            return dict(msg='An order with ID {} does not exist.'.format(o_id),
-                        order=None)
-        members = [m for m in session.query(Member).all() if m.balance < 0]
-        now = datetime.datetime.now()
-        deadline = now + datetime.timedelta(days = 3)
-        weekdays_en= ['monday', 'tuesday', 'wednesday', 'thursday',
-                      'friday', 'saturday', 'sunday']
-        weekdays_nl = ['maandag', 'dinsdag', 'woensdag', 'donderdag',
-                       'vrijdag', 'zaterdag', 'zondag']
-        deadline_en = '{} {}.{}.{}'.format(weekdays_en[deadline.weekday()],
-                        deadline.day, deadline.month, deadline.year)
-        deadline_nl = '{} {}.{}.{}'.format(weekdays_nl[deadline.weekday()],
-                        deadline.day, deadline.month, deadline.year)
-        for m in members:
-            subject = 'Payment request / Verzoek tot betaling'
-            mail_templ = open('members/templates/order_charge_txt.eml', 'r')
-            mail = mail_templ.read()
-            body = mail.format(mem_id=m.mem_id, label=order.label, amount=m.balance,
-                       deadline_nl=deadline_nl, deadline_en=deadline_en)
-            sendmail(m.mem_email, subject, body,
-                        folder='order-charges/{}'.format(order.id),
-                        sender='finance@vokomokum.nl')
-        return dict(msg=u'Emails with payment reminders have been sent out '\
-                        'after order {}'.format(order.label))
+        try:
+            session = DBSession()
+            members = [m for m in session.query(Member).all() if m.balance < 0]
+            now = datetime.datetime.now()
+            deadline = now + datetime.timedelta(days = 3)
+            weekdays_en= ['monday', 'tuesday', 'wednesday', 'thursday',
+                        'friday', 'saturday', 'sunday']
+            weekdays_nl = ['maandag', 'dinsdag', 'woensdag', 'donderdag',
+                        'vrijdag', 'zaterdag', 'zondag']
+            deadline_en = '{} {}.{}.{}'.format(weekdays_en[deadline.weekday()],
+                            deadline.day, deadline.month, deadline.year)
+            deadline_nl = '{} {}.{}.{}'.format(weekdays_nl[deadline.weekday()],
+                            deadline.day, deadline.month, deadline.year)
+            for m in members:
+                subject = 'Payment request / Verzoek tot betaling'
+                mail_templ = open('members/templates/payment_reminders.eml', 'r')
+                mail = mail_templ.read()
+                body = mail.format(mem_id=m.mem_id, amount=m.balance,
+                        deadline_nl=deadline_nl, deadline_en=deadline_en)
+                sendmail(m.mem_email, subject, body,
+                        sender='finance@vokomokum.nl',
+                        folder='payment-reminders/{}'.format(),
+                        filename='MemberNo{}'.format(m.mem_id))
+        except Exception, e:
+            return dict(status='error', msg=str(e))
+        return dict(status='ok', msg=u'Emails with payment reminders have been'\
+                                      ' to members.')
 

@@ -5,7 +5,7 @@ Beste Vokomokum-lid,
 
 We hebben deze maand weer met elkaar een bestelling gedaan bij de groothandel en onze boeren. We zijn erg blij dat je meebesteld hebt!
 
-Waarschijnlijk weet je dat de kosten voor de maandelijkse bestelling aan Vokomokum op de dag van bezorging in rekening worden gebracht. Het is daarom belangrijk dat we betalingen van de leden snel binnen hebben, zodat we ook onze leveranciers op tijd kunnen betalen. Graag ontvangen wij nu jullie betalingen voor de bestelling van {label}.
+Waarschijnlijk weet je dat de kosten voor de maandelijkse bestelling aan Vokomokum op de dag van bezorging in rekening worden gebracht. Het is daarom belangrijk dat we betalingen van de leden snel binnen hebben, zodat we ook onze leveranciers op tijd kunnen betalen.
 
 Volgens onze administratie is EUR {amount} je huidige saldo. 
 
@@ -13,7 +13,7 @@ Zou je zo vriendelijk willen zijn om dit bedrag zo snel mogelijk, maar uiterlijk
 
 Mocht het bovenstaand bedrag niet kloppen: Maak nog geen geld over, maar probeer eerst de problemen op te lossen. Door in te loggen op de Vokomokum website: 
 http://www.vokomokum.nl/member-area/dashboard, 
-en op je naam rechts boven te klikken, kom je op de "My Account" pagina waar je een overzicht van al je transacties vindt: je bestellingen, je betalingen en mogelijke andere transacties. Als je denkt dat er iets mis is met hoe je bestelling in rekening is gebracht, kijk dan op je bestellingspagina: http://order.vokomokum.nl > log in > choose My Orders > current.
+en op je naam rechts boven te klikken, kom je op de "My Account" pagina waar je een overzicht van al je transacties vindt: je bestellingen, je betalingen en mogelijke andere transacties. Als je denkt dat er iets mis is met hoe je bestelling in rekening is gebracht, kijk dan op je bestellingspagina: http://order.vokomokum.nl.
 
 Als je daarna nog vragen hebt, of als je een fout hebt gevonden in je saldo, neem dan zo snel mogelijk contact op met de werkgroep Finance (finance@vokomokum.nl). Beschrijf het probleem in de email. Als de fout in je VERS-bestelling zit, graag een email sturen naar die werkgroep (vers-admin-all@vokomokum.nl) met een kopie naar de werkgroep Finance. Uiteraard wordt de betalingsdeadline opgeschort tot het probleem is opgelost.
 
@@ -29,7 +29,7 @@ Dear Vokomokum member,
 
 Every month, our combined orders support local farmers, healthy organic food markets, and development of our community here in Amsterdam. Great that you were a part of it again!
 
-As you probably know, Vokomokum is billed for the entire order on the day of delivery, and therefore we need to receive all member payments very quickly in order to pay our VERS and bulk goods suppliers. Now that the pick-up is complete, we would like to request that you pay for your order of {label}. 
+As you probably know, Vokomokum is billed for the entire order on the day of delivery, and therefore we need to receive all member payments very quickly in order to pay our VERS and bulk goods suppliers.
 
 Our records show that EUR {amount} is your current balance.
 
@@ -38,7 +38,7 @@ Please pay as soon as possible, but at the latest by {deadline_en}. Please trans
 If you believe the amount above is wrong, please resolve any problems before making your payment. First log into the Vokomokum website:
 http://www.vokomokum.nl/member-area/dashboard,
 and click on your name on the upper right of the screen to access the "My Account" page, where you will see your transaction history. Here, you will be able to see a record of your orders, your payments, and any other transactions. If you believe your Order Charge to be wrong, you should then visit your order page:
-http://order.vokomokum.nl > log in > choose My Orders > current.
+http://order.vokomokum.nl.
 
 If you have further questions or if you identify a mistake in your balance, please immediately email the Finance work group (finance@vokomokum.nl) and describe the problem. If the mistake involves your VERS order, you should email that work group (vers-admin-all@vokomokum.nl) and carbon copy the Finance group on the message. The payment deadline will be extended until the mistake has been resolved.
 
