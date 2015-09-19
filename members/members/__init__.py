@@ -25,7 +25,6 @@ def main(global_config, **settings):
     authn_policy = VokoAuthenticationPolicy(settings)
     authz_policy = ACLAuthorizationPolicy()
     config = Configurator(settings=settings,
-        #root_factory = 'members.models.auth.RootFactory',
         authentication_policy = authn_policy,
         authorization_policy = authz_policy)
     config.include('pyramid_chameleon') # needed for pyramid >= 1.5
