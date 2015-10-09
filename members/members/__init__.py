@@ -64,8 +64,8 @@ def main(global_config, **settings):
     config.add_route('transaction-edit', '/transaction/{t_id}/edit/{action}', factory=Transaction)
     config.add_route('transaction-delete', '/transaction/{t_id}/delete', factory=Transaction)
     config.add_route('transactions-year-overview', '/transactions/{year}', factory=Transaction)
-    config.add_route('charge-order', '/charge-order/{o_id}')
     config.add_route('mail-payment-reminders', '/mail-payment-reminders')
+    config.add_route('charge-members', '/charge-members')
     config.add_route('docs', '/docs*folder')
     config.add_route('doc', '/doc*doc_path')
 

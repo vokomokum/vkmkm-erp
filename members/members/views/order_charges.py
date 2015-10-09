@@ -1,99 +1,132 @@
 from pyramid.view import view_config
 import datetime
+import json
 
 from members.views.base import BaseView
 from members.models.member import Member
-from members.models.orders import Order, MemberOrder
 from members.models.transactions import Transaction
 from members.models.transactions import TransactionType
 from members.models.transactions import get_ttypeid_by_name
 from members.models.base import DBSession
 from members.utils.mail import sendmail
 from members.utils.misc import membership_fee, ascii_save
-from members.utils.graphs import orders_money_and_people
+#from members.utils.graphs import orders_money_and_people
 
-
-@view_config(renderer='../templates/order-charges.pt', route_name='charge-order')
-class ChargeOrder(BaseView):
+@view_config(renderer='json', route_name='charge-members')
+class ChargeMembers(BaseView):
     
-    tab = 'finance'
-
     def __call__(self):
         '''
-        Create order charges for a given order in the system
+        Create transactions which charge members.
+
+        Expects a list of dicts where each has these fields:
+        * user_id
+        * order_id
+        * amount > 0
+        * note
+
+        Returns JSON dict with status (ok|error) and a msg.
         '''
-        o_id = int(self.request.matchdict['o_id'])
-        session = DBSession()
-        order = session.query(Order).\
-                filter(Order.id == o_id).first()
-        if not order:
-            return dict(msg='An order with ID {} does not exist.'.format(o_id),
-                        order=None, action=None)
-        charge_ttype_id = get_ttypeid_by_name('Order Charge')
+        try:
+            session = DBSession()
+            charge_ttype_id = get_ttypeid_by_name('Order Charge')
 
-        if not 'Finance' in [wg.name for wg in self.user.workgroups]\
-            and not self.user.mem_admin:
-            return dict(order=order, action=None, 
-                        msg='Only Finance people can do this.')
-        # all (positive) charges for members who have not been charged for 
-        # this order yet
-        charges = [MemberOrder(m, order) for m in session.query(Member).all()]
-        charges = [c for c in charges if c.amount > 0 and not o_id in\
-                                [t.order.id for t in c.member.transactions\
-                                            if t.ttype_id == charge_ttype_id]]
-        first_orderers = []
+            if not self.user or\
+            (not 'Finance' in [wg.name for wg in self.user.workgroups]\
+                and not self.user.mem_admin):
+                return dict(status='error', 
+                            msg='Only Finance people can do this.')
+            
+            # get data from request body
+            try:
+                parsed_body = json.loads(self.request.body)
+            except Exception, e:
+                return dict(status='error',
+                            msg='Body could not be parsed: {}.'.format(e))
+            if not 'charges' in parsed_body:
+                return dict(status='error', msg='No "charges" list found in request body.')
+            charges = parsed_body['charges']
+            if not isinstance(charges, list):
+                return dict(status='error', msg='Charges are not given as list.')
 
-        if not 'action' in self.request.params:
-            # show charges that would be made
-            return dict(order=order, action='show', charges=charges)
-        else:
-            # temporary backdoor to test this
-            if self.request.params['action'] == 'gggraph':
-                orders_money_and_people()
-            if self.request.params['action'] == 'charge':
-                # confirmation: make charges
-                for c in charges:
-                    t = Transaction(amount = -1 * c.amount,
-                        comment = 'Automatically charged.' 
+            # rule out non-positive amounts
+            charges = [c for c in charges if c['amount'] > 0]
+            first_orderers = []
+
+            # now we make charges and also membership fees
+            created = 0
+            updated = 0
+            for c in charges:
+                member = session.query(Member).get(c['user_id'])
+                if not member:
+                    return dict(status='error',
+                                msg='No member with id {} could be found.'\
+                                    .format(c['user_id']))
+                existing_order_charges = [t for t in member.transactions\
+                                          if t.ttype_id == charge_ttype_id\
+                                          and t.ord_no == c['order_id']]
+                comment = c.get('note')
+                if not comment:
+                    comment = 'Automatically charged for order {}.'\
+                              .format(c['order_id']) 
+                if not existing_order_charges:
+                    t = Transaction(amount=-1 * c['amount'], comment=comment)
+                    ttype = session.query(TransactionType)\
+                                         .get(charge_ttype_id)
+                    t.ttype = ttype
+                    t.member = member
+                    t.ord_no = c['order_id']
+                    created += 1
+                else:
+                    if len(existing_order_charges) > 1:
+                        return dict(status='error',
+                                    msg='Member {} was charged twice for order {}.'\
+                                        ' This should be fixed first!'\
+                                        .format(c['user_id'], c['order_id']))
+                    t = existing_order_charges[0]
+                    t.amount = -1 * c['amount']
+                    t.comment = comment
+                    updated += 1
+                t.validate()
+                session.add(t)
+                # first order charge of this member? Charge Membership fee
+                existing_charge = [t for t in member.transactions\
+                                   if t.ttype_id == charge_ttype_id]
+                if not existing_charge:
+                    first_orderers.append(member)
+                    mf = Transaction(\
+                            amount = membership_fee(member) * -1,
+                            comment = 'Automatically charged (for {}'\
+                            ' people in the household) on first-time'\
+                            ' order ({})'\
+                            .format(member.mem_household_size,
+                                    c['order_id'])
                     )
                     ttype = session.query(TransactionType)\
-                                   .get(charge_ttype_id)
-                    t.ttype = ttype
-                    t.member = c.member
-                    t.order = c.order
-                    t.validate()
-                    session.add(t)
-                    # first order of this member? Charge Membership fee
-                    if c.is_first_order():
-                        first_orderers.append(c.member)
-                        mf = Transaction(\
-                                amount = membership_fee(c.member) * -1,
-                                comment = 'Automatically charged (for {}'\
-                                ' people in the household) on first-time'\
-                                ' order ({})'\
-                                .format(c.member.mem_household_size,
-                                        c.order.label)
-                        )
-                        ttype = session.query(TransactionType)\
-                                    .get(get_ttypeid_by_name('Membership Fee'))
-                        mf.ttype = ttype
-                        mf.member = c.member
-                        mf.validate()
-                        session.add(mf)
-                # use this opportunity to update graph data
-                orders_money_and_people()
-                # inform membership about people who ordered for first time
-                subject = 'First-time orderers'
-                body = 'FYI: Below is a list of people who ordered for the'\
-                       ' first time today. This mail was auto-generated.\n\n'
-                body += '\n'.join(['{} [ID:{}]'.format(ascii_save(m.fullname), m.mem_id)\
-                                  for m in first_orderers])
-                sendmail('membership@vokomokum.nl', subject, body,
-                        folder='order-charges/{}'.format(o_id),
-                        sender='finance@vokomokum.nl')
+                                .get(get_ttypeid_by_name('Membership Fee'))
+                    mf.ttype = ttype
+                    mf.member = member
+                    mf.validate()
+                    session.add(mf)
+            # updating graph data doesn't work anymore because we don't have orders in-house
+            # orders_money_and_people()
+            # inform membership about people who ordered for first time
+            print "FIRST ORDERERS:", first_orderers
+            subject = 'First-time orderers'
+            body = 'FYI: Below is a list of people who ordered for the'\
+                    ' first time today. This mail was auto-generated.\n\n'
+            body += '\n'.join(['{} [ID:{}]'.format(ascii_save(m.fullname), m.mem_id)\
+                                for m in first_orderers])
+            sendmail('membership@vokomokum.nl', subject, body,
+                    folder='order-charge-notifications',
+                    sender='finance@vokomokum.nl')
 
-                return dict(order=order, action='done')
-        return dict(order=order, action='')
+            return dict(status='ok', msg='Created {} & updated {} transactions.'
+                                        'Charged {} times membership fee.'\
+                                        .format(created, updated,
+                                                len(first_orderers)))
+        except Exception, e:
+            return dict(status='error', msg="{}: {}".format(str(type(e)), str(e)))
 
 
 @view_config(renderer='json', route_name='mail-payment-reminders')
@@ -104,7 +137,14 @@ class MailPaymentReminders(BaseView):
         Send members an email about their negative balance.
         We keep copies of the mails in folders, by date.
         '''
+        sent = 0
         try:
+            if not self.user or\
+                (not 'Finance' in [wg.name for wg in self.user.workgroups]\
+                 and not self.user.mem_admin):
+                return dict(status='error', 
+                            msg='Only Finance people can do this.')
+ 
             session = DBSession()
             members = [m for m in session.query(Member).all() if m.balance < 0]
             now = datetime.datetime.now()
@@ -125,10 +165,12 @@ class MailPaymentReminders(BaseView):
                         deadline_nl=deadline_nl, deadline_en=deadline_en)
                 sendmail(m.mem_email, subject, body,
                         sender='finance@vokomokum.nl',
-                        folder='payment-reminders/{}'.format(),
+                        folder='payment-reminders/{}-{}-{}'\
+                               .format(deadline.year, deadline.month, deadline.day),
                         filename='MemberNo{}'.format(m.mem_id))
+                sent += 1
         except Exception, e:
-            return dict(status='error', msg=str(e))
-        return dict(status='ok', msg=u'Emails with payment reminders have been'\
-                                      ' to members.')
+            return dict(status='error', msg="{}: {}".format(str(type(e)), str(e)))
+        return dict(status='ok', msg=u'{} emails with payment reminders have been'\
+                                      ' sent to members.'.format(sent))
 

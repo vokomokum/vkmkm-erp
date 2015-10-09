@@ -11,7 +11,6 @@ import pytz
 from base import Base, VokoValidationError, DBSession
 from member import Member
 from supplier import Wholesaler, VersSupplier
-from orders import Order
 from members.utils.misc import ascii_save
 from members.utils.misc import month_info
 
@@ -97,8 +96,7 @@ class Transaction(Base):
     vers_id = Column(Integer, ForeignKey('vers_suppliers.id'), nullable=True)
     vers_supplier = relationship(VersSupplier)
     comment = Column(Unicode(500))
-    ord_no = Column(Integer, ForeignKey('wh_order.ord_no'), nullable=True)
-    order = relationship(Order, backref='transactions')
+    ord_no = Column(Integer, nullable=True)  # since 2015: order number in Foodsoft
     date = Column(DateTime)
     late = Column(Boolean, default=False)
 
@@ -175,9 +173,9 @@ class Transaction(Base):
            (self.member and self.vers_supplier):
             raise VokoValidationError('This transaction should not link to '\
                                       'both a member and a supplier.')
-        if self.ttype.name == 'Order Charge' and not self.order:
+        if self.ttype.name == 'Order Charge' and not self.ord_no:
             raise VokoValidationError('This Order Charge has no connected order.')
-        if self.ttype.name != 'Order Charge' and self.order:
+        if self.ttype.name != 'Order Charge' and self.ord_no:
             raise VokoValidationError('This transaction has a connected order, '\
                                       'but is not an Order Charge.')
            
