@@ -708,7 +708,7 @@ sub modes_234 {
 	$h->{mmm} = (defined($nv->{m})) ? 
 	    $nv->{m} : 5;
 	$sth->execute($h->{wh_whpri}, $h->{wh_btw}, 
-		      5, $h->{wh_wh_q});
+		      4, $h->{wh_wh_q});
 	my $mp = $sth->fetchrow_arrayref;
 	$h->{rec_pr} = $mp->[0];
 	$h->{mprice} =  sprintf "%.2f", $h->{rec_pr}/100.0;
