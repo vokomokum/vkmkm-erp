@@ -10,6 +10,7 @@ from members.models.transactions import get_ttypeid_by_name
 from members.models.base import DBSession
 from members.utils.mail import sendmail
 from members.utils.misc import membership_fee, ascii_save
+from members.utils.security import authenticated_user
 #from members.utils.graphs import orders_money_and_people
 
 @view_config(renderer='json', route_name='charge-members')
@@ -23,17 +24,20 @@ class ChargeMembers(BaseView):
         * user_id
         * order_id
         * amount > 0
-        * note
+        * note (optional)
 
         Returns JSON dict with status (ok|error) and a msg.
+        msg describes number of created, updated transactions and how
+        many membership fees were charged for first-time orderers.
         '''
         try:
             session = DBSession()
             charge_ttype_id = get_ttypeid_by_name('Order Charge')
-
-            if not self.user or\
-            (not 'Finance' in [wg.name for wg in self.user.workgroups]\
-                and not self.user.mem_admin):
+            # this endpoint is available from remote apps
+            user = authenticated_user(self.request, bypass_ip=True)
+            if not user or\
+            (not 'Finance' in [wg.name for wg in user.workgroups]\
+                and not user.mem_admin):
                 return dict(status='error', 
                             msg='Only Finance people can do this.')
             
@@ -51,11 +55,11 @@ class ChargeMembers(BaseView):
 
             # rule out non-positive amounts
             charges = [c for c in charges if c['amount'] > 0]
-            first_orderers = []
-
+            
             # now we make charges and also membership fees
             created = 0
             updated = 0
+            first_orderers = []
             for c in charges:
                 member = session.query(Member).get(c['user_id'])
                 if not member:
@@ -69,8 +73,9 @@ class ChargeMembers(BaseView):
                 if not comment:
                     comment = 'Automatically charged for order {}.'\
                               .format(c['order_id']) 
+                amount = float(c['amount'])
                 if not existing_order_charges:
-                    t = Transaction(amount=-1 * c['amount'], comment=comment)
+                    t = Transaction(amount=-1 * amount, comment=comment)
                     ttype = session.query(TransactionType)\
                                          .get(charge_ttype_id)
                     t.ttype = ttype
@@ -84,7 +89,7 @@ class ChargeMembers(BaseView):
                                         ' This should be fixed first!'\
                                         .format(c['user_id'], c['order_id']))
                     t = existing_order_charges[0]
-                    t.amount = -1 * c['amount']
+                    t.amount = -1 * amount
                     t.comment = comment
                     updated += 1
                 t.validate()
@@ -111,7 +116,6 @@ class ChargeMembers(BaseView):
             # updating graph data doesn't work anymore because we don't have orders in-house
             # orders_money_and_people()
             # inform membership about people who ordered for first time
-            print "FIRST ORDERERS:", first_orderers
             subject = 'First-time orderers'
             body = 'FYI: Below is a list of people who ordered for the'\
                     ' first time today. This mail was auto-generated.\n\n'
@@ -139,9 +143,11 @@ class MailPaymentReminders(BaseView):
         '''
         sent = 0
         try:
-            if not self.user or\
-                (not 'Finance' in [wg.name for wg in self.user.workgroups]\
-                 and not self.user.mem_admin):
+            # this endpoint is available from remote apps
+            user = authenticated_user(self.request, bypass_ip=True)
+            if not user or\
+                (not 'Finance' in [wg.name for wg in user.workgroups]\
+                 and not user.mem_admin):
                 return dict(status='error', 
                             msg='Only Finance people can do this.')
  
