@@ -130,7 +130,7 @@ class MailOrderCharges(BaseView):
             subject = 'Payment request / Verzoek tot betaling'
             mail_templ = open('members/templates/order_charge_txt.eml', 'r')
             mail = mail_templ.read()
-            body = mail.format(mem_id=m.mem_id, label=order.label, amount=m.balance,
+            body = mail.format(mem_id=m.mem_id, label=order.label, amount=round(m.balance, 2),
                        deadline_nl=deadline_nl, deadline_en=deadline_en)
             sendmail(m.mem_email, subject, body,
                         folder='order-charges/{}'.format(order.id),
