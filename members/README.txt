@@ -17,3 +17,9 @@ fab serve
 Running tests
 -------------------------------
 fab test
+
+Running version with dummy data as Docker container
+----------------------------------------------------
+
+docker pull nhoening/vokomokum-members
+docker run --name=vkmkm -d -p 6543:6543 vokomokum-members
