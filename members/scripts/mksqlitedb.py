@@ -185,12 +185,16 @@ def fillDBRandomly(seed, workgroups):
 
 def main():
     global dbname, DBSession
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 1 and sys.argv[1] != 'yy':
         dbname = sys.argv[1]
 
     if os.path.exists(dbname):
-        answ = raw_input('DB {} already exists. Delete it? [y/N]'.format(dbname))
-        if answ.lower() == 'y':
+        if "yy" in sys.argv:
+            rmdb = True
+        else:
+            answ = raw_input('DB {} already exists. Delete it? [y/N]'.format(dbname))
+            rmdb = answ.lower() == 'y'
+        if rmdb:
             os.remove(dbname)
         else:
             print "Aborted."

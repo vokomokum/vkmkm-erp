@@ -4,7 +4,6 @@ from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
-CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'pyramid==1.5a4',
@@ -22,7 +21,7 @@ requires = [
 setup(name='members',
       version='1.0',
       description='Vokomokum members application',
-      long_description=README + '\n\n' +  CHANGES,
+      long_description=README,
       classifiers=[
         "Programming Language :: Python",
         "Framework :: Pylons",
