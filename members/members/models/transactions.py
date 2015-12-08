@@ -96,7 +96,7 @@ class Transaction(Base):
     vers_id = Column(Integer, ForeignKey('vers_suppliers.id'), nullable=True)
     vers_supplier = relationship(VersSupplier)
     comment = Column(Unicode(500))
-    ord_no = Column(Integer, nullable=True)  # since 2015: order number in Foodsoft
+    ord_no = Column(Integer, nullable=True)  # since 2016: order number in Foodsoft
     date = Column(DateTime)
     late = Column(Boolean, default=False)
 

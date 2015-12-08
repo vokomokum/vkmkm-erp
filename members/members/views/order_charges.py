@@ -11,7 +11,6 @@ from members.models.base import DBSession
 from members.utils.mail import sendmail
 from members.utils.misc import membership_fee, ascii_save
 from members.utils.security import authenticated_user
-#from members.utils.graphs import orders_money_and_people
 
 @view_config(renderer='json', route_name='charge-members')
 class ChargeMembers(BaseView):
@@ -113,8 +112,6 @@ class ChargeMembers(BaseView):
                     mf.member = member
                     mf.validate()
                     session.add(mf)
-            # updating graph data doesn't work anymore because we don't have orders in-house
-            # orders_money_and_people()
             # inform membership about people who ordered for first time
             subject = 'First-time orderers'
             body = 'FYI: Below is a list of people who ordered for the'\

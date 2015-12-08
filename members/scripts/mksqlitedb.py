@@ -15,7 +15,6 @@ from members.models.workgroups import Workgroup
 from members.models.shift import Shift, shift_states
 from members.models.transactions import Transaction
 from members.models.transactions import TransactionType
-from members.models.orders import Order
 
 from members.utils.md5crypt import md5crypt
 from members.utils.misc import month_info
@@ -163,7 +162,6 @@ def fillDBRandomly(seed, workgroups):
                 
     # Finally: create 20 transactions per member
     ttype = DBSession.query(TransactionType).filter(TransactionType.name=='Order Charge').first()
-    orders = DBSession.query(Order).all()
     for m in members:
         for i in range(20):
             month = random.choice(months)
@@ -175,9 +173,7 @@ def fillDBRandomly(seed, workgroups):
             if ttype.pos_neg == 'neg':
                 t.amount *= -1
             if ttype.name == 'Order Charge':
-                o = random.choice(orders)
-                t.ord_no = o.id
-                t.order = o 
+                t.ord_no = random.choice([12,13,14,15,16])
             t.validate()
             DBSession.add(t)
         DBSession.flush()

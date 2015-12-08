@@ -4,7 +4,7 @@ from fabric.contrib.console import confirm
 '''
 This file is very useful in day-to-day Vokomokum development.
 It uses fabric to automate common actions. Install fabric by 
-$VIRPY/bin/pip install fabric
+pip install fabric
 
 Then it suffices to issue 
 fab develop         # develop the webapp locally
@@ -18,18 +18,17 @@ fab prepare_deploy  # run tests and if successful, push all code to git
 fab deploy:user=you # deploy latest code on our server and set it 'live'
                     # (you need admin rights for this on the server)
 
-Note: $VIRPY should point at your python environment (see INSTALL.txt)
 '''
 env.hosts = ['order.vokomokum.nl']
 #env.use_ssh_config = True # we may want this
 
 def develop():
     ''' develop the webapp locally '''
-    local('$VIRPY/bin/python setup.py develop')
+    local('python setup.py develop')
 
 def serve():
     ''' run local dev server '''
-    local('$VIRPY/bin/pserve development.ini --reload')
+    local('pserve development.ini --reload')
 
 def test(standalone=True):
     '''
@@ -38,10 +37,10 @@ def test(standalone=True):
     # Note: The setuptools environment is notorious for uninformative error messages 
     # when imports went bad. It will tell you which module is the problem, but only
     # say sthg about an AttributeError. Do this to find out what is wrong:
-    # $ $VIRPY/bin/python setup.py develop
-    # $ $VIRPY/bin/python -c "import members.tests.<The module in question>"
+    # $ python setup.py develop
+    # $ python -c "import members.tests.<The module in question>"
     with settings(warn_only=True):
-        result = local('$VIRPY/bin/python setup.py test -q', capture=False)
+        result = local('python setup.py test -q', capture=False)
     if result.failed and not standalone and not confirm("Tests failed. Continue anyway?"):
         abort("Aborting at user request.")
 

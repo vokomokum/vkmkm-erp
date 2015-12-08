@@ -29,7 +29,7 @@
                     Type:
                 </label>
                 <div class="col-sm-4">
-                    <select class="form-control" onchange="javascript:togglePartnerOrderSelect();"
+                    <select class="form-control" onchange="javascript:togglePartnerSelect();"
                             name="ttype_id" id="ttype-select">
                         <option value="--">--</option>
                         <tal:block tal:repeat="tt view.transaction_types">
@@ -83,7 +83,7 @@
                         <tal:block tal:condition="tt.mem_sup == 'whol'">wholesaler_types.push("${tt.id}");</tal:block>
                         <tal:block tal:condition="tt.mem_sup == 'vers'">vers_supplier_types.push("${tt.id}");</tal:block>
                         </tal:block>
-                        function togglePartnerOrderSelect(){
+                        function togglePartnerSelect(){
                             var sel = $('#ttype-select')[0];
                             var sel_ttid = sel.options[sel.selectedIndex].value;
                             var sel_txt = sel.options[sel.selectedIndex].innerHTML;
@@ -106,15 +106,10 @@
                                 $('#vers_supplier').show();
                             else
                                 $('#vers_supplier').hide();
-                            // also toggle the order selection for some type(s)
-                            if (sel_txt == 'Order Charge')
-                                $('#order-div').show();
-                            else
-                                $('#order-div').hide();
                         }
                         window.onload = function(){ //$ is not known yet (bottom of page)
                             // perform showing/hiding once
-                            togglePartnerOrderSelect();
+                            togglePartnerSelect();
                             // make sure we're empty (some browsers are too nice)
                             $('#mem-default-option').attr('selected', 'selected')
                                                     .removeAttr('selected');
@@ -122,20 +117,8 @@
                                                    .removeAttr('selected');
                             $('#vers-default-option').attr('selected', 'selected')
                                                      .removeAttr('selected');
-                            $('#order-default-option').attr('selected', 'selected')
-                                                      .removeAttr('selected');
                         };
                     </script>
-
-                    <label class="control-label col-sm-2" for="ord_no">Order:</label>
-                    <div class="col-sm-4">
-                        <select name="ord_no" id="order-select">
-                            <option id="order-default-option" value="--">--</option>
-                            <tal:block tal:repeat="o view.orders">
-                                <option value="${o.id}">${o.label}</option>
-                            </tal:block>
-                        </select>
-                    </div>
             </div>
 
             <div class="form-group">
@@ -235,7 +218,6 @@
             <th>Type</th>
             <th>Partner</th>
             <th width="110px">Amount</th>
-            <th>Order</th>
             <th>Day</th>
             <th>Comment</th>
             <th>Late</th>
@@ -291,14 +273,6 @@
                                             title="Edit, then press Enter/Return key to update." />
                     </div>
                 </form>
-            </td>
-            <td>
-                <a tal:condition="t.ttype.name == 'Order Charge'"
-                    class="btn btn-link"
-                   href="http://order.vokomokum.nl/cgi-bin/order?order_no=${t.ord_no}&amp;mem_id=${t.mem_id}"
-                   title="Click to see the details of this order (you might need to login)."
-                   tal:content="t.order.label">
-                </a>
             </td>
             <td tal:content="t.date.day">
             </td>

@@ -10,7 +10,6 @@ from members.models.member import Member, get_member
 from members.models.supplier import Wholesaler, VersSupplier
 from members.models.transactions import Transaction, TransactionType
 from members.models.transactions import get_transaction_sums
-from members.models.orders import Order
 from members.utils.misc import month_info
 
 
@@ -39,13 +38,6 @@ class BaseTransactionView(BaseView):
     def transaction_types(self):
         session = DBSession()
         return session.query(TransactionType).all()
-
-    @property
-    def orders(self):
-        ''' return a dict, with order IDs as keys and labels as values'''
-        session = DBSession()
-        return session.query(Order)\
-                    .order_by(desc(Order.completed)).all()
 
     def redir_to_list(self, year, month, msg='', show_list=False, tid=None):
         ''' redirect to list view '''
@@ -258,9 +250,6 @@ class EditTransaction(BaseTransactionView):
                 transaction.late = False
             msg = "Late-status of transaction was set to {}."\
                    .format(transaction.late)
-        if action == 'setorder':
-            transaction.ord_no = int(self.request.params['ord_no'])
-            msg = "order was set."
         transaction.validate()
         session.flush()
         return self.redir_to_list(transaction.date.year, transaction.date.month,

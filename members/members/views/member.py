@@ -2,10 +2,8 @@ from __future__ import unicode_literals
 
 from pyramid.view import view_config
 from sqlalchemy import asc, desc
-import datetime
 
 from members.models.member import Member, get_member
-from members.models.orders import Order, MemberOrder
 from members.models.base import DBSession
 from members.utils.misc import running_sqlite
 from members.views.base import BaseView
@@ -70,14 +68,8 @@ class MemberView(BaseView):
         msg = ''
         if 'msg' in self.request.params:
             msg = self.request.params['msg']
-        nov12 = datetime.datetime(2012, 11, 1)
-        orders = [MemberOrder(self.m, o) for o in session.query(Order)\
-                    .order_by(desc(Order.completed)).all()]
-        old_orders = [o for o in orders if o.amount > 0\
-                                      and str(o.order.completed).strip() != ''\
-                                      and str(o.order.completed) < str(nov12)]
         return dict(m=self.m, msg=msg, shifts=self.m.shifts,
-                    old_orders=old_orders, transactions=self.m.transactions)
+                    transactions=self.m.transactions)
 
 
 @view_config(renderer='../templates/edit-member.pt',

@@ -32,12 +32,9 @@ $ python virtualenv.py vopy
 If you downloaded it, you can remove that script now:
 $ rm virtualenv.py
 
-Also, from here on we denote the location of this environment as ``$VIRPY``, assuming that you store the location in a system variable. 
-$ export VIRPY=~/vopy
-Note: You might want to permanently assign the location you chose to ``VIRPY`` in a configuration file that is executed when the console is started (e.g. ``~/.bashrc`` or ``~/.profile``).
-Another note: If you want to configure the app for being served by Apache (most likely on a production setup), contents of the ``VIRPY` directory need to be executable by the Apache user. 
-We can now activate this python environment for the current console session (which has the same effect as adding the bins to your path, e.g. by doing ´export PATH=$VIRPY/bin/:$PATH´ but this way there will be no inteference with the rest of your system):
-$ source $VIRPY/bin/activate
+We can now activate this python environment for the current console session:
+$ cd vopy
+$ source bin/activate
 You should now see the name of the virtual environment in front of your console now, like this:
 [vopy] $
 Make sure you always activate your virtual environment, before you work with the web app in this local setup - otherwise, you might end up using different versions of these programs somewhere else on your computer, which can have any number of different outcomes (this kind of developer headache is what virtual environments are here to solve).
@@ -125,8 +122,6 @@ $ ./configure --with-python=/home/nic/vopy/bin/python
 $ make
 $ sudo make install
 (you can remove the downloaded file/directory later, once mod_wsgi has been installed in Apache)
-Note that I am not using the $VIRPY variable here to refer to the virtual environment location. I use the absolute path /home/nic/vopy in this example,
-because I haven't tested using $VIRPY yet (which would probably be better practice).
 
 2. Now make sure that Apache knows about mod_wsgi - add the following line to /etc/apache2/httpd.conf:
 ``LoadModule wsgi_module modules/mod_wsgi.so``
@@ -183,3 +178,5 @@ $ sudo /usr/sbin/apachectl restart
 
 Note: To make Apache aware of code updates, it is usually enough to touch the ´pyramid.wsgi´ file
 (see also the deploy command within ´fabfile.py´), so restarting Apache is usually not necessary.
+
+Another note: If you want to configure the app for being served by Apache (most likely on a production setup), contents of your python virtual environment directory (which we called vopy in this file) need to be executable by the Apache user. 
