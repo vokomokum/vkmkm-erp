@@ -177,9 +177,9 @@ sub process {
 	$h{omschrijving} .= " $inh $h{eenheid} ($aant per omdoos)";
 	$h{btw} = $btws[$h{btw}];
 	# hack around columds h, g, s
-	if ($h{H} =~ /^\s*$/) ( $h{H} = "0";}
-	if ($h{G} =~ /^\s*$/) ( $h{G} = "0";}
-	if ($h{S} =~ /^\s*$/) ( $h{S} = "0";}
+	if ($h{H} =~ /^\s*$/) { $h{H} = "0";}
+	if ($h{G} =~ /^\s*$/) { $h{G} = "0";}
+	if ($h{S} =~ /^\s*$/) { $h{S} = "0";}
 	$sth = prepare("SELECT put_dnb(?, " .  # prcode
                                  "?,  ?, " .   # supplier   barcode
                                  "?,  ?, " .   # descr      brand
