@@ -19,34 +19,34 @@ $ cd ~
 
 Now we get the standard python script that will set up the virtual python environment.
 If you have the ``virtualenv`` command, great. Do this:
-$ virtualenv vopy
+$ virtualenv --python python2.7 vopy
 
 If not, do this:
 $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
 Note that if you haven't got ``wget`` or if you have problems with the SSL certificate, you can also access this file with your browser and do a "Save as ..." to get the script.
 
 Also, make sure your virtual environment is built with the python you want. On some systems, several python interpreters are installed, for instance 2.6 and 2.7, or even two installations of the same version (e.g. Apples default vs a manual installation). 
-Here, we take the easy route: Simply saying "python" just uses the first in your path. Also, we call this environment ``vopy``, which makes virtualenv.py create a directory with that name:
-$ python virtualenv.py vopy
+Here, we are explicit and say "python2.7" ("python would just use the first in your path). Also, we call this environment ``vopy``, which makes virtualenv.py create a directory with that name:
+$ python2.7 virtualenv.py your_venv
 
 If you downloaded it, you can remove that script now:
 $ rm virtualenv.py
 
-Also, from here on we denote the location of this environment as ``$VIRPY``, assuming that you store the location in a system variable. 
-$ export VIRPY=~/vopy
-Note: You might want to permanently assign the location you chose to ``VIRPY`` in a configuration file that is executed when the console is started (e.g. ``~/.bashrc`` or ``~/.profile``).
-Another note: If you want to configure the app for being served by Apache (most likely on a production setup), contents of the ``VIRPY` directory need to be executable by the Apache user. 
-We can now activate this python environment for the current console session (which has the same effect as adding the bins to your path, e.g. by doing ´export PATH=$VIRPY/bin/:$PATH´ but this way there will be no inteference with the rest of your system):
-$ source $VIRPY/bin/activate
+We can now activate this python environment for the current console session (which has the same effect as adding the bins to your path, e.g. by doing ´export PATH=path/to/your_venv/bin/:$PATH´ but this way there will be no interference with the rest of your system):
+$ source path/to/your_venv/bin/activate
 You should now see the name of the virtual environment in front of your console now, like this:
-[vopy] $
+[your_venv] $
 Make sure you always activate your virtual environment, before you work with the web app in this local setup - otherwise, you might end up using different versions of these programs somewhere else on your computer, which can have any number of different outcomes (this kind of developer headache is what virtual environments are here to solve).
 
 
-Now we're ready to install some libraries into the virtual python environment, which our app will be using:
-$ pip install paste
-$ pip install fabric         # Unix/SSH scripting environment for Python, handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
-                             # if you don't install fabric, look inside the fabfile for the actual commands
+Now we're ready to install some libraries into the virtual python environment, which our app might be using:
+$ pip install fabric         # Unix/SSH scripting environment for Python,
+                             # handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
+                             # If you don't install fabric, look inside the fabfile for the actual commands
+
+If there is an error installing fabric, this might help (on Debian, adjust on other systems):
+$ sudo apt-get install libssl-dev
+
 $ pip install psycopg2       # Postgres wrapper for Python, install if you are creating a production(-like) system
                              # (otherwise, e.g. for development, you'd use sqlite3 which is built into python).
 
@@ -61,7 +61,7 @@ To get a clone you can commit back to the server as a member of the vokomokum
 dev team, you should do this:
 $ git clone git@git.assembla.com:vokomokum.git
 However, to authenticate with assembla, you need an assembla account and an
-authenticatioin setup. See here: https://www.assembla.com/code/vokomokum/git/repo/instructions
+authentication setup. See here: https://www.assembla.com/code/vokomokum/git/repo/instructions
 
 
 Develop the app 
@@ -75,7 +75,7 @@ Last step: Initialise the database
 ----------------------------------------------------------------------------------------------------
 If you want to simply create a test environment and if you are happy with some dummy data, then you'll need to install the sqlite database software.
 
-For example, on Debian-based LInux (e.g. Ubuntu):
+For example, on Debian-based Linux (e.g. Ubuntu):
 
 $ sudo apt-get install sqlite3
 
@@ -83,7 +83,7 @@ On OSX, you might use MacPorts for this.
 
 Then, all you need to do is:
 
-$ python scripts/mksqlitedb.py
+$ fab populate
 
 This will create an sqlite database and fill it with some data, so you can start. You may skip to the next step.
 
@@ -106,7 +106,7 @@ If you ran the mksqlitedb script in the step above, you can log in with ID 3 and
 This is a convenient way to test if everything is there.
 To stop the server, do a CTRL-C.
 
-Note that the serve command loads development.ini by default (because the local server is usually used for testing).
+Note that the fab serve command loads development.ini by default (because the local server is usually used for testing).
 You can change that (in the fabfile) if you need production.ini.
 
 
@@ -125,12 +125,11 @@ $ ./configure --with-python=/home/nic/vopy/bin/python
 $ make
 $ sudo make install
 (you can remove the downloaded file/directory later, once mod_wsgi has been installed in Apache)
-Note that I am not using the $VIRPY variable here to refer to the virtual environment location. I use the absolute path /home/nic/vopy in this example,
-because I haven't tested using $VIRPY yet (which would probably be better practice).
+Note that I my virtual environment is called "vopy" here.
 
 2. Now make sure that Apache knows about mod_wsgi - add the following line to /etc/apache2/httpd.conf:
 ``LoadModule wsgi_module modules/mod_wsgi.so``
-Or, on OSX 10.6:
+Or, on OSX (tested on 10.6, so this might be outdated):
 ``LoadModule wsgi_module libexec/apache2/mod_wsgi.so``
 
 3. Restart the Apache server
