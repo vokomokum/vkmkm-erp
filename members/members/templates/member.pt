@@ -91,7 +91,7 @@
             </div>
 	</div>	
 	
-	<div id="transactions" class="panel panel-default" tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in view.user.workgroups or 'Membership' in view.user.workgroups">
+	<div id="transactions" class="panel panel-default" tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in [wg.name for wg in view.user.workgroups] or 'Membership' in [wg.name for wg in view.user.workgroups]">
 		<div class="panel-heading">
 			<h2 class="panel-title">Transactions</h2>
 		</div>
@@ -124,7 +124,7 @@
 		</table>
 	</div>
 	
-	<div class="panel panel-default" tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in view.user.workgroups or 'Membership' in view.user.workgroups">
+	<div class="panel panel-default" tal:condition="python: view.user.mem_id == m.mem_id or view.user.mem_admin or 'Finance' in [wg.name for wg in view.user.workgroups] or 'Membership' in [wg.name for wg in view.user.workgroups]">
             <div class="panel-heading">
                 <h2 class="panel-title">Orders before Nov 2012</h2>
             </div>

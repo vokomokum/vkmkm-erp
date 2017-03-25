@@ -11,10 +11,10 @@
         <tal:block tal:condition="not: action">
             No known action given.
         </tal:block>
-        <tal:block tal:condition="python: not view.user.mem_admin and not 'Finance' in view.user.workgroups">
+        <tal:block tal:condition="python: not view.user.mem_admin and not 'Finance' in [wg.name for weg in view.user.workgroups] and not 'Membership' in [wg.name for wg in view.user.workgroups]">
             You have no right to use this page.
         </tal:block>
-        <tal:block tal:condition="python: view.user.mem_admin or 'Finance' in view.user.workgroups or 'Membership' in view.user.workgroups">
+        <tal:block tal:condition="python: view.user.mem_admin or 'Finance' in [wg.name for wg in view.user.workgroups] or 'Membership' in [wg.name for wg in view.user.workgroups]">
             <tal:block tal:condition="action == 'show'">
                 <h3>These are the charges I would make:</h3>
 

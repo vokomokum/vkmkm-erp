@@ -7,21 +7,29 @@
 
     <h1>Documents <tal:block tal:condition="cur_folder != ''">: ${cur_folder}</tal:block></h1>
 
-    <a tal:condition="cur_folder != ''" href="${portal_url}/docs/${cur_folder}/..">one level up</a>
-    <br/>
-    <br/>
+    <div tal:condition="cur_folder != ''">
+        <a class="btn btn-link" href="${portal_url}/docs/${cur_folder}/..">
+            <span class="glyphicon glyphicon-arrow-up"></span>  Go one level up</a>
+        <br/>
+    </div>
 
-    <div tal:repeat="folder folders">
+    <tal:block tal:condition="python: cur_folder != '' and 'Docs' in [wg.name for wg in view.user.workgroups]">
+        <a class="btn btn-link" href="${portal_url}/file-upload-form?path=${cur_folder}"><span class="glyphicon glyphicon-plus-sign"></span> upload a document</a>
+        <br/>
+        <br/>
+    </tal:block>
+
+    <div tal:repeat="folder folders" style="">
         <div class="folder">
             <a href="${portal_url}/docs/${cur_folder}/${folder}">
             	<span class="glyphicon glyphicon-folder-close"></span>  ${folder}</a>
         </div>
     </div>
-    <ul>
-        <li class="file" tal:repeat="file files">
-            <a href="${portal_url}/doc/${cur_folder}/${file}">${file}</a>
-        </li>
-    </ul>
+    <div tal:repeat="file files">
+        <a href="${portal_url}/doc/${cur_folder}/${file}">
+            <span class="glyphicon glyphicon-file"></span>  ${file}</a>
+        <!--a tal:condition="python: 'Docs' in [wg.name for wg in view.user.workgroups]" href="${portal_url}/docs/delete?path=${cur_folder}/${file}"><span class="glyphicon glyphicon-remove"></span> Delete</a-->
+    </div>
    
 
         </div>

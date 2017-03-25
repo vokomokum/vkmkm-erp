@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <div metal:use-macro="view.layout.macros['master']">
+        <div metal:fill-slot="content">
+
+
+        <h1>Uploading a new document to docs/${cur_folder}</h1>
+
+        <div tal:condition="python: 'Docs' not in [wg.name for wg in view.user.workgroups]">
+            Only members of the Docs workgroup can upload documents.
+        </div>
+
+        <br/>
+        <br/>
+        <form tal:condition="python: 'Docs' in [wg.name for wg in view.user.workgroups]"
+            action="/docs/${cur_folder}" method="post" accept-charset="utf-8"
+            enctype="multipart/form-data">
+
+            <!-- TODO: make some restrictions here? Or at least explanations? -->
+            <input type="hidden" name="path" value="${cur_folder}" />
+             
+            <input id="doc" name="new_doc" type="file" value="" />
+            <small>(.txt, .pdf, .odt, .doc, .docx)</small>
+            <br/>
+            <br/>
+            <input type="submit" value="Upload" />
+        </form>
+        
+        </div>
+    </div>
+</html>
