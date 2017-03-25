@@ -30,7 +30,7 @@ else
 fi
 
 # make ourselves a nice copy to deploy from
-if [ -e git-repo ];
+if [ -e git-repo-tmp ];
 then
     /usr/bin/sudo rm -r git-repo-tmp
 fi
