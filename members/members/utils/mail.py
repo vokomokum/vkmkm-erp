@@ -46,7 +46,8 @@ Subject: %s
             mailer.stdin.close()
             result = mailer.wait()
             error = mailer.stderr.read()
-            assert(result == 0)  # specific to exim?
+            if result != 0:  # specific to exim?
+                raise Exception(error)
         # save a copy if mailing succeeded (or if we used the workaround)
         target_folder = '{}/{}'.format(mail_folder, folder)
         if not os.path.exists(target_folder):
