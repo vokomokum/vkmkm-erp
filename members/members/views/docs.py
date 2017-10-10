@@ -92,7 +92,10 @@ class DocsListView(BaseView):
 
         # Handle eventual upload
         if 'new_doc' in self.request.POST:
-            msg = upload_file(self.request, folder_full_path)
+            if "Docs" in [wg.name for wg in self.user.workgroups]:
+                msg = upload_file(self.request, folder_full_path)
+            else:
+                msg = "Only members of the Docs wokgroup can upload documents!"
 
         # Build a dict with filenames in each subdirectory
         files = [urllib.quote(f) for f in os.listdir(folder_full_path)\
