@@ -133,7 +133,7 @@ sub process {
     my $cols = make_col_hash($fh, $dnb);
     my $newkey = get_file_key($fh, $dnb, $config, $dbh);
     my $line = 1;
-    my @btws = (0, 6, 21);
+    my @btws = (0, 9, 21);
     
     # get the timestamp we will use
     my %h;
