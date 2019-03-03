@@ -180,7 +180,7 @@ sub get_products {
     my %pr_hr;
 
     get_cats(\%categories, \%cat_descs, \%sc_descs, $dbh);
-    my $sth = prepare( 'SELECT * FROM product WHERE pr_active', $dbh );
+    my $sth = prepare( 'SELECT * FROM product WHERE pr_active and pr_wh != 1', $dbh );
     $sth->execute;
 
     while ( my $h = $sth->fetchrow_hashref ) {
@@ -616,14 +616,8 @@ sub print_html {
 
 	$h->{sh_color} = ($h->{short}) ? 'bgcolor="pink"><B' : '';
     	my $tplr = new CGI::FastTemplate( $config->{templates} );
-	my $url_temp = "common/dnb_url.template";
-	if ( $h->{pr_wh} == $config->{DNB}->{dnb_wh_id} ) {
-            if ( $h->{wh_prcode} < 10000 ) {
-                $h->{PID} = sprintf "%04.4d", $h->{wh_prcode};
-            } else {
-		$h->{PID} =  $h->{wh_prcode};
-	    }
-	} elsif($h->{pr_wh} == $config->{ZAPATISTA}->{zap_wh_id}) {
+	my $url_temp = "common/zap_url.template";
+        if($h->{pr_wh} == $config->{ZAPATISTA}->{zap_wh_id}) {
 	    $url_temp = "common/zap_url.template";
 	    $h->{wh_url} = $config->{ZAPATISTA}->{$h->{pr_id}};
 	} elsif($h->{pr_wh} == $config->{BG}->{bg_wh_id} and 
