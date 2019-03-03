@@ -13,7 +13,6 @@
         <li>[<a href="/cgi-bin/adm_view_memord.cgi">View member order</a>]</li>
         <li>[ <a href="/cgi-bin/who_ordered.pm">Who ordered this product?</a> ]</li>
         <li>[<a href="/cgi-bin/adm_ord_status.cgi">Change order status</a>]<br /></li>
-        <li>[<a href="/cgi-bin/adm_dnb.cgi">DNB products</a>]</li>
         <li>[<a href="/cgi-bin/adm_zap.cgi">Zapatista Coffee products</a>]</li>
         <li>[<a href="/cgi-bin/adm_bg.cgi">Bijenpark Geuzenveld products</a>]</li>
         <li>[<a href="/cgi-bin/adm_bclub.cgi">Bubble Club products</a>]</li>
