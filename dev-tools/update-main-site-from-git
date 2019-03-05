@@ -10,7 +10,7 @@ then
   cd ..
 else
   echo Checking out code into git-repo ...
-  git clone https://github.com/vokomokum/members
+  git clone https://github.com/vokomokum/vkmkm-erp git-repp
 fi
 
 cp -r git-repo git-repo-tmp
