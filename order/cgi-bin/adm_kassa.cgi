@@ -798,7 +798,7 @@ sub state_2 {
 	$tpl = new CGI::FastTemplate($config->{templates});
 	$tpl->strict;
 	my $url_temp = "common/zap_url.template";
-        sif($h->{pr_wh} == $config->{ZAPATISTA}->{zap_wh_id}) {
+        if($h->{pr_wh} == $config->{ZAPATISTA}->{zap_wh_id}) {
 	    $url_temp = "common/zap_url.template";
 	    $h->{wh_url} = $config->{ZAPATISTA}->{$h->{pr_id}};
 	} elsif($h->{pr_wh} == $config->{BG}->{bg_wh_id} and 
@@ -968,7 +968,7 @@ sub state_5 {
 	$tpl = new CGI::FastTemplate($config->{templates});
 	$tpl->strict;
 	my $url_temp = "common/zap_url.template";
-        sif($h->{pr_wh} == $config->{ZAPATISTA}->{zap_wh_id}) {
+        if($h->{pr_wh} == $config->{ZAPATISTA}->{zap_wh_id}) {
 	    $url_temp = "common/zap_url.template";
 	    $h->{wh_url} = $config->{ZAPATISTA}->{$h->{pr_id}};
 	} else {
