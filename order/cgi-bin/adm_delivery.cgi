@@ -313,7 +313,6 @@ sub print_html {
 	    }
 	    $last_whn = $h->{wh_no};
 	    if(1) {
-#	    if($h->{wh_no} == $config->{DNB}->{dnb_wh_id}) {
 		my $ord_date = ($ord_no == $current_no) ?
 		    $cur_label : $config->{labels}->{$ord_no};
 		$fn = "/orders/WH-$h->{wh_no}-$ord_date.txt";

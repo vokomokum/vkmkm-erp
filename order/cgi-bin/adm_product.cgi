@@ -153,22 +153,9 @@ sub do_changes {
 	$h->{mem_price} = sprintf "%0.2f", $h->{pr_mem_price} / 100.0;
 	$h->{wh_price} = sprintf "%0.2f", $h->{pr_wh_price} / 100.0;
 	$h->{active} = ($h->{pr_active}) ? "Yes" : "No";
-	if($h->{pr_wh} == $config->{DNB}->{dnb_wh_id}) {
-	    if($h->{wh_prcode} < 10000) {
-		$h->{PID} = sprintf "%04.4d", $h->{wh_prcode};
-	    } else {
-		$h->{PID} = $h->{wh_prcode};
-	    }
-	    $tplr->define(row => $config->{row},
-			  url => "common/dnb_url.template");
-	    $tplr->assign($h);
-	    $tplr->parse("URL", "url");
-	} else {
-	    $h->{URL} = "";
-	    $tplr->define(row => $config->{row});
-	    $tplr->assign($h);
-	}
-
+        $h->{URL} = "";
+        $tplr->define(row => $config->{row});
+        $tplr->assign($h);
 
 	$tplr->parse(MAIN => "row");
 	$tplr->print();
