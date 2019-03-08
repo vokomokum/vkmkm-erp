@@ -1,1 +1,0 @@
-jQuery(document).ready(function(){faviconLoader()});(function(a){faviconLoader=function(){a.each(Aiofavicon,function(c,d){var e='<img src="'+d+'" />';var b="#"+c+"-favicon";a(b).empty().html(e).fadeIn()})}})(jQuery);

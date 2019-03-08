@@ -1,6 +1,0 @@
-#!/bin/bash
-scp nh:/www/htdocs/w00e4765/vk.nh.de/wp.tar.gz .
-tar -zxf wp.tar.gz
-rm wp.tar.gz
-rm -r usage
-rm wp-config.php
