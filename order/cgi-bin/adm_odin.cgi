@@ -256,12 +256,12 @@ sub get_vars {
     if($config->{choice} == 1) {
 	foreach $wid (@updates) {
 	    next if(not defined($inputs{$wid}->{s}));
-	    my $dnbst = prepare("SELECT wh_wh_q, wh_btw, wh_whpri, ".
+	    my $odinst = prepare("SELECT wh_wh_q, wh_btw, wh_whpri, ".
 				"wh_prcode, wh_descr FROM odindata ".
 				"WHERE wh_pr_id = ?", $dbh);
-	    $dnbst->execute($wid);
-	    my $h = $dnbst->fetchrow_hashref;
-	    $dnbst->finish;
+	    $odinst->execute($wid);
+	    my $h = $odinst->fetchrow_hashref;
+	    $odinst->finish;
 	    next if(not defined($h));
 	    my $sth = prepare("UPDATE product SET pr_margin = ?, ".
 			      "pr_mem_price = ?, pr_desc = ?, ".
@@ -336,7 +336,7 @@ sub get_vars {
 		    not defined($inputs{$wid}->{i}));
 	    my $inp = $inputs{$wid};
 	    next if($inp->{i} !~ /A/i);
-	    my $dnbst = prepare("SELECT wh_wh_q, wh_btw, wh_whpri, ".
+	    my $odinst = prepare("SELECT wh_wh_q, wh_btw, wh_whpri, ".
 				"wh_prcode, wh_descr FROM odindata ".
 				"WHERE wh_pr_id = ?", $dbh);
 	    $odinst->execute($wid);
@@ -346,7 +346,7 @@ sub get_vars {
 	    next if(not defined($h));
 	    $do_commit = 1;
 	    $ins_sth->execute($inp->{c}, 99999, 
-			      $config->{DNB}->{dnb_wh_id}, $h->{wh_wh_q}, 
+			      $config->{Odin}->{odin_wh_id}, $h->{wh_wh_q}, 
 			      $inp->{m}, $inp->{q}, 
 			      $h->{wh_whpri}, $inp->{d}, $wid, $h->{wh_descr},
 			      $h->{wh_btw}, $inp->{p});
@@ -401,7 +401,7 @@ sub do_dropped_products {
 
     my $tpl = new CGI::FastTemplate($config->{templates});
     $tpl->strict();
-    $tpl->define( header  => "adm_odin/adm_dnb_m1_dropped.template",
+    $tpl->define( header  => "adm_odin/adm_odin_m1_dropped.template",
 	);
     $tpl->assign({});
     $tpl->parse(MAIN => "header");
@@ -633,7 +633,7 @@ sub modes_234 {
 
 }
 
-# display edit rows for selected DNB products
+# display edit rows for selected Odin products
 sub modes_101112 {
     my ($new_vals, $odin_hash, $config, $cgi, $dbh) = @_;
     my $sth = prepare("SELECT min_price(?, ?, ?, ?)", $dbh);

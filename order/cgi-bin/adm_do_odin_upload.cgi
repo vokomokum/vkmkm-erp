@@ -237,7 +237,7 @@ sub doit {
     my $buttons = {}; # 
     $tpl->define( header         => "common/header.template",
                   banner         => "common/adm-banner.template",
-		  buttons        => "adm_do_odin_upload/adm_dnb_file_done.template",
+		  buttons        => "adm_do_odin_upload/adm_odin_file_done.template",
 	);
     my %hdr_h =(  Pagename       => 'Odin File Processing Complete',
 		  Title          => 'Odin File Processing Complete',
