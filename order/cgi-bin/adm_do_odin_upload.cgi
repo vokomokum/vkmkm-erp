@@ -50,11 +50,10 @@ my $tstamp;
 sub make_col_hash {
     my ($fh, $odin) = @_;
     my $line = <$fh>;
-
     die("file $odin appears to be empty") if(not defined($line));
     
     die("$odin does not look like a Odin product file - no bestelnummer column") 
-	if($line !~ /\tbestelnummer\t/);
+	if($line !~ /^bestelnummer\t/);
     my %col_names;
     # trim any cruft off the end
     $line =~ s/\s+$//;
@@ -88,8 +87,12 @@ sub check_unique_file {
         $h = $sth->fetchrow_hashref;
         $sth->finish;
     };
-    if(not $dbh->err) {
+    if($dbh->err) {
+	my $m = $@;
 	$dbh->disconnect;
+	die ("Can't select from odin_md5s: $m");
+    }
+    if(defined($h)) {
 	die ("This file has already been processed");
     }
     $sth = prepare('INSERT INTO odin_md5s (md5sum, date_seen) VALUES (?, LOCALTIMESTAMP)', $dbh);
@@ -99,15 +102,16 @@ sub check_unique_file {
         $sth->finish;
         $dbh->commit;
         $sth = prepare('SELECT date_seen FROM odin_md5s where md5sum = ?', $dbh);
+	$sth->execute($digest);
         $a = $sth->fetchrow_arrayref;
         $tstamp = $a->[0];
-        $tstamp =~ s/\+.*//;
+        #$tstamp =~ s/\+.*//;
     };
     if($dbh->err) {
+	my $m = $@;
 	$dbh->disconnect;
-	die ("Can't record md5 digest in odin_md5s");
+	die ("Can't record md5 digest in odin_md5s: $m");
     }
-    
 }
 
 sub process {
@@ -128,7 +132,7 @@ sub process {
     my $junk = <$fh>;
     $junk =  <$fh>;
     my $cols = make_col_hash($fh, $odin);
-    check_unique_file($odin, $dbh);
+    check_unique_file($fh, $odin, $config, $dbh);
     my $line = 1;
     my %h;
 
@@ -144,7 +148,9 @@ sub process {
 	for(my $i = 0; $i < scalar(@data); ++$i) {
 	    $h{$cols->{$i}} = $data[$i];
 	}
-        next if($h{status} == "Non actief");
+        if($h{status} =~ /Non actief/i) {
+            next;
+        }
 	$h{bestelnummer} =~ s/^\s0*//;
 	$h{bestelnummer} = int($h{bestelnummer});
 	$h{kassaomschrijving} .= " [$h{merk}]" if($h{merk} ne '');
@@ -160,13 +166,16 @@ sub process {
 	};
 	$aant = int($aant);
         if($aant > 1) {
-            $h{kassaomschrijving} .= " $inh $h{eenheid} ($aant per $h{verpakkingce})";
+            if($h{verpakkingce} != "") {
+                $h{kassaomschrijving} .= " $inh $h{eenheid} ($aant X $h{verpakkingce})";
+            } else {
+                $h{kassaomschrijving} .= " $inh $h{eenheid} ($aant per order)";
+            }
         } elsif($h{verpakkingce} != "") {
             $h{kassaomschrijving} .= " $inh $h{eenheid} ($h{verpakkingce})";
         } else {
             $h{kassaomschrijving} .= " $inh $h{eenheid})";
         }
-
 	my $sth = prepare("SELECT put_odin(?, " .  # prcode
                                  "?, " .       # supplier  
                                  "?,  ?, " .   # descr      brand
@@ -174,24 +183,24 @@ sub process {
                                  "?,  ?, " .   # wh_q       unit
                                  "?, " .       # whpri
                                  "?, " .       # btw 
-                                 "?)",         # tstmp
+                                 "?)",         # tstamp
 		       $dbh);
-	    eval {
-		$sth->execute( $h{bestelnummer},  
-			       $h{leverancier},  
-			       $h{kassaomschrijving}, $h{merk},
-			       $inh,
-			       $aant,    	 $h{eenheid},
-			       $h{wh_pri},
-			       $h{btw},
-                               $tstamp);
-	    };
-	    if($dbh->err) {
-		my $m = $@;
-		$dbh->rollback;
-		$dbh->disconnect;
-		die("odin file line $line: $m");
-	    }
+        eval {
+            $sth->execute( $h{bestelnummer},  
+                           $h{leverancier},  
+                           $h{kassaomschrijving}, $h{merk},
+                           $inh,
+                           $aant,    	 $h{eenheid},
+                           $h{wh_pri},
+                           $h{btw},
+                           $tstamp);
+        };
+        if($dbh->err) {
+            my $m = $@;
+            $dbh->rollback;
+            $dbh->disconnect;
+            die("odin file line $line: $m");
+        }
     }
 
     my $sth = prepare(
@@ -274,7 +283,7 @@ sub main {
     $mem_id = test_cookie(0, $config, $cgi, $dbh)
 	if(($mem_id = process_login_data(0, $config, $cgi, $dbh)) < 0);
 
-    syslog(LOG_ERR, "welcome - >$mem_id<");
+    #syslog(LOG_ERR, "welcome - >$mem_id<");
 
     doit($config, $cgi, $dbh);
 

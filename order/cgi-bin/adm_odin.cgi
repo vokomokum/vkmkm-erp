@@ -65,12 +65,12 @@ sub get_stats {
     my (@voko_changed, @voko_dropped, @voko_same, @new_odin, 
 	@odin_maybe, @odin_all);
 
-      if($config->{choice} == 0) {
-    # 	$sth = prepare("UPDATE odindata SET is_seen = 'f'", $dbh);
-    # 	$sth->execute;
-    # 	$sth->finish;
+    if($config->{choice} == 0) {
+        # 	$sth = prepare("UPDATE odindata SET is_seen = 'f'", $dbh);
+        # 	$sth->execute;
+        # 	$sth->finish;
     }
-    # make sure the is_product flag are correctly set
+    # make sure the is_product flag is correctly set
     $sth = prepare("UPDATE odindata SET is_product = (wh_prcode IN " .
 		   "(SELECT wh_prcode FROM product WHERE pr_wh = ?))", $dbh);
     $sth->execute($config->{ODIN}->{odin_wh_id});
@@ -87,7 +87,6 @@ sub get_stats {
     $config->{penult} = $penult;
     $config->{penult} =~ s/\+.*//;
     $sth->finish;
-
     # step through the products
     $sth = prepare("SELECT * from odin_products ORDER BY wh_pr_id", $dbh);
     $sth->execute;
@@ -101,7 +100,7 @@ sub get_stats {
 		$h->{$k} = $nv->{$k};
 	    }
 	}
-	if(defined($h->{pr_id})) {
+	if($h->{is_product}) {
 	    # it's in the voko product list
 	    if(not $h->{pr_active}) {
 		# no longer an active product, but was dropped 
@@ -154,15 +153,17 @@ sub get_stats {
 	push @odin_all, $h;
 	# display as new product unless already classified
 	if($h->{wh_last_seen} eq $newest and $h->{wh_prev_seen} eq $newest
-	    and not $h->{is_seen}) {
+           and not $h->{is_seen}) {
 	    push @new_odin, $h;
 	}
 	next if($h->{is_seen});
 	push @odin_maybe, $h if(not $h->{is_skipped});
     }
     $sth->finish;
+    
     return (\@voko_changed, \@voko_dropped, \@voko_same, 
-	    \@new_odin, \@odin_maybe, \@odin_all);}
+	    \@new_odin, \@odin_maybe, \@odin_all);
+}
 
 
 # see if we know what mode we're in
@@ -193,7 +194,7 @@ sub get_mode {
 
 sub get_choice {
     my ($voko_changed, $voko_dropped, $voko_same, 
-	    $new_odin, $odin_maybe, $odin_all, $config, $cgi, $dbh) = @_;
+        $new_odin, $odin_maybe, $odin_all, $config, $cgi, $dbh) = @_;
     my $tpl = new CGI::FastTemplate($config->{templates});
     $tpl->strict();
     my $buttons = {}; # 
@@ -257,8 +258,8 @@ sub get_vars {
 	foreach $wid (@updates) {
 	    next if(not defined($inputs{$wid}->{s}));
 	    my $odinst = prepare("SELECT wh_wh_q, wh_btw, wh_whpri, ".
-				"wh_prcode, wh_descr FROM odindata ".
-				"WHERE wh_pr_id = ?", $dbh);
+                                 "wh_prcode, wh_descr FROM odindata ".
+                                 "WHERE wh_pr_id = ?", $dbh);
 	    $odinst->execute($wid);
 	    my $h = $odinst->fetchrow_hashref;
 	    $odinst->finish;
@@ -268,7 +269,7 @@ sub get_vars {
 			      "pr_wh_q = ?, pr_btw = ?, pr_wh_price = ?,".
 			      "wh_desc = ? ".
 			      "WHERE pr_id = (SELECT pr_id FROM ".
-			      "product where wh_prcode = ?)", $dbh);
+			      "product where wh_prcode = ? and pr_wh = 6)", $dbh);
 	    $sth->execute($inputs{$wid}->{m},
 			  $inputs{$wid}->{p},
 			  $inputs{$wid}->{d},
@@ -328,8 +329,8 @@ sub get_vars {
 
 
 	my $odinst = prepare("SELECT wh_wh_q, wh_btw, wh_whpri, ".
-			    "wh_prcode, wh_descr FROM odindata ".
-			    "WHERE wh_pr_id = ?", $dbh);
+                             "wh_prcode, wh_descr FROM odindata ".
+                             "WHERE wh_pr_id = ?", $dbh);
 
 	foreach $wid (@updates) {
 	    next if(not defined($inputs{$wid}) or 
@@ -337,8 +338,8 @@ sub get_vars {
 	    my $inp = $inputs{$wid};
 	    next if($inp->{i} !~ /A/i);
 	    my $odinst = prepare("SELECT wh_wh_q, wh_btw, wh_whpri, ".
-				"wh_prcode, wh_descr FROM odindata ".
-				"WHERE wh_pr_id = ?", $dbh);
+                                 "wh_prcode, wh_descr FROM odindata ".
+                                 "WHERE wh_pr_id = ?", $dbh);
 	    $odinst->execute($wid);
 	    my $h = $odinst->fetchrow_hashref;
 	    $odinst->finish;
@@ -364,7 +365,7 @@ sub get_vars {
 	    if(defined($inputs{$wid}->{s}) and $inputs{$wid}->{s} =~ /A/i);
     }
     return \%inputs;
-	
+    
 }
 
 # html_header common routine
@@ -385,7 +386,7 @@ sub html_header {
 		  penult         => $config->{penult},
 		  mem_name       => $config->{mem_name},
 		  mem_id         => $mem_id,
-		  );
+        );
 
     $tpl->assign(\%hdr_h);
     $tpl->parse(BUTTONS => "buttons");
@@ -600,9 +601,9 @@ sub modes_234 {
 	$h->{p_desc} = escapeHTML($h->{wh_descr});
 	$h->{pr_whpri} = sprintf "%.2f", $h->{pr_wh_price}/100.0;
 	$h->{DROP} = make_dropdown(((defined($nv->{c})) ? 
-			    $nv->{c} : 99999), \%categories);
+                                    $nv->{c} : 99999), \%categories);
 	$h->{qqq} = (defined($nv->{q})) ? 
-		   $nv->{q} : 1;
+            $nv->{q} : 1;
 	$h->{mmm} = (defined($nv->{m})) ? 
 	    $nv->{m} : 5;
 	$sth->execute($h->{wh_whpri}, $h->{wh_btw}, 
@@ -648,9 +649,9 @@ sub modes_101112 {
 				  $nv->{d} : $h->{wh_descr});
 	$h->{pr_whpri} = sprintf "%.2f", $h->{pr_wh_price}/100.0;
 	$h->{DROP} = make_dropdown(((defined($nv->{c})) ? 
-			    $nv->{c} : 99999), \%categories);
+                                    $nv->{c} : 99999), \%categories);
 	$h->{qqq} = (defined($nv->{q})) ? 
-		   $nv->{q} : 1;
+            $nv->{q} : 1;
 	$h->{mmm} = (defined($nv->{m})) ? 
 	    $nv->{m} : 5;
 	$sth->execute($h->{wh_whpri}, $h->{wh_btw}, 
@@ -658,7 +659,7 @@ sub modes_101112 {
 	my $mp = $sth->fetchrow_arrayref;
 	$h->{rec_pr} = $mp->[0];
 	$h->{mprice} =  sprintf "%.2f", ((defined($nv->{p})) ?
-				$nv->{p} : $h->{rec_pr})/100.0;
+                                         $nv->{p} : $h->{rec_pr})/100.0;
 	$h->{w_price} = sprintf "%.2f", $h->{wh_whpri}/100.0;
 	$h->{sss} = (defined($nv->{i})) ? 
 	    $nv->{i} : '';
@@ -713,8 +714,8 @@ sub doit {
     my $new_vals = get_vars($config, $cgi, $dbh);
 
     my ($voko_changed, $voko_dropped, $voko_same, 
-	    $new_odin, $odin_maybe, $odin_all) = 
-		get_stats($new_vals, $config, $cgi, $dbh);
+        $new_odin, $odin_maybe, $odin_all) = 
+            get_stats($new_vals, $config, $cgi, $dbh);
     
     get_choice($voko_changed, $voko_dropped, $voko_same, 
 	       $new_odin, $odin_maybe, $odin_all, $config, $cgi, $dbh) 
@@ -729,7 +730,7 @@ sub doit {
 	if(($config->{choice} & ~8)== 4);
     mode_5($config, $cgi, $dbh) if($config->{choice} == 5);
 }
-    
+
 
 sub main {
     my $program = $0;
