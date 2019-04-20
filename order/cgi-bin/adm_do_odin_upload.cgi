@@ -166,12 +166,12 @@ sub process {
 	};
 	$aant = int($aant);
         if($aant > 1) {
-            if($h{verpakkingce} != "") {
+            if(defined($h{verpakkingce}) and $h{verpakkingce} !~ /^$/) {
                 $h{kassaomschrijving} .= " $inh $h{eenheid} ($aant X $h{verpakkingce})";
             } else {
                 $h{kassaomschrijving} .= " $inh $h{eenheid} ($aant per order)";
             }
-        } elsif($h{verpakkingce} != "") {
+        } elsif(defined($h{verpakkingce})  and $h{verpakkingce} !~ /^$/) {
             $h{kassaomschrijving} .= " $inh $h{eenheid} ($h{verpakkingce})";
         } else {
             $h{kassaomschrijving} .= " $inh $h{eenheid})";
