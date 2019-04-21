@@ -83,9 +83,9 @@ sub get_stats {
     $a = $sth->fetchrow_arrayref;
     my ($newest, $penult) = @{$a};
     $config->{newest} = $newest;
-    $config->{newest} =~ s/\+.*//;
+    $config->{newest} =~ s/\..*//;
     $config->{penult} = $penult;
-    $config->{penult} =~ s/\+.*//;
+    $config->{penult} =~ s/\..*//;
     $sth->finish;
     # step through the products
     $sth = prepare("SELECT * from odin_products ORDER BY wh_pr_id", $dbh);
@@ -442,7 +442,8 @@ sub title_row {
 		  "adm_odin/adm_odin_m101112_table.template" : 
 		  "adm_odin/adm_odin_m234_table.template");
     $tpr->assign({});
-    $tpr->parse(MAIN => "title");
+    $tpr->parse(MAIN =>
+ "title");
     $tpr->print("MAIN");
 }
 
