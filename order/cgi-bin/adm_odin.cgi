@@ -306,8 +306,7 @@ sub get_vars {
 	$s = $inp->{s} if(defined($inp->{s}));
 	$s = $inp->{i} if(defined($inp->{i}));
 	next if($s !~ /[XM]/i);
-	$upd_sth->execute('t', (($s =~ /^[xX]/) ?
-				't' : 'f'), $wid);
+	$upd_sth->execute((($s =~ /^[xX]/) ? 't' : 'f'), (($s =~ /^[xX]/) ? 't' : 'f'), $wid);
 
 	$do_commit = 1;
 	delete $inputs{$wid};
@@ -442,8 +441,7 @@ sub title_row {
 		  "adm_odin/adm_odin_m101112_table.template" : 
 		  "adm_odin/adm_odin_m234_table.template");
     $tpr->assign({});
-    $tpr->parse(MAIN =>
- "title");
+    $tpr->parse(MAIN => "title");
     $tpr->print("MAIN");
 }
 
