@@ -346,7 +346,7 @@ sub get_vars {
 	    next if(not defined($h));
 	    $do_commit = 1;
 	    $ins_sth->execute($inp->{c}, 99999, 
-			      $config->{Odin}->{odin_wh_id}, $h->{wh_wh_q}, 
+			      $config->{ODIN}->{odin_wh_id}, $h->{wh_wh_q}, 
 			      $inp->{m}, $inp->{q}, 
 			      $h->{wh_whpri}, $inp->{d}, $wid, $h->{wh_descr},
 			      $h->{wh_btw}, $inp->{p});
