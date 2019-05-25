@@ -127,7 +127,7 @@ sub get_mem {
 	$h{from_id} = 0;
 	$buttons = "xfer";
     }
-   
+    
     $tpl->assign(\%h);
     $tpl->parse(BUTTONS => $buttons);
     admin_banner($status, "BANNER", "banner", $tpl, $config);
@@ -289,7 +289,7 @@ sub state_1 {
 	$h{from_id} = 0;
 	$buttons = "xfer";
     }
-   
+    
 
     $tpl->assign(\%h);
     $tpl->parse(BUTTONS => "$buttons");
@@ -421,27 +421,31 @@ sub get_xfin {
 }
 
 
-my %pymnts = ( stgeld_rxed => {col => 'mo_stgeld_rxed', type =>'&nbsp;', 
-			      desc=>"Statiegeld for items in this order", ord => 0},
-	      stgeld_refunded => {col => 'mo_stgeld_refunded', type=>'Credit', 
-				  desc=>'Statiegeld repaid to member', ord => 1},
-	      crates_rxed => {col => 'mo_crates_rxed', type =>'&nbsp;', 
-			      desc=>"Deposit for crates with this order", ord => 2},
-	      crates_refunded => {col => 'mo_crates_refunded', type=>'Credit', 
-				  desc=>"Deposit returned for crates", ord => 3},
-	      membership => {col => 'mo_membership', type =>'&nbsp;', 
-			    desc=>"Membership fees", ord => 4},
-	      misc_rxed => {col => 'mo_misc_rxed', type =>'&nbsp;', 
-			    desc=>"Miscellaneous charges (see notes)", ord => 5},
-	      misc_refunded => {col => 'mo_misc_refunded', type=>'Credit', 
-				desc => "Miscellaneous credits (see notes)", ord => 6},
-	      vers_g_rxed  => {col => 'mo_vers_groente', type=>'&nbsp', 
-				desc => "Vers groente", ord => 7},
-	      vers_k_rxed  => {col => 'mo_vers_kaas', type=>'&nbsp', 
-				desc => "Vers kaas, eieren en brood", ord => 8},
-	      vers_m_rxed  => {col => 'mo_vers_misc', type=>'&nbsp', 
-				desc => "Vers misc.", ord => 9},
-);
+my %pymnts = ( 
+    pin_charge => {col => 'mo_pin_charge', type =>'&nbsp;', 
+		    desc=>"Charge for payment by PIN", ord => 0},
+    stgeld_rxed => {col => 'mo_stgeld_rxed', type =>'&nbsp;', 
+		    desc=>"Statiegeld for items in this order", ord => 1},
+    stgeld_refunded => {col => 'mo_stgeld_refunded', type=>'Credit', 
+			desc=>'Statiegeld repaid to member', ord => 2},
+    crates_rxed => {col => 'mo_crates_rxed', type =>'&nbsp;', 
+		    desc=>"Deposit for crates with this order", ord => 3},
+    crates_refunded => {col => 'mo_crates_refunded', type=>'Credit', 
+			desc=>"Deposit returned for crates", ord => 4},
+    membership => {col => 'mo_membership', type =>'&nbsp;', 
+		   desc=>"Membership fees", ord => 5},
+    misc_rxed => {col => 'mo_misc_rxed', type =>'&nbsp;', 
+		  desc=>"Miscellaneous charges (see notes)", ord => 6},
+    misc_refunded => {col => 'mo_misc_refunded', type=>'Credit', 
+		      desc => "Miscellaneous credits (see notes)", ord => 7},
+    vers_g_rxed  => {col => 'mo_vers_groente', type=>'&nbsp', 
+		     desc => "Vers groente", ord => 8},
+    vers_k_rxed  => {col => 'mo_vers_kaas', type=>'&nbsp', 
+		     desc => "Vers kaas, eieren en brood", ord => 9},
+    vers_m_rxed  => {col => 'mo_vers_misc', type=>'&nbsp', 
+		     desc => "Vers misc.", ord => 10},
+    
+    );
 
 sub posted_pymnts {
     my ($mhref, $vals, $config, $cgi, $dbh) = @_;
@@ -456,7 +460,7 @@ sub posted_pymnts {
 	    $v = int(100 * $v);
 	    if($v != $mhref->{$dbcol}) {
 		$sth = prepare("UPDATE mem_order SET $dbcol = ? WHERE mem_id = ? ".
-		   "AND ord_no = ?", $dbh);
+			       "AND ord_no = ?", $dbh);
 
 		$sth->execute($v, $config->{check_out}, $ord_no);
 		$dbh->commit;
@@ -586,9 +590,10 @@ sub disp_payments {
 	next if($dbcol eq 'mo_membership' and 
 		membership_paid($config, $cgi, $dbh)  and 
 		$mhref->{$dbcol} == 0);
+	next if($dbcol eq 'mo_pin_charge' and $mhref->{$dbcol} == 0);
 	my $tpl = new CGI::FastTemplate($config->{templates});
 	$tpl->strict;
-	$tpl->define( row => ($mhref->{mo_checked_out}) ?
+	$tpl->define( row => ($mhref->{mo_checked_out} or $dbcol eq 'mo_pin_charge') ?
 		      "adm_kassa/adm_kassa_py_noedit.template" :
 		      "adm_kassa/adm_kassa_py_edit.template");
 	$h{desc} = $pymnts{$col}->{desc};
@@ -602,7 +607,7 @@ sub disp_payments {
 	$tpl = undef;
     }
 }
-  
+
 # display the various totals
 sub disp_totals {
     my ($width, $vals, $config, $cgi, $dbh) = @_;
@@ -675,11 +680,30 @@ sub state_2 {
     }
 
     $sth = prepare("UPDATE mem_order SET mo_checked_out = False ".
-		       "WHERE mem_id = ? AND ord_no = ?", $dbh);
+		   "WHERE mem_id = ? AND ord_no = ?", $dbh);
     if(defined($vals->{Reopen})) {
 	$sth->execute($config->{check_out}, $ord_no);
 	$sth->finish;
 	$dbh->commit;
+    }
+
+    if(defined($vals->{'No_Pin'})) {
+	$sth = prepare("UPDATE mem_order SET mo_pin_charge = 0 ".
+		       "WHERE mem_id = ? AND ord_no = ?", $dbh);
+	$sth->execute($config->{check_out}, $ord_no);
+	$sth->finish;
+	$dbh->commit;
+    }
+
+    if(defined($vals->{'Add_Pin'})) {
+	$sth = prepare("UPDATE mem_order SET mo_pin_charge = ? ".
+		       "WHERE mem_id = ? AND ord_no = ?", $dbh);
+	$sth->execute($config->{pin_charge}, $config->{check_out}, $ord_no);
+	$sth->finish;
+	$dbh->commit;
+	$sth = prepare("SELECT * FROM mem_order WHERE mem_id = ? ".
+		       "AND ord_no = ?", $dbh);
+	$sth->execute($config->{check_out}, $ord_no);
     }
 
     $sth = prepare("UPDATE mem_order SET mo_checked_out = True, ".
@@ -694,7 +718,7 @@ sub state_2 {
     posted_xfer($vals, $config, $cgi, $dbh);
 
     $sth = prepare("SELECT * FROM mem_order WHERE mem_id = ? ".
-		      "AND ord_no = ?", $dbh);
+		   "AND ord_no = ?", $dbh);
     $sth->execute($config->{check_out}, $ord_no);
     my $mhref = $sth->fetchrow_hashref;
 
@@ -725,8 +749,8 @@ sub state_2 {
     } elsif (defined($vals->{Damaged})) {
 	$config->{row} = "adm_kassa/adm_kassa_edit_damaged.template";
     } elsif(defined($config->{to_id}) and $config->{to_id} and
-	     $config->{to_id} != $config->{check_out}
-	     and $config->{sel_state} == 4) {
+	    $config->{to_id} != $config->{check_out}
+	    and $config->{sel_state} == 4) {
 	$config->{title_row} = "adm_kassa/adm_kassa_xfer_title.template";
 	$config->{row} = "adm_kassa/adm_kassa_edit_xferout.template";
 	get_xfout(\%prx, $vals, $config, $cgi, $dbh);
@@ -742,7 +766,8 @@ sub state_2 {
     my $tpl = new CGI::FastTemplate($config->{templates});
     $tpl->define( header         => "common/header.template",
                   banner         => "common/adm-banner.template",
-		  open_buttons   => "adm_kassa/adm_kassa_payments.template",
+		  open_buttons   => (($mhref->{mo_pin_charge} == 0) ? "adm_kassa/adm_kassa_payments.template" :
+				     "adm_kassa/adm_kassa_nopin_payments.template") ,
                   closed_buttons => "adm_kassa/adm_kassa_reopen.template",
 	);
     my %h =(  Pagename    => "Checkout Member $config->{check_out} $config->{check_out_name}",
@@ -762,7 +787,7 @@ sub state_2 {
     $h{BUTTONS} = "" if($status != 7); 
     $tpl->assign(\%h);
     $tpl->parse(BUTTONS => "$buttons") if($status == 7);
-	
+    
     admin_banner($status, "BANNER", "banner", $tpl, $config);
     $tpl->parse(MAIN => "header");
     $tpl->print("MAIN");
@@ -818,7 +843,7 @@ sub state_2 {
 		     url => $url_temp);
 	$tpl->assign($h);
 	$tpl->parse("URL", "url");
-	    
+	
 	$tpl->parse(MAIN => "row");
 	$tpl->print;
 	$tpl = undef;
@@ -884,7 +909,7 @@ sub state_5 {
     posted_xfer($vals, $config, $cgi, $dbh);
 
     $sth = prepare("SELECT * FROM mem_order WHERE mem_id = ? ".
-		      "AND ord_no = ?", $dbh);
+		   "AND ord_no = ?", $dbh);
     $sth->execute($config->{check_out}, $ord_no);
     my $mhref = $sth->fetchrow_hashref;
     # we need a copy of the member being checked out
