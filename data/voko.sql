@@ -339,6 +339,27 @@ END;$_$;
 ALTER FUNCTION public.add_order_to_member(integer, integer, integer, integer) OWNER TO jes;
 
 --
+-- Name: bclub_interval(); Type: FUNCTION; Schema: public; Owner: jes
+--
+
+CREATE FUNCTION bclub_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+   DECLARE
+     bclub_time CURSOR FOR 
+        SELECT DISTINCT wh_last_seen 
+        FROM bclub_data ORDER BY wh_last_seen DESC LIMIT 2;
+   BEGIN
+     OPEN bclub_time;
+     FETCH bclub_time INTO newest;
+     FETCH bclub_time INTO penult;
+     CLOSE bclub_time;
+END;$$;
+
+
+ALTER FUNCTION public.bclub_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) OWNER TO jes;
+
+--
 -- Name: bg_interval(); Type: FUNCTION; Schema: public; Owner: jes
 --
 
@@ -1139,6 +1160,27 @@ END;$$;
 ALTER FUNCTION public.news_update() OWNER TO jes;
 
 --
+-- Name: odin_interval(); Type: FUNCTION; Schema: public; Owner: jes
+--
+
+CREATE FUNCTION odin_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+   DECLARE
+     odintime CURSOR FOR 
+                SELECT DISTINCT wh_last_seen 
+                FROM odindata ORDER BY wh_last_seen DESC LIMIT 2;
+   BEGIN
+     OPEN odintime;
+     FETCH odintime INTO newest;
+     FETCH odintime INTO penult;
+     CLOSE odintime;
+END;$$;
+
+
+ALTER FUNCTION public.odin_interval(OUT newest timestamp with time zone, OUT penult timestamp with time zone) OWNER TO jes;
+
+--
 -- Name: product_pr_id_seq; Type: SEQUENCE; Schema: public; Owner: jes
 --
 
@@ -1166,7 +1208,7 @@ CREATE TABLE product (
     pr_sc integer NOT NULL,
     pr_wh integer,
     pr_wh_q integer NOT NULL,
-    pr_margin integer DEFAULT 5,
+    pr_margin integer DEFAULT 4,
     pr_mem_q integer NOT NULL,
     pr_wh_price integer NOT NULL,
     pr_mem_price integer,
@@ -1179,7 +1221,7 @@ CREATE TABLE product (
     pr_mq_chg boolean DEFAULT false,
     pr_ex_btw integer,
     age integer DEFAULT 0,
-    CONSTRAINT btw_valid CHECK ((((pr_btw = (0)::numeric) OR (pr_btw = (6)::numeric)) OR (pr_btw = (21)::numeric))),
+    CONSTRAINT btw_valid CHECK ((((pr_btw = (0)::numeric) OR (pr_btw = (9)::numeric)) OR (pr_btw = (21)::numeric))),
     CONSTRAINT minimum_margin CHECK ((pr_margin >= 4)),
     CONSTRAINT not_null_pr_ex_btw CHECK ((pr_ex_btw IS NOT NULL)),
     CONSTRAINT positive_price CHECK ((pr_wh_price > 0)),
@@ -1435,7 +1477,7 @@ CREATE FUNCTION order_totals(mem integer, ord integer) RETURNS order_sums
 
       os.grand_tot := os.prod_tot + os.tax_tot +  mo.mo_stgeld_rxed + 
          mo.mo_crates_rxed + mo.mo_misc_rxed + mo.mo_membership + 
-	 mo.mo_vers_groente + mo.mo_vers_kaas + mo.mo_vers_misc +
+	 mo.mo_vers_groente + mo.mo_vers_kaas + mo.mo_vers_misc + mo.mo_pin_charge
 	 - (mo.mo_stgeld_refunded + mo.mo_crates_refunded + mo.mo_misc_refunded);
       RETURN os;
 
@@ -1597,6 +1639,100 @@ END;$$;
 
 
 ALTER FUNCTION public.put_dnb(prcode character varying, supplier character varying, barcode character varying, descr character varying, brand character varying, kwaliteit character varying, size numeric, wh_q integer, unit character varying, land character varying, trefw character varying, col_h integer, col_g integer, vol_s integer, whpri integer, btw numeric, korting numeric, statieg integer, gluten boolean, suiker boolean, lactose boolean, milk boolean, salt boolean, soya boolean, yeast boolean, veg boolean, tstmp timestamp with time zone) OWNER TO jes;
+
+--
+-- Name: put_odin(character varying, character varying, character varying, character varying, numeric, integer, character varying, integer, numeric, timestamp with time zone); Type: FUNCTION; Schema: public; Owner: jes
+--
+
+CREATE FUNCTION put_odin(prcode character varying, supplier character varying, descr character varying, brand character varying, size numeric, wh_q integer, unit character varying, whpri integer, btw numeric, tstmp timestamp with time zone) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+
+  DECLARE
+    d	    odindata%ROWTYPE;
+    do_upd  BOOLEAN := 'f';
+    pr_id   INTEGER := cast(prcode as integer);
+  BEGIN
+    SELECT INTO d * FROM odindata WHERE wh_pr_id = pr_id;
+    IF(FOUND) THEN
+      do_upd := 't';
+      -- defend against partial updates, skip records with date or
+      -- older date
+      IF(d.wh_last_seen >= tstmp) THEN 
+      	RETURN; 
+      END IF;
+
+      -- do some flag fixups
+      -- if it's a product, clear is_skipped
+      IF(d.is_product) THEN d.is_skipped := 'f'; END IF;
+      -- mark if it's changed in price, wholesale qty, btw, 
+      IF(d.wh_whpri != whpri OR d.wh_wh_q != wh_q OR d.wh_btw != btw
+            OR d.wh_size != size OR d.wh_unit != unit) THEN
+         d.is_changed := 't';
+         d.is_seen    := 'f';
+      END IF;
+      -- record last appearnce
+      d.wh_prev_seen := d.wh_last_seen;
+    ELSE
+      -- new odin product
+      d.is_changed := 'f';
+      d.is_seen    := 'f';
+      d.is_skipped := 'f';
+      d.is_product := 'f';
+      d.wh_prev_seen := tstmp;
+    END IF;
+
+    d.wh_last_seen := tstmp;
+    d.wh_prcode    := prcode;
+    d.wh_pr_id     := cast(prcode as integer);
+    d.wh_supplier  := supplier;  
+    d.wh_descr     := descr;
+    d.wh_brand     := brand;
+    d.wh_size      := size;
+    d.wh_wh_q      := wh_q;
+    d.wh_unit      := unit;
+    d.wh_whpri     := whpri;
+    d.wh_btw       := btw;
+        
+    IF(do_upd) THEN
+       UPDATE odindata SET 
+         wh_supplier  = supplier,
+         wh_descr     = descr,
+         wh_brand     = brand,
+         wh_size      = size,
+         wh_wh_q      = wh_q, 
+         wh_unit      = unit,
+         wh_whpri     = whpri,
+         wh_btw       = btw,
+         is_product   = d.is_product,
+         is_changed   = d.is_changed, 
+         is_seen      = d.is_seen,
+         is_skipped   = d.is_skipped, 
+         wh_prev_seen = d.wh_prev_seen,
+         wh_last_seen = d.wh_last_seen
+       WHERE  wh_pr_id = d.wh_pr_id;
+       --RAISE 'put_odin 2 wh_pr_id %, d.wh_last_seen %, tstamp %',  d.wh_pr_id,  d.wh_last_seen, tstmp;
+
+   ELSE
+         d.wh_pr_id = pr_id;
+      INSERT INtO odindata 
+        (wh_pr_id, wh_prcode, wh_supplier, wh_descr, wh_brand,
+         wh_size, wh_wh_q, wh_unit, 
+         wh_whpri, wh_btw,
+         is_product, is_changed, is_seen, is_skipped, wh_prev_seen,
+         wh_last_seen) VALUES 
+        (d.wh_pr_id, d.wh_prcode, d.wh_supplier, d.wh_descr, d.wh_brand,
+         d.wh_size, d.wh_wh_q, d.wh_unit,
+         d.wh_whpri,
+	 d.wh_btw, 'f', 
+         'f', 'f', 'f', d.wh_prev_seen,
+         d.wh_last_seen);
+       --RAISE 'put_odin 2 wh_pr_id %, d.wh_last_seen %, tstamp %', d.wh_pr_id,  d.wh_last_seen, tstmp;
+   END IF;
+END;$$;
+
+
+ALTER FUNCTION public.put_odin(prcode character varying, supplier character varying, descr character varying, brand character varying, size numeric, wh_q integer, unit character varying, whpri integer, btw numeric, tstmp timestamp with time zone) OWNER TO jes;
 
 --
 -- Name: put_zap(character varying, character varying, integer, integer, numeric, character varying, timestamp with time zone); Type: FUNCTION; Schema: public; Owner: jes
@@ -1900,11 +2036,12 @@ CREATE FUNCTION remove_inactive_member_order(integer) RETURNS void
     order_no := get_ord_no();
     status   := get_ord_status();
     SELECT INTO cnt count(*) FROM mem_line AS l, product AS p WHERE
-    l.ord_no = order_no AND l.mem_id = l.mem_id  AND p.pr_active AND
+    l.ord_no = order_no AND l.mem_id = mem_no  AND p.pr_active AND
     l.pr_id = p.pr_id;
     IF(cnt > 0 AND status >= 4) THEN 
       RAISE EXCEPTION 'Member has committed order';
     END IF;
+    DELETE FROM order_notes where ord_no = order_no AND mem_id = mem_no;
     DELETE FROM mem_line WHERE ord_no = order_no AND mem_id = mem_no;
     DELETE FROM mem_order WHERE ord_no = order_no AND mem_id = mem_no;
     PERFORM rebuild_all_wh_headers();
@@ -2087,20 +2224,20 @@ CREATE FUNCTION set_status_0(character varying) RETURNS integer
       func_flag = False WHERE mas_key = 1;
     -- install default orders
     order_no = get_ord_no();
-    open df_curs;
-    LOOP
-      FETCH df_curs INTO mem_no, pr_no, quantity;
-      EXIT WHEN NOT FOUND;
-      PERFORM add_order_to_member(pr_no, quantity, mem_no, 0);
-    END LOOP;
-    CLOSE df_curs;
-    OPEN co_curs;
-    LOOP
-      FETCH co_curs INTO mem_no, pr_no, quantity;
-      EXIT WHEN NOT FOUND;
-      PERFORM add_order_to_member(pr_no, quantity, mem_no, 0);
-    END LOOP;
-    CLOSE co_curs;
+--    open df_curs;
+--   LOOP
+--     FETCH df_curs INTO mem_no, pr_no, quantity;
+--      EXIT WHEN NOT FOUND;
+--      PERFORM add_order_to_member(pr_no, quantity, mem_no, 0);
+--    END LOOP;
+--    CLOSE df_curs;
+--    OPEN co_curs;
+--    LOOP
+--      FETCH co_curs INTO mem_no, pr_no, quantity;
+--      EXIT WHEN NOT FOUND;
+--      PERFORM add_order_to_member(pr_no, quantity, mem_no, 0);
+--    END LOOP;
+--    CLOSE co_curs;
     RETURN 0;
 END;$_$;
 
@@ -2411,6 +2548,43 @@ end;$_$;
 
 
 ALTER FUNCTION public.short(integer, integer, integer) OWNER TO jes;
+
+--
+-- Name: smarm(); Type: FUNCTION; Schema: public; Owner: jes
+--
+
+CREATE FUNCTION smarm() RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+  DECLARE
+  order_no      INTEGER;
+  cnt           INTEGER := 0;
+  pr_no         INTEGER;
+  m_adj         INTEGER;
+  w_m_adj       INTEGER;
+  ml_curs       CURSOR (ORDN INTEGER) FOR SELECT pr_id, sum(meml_adj) 
+                  FROM mem_line WHERE ord_no = ORDN GROUP BY pr_id;
+  BEGIN
+    order_no := get_ord_no();
+    open ml_curs(order_no);
+    LOOP
+      FETCH ml_curs INTO pr_no, m_adj;
+      EXIT WHEN NOT FOUND;
+      SELECT INTO w_m_adj p.pr_wh_q * l.whl_qty 
+        FROM wh_line AS l, product AS p
+        WHERE l.ord_no = order_no AND l.pr_id = p.pr_id AND p.pr_active 
+        AND p.pr_id = pr_no;
+      IF(w_m_adj < m_adj) THEN 
+          cnt := cnt + 1; 
+	  RAISE EXCEPTION 'product % w_m_adj % m_adj %', pr_no, w_m_adj, m_adj;
+      END IF;
+    END LOOP;
+    CLOSE ml_curs;
+    RETURN cnt;
+END;$$;
+
+
+ALTER FUNCTION public.smarm() OWNER TO jes;
 
 --
 -- Name: status_change(); Type: FUNCTION; Schema: public; Owner: jes
@@ -3074,6 +3248,40 @@ ALTER SEQUENCE applicants_id_seq OWNED BY applicants.id;
 
 
 --
+-- Name: bclub_data; Type: TABLE; Schema: public; Owner: jes; Tablespace: 
+--
+
+CREATE TABLE bclub_data (
+    wh_pr_id integer NOT NULL,
+    wh_whpri integer NOT NULL,
+    wh_btw numeric NOT NULL,
+    wh_descr character varying NOT NULL,
+    wh_url character varying DEFAULT ''::character varying,
+    wh_wh_q integer NOT NULL,
+    is_product boolean DEFAULT true,
+    is_changed boolean DEFAULT false,
+    is_seen boolean DEFAULT false,
+    is_skipped boolean DEFAULT false,
+    wh_last_seen timestamp with time zone,
+    wh_prev_seen timestamp with time zone,
+    wh_prcode character varying DEFAULT ''::character varying,
+    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (9)::numeric)) OR (wh_btw = (21)::numeric)))
+);
+
+
+ALTER TABLE public.bclub_data OWNER TO jes;
+
+--
+-- Name: bclub_products; Type: VIEW; Schema: public; Owner: jes
+--
+
+CREATE VIEW bclub_products AS
+    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw, w.is_product, w.is_changed, w.is_seen, w.is_skipped, w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc, p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active, p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc, min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr, min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS over_marg FROM (bclub_data w LEFT JOIN product p ON ((((w.wh_prcode)::text = (p.wh_prcode)::text) AND (p.pr_wh = 4))));
+
+
+ALTER TABLE public.bclub_products OWNER TO jes;
+
+--
 -- Name: bg_data; Type: TABLE; Schema: public; Owner: jes; Tablespace: 
 --
 
@@ -3091,7 +3299,7 @@ CREATE TABLE bg_data (
     wh_last_seen timestamp with time zone,
     wh_prev_seen timestamp with time zone,
     wh_prcode character varying DEFAULT ''::character varying,
-    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (6)::numeric)) OR (wh_btw = (21)::numeric)))
+    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (9)::numeric)) OR (wh_btw = (21)::numeric)))
 );
 
 
@@ -3102,7 +3310,7 @@ ALTER TABLE public.bg_data OWNER TO jes;
 --
 
 CREATE VIEW bg_products AS
-    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw, w.is_product, w.is_changed, w.is_seen, w.is_skipped, w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc, p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active, p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc, min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr, min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS over_marg FROM (bg_data w LEFT JOIN product p ON (((w.wh_prcode)::text = (p.wh_prcode)::text)));
+    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw, w.is_product, w.is_changed, w.is_seen, w.is_skipped, w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc, p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active, p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc, min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr, min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS over_marg FROM (bg_data w LEFT JOIN product p ON ((((w.wh_prcode)::text = (p.wh_prcode)::text) AND (p.pr_wh = 3))));
 
 
 ALTER TABLE public.bg_products OWNER TO jes;
@@ -3213,7 +3421,7 @@ CREATE TABLE dnbdata (
     wh_last_seen timestamp with time zone,
     wh_prev_seen timestamp with time zone,
     wh_prcode character varying DEFAULT ''::character varying,
-    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (6)::numeric)) OR (wh_btw = (21)::numeric)))
+    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (9)::numeric)) OR (wh_btw = (21)::numeric)))
 );
 
 
@@ -3244,7 +3452,7 @@ ALTER TABLE public.dnb_view OWNER TO jes;
 --
 
 CREATE VIEW edit_pr_view AS
-    SELECT product.pr_id, product.pr_cat, product.pr_sc, product.pr_wh_q, product.pr_margin, product.pr_mem_q, product.pr_wh_price, product.pr_mem_price, product.pr_desc, product.pr_btw, product.pr_active FROM product ORDER BY product.pr_cat, product.pr_id;
+    SELECT product.pr_id, product.pr_cat, product.pr_sc, product.pr_wh_q, product.pr_margin, product.pr_mem_q, product.pr_wh_price, product.pr_mem_price, product.pr_desc, product.pr_btw, product.pr_active FROM product WHERE (product.pr_wh <> 1) ORDER BY product.pr_cat, product.pr_id;
 
 
 ALTER TABLE public.edit_pr_view OWNER TO jes;
@@ -3341,7 +3549,8 @@ CREATE TABLE mem_order (
     mo_membership integer DEFAULT 0,
     mo_vers_groente integer DEFAULT 0 NOT NULL,
     mo_vers_kaas integer DEFAULT 0 NOT NULL,
-    mo_vers_misc integer DEFAULT 0 NOT NULL
+    mo_vers_misc integer DEFAULT 0 NOT NULL,
+    mo_pin_charge integer DEFAULT 0
 );
 
 
@@ -3430,6 +3639,67 @@ CREATE VIEW news AS
 ALTER TABLE public.news OWNER TO jes;
 
 SET default_with_oids = false;
+
+--
+-- Name: odin_md5s; Type: TABLE; Schema: public; Owner: jes; Tablespace: 
+--
+
+CREATE TABLE odin_md5s (
+    md5sum character varying NOT NULL,
+    date_seen timestamp with time zone
+);
+
+
+ALTER TABLE public.odin_md5s OWNER TO jes;
+
+--
+-- Name: odindata; Type: TABLE; Schema: public; Owner: jes; Tablespace: 
+--
+
+CREATE TABLE odindata (
+    wh_pr_id integer NOT NULL,
+    wh_supplier character varying,
+    wh_descr character varying NOT NULL,
+    wh_brand character varying,
+    wh_size numeric,
+    wh_wh_q integer NOT NULL,
+    wh_unit character varying,
+    wh_whpri integer NOT NULL,
+    wh_btw numeric NOT NULL,
+    is_product boolean DEFAULT true,
+    is_changed boolean DEFAULT false,
+    is_seen boolean DEFAULT false,
+    is_skipped boolean DEFAULT false,
+    wh_last_seen timestamp with time zone,
+    wh_prev_seen timestamp with time zone,
+    wh_prcode character varying DEFAULT ''::character varying,
+    wh_url character varying DEFAULT ''::character varying,
+    wh_statieg integer DEFAULT 0 NOT NULL,
+    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (9)::numeric)) OR (wh_btw = (21)::numeric)))
+);
+
+
+ALTER TABLE public.odindata OWNER TO jes;
+
+--
+-- Name: odin_products; Type: VIEW; Schema: public; Owner: jes
+--
+
+CREATE VIEW odin_products AS
+    SELECT w.wh_pr_id, w.wh_descr, w.wh_wh_q, w.wh_whpri, w.wh_btw, w.is_product, w.is_changed, w.is_seen, w.is_skipped, w.wh_prev_seen, w.wh_last_seen, p.pr_id, p.pr_cat, p.pr_sc, p.pr_wh_q, p.pr_margin, p.pr_mem_q, p.pr_wh_price, p.pr_active, p.pr_mq_chg, p.pr_btw, p.pr_mem_price, p.pr_desc, min_price(w.wh_whpri, w.wh_btw, p.pr_margin, w.wh_wh_q) AS rec_pr, min_price(w.wh_whpri, w.wh_btw, (1 + p.pr_margin), w.wh_wh_q) AS over_marg FROM (odindata w LEFT JOIN product p ON ((((w.wh_prcode)::text = (p.wh_prcode)::text) AND (p.pr_wh = 6))));
+
+
+ALTER TABLE public.odin_products OWNER TO jes;
+
+--
+-- Name: odin_view; Type: VIEW; Schema: public; Owner: jes
+--
+
+CREATE VIEW odin_view AS
+    SELECT d.wh_pr_id, d.wh_prcode AS pr_code, 99999 AS pr_cat, d.wh_wh_q AS pr_wh_q, 5 AS pr_margin, 1 AS pr_mem_q, d.wh_whpri AS pr_wh_price, min_price(d.wh_whpri, d.wh_btw, 5, d.wh_wh_q) AS pr_mem_price, d.wh_descr AS pr_desc, d.wh_btw AS pr_btw, d.wh_last_seen, d.wh_prev_seen, d.is_seen, d.is_changed, d.is_skipped, d.is_product FROM odindata d;
+
+
+ALTER TABLE public.odin_view OWNER TO jes;
 
 --
 -- Name: order_notes; Type: TABLE; Schema: public; Owner: jes; Tablespace: 
@@ -3814,7 +4084,9 @@ CREATE TABLE workgroups (
     id integer NOT NULL,
     name character varying(255),
     "desc" character varying(255),
-    leader_id integer
+    leader_id integer,
+    required_members integer DEFAULT 1 NOT NULL,
+    active boolean DEFAULT true NOT NULL
 );
 
 
@@ -3875,7 +4147,7 @@ CREATE TABLE zapatistadata (
     wh_last_seen timestamp with time zone,
     wh_prev_seen timestamp with time zone,
     wh_prcode character varying DEFAULT ''::character varying,
-    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (6)::numeric)) OR (wh_btw = (21)::numeric)))
+    CONSTRAINT btw_valid CHECK ((((wh_btw = (0)::numeric) OR (wh_btw = (9)::numeric)) OR (wh_btw = (21)::numeric)))
 );
 
 
@@ -3939,6 +4211,14 @@ ALTER TABLE workgroups ALTER COLUMN id SET DEFAULT nextval('workgroups_id_seq'::
 
 ALTER TABLE ONLY applicants
     ADD CONSTRAINT applicants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bc_data_pkey; Type: CONSTRAINT; Schema: public; Owner: jes; Tablespace: 
+--
+
+ALTER TABLE ONLY bclub_data
+    ADD CONSTRAINT bc_data_pkey PRIMARY KEY (wh_pr_id);
 
 
 --
@@ -4011,6 +4291,14 @@ ALTER TABLE ONLY member_news
 
 ALTER TABLE ONLY members
     ADD CONSTRAINT members_pkey PRIMARY KEY (mem_id);
+
+
+--
+-- Name: odindata_pkey; Type: CONSTRAINT; Schema: public; Owner: jes; Tablespace: 
+--
+
+ALTER TABLE ONLY odindata
+    ADD CONSTRAINT odindata_pkey PRIMARY KEY (wh_pr_id);
 
 
 --
@@ -4195,6 +4483,13 @@ CREATE INDEX idx_trans_ordno ON transactions USING btree (ord_no);
 --
 
 CREATE UNIQUE INDEX idx_wh_prcode ON product USING btree (pr_wh, wh_prcode);
+
+
+--
+-- Name: odincodes; Type: INDEX; Schema: public; Owner: jes; Tablespace: 
+--
+
+CREATE INDEX odincodes ON odindata USING btree (wh_prcode);
 
 
 --
@@ -4598,6 +4893,26 @@ GRANT ALL ON TABLE adj_email TO apache;
 
 
 --
+-- Name: bclub_data; Type: ACL; Schema: public; Owner: jes
+--
+
+REVOKE ALL ON TABLE bclub_data FROM PUBLIC;
+REVOKE ALL ON TABLE bclub_data FROM jes;
+GRANT ALL ON TABLE bclub_data TO jes;
+GRANT ALL ON TABLE bclub_data TO apache;
+
+
+--
+-- Name: bclub_products; Type: ACL; Schema: public; Owner: jes
+--
+
+REVOKE ALL ON TABLE bclub_products FROM PUBLIC;
+REVOKE ALL ON TABLE bclub_products FROM jes;
+GRANT ALL ON TABLE bclub_products TO jes;
+GRANT ALL ON TABLE bclub_products TO apache;
+
+
+--
 -- Name: bg_data; Type: ACL; Schema: public; Owner: jes
 --
 
@@ -4825,6 +5140,36 @@ REVOKE ALL ON TABLE news FROM PUBLIC;
 REVOKE ALL ON TABLE news FROM jes;
 GRANT ALL ON TABLE news TO jes;
 GRANT ALL ON TABLE news TO apache;
+
+
+--
+-- Name: odin_md5s; Type: ACL; Schema: public; Owner: jes
+--
+
+REVOKE ALL ON TABLE odin_md5s FROM PUBLIC;
+REVOKE ALL ON TABLE odin_md5s FROM jes;
+GRANT ALL ON TABLE odin_md5s TO jes;
+GRANT ALL ON TABLE odin_md5s TO apache;
+
+
+--
+-- Name: odindata; Type: ACL; Schema: public; Owner: jes
+--
+
+REVOKE ALL ON TABLE odindata FROM PUBLIC;
+REVOKE ALL ON TABLE odindata FROM jes;
+GRANT ALL ON TABLE odindata TO jes;
+GRANT ALL ON TABLE odindata TO apache;
+
+
+--
+-- Name: odin_products; Type: ACL; Schema: public; Owner: jes
+--
+
+REVOKE ALL ON TABLE odin_products FROM PUBLIC;
+REVOKE ALL ON TABLE odin_products FROM jes;
+GRANT ALL ON TABLE odin_products TO jes;
+GRANT ALL ON TABLE odin_products TO apache;
 
 
 --
