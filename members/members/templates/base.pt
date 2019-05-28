@@ -76,6 +76,9 @@
                               <li><a href="${portal_url}/transactions/2015">2015</a></li>
                               <li><a href="${portal_url}/transactions/2016">2016</a></li>
                               <li><a href="${portal_url}/transactions/2017">2017</a></li>
+                              <li><a href="${portal_url}/transactions/2018">2018</a></li>
+                              <li><a href="${portal_url}/transactions/2019">2019</a></li>
+                              <li><a href="${portal_url}/transactions/2020">2020</a></li>
                               <li><a href="${portal_url}/transaction-types">Transaction Types</a></li>
                             </ul>
                           </li>

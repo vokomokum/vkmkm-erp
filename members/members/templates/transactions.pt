@@ -286,7 +286,7 @@
                 <form action="${portal_url}/transaction/${t.id}/edit/setamount" method="post" class="form-inline">
                     <div class="input-group">
                         <span class="input-group-addon">&euro;</span>
-                        <input type="text" size="5" maxlength="7" name="amount" value="${round(t.amount, 2)}" class="form-control"
+                        <input type="text" size="7" maxlength="9" name="amount" value="${round(t.amount, 2)}" class="form-control"
                                             onkeydown="if (event.keyCode == 13) this.form.submit()"
                                             title="Edit, then press Enter/Return key to update." />
                     </div>
@@ -295,7 +295,7 @@
             <td>
                 <a tal:condition="t.ttype.name == 'Order Charge'"
                     class="btn btn-link"
-                   href="http://order.vokomokum.nl/cgi-bin/order?order_no=${t.ord_no}&amp;mem_id=${t.mem_id}"
+                   href="http://order.vokomokum.nl/cgi-bin/adm_view_memord.cgi?order_no=${t.ord_no}&amp;Member=${t.mem_id}"
                    title="Click to see the details of this order (you might need to login)."
                    tal:content="t.order.label">
                 </a>
