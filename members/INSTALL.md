@@ -55,19 +55,19 @@ Now we get the code (if you don't have it already)
 ----------------------------------------------------
 
 $ cd <location where you want vokomokum code to live>
-$ git clone git://git.assembla.com/vokomokum.git vokomokum 
+$ git clone git://git.github.com/vokomokum/vkmkm-erp.git
 This will give you a read-only clone of the code.
 To get a clone you can commit back to the server as a member of the vokomokum
 dev team, you should do this:
-$ git clone git@git.assembla.com:vokomokum.git
-However, to authenticate with assembla, you need an assembla account and an
-authentication setup. See here: https://www.assembla.com/code/vokomokum/git/repo/instructions
+$ git clone git@git.github.com:vokomokum/vkmkm-erp.git
+However, to authenticate with github, you need an github account and an
+authentication setup. See here: https://www.github.com/code/vokomokum/git/repo/instructions
 
 
 Develop the app 
 --------------------
 (this also installs all other needed python libs for the webapp, locally in that folder)
-$ cd vokomokum/members
+$ cd vkmkm-erp/members
 $ fab develop
 
 
@@ -102,7 +102,7 @@ Now it's time to see if the App is served correctly through its own simple devel
 $ fab serve
 The Member application should now respond under http://localhost:6543.
 
-If you ran the mksqlitedb script in the step above, you can log in with ID 3 and password "notsecret".
+If you successfully ran the `fab populate` command in the step above, you can log in with ID 3 and password "notsecret".
 This is a convenient way to test if everything is there.
 To stop the server, do a CTRL-C.
 

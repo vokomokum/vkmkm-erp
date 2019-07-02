@@ -7,6 +7,9 @@ It uses fabric to automate common actions. Install fabric with
 
 $ pip install fabric
 
+TODO: This would need to be rewritten to use Fabric >= 2.0 or you install Fabric 1 like this:
+      pip install 'fabric<2.0' (which only works with Python2).
+
 Then it suffices to issue 
 fab develop         # develop the webapp locally
 fab serve           # run local dev server
@@ -82,7 +85,7 @@ def deploy(user='you', mode="test", branch="master"):
     # this is only useful when we'd run multiple server nodes
     with settings(warn_only=True):
         if run("test -d {}".format(code_dir)).failed:
-            sudo("git clone git@git.assembla.com:vokomokum.git {}".\
+            sudo("git clone git@github.com:vokomokum/vkmkm-erp.git {}".\
                      format(code_dir), user=user)
     with cd(code_dir):
         sudo("./dev-tools/update-members-site-from-git {} {}".format(mode, branch))
