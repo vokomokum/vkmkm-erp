@@ -275,7 +275,7 @@ sub get_vars {
 			  $inputs{$wid}->{d},
 			  $h->{wh_wh_q}, $h->{wh_btw}, 
 			  $h->{wh_whpri}, $h->{wh_descr},
-			  $wid);
+			  $h->{wh_prcode});
 	    $sth->finish;
 	    $dbh->commit;
 	    delete $inputs{$wid};
