@@ -42,11 +42,11 @@ my %sc_descs;
 
 # sort by cat, subcat, desc alpha
 sub pr_sort{
-    my $aid = 100000 * $a->{pr_cat} + $a->{pr_sc};
-    my $bid = 100000 * $b->{pr_cat} + $b->{pr_sc};
+    my $aid = 100000 * $a->{pr_cat} + lc $a->{pr_sc};
+    my $bid = 100000 * $b->{pr_cat} + lc $b->{pr_sc};
     my $cmp = ($sc_descs{$aid}->{sort_ord} <=> $sc_descs{$bid}->{sort_ord});
     return $cmp if($cmp != 0);
-    return ($a->{pr_desc} cmp $b->{pr_desc});
+    return (lc($a->{pr_desc}) cmp lc($b->{pr_desc}));
 }
 
 

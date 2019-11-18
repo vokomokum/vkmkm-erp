@@ -47,7 +47,7 @@ sub pr_sort{
     my $bid = 100000 * $b->{pr_cat} + $b->{pr_sc};
     my $cmp = ($sc_descs{$aid}->{sort_ord} <=> $sc_descs{$bid}->{sort_ord});
     return $cmp if($cmp != 0);
-    return ($a->{pr_desc} cmp $b->{pr_desc});
+    return (lc($a->{pr_desc}) cmp lc($b->{pr_desc}));
 }
 
 sub get_products {

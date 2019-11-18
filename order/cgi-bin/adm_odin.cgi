@@ -125,7 +125,7 @@ sub get_stats {
 	    }
 	    # active products where there are changes or the
 	    # current price exceeds the current margin (e.g
-            # price with btw = 5.00, margin = 5% price should be 5.25
+            # price with btw = 5.00, margin = 4% price should be 5.25
             # if margin were 6%, price would be  5.30
             # we report if item is 5.30 or more - change the price or the 
             # margin
@@ -604,7 +604,7 @@ sub modes_234 {
 	$h->{qqq} = (defined($nv->{q})) ? 
             $nv->{q} : 1;
 	$h->{mmm} = (defined($nv->{m})) ? 
-	    $nv->{m} : 5;
+	    $nv->{m} : 4;
 	$sth->execute($h->{wh_whpri}, $h->{wh_btw}, 
 		      4, $h->{wh_wh_q});
 	my $mp = $sth->fetchrow_arrayref;
@@ -652,7 +652,7 @@ sub modes_101112 {
 	$h->{qqq} = (defined($nv->{q})) ? 
             $nv->{q} : 1;
 	$h->{mmm} = (defined($nv->{m})) ? 
-	    $nv->{m} : 5;
+	    $nv->{m} : 4;
 	$sth->execute($h->{wh_whpri}, $h->{wh_btw}, 
 		      $h->{mmm}, $h->{wh_wh_q});
 	my $mp = $sth->fetchrow_arrayref;
