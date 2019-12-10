@@ -1,0 +1,32 @@
+
+Assuming the Odin XML file has been attached to an email to systems@vokomokum.nl:
+
+1) save the attachment on your own PC
+
+2) You need to have a copy of Ruby and its libraries installed (most Linux distributions will have
+it or something like apt-get install ruby or yum -y install ruby should take care of it. I don't
+know what's needed with windows
+
+3) I believe the Odin file is ataached as a .zip file, in which case you need to unzip it. For
+example, assuming you saved the attachment in /tmp
+
+   cd /tmp
+   # unzip the file, you'll get a new output file with the extension .xml
+   # note that the spaces in the name mean you'll want quotes around the full file name
+   unzip '1039 producten 20191114.zip'
+   # now run the conversion script on the unzipped result
+   ruby convert_odi_xml_to_csv_tb '1039 producten 20191114.xml'
+   # after about 5 minutes, the script completes and the results will be in the file 'prods.csv'
+   # this needs to be uploaded to the site as a .zip file, so first zip prods.csv into prods.zip
+   zip prods prods.csv
+   # now use your web brwoser to go the vokomokum site, log in and click on 'Odin Products'
+   # then click on the 'Upload a new Odin product file' button. On the page that opens, click on 
+   # the 'Browze' button to find and select the prods.zip file you just made. Select that file, 
+   # then click 'Go'/ In a few seconds, the upload will have completed.
+
+At this point, admins can examine the changes in the latest upload and can apply prices changes
+where they have occurred (this is done simply by clearing the price field on the product and 
+ticking the 'Apply' box. When the admin clicks submit, all the prices will be changed to meet the
+new wholesale prices with an approprate margin, etc. They can also edit the description and the
+Category and Subcategory for the product at the same time.
+
