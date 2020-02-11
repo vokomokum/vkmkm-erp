@@ -16,13 +16,6 @@
     <td width="30%">&nbsp;</td>
  </tr>
  <tr>
-    <td align = "center"><input type="submit" name="No_Pin" value="Go" 
-        width="5%"></td>
-    <td align="left" width="30%">Remove charge for payment by PIN</td>
-    <td width="30%">&nbsp;</td>
-    <td width="30%">&nbsp;</td>
- </tr>
- <tr>
     <td align = "center"><input type="submit" name="Missing" value="Go" 
         width="5%"></td>
     <td align="left" width="30%">Record items missing from order</td>

@@ -423,7 +423,7 @@ sub get_xfin {
 
 my %pymnts = ( 
     pin_charge => {col => 'mo_pin_charge', type =>'&nbsp;', 
-		    desc=>"Charge for payment by PIN", ord => 0},
+		    desc=>"Standard transaction charge", ord => 0},
     stgeld_rxed => {col => 'mo_stgeld_rxed', type =>'&nbsp;', 
 		    desc=>"Statiegeld for items in this order", ord => 1},
     stgeld_refunded => {col => 'mo_stgeld_refunded', type=>'Credit', 
@@ -590,7 +590,7 @@ sub disp_payments {
 	next if($dbcol eq 'mo_membership' and 
 		membership_paid($config, $cgi, $dbh)  and 
 		$mhref->{$dbcol} == 0);
-	next if($dbcol eq 'mo_pin_charge' and $mhref->{$dbcol} == 0);
+	#next if($dbcol eq 'mo_pin_charge' and $mhref->{$dbcol} == 0);
 	my $tpl = new CGI::FastTemplate($config->{templates});
 	$tpl->strict;
 	$tpl->define( row => ($mhref->{mo_checked_out} or $dbcol eq 'mo_pin_charge') ?
@@ -687,24 +687,14 @@ sub state_2 {
 	$dbh->commit;
     }
 
-    if(defined($vals->{'No_Pin'})) {
-	$sth = prepare("UPDATE mem_order SET mo_pin_charge = 0 ".
-		       "WHERE mem_id = ? AND ord_no = ?", $dbh);
-	$sth->execute($config->{check_out}, $ord_no);
-	$sth->finish;
-	$dbh->commit;
-    }
-
-    if(defined($vals->{'Add_Pin'})) {
-	$sth = prepare("UPDATE mem_order SET mo_pin_charge = ? ".
-		       "WHERE mem_id = ? AND ord_no = ?", $dbh);
-	$sth->execute($config->{pin_charge}, $config->{check_out}, $ord_no);
-	$sth->finish;
-	$dbh->commit;
-	$sth = prepare("SELECT * FROM mem_order WHERE mem_id = ? ".
-		       "AND ord_no = ?", $dbh);
-	$sth->execute($config->{check_out}, $ord_no);
-    }
+    $sth = prepare("UPDATE mem_order SET mo_pin_charge = ? ".
+                   "WHERE mem_id = ? AND ord_no = ?", $dbh);
+    $sth->execute($config->{pin_charge}, $config->{check_out}, $ord_no);
+    $sth->finish;
+    $dbh->commit;
+    $sth = prepare("SELECT * FROM mem_order WHERE mem_id = ? ".
+                   "AND ord_no = ?", $dbh);
+    $sth->execute($config->{check_out}, $ord_no);
 
     $sth = prepare("UPDATE mem_order SET mo_checked_out = True, ".
 		   "mo_checked_out_by = ? WHERE mem_id = ? ".
@@ -766,8 +756,7 @@ sub state_2 {
     my $tpl = new CGI::FastTemplate($config->{templates});
     $tpl->define( header         => "common/header.template",
                   banner         => "common/adm-banner.template",
-		  open_buttons   => (($mhref->{mo_pin_charge} == 0) ? "adm_kassa/adm_kassa_payments.template" :
-				     "adm_kassa/adm_kassa_nopin_payments.template") ,
+		  open_buttons   => "adm_kassa/adm_kassa_nopin_payments.template",
                   closed_buttons => "adm_kassa/adm_kassa_reopen.template",
 	);
     my %h =(  Pagename    => "Checkout Member $config->{check_out} $config->{check_out_name}",
