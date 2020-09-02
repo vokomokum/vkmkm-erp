@@ -153,10 +153,11 @@ sub print_pickup_lists{
         }
 
         my $st = 'SELECT ml.mem_id, p.pr_desc, ml.meml_rcv, '.
-	    'ml.meml_unit_price, ml.meml_btw FROM members m, '.
-	    'mem_line ml, product p WHERE ml.ord_no = ? AND '.
-	    'm.mem_id = ml.mem_id AND m.mem_id = ? AND ml.pr_id = p.pr_id '.
-            'AND ml.meml_rcv > 0 ORDER BY pr_cat';
+	    'ml.meml_unit_price, ml.meml_btw, c.cat_name, s.sc_name FROM members m, '.
+	    'mem_line ml, product p, category c, sub_cat s '.
+            'WHERE ml.ord_no = ? AND c.cat_id = p.pr_cat and s.sc_id = p.pr_sc '.
+	    'AND m.mem_id = ml.mem_id AND m.mem_id = ? AND ml.pr_id = p.pr_id '.
+            'AND ml.meml_rcv > 0 ORDER BY c.cat_name, s.sc_name, p.pr_id';
         my $sth2 = prepare($st, $dbh);
         $sth2->execute($config->{ord_no}, $mem->{mem_id});
         $list .= tableHead(1, $mem, $date);
