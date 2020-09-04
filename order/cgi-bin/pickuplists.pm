@@ -152,12 +152,12 @@ sub print_pickup_lists{
 	    $new_page = 0;
         }
 
-        my $st = 'SELECT ml.mem_id, p.pr_desc, ml.meml_rcv, '.
-	    'ml.meml_unit_price, ml.meml_btw, c.cat_name, s.sc_name FROM members m, '.
-	    'mem_line ml, product p, category c, sub_cat s '.
-            'WHERE ml.ord_no = ? AND c.cat_id = p.pr_cat and s.sc_id = p.pr_sc '.
-	    'AND m.mem_id = ml.mem_id AND m.mem_id = ? AND ml.pr_id = p.pr_id '.
-            'AND ml.meml_rcv > 0 ORDER BY c.cat_name, s.sc_name, p.pr_id';
+        my $st = 'SELECT DISTINCT ml.mem_id, p.pr_desc, ml.meml_rcv, ml.meml_unit_price, ' .
+            'ml.meml_btw, c.cat_name, s.sc_name, p.pr_id FROM members m, mem_line ml, ' .
+            'product p, category c, sub_cat s WHERE ml.ord_no = ? AND p.pr_id = ml.pr_id AND ' .
+            'm.mem_id = ml.mem_id AND m.mem_id = ? AND ml.meml_rcv > 0 AND ' .
+            'c.cat_id = p.pr_cat AND s.sc_id = p.pr_sc AND s.cat_id = p.pr_cat '.
+            'ORDER BY c.cat_name, s.sc_name, p.pr_id';
         my $sth2 = prepare($st, $dbh);
         $sth2->execute($config->{ord_no}, $mem->{mem_id});
         $list .= tableHead(1, $mem, $date);
@@ -169,6 +169,7 @@ sub print_pickup_lists{
         while(my $o = $sth2->fetchrow_hashref) {
             # all EUR numbers are carried in cents (as in the DB), 
 	    # for printing only we divide by 100
+            dump_stuff("pup", "", "", $o);
             my $pr = $o->{meml_rcv} * $o->{meml_unit_price};
             $sum_prices += $pr;
 	    # the unit prices are inclusive btw
