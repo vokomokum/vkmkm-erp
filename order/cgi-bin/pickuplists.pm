@@ -169,7 +169,7 @@ sub print_pickup_lists{
         while(my $o = $sth2->fetchrow_hashref) {
             # all EUR numbers are carried in cents (as in the DB), 
 	    # for printing only we divide by 100
-            dump_stuff("pup", "", "", $o);
+            #dump_stuff("pup", "", "", $o);
             my $pr = $o->{meml_rcv} * $o->{meml_unit_price};
             $sum_prices += $pr;
 	    # the unit prices are inclusive btw
