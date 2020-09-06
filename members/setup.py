@@ -16,6 +16,7 @@ requires = [
     'waitress',
     'pytz',
     'dnspython',
+    'passlib',
     'python-magic'
     ]
 

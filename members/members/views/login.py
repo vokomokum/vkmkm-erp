@@ -4,13 +4,13 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
 from pyramid.url import route_url
 from pyramid.view import view_config
+from passlib.hash import md5_crypt
 
 import os
 import base64
 
 from members.utils.security import get_member
 from members.utils.security import authenticated_user
-from members.utils.md5crypt import md5crypt
 from members.views.base import BaseView
 
 
@@ -27,11 +27,9 @@ class Login(BaseView):
             passwd = self.request.params['passwd']
             member = get_member(login)
             if member:
-                # jim uses encrypted pwd as salt
-                enc_pwd = md5crypt(str(passwd), str(member.mem_enc_pwd))
-                if (member.mem_enc_pwd and str(member.mem_enc_pwd) == enc_pwd):
+                if member.mem_enc_pwd and md5_crypt.verify(str(passwd), member.mem_enc_pwd):
                     self.logged_in = True
-                    member.mem_cookie = base64.urlsafe_b64encode(os.urandom(24))
+                    member.mem_cookie = str(base64.urlsafe_b64encode(os.urandom(24)), "utf-8")
                     member.mem_ip = self.request.client_addr
                     headers = remember(self.request, member.mem_id)
                     if self.came_from == '/login':
