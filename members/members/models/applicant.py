@@ -2,7 +2,7 @@ from sqlalchemy import Table, Column, Integer, Unicode
 
 from pyramid.security import Allow, DENY_ALL
 
-from base import Base, VokoValidationError
+from members.models.base import Base, VokoValidationError
 
 
 class Applicant(Base):

@@ -5,7 +5,7 @@ Models of second order in this app
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
 #from sqlalchemy.orm import relationship
 
-from base import Base, DBSession, CreationForbiddenException
+from members.models.base import Base, DBSession, CreationForbiddenException
 from members.models.member import Member
 from members.utils.misc import running_sqlite
 

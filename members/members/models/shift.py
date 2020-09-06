@@ -6,10 +6,10 @@ from sqlalchemy.orm import relationship, backref
 
 from datetime import datetime
 
-from base import Base
-from base import VokoValidationError
-from member import Member
-from workgroups import Workgroup
+from members.models.base import Base
+from members.models.base import VokoValidationError
+from members.models.member import Member
+from members.models.workgroups import Workgroup
 from members.utils.misc import ascii_save, month_info
 
 

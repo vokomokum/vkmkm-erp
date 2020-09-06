@@ -2,7 +2,7 @@ from sqlalchemy import Column, Boolean, Integer, Unicode
 
 from pyramid.security import Allow, DENY_ALL
 
-from base import Base
+from members.models.base import Base
 
 
 class VersSupplier(Base):

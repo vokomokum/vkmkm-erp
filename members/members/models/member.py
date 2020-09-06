@@ -16,7 +16,7 @@ from sqlalchemy import Boolean
 
 from pyramid.security import Allow, DENY_ALL
 
-from base import Base, VokoValidationError
+from members.models.base import Base, VokoValidationError
 from members.models.base import DBSession
 
 
