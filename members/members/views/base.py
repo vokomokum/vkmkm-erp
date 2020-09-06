@@ -18,7 +18,7 @@ class BaseView(object):
         self.context = context
         self.request = request
         self.user = authenticated_user(self.request)
-        self.logged_in = authenticated_userid(request) > -1
+        self.logged_in = user_id is not None and user_id > -1
         # only show content if this is False or user is logged in
         # (otherwise, show login screen)
         self.login_necessary = True
