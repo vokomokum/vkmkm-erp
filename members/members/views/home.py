@@ -48,7 +48,7 @@ def get_todos(session, user, show_all):
     act_members = [m for m in all_members if m.mem_active]
     now = datetime.datetime.now()
     def df(i):
-        return unicode(i).rjust(2, '0')
+        return str(i).rjust(2, '0')
     
 
     # ---- Todos for every user:

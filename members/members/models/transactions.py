@@ -207,6 +207,6 @@ def get_transaction_sums(year, month, ttype):
     if not amount:
         amount = 0.0
     count = list(DBSession().connection().engine.execute(query_c))[0][0]
-    return {'count': count, 'amount': round(amount, 2)}
+    return {'count': int(count), 'amount': round(float(amount), 2)}
 
  

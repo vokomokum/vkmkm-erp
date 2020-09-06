@@ -72,7 +72,7 @@
                     <label for="until_month" class="col-sm-2 control-label">until</label>
                     <div class="col-sm-2">
                           <select name="until_month" class="form-control">
-                            <tal:block tal:repeat="m python:xrange(1, 13, 1)">
+                            <tal:block tal:repeat="m python:range(1, 13, 1)">
                                 <option tal:condition="m == view.month" value="${m}" selected="selected">${m}</option>
                                 <option tal:condition="m != view.month" value="${m}">${m}</option>
                             </tal:block>
@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-sm-2">
                         <select name="until_year" class="form-control">
-                          <option tal:repeat="y python:xrange(view.year,view.year+3)" value="${y}">${y}</option>
+                          <option tal:repeat="y python:range(view.year,view.year+3)" value="${y}">${y}</option>
                         </select>
                     </div>
                 </span>
