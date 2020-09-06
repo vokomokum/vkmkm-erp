@@ -89,7 +89,7 @@ class Shift(Base):
             tmp_day = 1
         try:
             datetime(self.year, self.month, int(tmp_day))
-        except ValueError, e:
+        except ValueError as e:
             raise VokoValidationError('The date of this shift is not correct: %s.' % e)
         if self.wg_id == "" or not self.workgroup:
             raise VokoValidationError('No workgroup is assigned to this shift.')

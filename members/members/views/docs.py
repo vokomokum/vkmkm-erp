@@ -61,7 +61,7 @@ def upload_file(request, path):
 
         # Now that we know the file has been fully saved to disk move it into place.
         os.rename(temp_file_path, file_path)
-    except Exception, e:
+    except Exception as e:
         return "There was a problem with uploading the file: %s" % str(e)
 
     return "The file was successfully uploaded."

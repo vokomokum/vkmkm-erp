@@ -51,7 +51,7 @@ class ResetPasswordRequestView(BaseView):
         if 'mem_id' in p and p['mem_id'] != "":
             try:
                 member = get_member(session, self.request)
-            except Exception, e:
+            except Exception:
                 member = None
         if member:
             send_pwdreset_request(member, self.request.application_url)

@@ -192,7 +192,7 @@ def get_member(session, request):
         if m_id == 'new':
             return member
         try:
-            mid = int(m_id)
+            m_id = int(m_id)
         except ValueError:
             raise Exception("No member with ID {0}".format(m_id))
         member = session.query(Member).get(m_id)

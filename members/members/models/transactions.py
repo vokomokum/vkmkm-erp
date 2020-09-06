@@ -146,7 +146,7 @@ class Transaction(Base):
         ''' validate if this object is valid, raise exception otherwise '''
         try:
             _ = float(self.amount)
-        except Exception, e:
+        except Exception as e:
             raise VokoValidationError('The amount is not numeric - maybe it '\
                                       'contains illegal characters (please '\
                                       'write numbers with a dot, e.g. "3.89").')

@@ -55,7 +55,7 @@ Subject: %s
         mf = open('{}/{}.eml'.format(target_folder, mail_time), 'w')
         mf.write(mail)
         mf.close()
-    except OSError, e:
+    except OSError as e:
         # log that it didn't work
         log = logging.getLogger(__name__)
         log.warn('Could not send mail to %s, subject "%s"'\
