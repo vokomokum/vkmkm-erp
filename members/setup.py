@@ -3,10 +3,10 @@ import os
 from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.txt')).read()
+README = open(os.path.join(here, 'README.md')).read()
 
 requires = [
-    'pyramid==1.5a4',
+    'pyramid>=1.5',
     'pyramid_chameleon',
     'SQLAlchemy',
     'transaction',
@@ -39,6 +39,7 @@ setup(name='members',
       zip_safe=False,
       test_suite='members',
       install_requires = requires,
+      tests_require= requires + ['multidict'],
       entry_points = """\
       [paste.app_factory]
       main = members:main

@@ -1,9 +1,10 @@
 from pyramid import testing
 from sqlalchemy.exc import IntegrityError
+from passlib.hash import md5_crypt
 
 import os
 
-import base
+from members.models import base
 from members.models.member import Member
 from members.models.base import VokoValidationError
 from members.views.login import Login
@@ -15,7 +16,6 @@ from members.views.pwdreset import ResetPasswordView
 from members.views.pwdreset import ResetPasswordRequestView
 from members.utils import mail
 from members.utils.misc import get_settings
-from members.utils.md5crypt import md5crypt
 
 from members.tests.base import VokoTestCase
 
@@ -185,8 +185,7 @@ class TestMembers(VokoTestCase):
         self.assertTrue('Password has been set' in response['msg'])
         # check if password was saved and encrypted correctly
         mem = self.DBSession.query(Member).filter(Member.mem_id==mem_id).first()
-        enc_pwd = md5crypt(str(password), str(mem.mem_enc_pwd))
-        self.assertEquals(enc_pwd, mem.mem_enc_pwd)
+        assert md5_crypt.verify(str(password), mem.mem_enc_pwd)
 
     def test_toggle_active(self):
         request = testing.DummyRequest()
@@ -241,8 +240,7 @@ class TestMembers(VokoTestCase):
         self.assertTrue('Password has been set' in response['msg'])
         # check if password was saved and encrypted correctly
         mem = self.DBSession.query(Member).filter(Member.mem_id==mem_id).first()
-        enc_pwd = md5crypt(str(password), str(mem.mem_enc_pwd))
-        self.assertEquals(enc_pwd, mem.mem_enc_pwd)
+        assert md5_crypt.verify(str(password), mem.mem_enc_pwd)
 
         # the key is now not longer valid
         self.assertNotEqual(key, mem.mem_pwd_url)

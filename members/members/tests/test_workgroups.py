@@ -1,5 +1,5 @@
 from pyramid import testing
-from paste.util.multidict import MultiDict
+from multidict import MultiDict
 
 from members.tests.base import VokoTestCase
 from members.views.workgroup import WorkgroupView, NewWorkgroupView, ListWorkgroupView, EditWorkgroupView
@@ -62,7 +62,7 @@ class TestWorkgroups(VokoTestCase):
         request.params['action'] = 'save'
         view = EditWorkgroupView(None, request)
         view.user = self.get_peter()
-        view_info = view()
+        _ = view()
         wg_bestel = self.DBSession.query(Workgroup).get(2)
         self.assertEqual(wg_bestel.name, 'Wholesale Besteling')
 
