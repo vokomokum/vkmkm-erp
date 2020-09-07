@@ -8,7 +8,6 @@ from members.views.base import BaseView
 from members.models.member import Member, get_member
 from members.models.base import DBSession
 from members.utils.mail import sendmail
-from members.utils.md5crypt import md5crypt
 
 
 def send_pwdreset_request(member, app_url, first=False):
