@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
 from pyramid.security import Allow, DENY_ALL
 
-from bmembers.models.ase import Base, VokoValidationError
+from members.models.ase import Base, VokoValidationError
 from members.models.member import Member
 
 
