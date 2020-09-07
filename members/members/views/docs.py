@@ -98,7 +98,7 @@ class DocsListView(BaseView):
                 msg = "Only members of the Docs wokgroup can upload documents!"
 
         # Build a dict with filenames in each subdirectory
-        files = [urllib.quote(f) for f in os.listdir(folder_full_path)\
+        files = [urllib.parse.quote(f) for f in os.listdir(folder_full_path)\
                  if is_probably_doc_file(f)]
         files.sort()
         files.reverse() # assuming file names often start with date
@@ -122,13 +122,13 @@ class DocView(BaseView):
             return self.redirect('/login') # not sure why this view needs this
         doc_path = self.request.matchdict['doc_path']
         doc_path = '/'.join(doc_path)
-        doc_path = urllib.unquote(doc_path)
+        doc_path = urllib.parse.unquote(doc_path)
             
         settings = get_settings()
         docs_folder = settings['vokomokum.docs_folder']
         file_path = '{}/{}'.format(docs_folder, doc_path) 
         mime_type = magic.from_file(file_path, mime=True)
-        with open(file_path, 'r') as f:
+        with open(file_path, 'rb') as f:
            data = f.read()
         return Response(data, content_type=mime_type)
 
