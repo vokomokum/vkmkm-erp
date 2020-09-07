@@ -42,7 +42,7 @@ Subject: %s
                             stdin=subprocess.PIPE,
                             stderr=subprocess.PIPE,
                             stdout=subprocess.PIPE)
-            print >> mailer.stdin, mail
+            mailer.stdin.write(bytes(mail, "utf-8"))
             mailer.stdin.close()
             result = mailer.wait()
             error = mailer.stderr.read()
