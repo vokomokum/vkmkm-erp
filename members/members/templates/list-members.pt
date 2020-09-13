@@ -18,7 +18,8 @@
 					</div>
 					<div class="checkbox">
 						<label>
-							<input name="include_inactive" tal:attributes="checked python: show_inactive and 'checked' | nothing" type="checkbox"> Include inactive
+							<input type="checkbox" name="include_inactive" tal:condition="show_inactive" checked="checked">Include inactive</input>
+							<input type="checkbox" name="include_inactive" tal:condition="not show_inactive">Include inactive</input>
 						</label>
 					</div>                
 	            </form>
