@@ -21,18 +21,20 @@ def fill_wg_from_request(wg, request, session):
     '''overwrite workgroup properties from request'''
     if request and wg:
         for attr in ['name', 'desc', 'required_members']:
-            if attr in request.params:
-                wg.__setattr__(attr, request.params[attr])
+            val = request.params[attr]
+            if attr == "required_members":
+                val = int(val)
+            wg.__setattr__(attr, val)
         if 'wg_leaders' in request.POST:
             wg.leaders = []
             for mid in request.POST.getall('wg_leaders'):
-                m = session.query(Member).get(mid)
+                m = session.query(Member).get(int(mid))
                 if m:
                     wg.leaders.append(m)
         if 'wg_members' in request.params:
             wg.members = []
             for mid in request.POST.getall('wg_members'):
-                m = session.query(Member).get(mid)
+                m = session.query(Member).get(int(mid))
                 wg.members.append(m)
         # make sure leaders are also members
         for m in wg.leaders:

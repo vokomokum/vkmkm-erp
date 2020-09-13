@@ -43,7 +43,7 @@ class Workgroup(Base):
         self.name = name
         self.desc = desc
         self.active = True
-        self.required_members = required_members
+        self.required_members = int(required_members)
 
     def __repr__(self):
         return self.name
@@ -74,7 +74,7 @@ class Workgroup(Base):
         if len(self.leaders) == 0:
             raise VokoValidationError('A workgroup needs at least '\
                                       'one coordinator.')
-        if self.required_members < 1:
+        if int(self.required_members) < 1:
             raise VokoValidationError('A workgroup needs at least one member.')
 
     @property
