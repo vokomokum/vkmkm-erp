@@ -130,7 +130,7 @@ class Member(Base):
                 raise VokoValidationError('Bank number needs to consist of '\
                                           'only numbers.')
         # household size
-        if self.mem_household_size < 1:
+        if self.mem_household_size is None or self.mem_household_size < 1:
             raise VokoValidationError('Please specify how many people live '\
                                       'in the household.')
 

@@ -114,7 +114,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="mem_household_size" class="col-sm-2 control-label">Household size</label>
+      <label for="mem_household_size" class="col-sm-2 control-label">Household size *</label>
       <div class="col-sm-6">
         <input type="text" class="form-control" id="mem_household_size" name="mem_household_size" placeholder="Household size" value="${m.mem_household_size}">
       </div>
