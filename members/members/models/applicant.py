@@ -31,7 +31,7 @@ class Applicant(Base):
         self.comment = comment
         self.email = email
         self.telnr = telnr
-        self.household_size = household_size
+        self.household_size = int(household_size)
 
     def __repr__(self):
         return '{} {}'.format(self.fname, self.lname)

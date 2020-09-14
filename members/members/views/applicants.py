@@ -37,11 +37,13 @@ class NewApplicant(BaseView):
         fname = self.request.params['fname']
         lname = self.request.params['lname']
         now = datetime.now()
-        month = "{}/{}".format(unicode(now.month).rjust(2, '0'),
-                               unicode(now.year)[-2:])
+        month = "{}/{}".format(str(now.month).rjust(2, '0'),
+                               str(now.year)[-2:])
         comment = self.request.params['comment']
         email = self.request.params['email']
         telnr = self.request.params['telnr']
+        if not self.request.params['household_size'].isdigit():
+            raise VokoValidationError("Please enter valid household size (number > 1), not: '%s'" % self.request.params['household_size']) 
         hsize = int(self.request.params['household_size'])
         applicant = Applicant(None, fname, lname, month, comment, email,
                               telnr, hsize)
