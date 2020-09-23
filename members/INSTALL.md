@@ -6,7 +6,7 @@ This describes what you need to do to install the members app locally and/or on 
 First, the dependencies:
 -------------------------
 
-You should have a modern python (2.6+) and a database on your system.
+You should have a modern python (3.6+) and a database on your system.
 The production version uses postgres, locally you can also use sqlite3, with maybe not all features working, but a much easier installation.
 To get and update the member app code, you also need git.
 This app is meant to be run via Apache when in production (installation help for the link from Apache to this app are also below), but can be run locally with the simple, in-built server.
@@ -19,20 +19,20 @@ $ cd ~
 
 Now we get the standard python script that will set up the virtual python environment.
 If you have the ``virtualenv`` command, great. Do this:
-$ virtualenv --python python2.7 vopy
+$ virtualenv --python python3.8 vopy
 
 If not, do this:
 $ wget https://raw.github.com/pypa/virtualenv/master/virtualenv.py
 Note that if you haven't got ``wget`` or if you have problems with the SSL certificate, you can also access this file with your browser and do a "Save as ..." to get the script.
 
-Also, make sure your virtual environment is built with the python you want. On some systems, several python interpreters are installed, for instance 2.6 and 2.7, or even two installations of the same version (e.g. Apples default vs a manual installation). 
-Here, we are explicit and say "python2.7" ("python would just use the first in your path). Also, we call this environment ``vopy``, which makes virtualenv.py create a directory with that name:
-$ python2.7 virtualenv.py your_venv
+Also, make sure your virtual environment is built with the python you want. On some systems, several python interpreters are installed, for instance 2.7 and 3.6, or even two installations of the same version (e.g. Apples default vs a manual installation). 
+Here, we are explicit and say "python3.8" ("python would just use the first in your path). Also, we call this environment ``vopy``, which makes virtualenv.py create a directory with that name:
+$ python3.8 virtualenv.py your_venv
 
 If you downloaded it, you can remove that script now:
 $ rm virtualenv.py
 
-We can now activate this python environment for the current console session (which has the same effect as adding the bins to your path, e.g. by doing ´export PATH=path/to/your_venv/bin/:$PATH´ but this way there will be no interference with the rest of your system):
+We can now activate this python environment for the current console session (which has the same effect as adding the bins to your path, e.g. by doing `export PATH=path/to/your_venv/bin/:$PATH` but this way there will be no interference with the rest of your system):
 $ source path/to/your_venv/bin/activate
 You should now see the name of the virtual environment in front of your console now, like this:
 [your_venv] $
@@ -40,8 +40,8 @@ Make sure you always activate your virtual environment, before you work with the
 
 
 Now we're ready to install some libraries into the virtual python environment, which our app might be using:
-$ pip install fabric         # Unix/SSH scripting environment for Python,
-                             # handy to easily do the things described in `fabfile.py`, usually via `fab <command>´.
+$ pip install fabric>=2.0   # Unix/SSH scripting environment for Python,
+                             # handy to easily do the things described in `fabfile.py`, usually via `fab <command>`.
                              # If you don't install fabric, look inside the fabfile for the actual commands
 
 If there is an error installing fabric, this might help (on Debian, adjust on other systems):
@@ -180,5 +180,5 @@ On a web server, you might need to add a DNS entry (most likely via your webhost
 3. Now restart the Apache server
 $ sudo /usr/sbin/apachectl restart
 
-Note: To make Apache aware of code updates, it is usually enough to touch the ´pyramid.wsgi´ file
-(see also the deploy command within ´fabfile.py´), so restarting Apache is usually not necessary.
+Note: To make Apache aware of code updates, it is usually enough to touch the `pyramid.wsgi` file
+(see also the deploy command within `fabfile.py`), so restarting Apache is usually not necessary.
