@@ -51,7 +51,7 @@ echo make all directories under members/ 775 ...
 /usr/bin/sudo /usr/bin/find members -type d -print0 | xargs -0 /usr/bin/sudo /bin/chmod 775 
 
 echo "now move everything (but the .ini and .wsgi files) onto the voko server ..."
-sudo cp -rp CHANGES.txt README.txt setup.* members /var/www/$DEST
+sudo cp -rp INSTALL.md README.md setup.* members /var/www/$DEST
 
 cd ../..
 rm -r git-repo-tmp
