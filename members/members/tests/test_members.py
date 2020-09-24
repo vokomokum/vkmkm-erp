@@ -36,7 +36,7 @@ class TestMembers(VokoTestCase):
         request = testing.DummyRequest()
         view = NewMemberView(None, request)
         view.user = self.get_peter()
-        self.assertEquals(view()['m'].mem_fname, '')
+        self.assertEqual(view()['m'].mem_fname, '')
 
     def test_view_noexist(self):
         request = testing.DummyRequest()
@@ -170,8 +170,8 @@ class TestMembers(VokoTestCase):
 
         # check if password reset email was sent with expected key
         mem_id,key = self.get_reset_info_from_mails()
-        self.assertEquals(mem_id, mem.mem_id)
-        self.assertEquals(key, mem.mem_pwd_url)
+        self.assertEqual(mem_id, mem.mem_id)
+        self.assertEqual(key, mem.mem_pwd_url)
 
         # visit password reset view with key from sent link
         request = testing.DummyRequest()
@@ -228,7 +228,7 @@ class TestMembers(VokoTestCase):
 
         # visit password reset view with key from sent link, set new password
         mem_id,key = self.get_reset_info_from_mails() 
-        self.assertEquals(key, mem.mem_pwd_url)
+        self.assertEqual(key, mem.mem_pwd_url)
         request = testing.DummyRequest()
         password = 'notsecret'
         request.params['pwd1'] = password

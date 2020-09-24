@@ -22,9 +22,9 @@ class TestWorkgroups(VokoTestCase):
         hans = s.query(Member).filter(Member.mem_fname==u'Hans').first()
         wg_systems = s.query(Workgroup).filter(Workgroup.name==u'Systems').first()
         wg_bestel = s.query(Workgroup).filter(Workgroup.name==u'Besteling').first()
-        self.failUnless(peter.mem_id in [m.mem_id for m in wg_systems.members])
-        self.failUnless(peter in wg_bestel.members)
-        self.failUnless(hans in wg_bestel.members)
+        assert peter.mem_id in [m.mem_id for m in wg_systems.members]
+        assert peter in wg_bestel.members
+        assert hans in wg_bestel.members
 
     def test_view(self):
         request = testing.DummyRequest()
@@ -35,7 +35,7 @@ class TestWorkgroups(VokoTestCase):
     def test_new_view(self):
         request = testing.DummyRequest()
         view_info = NewWorkgroupView(None, request)()
-        self.assertEquals(view_info['wg'].name, '')
+        self.assertEqual(view_info['wg'].name, '')
 
     def test_view_noexist(self):
         request = testing.DummyRequest()
@@ -96,7 +96,7 @@ class TestWorkgroups(VokoTestCase):
         view.user = self.get_peter()
         view()
         wg = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Cafe').first()
-        self.assertEquals(wg.desc, 'Shake and Bake')
+        self.assertEqual(wg.desc, 'Shake and Bake')
 
     def test_deactivate(self):
         request = testing.DummyRequest()
