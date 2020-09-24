@@ -2,6 +2,7 @@
 import os
 import sys
 from sqlalchemy import create_engine
+from sqlalchemy.orm.scoping import scoped_session
 from subprocess import Popen
 import random
 import datetime
@@ -29,7 +30,7 @@ TODO:
 dbname = 'members-dev.db'
 seed='Miau'
 fakenamesname = 'scripts/fakenames.txt'
-DBSession = None
+DBSession: scoped_session = None
 default_pwd = 'testtest'
 
 
