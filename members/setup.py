@@ -17,7 +17,7 @@ requires = [
     'pytz',
     'dnspython',
     'passlib',
-    'python-magic'
+    'python-magic',
     ]
 
 setup(name='members',
@@ -39,7 +39,7 @@ setup(name='members',
       zip_safe=False,
       test_suite='members',
       install_requires = requires,
-      tests_require= requires + ['multidict'],
+      tests_require= requires + ["pytest", "multidict"],
       entry_points = """\
       [paste.app_factory]
       main = members:main
