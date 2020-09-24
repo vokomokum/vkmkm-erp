@@ -74,7 +74,7 @@ def main(global_config, **settings):
     config.add_view(NotFoundView, context=NotFound, renderer='templates/base.pt')
     config.add_view(ErrorView, context=Exception, renderer='templates/base.pt')
 
-    config.scan()
+    config.scan(ignore="members.tests")
 
     return config.make_wsgi_app()
 
