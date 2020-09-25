@@ -25,11 +25,10 @@ fab deploy:user=you # deploy latest code on our server and set it 'live'
                     # (you need admin rights for this on the server)
 
 '''
-#vkmkm_hosts = ['voko']
 vkmkm_hosts = ['order.vokomokum.nl']
 path_to_venv = "/home/nicolas/envs/vkmkm"
 venv_activation = "source {}/bin/activate".format(path_to_venv)
-#env.use_ssh_config = True # we may want this
+docker_image = "nhoening/vokomokum-members"
 
 @task
 def develop(c):
@@ -38,23 +37,30 @@ def develop(c):
         c.run('python setup.py develop')
 
 @task
-def serve(c):
-    ''' run local dev server '''
-    with c.prefix(venv_activation):
-        c.run('pserve development.ini --reload')
+def serve(c, docker=False):
+    ''' Run local dev server.
+    If --docker, then the docker imagge with dummy data is pulled and used.
+    '''
+    if docker:
+        print("Stopping and removing existing vkmkm containers ....")
+        c.run("docker stop vkmkm", warn=True)
+        c.run("docker rm vkmkm", warn=True)
+        print("Pulling and serving docker image ...")
+        c.run(f"docker pull {docker_image}")
+        c.run(f"docker run --name=vkmkm -d -p 6543:6543 {docker_image}")
+    else:
+        print("Serving via development.ini ...")
+        with c.prefix(venv_activation):
+            c.run('pserve development.ini --reload')
 
 @task
 def test(c, standalone=True):
     '''
     perfom tests
     '''
-    # Note: The setuptools environment is notorious for uninformative error messages 
-    # when imports went bad. It will tell you which module is the problem, but only
-    # say sthg about an AttributeError. Do this to find out what is wrong:
-    # $ python setup.py develop
-    # $ python -c "import members.tests.<The module in question>"
     with c.prefix(venv_activation):
-        result = c.run('python setup.py test -q', hide="stdout", warn=True)
+        c.run("pip install -q pytest multidict")
+        result = c.run('pytest', warn=True)
         if result.failed and not standalone and not confirm("Tests failed. Continue anyway?"):
             raise Exit("Aborting at user request.")
 
@@ -75,6 +81,15 @@ def populate(c):
     '''
     with c.prefix(venv_activation):
         c.run("python scripts/mksqlitedb.py")
+
+@task
+def build_docker_image(c):
+    '''
+    Build the Docker image and possibly upload it
+    '''
+    c.run(f"docker build . --tag {docker_image}")
+    if confirm("Upload image to docker registry?"):
+        c.run(f"docker push {docker_image}")
 
 @task
 def prepare_deploy(c):
@@ -105,12 +120,13 @@ def deploy(c, user=None, mode="test", branch="master"):
     # make sure we don't deploy untested or outdated code
     #test(c, standalone=False)  # Here, c is a Connection, not a Context, so this would need work
     #push(c)
-    if not confirm("have you tested and pushed your code??"):
+    if not confirm("Have you tested and pushed your code?? (You can use `fab prepare_deploy`)"):
         raise Exit("Aborting at user request.")
     
     code_dir = "/var/voko/git-repo"
     app_dir = "/var/www"
-    # make sure we have the code checked out    
+    
+    # make sure we have the code cloned on the server   
     if not c.run(f"test -d {code_dir}", warn=True):
         c.run(f"git clone git@github.com:vokomokum/vkmkm-erp.git {code_dir}", user=user)
     

@@ -1,9 +1,9 @@
-FROM python:2.7
+FROM python:3.8
 
 RUN pip install Paste
 RUN apt-get update -qq && apt-get install -y sqlite3
 
-COPY README.txt development.ini setup.py /members/
+COPY README.md development.ini setup.py /members/
 COPY members /members/members
 WORKDIR /members
 RUN python setup.py develop
