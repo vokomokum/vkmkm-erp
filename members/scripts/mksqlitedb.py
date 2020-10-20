@@ -57,10 +57,13 @@ def addAdmin():
     wgs.members.append(admin)
     wgm = DBSession.query(Workgroup).filter(Workgroup.name==u'Membership').first()
     wgm.members.append(admin)
+    wgf = DBSession.query(Workgroup).filter(Workgroup.name==u'Finance').first()
+    wgf.members.append(admin)
+    return admin
     
 
 """Ensure the backwards compatibility, these settings are used in unit tests"""
-def addOldNames():
+def addOldMembers():
     m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
     m1.mem_email = 'peter@gmail.com'
     m1.mem_enc_pwd = md5_crypt.hash('notsecret')
@@ -82,7 +85,8 @@ def addOldNames():
     s = Shift(wg2.id, 'do stuff', 2012, 6, member=m1)
     DBSession.add(s)
     DBSession.flush()
-    
+    return m1, m2
+
 
 def createWGs():
     wgs = []
@@ -98,7 +102,7 @@ def createWGs():
     return wgs
     
 
-def fillDBRandomly(seed, workgroups):
+def fillDBRandomly(seed, workgroups, existing_members):
     random.seed(seed)
     now = datetime.datetime.now()
     mi = month_info(now.date())
@@ -109,7 +113,7 @@ def fillDBRandomly(seed, workgroups):
         names[fname] = lname
     namelist = sorted(list(names.keys()))
     # 20% of the people are applicants
-    members = []
+    members = existing_members
     for l in namelist[int(len(namelist) * 0.2):]:
         m = Applicant(fname=l, lname=names[l])
         m.email = "%s-app@gmail.com"%(l)
@@ -221,11 +225,11 @@ def main():
 
     workgroups = createWGs()
     # add old names, used in base.py and in testing (ask Nic what to do with it)
-    addOldNames()
+    m1, m2 = addOldMembers()
     # add a default admin
-    addAdmin()
+    admin = addAdmin()
     # this applicants, members, shifts and transactions
-    fillDBRandomly(seed, workgroups)
+    fillDBRandomly(seed, workgroups, [m1, m2, admin])
 
     DBSession.flush()
     transaction.commit()
