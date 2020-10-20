@@ -47,13 +47,15 @@ def get_todos(session, user, show_all):
     all_members = session.query(Member).all()
     act_members = [m for m in all_members if m.mem_active]
     now = datetime.datetime.now()
+    settings = get_settings()
+
     def df(i):
         return str(i).rjust(2, '0')
-    
 
     # ---- Todos for every user:
     # negative balance
-    if user.balance < 0:
+     
+    if user.balance < 0 and settings.get("vokomokum.warn_on_negative_balance", "true") == "true":
         todos.append(Todo(msg='You have a negative balance of {}.'\
                              .format(round(user.balance, 2)),
                           wg='Finance',
@@ -78,15 +80,16 @@ def get_todos(session, user, show_all):
 
     # ---- Workgroup Finance:
     if 'Finance' in [w.name for w in user.workgroups] or show_all:
-        for m in [m for m in all_members if m.balance < 0]:
-            todos.append(Todo(msg='Member {} has a negative balance of EUR {}.'\
-                                 .format(ascii_save(m.fullname),
-                                        round(m.balance, 2)),
-                              wg='Finance',
-                              link_act='member/{}'.format(m.mem_id),
-                              link_txt='See member profile.',
-                              link_title='You should contact the member and '\
-                                 'tell them to transfer the missing amount.'))
+        if settings.get("vokomokum.warn_on_negative_balance", "true") == "true":
+            for m in [m for m in all_members if m.balance < 0]:
+                todos.append(Todo(msg='Member {} has a negative balance of EUR {}.'\
+                                    .format(ascii_save(m.fullname),
+                                            round(m.balance, 2)),
+                                wg='Finance',
+                                link_act='member/{}'.format(m.mem_id),
+                                link_txt='See member profile.',
+                                link_title='You should contact the member and '\
+                                    'tell them to transfer the missing amount.'))
    
         nov12 = datetime.datetime(2012, 11, 1)
         orders = session.query(Order).order_by(desc(Order.completed)).all()

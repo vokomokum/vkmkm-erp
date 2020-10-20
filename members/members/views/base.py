@@ -18,6 +18,7 @@ class BaseView(object):
         self.context = context
         self.request = request
         self.user = authenticated_user(self.request)
+        settings = get_settings()
         user_id = authenticated_userid(request)
         self.logged_in = user_id is not None and user_id > -1
         # only show content if this is False or user is logged in
@@ -29,8 +30,7 @@ class BaseView(object):
         if 'came_from' in self.request.params:
             cf = self.request.params.get('came_from')
             if "://" in cf:
-                s = get_settings()
-                for url in s.get('vokomokum.whitelist_came_from').split(' '):
+                for url in settings.get('vokomokum.whitelist_came_from').split(' '):
                     if (cf.startswith('http://{}'.format(url)) \
                         or cf.startswith('https://{}'.format(url))):
                         self.came_from = cf
@@ -43,7 +43,7 @@ class BaseView(object):
         self.month = now.month
         
         # general infos, messages
-        if self.user and self.user.balance < 0:
+        if self.user and self.user.balance < 0 and settings.get("vokomokum.warn_on_negative_balance", "true") == "true":
             self.info = ' Your account balance is EUR {}! Please'\
                        ' transfer the missing amount to Vokomokum,'\
                        ' IBAN: NL49 TRIO 0786 8291 09, t.p.v. Amsterdam'\
