@@ -74,7 +74,7 @@ class TestShifts(VokoTestCase):
     def test_delete(self):
         ''' Hans is wg leader, only he can delete peters shift '''
         pshifts = self.get_shifts(mname=u'Peter')
-        self.assertEquals(pshifts.count(), 1)
+        self.assertEqual(pshifts.count(), 1)
         shift = pshifts.one()
         wg = shift.workgroup
         request = testing.DummyRequest()
@@ -84,12 +84,12 @@ class TestShifts(VokoTestCase):
         view = EditShiftView(None, request)
         view.user = self.get_hans()
         view()
-        self.assertEquals(self.get_shifts(mname=u'Peter').count(), 0)
+        self.assertEqual(self.get_shifts(mname=u'Peter').count(), 0)
 
     def test_toggle_state(self):
         ''' set states of a shift (only Hans the wg-leader can do it)'''
         shift = self.get_shifts(mname=u'Peter').one()
-        self.assertEquals(shift.state, 'assigned')
+        self.assertEqual(shift.state, 'assigned')
         wg = self.DBSession.query(Workgroup).filter(Workgroup.name==u'Besteling').first()
         request = testing.DummyRequest()
         request.matchdict = {'wg_id': wg.id}
@@ -99,14 +99,14 @@ class TestShifts(VokoTestCase):
         view = EditShiftView(None, request)
         view.user = self.get_peter()
         view()
-        self.assertEquals(shift.state, 'assigned')  # peter can't do it
+        self.assertEqual(shift.state, 'assigned')  # peter can't do it
         view.user = self.get_hans()
         view()
-        self.assertEquals(shift.state, 'worked')  # hans can
+        self.assertEqual(shift.state, 'worked')  # hans can
         request.params['state'] = 'assigned'
         view.user = self.get_hans()
         view()
-        self.assertEquals(shift.state, 'assigned')
+        self.assertEqual(shift.state, 'assigned')
         request.params['state'] = 'invalid-state'
         self.assertRaises(VokoValidationError, view)
         # This does not work here, as in the view the shift has been
@@ -114,6 +114,6 @@ class TestShifts(VokoTestCase):
         # validation throws an error.
         # In production, a rollback happens, but not here
         #shift = self.get_shifts(mname=u'Peter').one()
-        #self.assertEquals(shift.state, 'assigned')
+        #self.assertEqual(shift.state, 'assigned')
 
 

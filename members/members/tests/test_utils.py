@@ -17,9 +17,9 @@ class TestUtils(VokoTestCase):
         mails = [m for m in os.listdir(mail_folder) if m.endswith('.eml')]
         f = open('%s/%s' % (mail_folder, mails[0]), 'r')
         _ = f.readline()
-        self.assertEquals(f.readline(), 'To: %s\n' % to)
-        self.assertEquals(f.readline(), 'Subject: %s\n' % subject)
+        self.assertEqual(f.readline(), 'To: %s\n' % to)
+        self.assertEqual(f.readline(), 'Subject: %s\n' % subject)
         _ = f.readline()
-        self.assertEquals(f.readline(), 'Bla\n')
-        self.assertEquals(f.readline(), 'Bla\n')
+        self.assertEqual(f.readline(), 'Bla\n')
+        self.assertEqual(f.readline(), 'Bla\n')
 

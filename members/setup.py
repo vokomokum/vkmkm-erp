@@ -3,10 +3,10 @@ import os
 from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.txt')).read()
+README = open(os.path.join(here, 'README.md')).read()
 
 requires = [
-    'pyramid==1.5a4',
+    'pyramid>=1.5',
     'pyramid_chameleon',
     'SQLAlchemy',
     'transaction',
@@ -16,7 +16,8 @@ requires = [
     'waitress',
     'pytz',
     'dnspython',
-    'python-magic'
+    'passlib',
+    'python-magic',
     ]
 
 setup(name='members',
@@ -38,6 +39,7 @@ setup(name='members',
       zip_safe=False,
       test_suite='members',
       install_requires = requires,
+      tests_require= requires + ["pytest", "multidict"],
       entry_points = """\
       [paste.app_factory]
       main = members:main

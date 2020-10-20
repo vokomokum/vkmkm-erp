@@ -2,12 +2,12 @@ import os
 import base64
 
 from pyramid.view import view_config
+from passlib.hash import md5_crypt
 
 from members.views.base import BaseView
 from members.models.member import Member, get_member
 from members.models.base import DBSession
 from members.utils.mail import sendmail
-from members.utils.md5crypt import md5crypt
 
 
 def send_pwdreset_request(member, app_url, first=False):
@@ -20,7 +20,7 @@ def send_pwdreset_request(member, app_url, first=False):
     :param bool first: True if this email is the first this user gets (on
                         account creation)
     '''
-    code = base64.urlsafe_b64encode(os.urandom(16))
+    code = str(base64.urlsafe_b64encode(os.urandom(16)), "utf-8")
     member.mem_pwd_url = code
     subject = 'Set a new password for your Vokomokum account.'
     if first:
@@ -51,7 +51,7 @@ class ResetPasswordRequestView(BaseView):
         if 'mem_id' in p and p['mem_id'] != "":
             try:
                 member = get_member(session, self.request)
-            except Exception, e:
+            except Exception:
                 member = None
         if member:
             send_pwdreset_request(member, self.request.application_url)
@@ -94,8 +94,7 @@ class ResetPasswordView(BaseView):
         # set new password
         member.validate_pwd(self.request)
         pwd = str(self.request.params['pwd1'])
-        salt = md5crypt(pwd, '') # jim uses encrypted pwd as salt
-        member.mem_enc_pwd = md5crypt(pwd, salt) 
+        member.mem_enc_pwd = md5_crypt.hash(pwd)
         member.mem_pwd_url = ''
         return info(u'Password has been set.'\
                ' Please use the new password the next time you log in.')

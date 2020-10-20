@@ -1,7 +1,7 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
-from zope.sqlalchemy import ZopeTransactionExtension
+from zope.sqlalchemy import register as register_for_transaction_mgmt
 
 import transaction
 
@@ -56,7 +56,9 @@ class VokoValidationError(Exception):
 # not possible on the SQLAlchemy model. Here is an example:
 # res = DBSession.execute('''SELECT * from workgroups;''')
 # print list(res)[0].name
-DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension(), autoflush=True, autocommit=False))
+
+DBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False))
+register_for_transaction_mgmt(DBSession)
 
 # this is used as base model class for SQLAlchemy models
 Base = declarative_base()

@@ -9,6 +9,7 @@ from pyramid import testing
 from sqlalchemy import create_engine, engine_from_config
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError, OperationalError
+from passlib.hash import md5_crypt
 
 from members import models
 from members.models.member import Member
@@ -18,7 +19,6 @@ from members.models.transactions import TransactionType
 from members.models.transactions import reserved_ttype_names
 from members.utils import mail
 from members.utils.misc import get_settings
-from members.utils.md5crypt import md5crypt
 
 
 '''
@@ -111,7 +111,7 @@ class VokoTestCase(unittest.TestCase):
         '''
         m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
         m1.mem_email = 'peter@dePan.nl'
-        m1.mem_enc_pwd = md5crypt('notsecret', 'notsecret')
+        m1.mem_enc_pwd = md5_crypt.hash('notsecret')
         self.DBSession.add(m1)
         m2 = Member(fname=u'Hans', prefix=u'de', lname='Wit')
         m1.mem_email = 'hans@deWit.nl'

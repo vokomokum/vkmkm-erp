@@ -22,7 +22,10 @@ def fill_wg_from_request(wg, request, session):
     if request and wg:
         for attr in ['name', 'desc', 'required_members']:
             if attr in request.params:
-                wg.__setattr__(attr, request.params[attr])
+                val = request.params[attr]
+                if attr == "required_members":
+                    val = int(val)
+                wg.__setattr__(attr, val)
         if 'wg_leaders' in request.POST:
             wg.leaders = []
             for mid in request.POST.getall('wg_leaders'):

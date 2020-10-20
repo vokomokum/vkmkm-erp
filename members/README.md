@@ -10,7 +10,7 @@ Workgroup membership comes with roles: members and coordinators.
 
 Shifts have a workflow (open <-> assigned -> worked or no-show)
 
-Financial transactions have types and always have a oppponent (members or suppliers, usually).
+Financial transactions have types and always have an opponent (members or suppliers, usually).
 In the end, you'll get a double bookkeeping system.
 
 
@@ -18,6 +18,11 @@ In the end, you'll get a double bookkeeping system.
 Installation instructions
 ------------------------------
 see INSTALL.md
+
+For the below commands to work, do this:
+
+    pip install 'fabric>=2.0'
+
 
 Populate local test database with dummy data
 ---------------------------------------------

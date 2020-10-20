@@ -3,11 +3,10 @@ import re
 from sqlalchemy import Table, Column, Integer, Unicode, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
-
 from pyramid.security import Allow, DENY_ALL
 
-from base import Base, VokoValidationError
-from member import Member
+from members.models.base import Base, VokoValidationError
+from members.models.member import Member
 
 
 membership = Table(
@@ -44,7 +43,7 @@ class Workgroup(Base):
         self.name = name
         self.desc = desc
         self.active = True
-        self.required_members = required_members
+        self.required_members = int(required_members)
 
     def __repr__(self):
         return self.name
@@ -75,7 +74,7 @@ class Workgroup(Base):
         if len(self.leaders) == 0:
             raise VokoValidationError('A workgroup needs at least '\
                                       'one coordinator.')
-        if self.required_members < 1:
+        if int(self.required_members) < 1:
             raise VokoValidationError('A workgroup needs at least one member.')
 
     @property

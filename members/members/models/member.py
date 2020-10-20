@@ -16,7 +16,7 @@ from sqlalchemy import Boolean
 
 from pyramid.security import Allow, DENY_ALL
 
-from base import Base, VokoValidationError
+from members.models.base import Base, VokoValidationError
 from members.models.base import DBSession
 
 
@@ -130,7 +130,7 @@ class Member(Base):
                 raise VokoValidationError('Bank number needs to consist of '\
                                           'only numbers.')
         # household size
-        if self.mem_household_size < 1:
+        if self.mem_household_size is None or self.mem_household_size < 1:
             raise VokoValidationError('Please specify how many people live '\
                                       'in the household.')
 
@@ -192,7 +192,7 @@ def get_member(session, request):
         if m_id == 'new':
             return member
         try:
-            mid = int(m_id)
+            m_id = int(m_id)
         except ValueError:
             raise Exception("No member with ID {0}".format(m_id))
         member = session.query(Member).get(m_id)

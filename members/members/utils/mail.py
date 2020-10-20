@@ -42,7 +42,7 @@ Subject: %s
                             stdin=subprocess.PIPE,
                             stderr=subprocess.PIPE,
                             stdout=subprocess.PIPE)
-            print >> mailer.stdin, mail
+            mailer.stdin.write(bytes(mail, "utf-8"))
             mailer.stdin.close()
             result = mailer.wait()
             error = mailer.stderr.read()
@@ -55,7 +55,7 @@ Subject: %s
         mf = open('{}/{}.eml'.format(target_folder, mail_time), 'w')
         mf.write(mail)
         mf.close()
-    except OSError, e:
+    except OSError as e:
         # log that it didn't work
         log = logging.getLogger(__name__)
         log.warn('Could not send mail to %s, subject "%s"'\

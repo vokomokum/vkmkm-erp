@@ -6,10 +6,10 @@ from sqlalchemy.orm import relationship, backref
 
 from datetime import datetime
 
-from base import Base
-from base import VokoValidationError
-from member import Member
-from workgroups import Workgroup
+from members.models.base import Base
+from members.models.base import VokoValidationError
+from members.models.member import Member
+from members.models.workgroups import Workgroup
 from members.utils.misc import ascii_save, month_info
 
 
@@ -89,7 +89,7 @@ class Shift(Base):
             tmp_day = 1
         try:
             datetime(self.year, self.month, int(tmp_day))
-        except ValueError, e:
+        except ValueError as e:
             raise VokoValidationError('The date of this shift is not correct: %s.' % e)
         if self.wg_id == "" or not self.workgroup:
             raise VokoValidationError('No workgroup is assigned to this shift.')

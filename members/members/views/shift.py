@@ -90,7 +90,7 @@ class NewShiftView(BaseShiftView):
             if year:
                 shift.year = year
             if people > 1:
-                for _ in xrange(1, people):
+                for _ in range(1, people):
                     s = shift.clone()
                     s.workgroup = DBSession().query(Workgroup).get(s.wg_id)
                     s.validate()
@@ -114,7 +114,7 @@ class NewShiftView(BaseShiftView):
                                       int(params['until_month']), day)
             if repeat in ('monthly', 'bi-monthly-startnow',
                             'bi-monthly-startnext'):
-                for year in xrange(sdate.year, udate.year + 1):
+                for year in range(sdate.year, udate.year + 1):
                     smonth = 1
                     if year == sdate.year:
                         smonth = sdate.month
@@ -126,7 +126,7 @@ class NewShiftView(BaseShiftView):
                         step = 2
                     if repeat == 'bi-monthly-startnext':
                         smonth += 1
-                    for month in xrange(smonth, umonth + 1, step):
+                    for month in range(smonth, umonth + 1, step):
                         add_shift(month, year)
                 if len(self.added_shifts) == 0:
                     return self.redir_to_shiftlist(wg, sdate.year, sdate.month,
@@ -327,7 +327,7 @@ class ListShiftView(BaseView):
         self.month_info = month_info(schedule_date) 
         q = """SELECT descr FROM shift_days_descriptions ORDER BY id;""" 
         day_literals = [i[0] for i in list(db_session.execute(q))]
-        self.days = day_literals + range(1, self.month_info.days_in_month + 1)
+        self.days = day_literals + list(range(1, self.month_info.days_in_month + 1))
         shifts = db_session.query(Shift).filter(Shift.wg_id == wg.id)\
                                      .filter(Shift.month == self.month)\
                                      .filter(Shift.year == self.year)\

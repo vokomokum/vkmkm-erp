@@ -2,10 +2,12 @@
 import os
 import sys
 from sqlalchemy import create_engine
+from sqlalchemy.orm.scoping import scoped_session
 from subprocess import Popen
 import random
 import datetime
 import transaction
+from passlib.hash import md5_crypt
 
 from members import models
 from members.models.member import Member
@@ -17,7 +19,6 @@ from members.models.transactions import Transaction
 from members.models.transactions import TransactionType
 from members.models.orders import Order
 
-from members.utils.md5crypt import md5crypt
 from members.utils.misc import month_info
 
 '''
@@ -29,7 +30,7 @@ TODO:
 dbname = 'members-dev.db'
 seed='Miau'
 fakenamesname = 'scripts/fakenames.txt'
-DBSession = None
+DBSession: scoped_session = None
 default_pwd = 'testtest'
 
 
@@ -45,10 +46,9 @@ def addAdmin():
     '''
     admin = Member(fname=u'Adalbert', lname='Adminovic')
     admin.mem_email = 'admin@vokomokum.nl'
-    admin.mem_mobile = "06" + unicode(random.randint(10000000, 100000000))
+    admin.mem_mobile = "06" + str(random.randint(10000000, 100000000))
     admin.household_size = 1
-    salt = md5crypt('notsecret', '') 
-    admin.mem_enc_pwd = md5crypt('notsecret', salt)
+    admin.mem_enc_pwd = md5_crypt.hash('notsecret')
     admin.mem_admin = True
     admin.mem_active = True
     DBSession.add(admin)
@@ -63,7 +63,7 @@ def addAdmin():
 def addOldNames():
     m1 = Member(fname=u'Peter', prefix=u'de', lname='Pan')
     m1.mem_email = 'peter@gmail.com'
-    m1.mem_enc_pwd = md5crypt('notsecret', 'notsecret')
+    m1.mem_enc_pwd = md5_crypt.hash('notsecret')
     DBSession.add(m1)
     m2 = Member(fname=u'Hans', prefix=u'de', lname='Wit')
     m1.mem_email = 'hans@gmail.com'
@@ -104,8 +104,8 @@ def fillDBRandomly(seed, workgroups):
     mi = month_info(now.date())
     # read in the fakenames
     names = {}
-    for l in file(fakenamesname, 'r'):
-        fname,lname = l.strip().split()
+    for l in open(fakenamesname, 'r').readlines():
+        fname, lname = l.strip().split()
         names[fname] = lname
     namelist = sorted(list(names.keys()))
     # 20% of the people are applicants
@@ -114,7 +114,7 @@ def fillDBRandomly(seed, workgroups):
         m = Applicant(fname=l, lname=names[l])
         m.email = "%s-app@gmail.com"%(l)
         m.household_size = random.randint(1, 5)
-        m.telnr = "06" + unicode(random.randint(10000000, 100000000))
+        m.telnr = "06" + str(random.randint(10000000, 100000000))
         DBSession.add(m)
         # randomly select a number of workgroups m can be a member of
         DBSession.flush()
@@ -123,8 +123,8 @@ def fillDBRandomly(seed, workgroups):
         prefix = random.choice([u"de", u"van", u"voor", u"van den", u"te"])
         m = Member(fname=l, prefix=prefix, lname=names[l])
         m.mem_email = "%s@gmail.com" % (l)
-        m.mem_enc_pwd = md5crypt(default_pwd, default_pwd)
-        m.mem_mobile = "06" + unicode(random.randint(10000000, 100000000))
+        m.mem_enc_pwd = md5_crypt.hash(default_pwd)
+        m.mem_mobile = "06" + str(random.randint(10000000, 100000000))
         m.household_size = random.randint(1, 5)
         m.mem_membership_paid = True
         if random.random() < 0.01:
@@ -192,12 +192,12 @@ def main():
         if "yy" in sys.argv:
             rmdb = True
         else:
-            answ = raw_input('DB {} already exists. Delete it? [y/N]'.format(dbname))
+            answ = input('DB {} already exists. Delete it? [y/N]'.format(dbname))
             rmdb = answ.lower() == 'y'
         if rmdb:
             os.remove(dbname)
         else:
-            print "Aborted."
+            print("Aborted.")
             sys.exit(2)
 
     # initalise database with some external data the members app relies on

@@ -2,7 +2,7 @@ from sqlalchemy import Table, Column, Integer, Unicode
 
 from pyramid.security import Allow, DENY_ALL
 
-from base import Base, VokoValidationError
+from members.models.base import Base, VokoValidationError
 
 
 class Applicant(Base):
@@ -31,7 +31,7 @@ class Applicant(Base):
         self.comment = comment
         self.email = email
         self.telnr = telnr
-        self.household_size = household_size
+        self.household_size = int(household_size)
 
     def __repr__(self):
         return '{} {}'.format(self.fname, self.lname)
