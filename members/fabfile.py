@@ -28,7 +28,7 @@ fab deploy:user=you # deploy latest code on our server and set it 'live'
 vkmkm_hosts = ['order.vokomokum.nl']
 path_to_venv = "/home/nicolas/envs/vkmkm"
 venv_activation = "source {}/bin/activate".format(path_to_venv)
-docker_image = "nhoening/vokomokum-members"
+docker_image = "vokomokum/members"
 
 @task
 def develop(c):
@@ -85,7 +85,8 @@ def populate(c):
 @task
 def build_docker_image(c):
     '''
-    Build the Docker image and possibly upload it
+    Build the Docker image and possibly upload it.
+    Requires an authenticated dockerhub session with access to the vokomokum group.
     '''
     c.run(f"docker build . --tag {docker_image}")
     if confirm("Upload image to docker registry?"):

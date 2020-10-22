@@ -46,5 +46,13 @@ Running tests
 Running version with dummy data as Docker container
 ----------------------------------------------------
 
-    docker pull nhoening/vokomokum-members
-    docker run --name=vkmkm -d -p 6543:6543 vokomokum-members
+    fab serve --docker
+
+which (other than cleaning containers) does:
+
+    docker pull vokomokum/members
+    docker run --name=vkmkm -d -p 6543:6543 vokomokum/members
+
+If you have the authorization, you can re-build and push the image:
+
+    fab build_docker_image
