@@ -126,7 +126,9 @@
       <div class="col-sm-offset-2 col-sm-10">
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="mem_admin" checked="${m.mem_admin}"> Member has general administrator privileges
+            <input type="checkbox" name="mem_admin" checked="checked" tal:condition="m.mem_admin">
+            <input type="checkbox" name="mem_admin" tal:condition="not m.mem_admin">
+            Member has general administrator privileges
           </label>
         </div>
       </div>
@@ -135,7 +137,9 @@
       <div class="col-sm-offset-2 col-sm-10">
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="mem_adm_adj" checked="${m.mem_adm_adj}"> Order admin account - can order goods after commits are closed
+            <input type="checkbox" name="mem_adm_adj" checked="checked" tal:condition="m.mem_adm_adj">
+            <input type="checkbox" name="mem_adm_adj" tal:condition="not m.mem_adm_adj">
+            Order admin account - can order goods after commits are closed
           </label>
         </div>
       </div>
