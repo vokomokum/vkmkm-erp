@@ -137,10 +137,14 @@ def deploy(c, user=None, mode="test", branch="master"):
     
     #with cd(code_dir):  # not yet implemented in fabric2 and sudo does not remember cd
     c.sudo(f"{code_dir}/dev-tools/update-members-site-from-git {mode} {branch}")
-    # no need to restart apache, simply touch wsgi file (when in daemon mode)
+    
+    # No need to restart apache, simply touch wsgi file (when in daemon mode)
     # (see http://code.google.com/p/modwsgi/wiki/ReloadingSourceCode)
-    if mode == 'production':
-        c.sudo(f"touch {app_dir}/members/pyramid.wsgi")
-    else:
-        c.sudo(f"touch {app_dir}/memberstest/pyramid.wsgi")
+    #if mode == 'production':
+    #    c.sudo(f"touch {app_dir}/members/pyramid.wsgi")
+    #else:
+    #    c.sudo(f"touch {app_dir}/memberstest/pyramid.wsgi")
+    
+    # The above is not working anymore, we do restart directly now
     #c.sudo("/etc/init.d/apache2 restart")
+    c.sudo("systemctl restart httpd")
