@@ -129,7 +129,7 @@ def fillDBRandomly(seed, workgroups, existing_members):
         m.mem_email = "%s@gmail.com" % (l)
         m.mem_enc_pwd = md5_crypt.hash(default_pwd)
         m.mem_mobile = "06" + str(random.randint(10000000, 100000000))
-        m.household_size = random.randint(1, 5)
+        m.mem_household_size = random.randint(1, 5)
         m.mem_membership_paid = True
         if random.random() < 0.01:
             m.mem_membership_paid = False
@@ -139,7 +139,7 @@ def fillDBRandomly(seed, workgroups, existing_members):
         m.mem_street = random.choice(namelist) + "street"
         m.mem_house = random.randint(1, 200)
         m.mem_postcode = "1000AB"
-        m.city = "Amsterdam"
+        m.mem_city = "Amsterdam"
         DBSession.add(m)
         # randomly select a number of workgroups m can be a member of
         for wg in random.sample(workgroups, random.randint(1, len(workgroups))):
