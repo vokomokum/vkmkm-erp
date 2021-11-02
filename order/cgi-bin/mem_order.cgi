@@ -337,24 +337,7 @@ sub do_changes {
 	}
     }
 
-    if(not defined($buttons->{Reload}) and
-       (($status == 2 and not $config->{committed} and $changes) or 
-	# changed or not, not committed, commit pressed but not confirmed
-	(not $config->{committed} and defined($buttons->{Commit})
-	    and ($buttons->{Commit} eq 'Commit')
-	    and not defined($buttons->{CommitYes})))) {
-	my $tpl = new CGI::FastTemplate($config->{templates});
-	$tpl->strict();
-	$tpl->define( emsg      => "common/err_pr_title.template");
-	my %em = (err_msg => ($config->{committed}) ?
-		  'You did not tick the agreement, your order is not changed' :
-		  'You did not tick the agreement, your order is not yet committed');
-	$tpl->assign(\%em);
-	$tpl->parse(MAIN => "emsg");
-	my $e = $tpl->fetch("MAIN");
-	$err_msgs = $$e . $err_msgs;
-	$tpl = undef;
-    } elsif(not defined($buttons->{Reload})) {
+    if(not defined($buttons->{Reload})) {
 	# attempt to apply changes
 	my $add_errors = 1;
 	foreach my $pr_id (keys %{$new_vals}) {
@@ -457,13 +440,10 @@ sub do_changes {
     	    $config->{nextcgi}  = "/cgi-bin/all-order";
 	}
 
-    	$config->{title}   .= " (Committed)" if ( $config->{committed} );
     	$config->{buttons}  = "mem_order/save_ord.template";
     	$config->{row}	    = "mem_order/editprrow.template";
 		
-    	$config->{footer}   = ( $status > 0 and not $config->{committed})
-				? "mem_order/footer-commit.template"
-				: "mem_order/footer-save.template";
+    	$config->{footer}   = "mem_order/footer-save.template";
 	
     } elsif( $status == 2 ) {
 	
@@ -477,7 +457,6 @@ sub do_changes {
     	    $config->{nextcgi}  = "/cgi-bin/all-order";
     	}
 
-    	$config->{title} .= " (Committed)" if ( $config->{committed} );
     	$config->{buttons} = "mem_order/nosave_ord.template";
     	$config->{row}      = "mem_order/editprrow.template";
     	$config->{footer}   = "mem_order/footer-save.template";
@@ -656,8 +635,7 @@ sub print_html {
     my $tplf = new CGI::FastTemplate( $config->{templates} );
     $tplf->define( footer => $config->{footer} );
 		
-    my %tots = (total  => $total,
-		CommitTxt => "Commit This Order");
+    my %tots = (total  => $total);
     $tots{NOTES} = "";
     $tplf->assign(\%tots);
     $tplf->parse(MAIN => "footer");
@@ -681,6 +659,7 @@ sub main {
     $config->{caller} = $program;
     $config->{program} = $program;
     openlog( $program, LOG_PID, LOG_USER );
+
     syslog(LOG_ERR, "$program");
 
     my ($cgi, $dbh) = open_cgi($config);
