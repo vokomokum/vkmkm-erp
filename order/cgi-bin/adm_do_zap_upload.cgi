@@ -29,6 +29,7 @@ use POSIX qw(strftime);
 use MIME::Base64;
 use Encode;
 use Spreadsheet::ParseExcel;
+use utf8;
 use voko;
 
 my $conf = "../passwords/db.conf";
@@ -70,16 +71,21 @@ sub process {
 	    die "Missing Date in column 2 of row $row" unless $cell;
 	    $xls_date = $cell->value();
 	    $xls_date =~ s/[+-]\d\d$//;
+            #syslog(LOG_ERR, "xls_date: $xls_date");
 	    $cell = $worksheet->get_cell($row, 5);
 	    $id = ($cell && $cell->value()) ? $cell->value() : "";
+            #syslog(LOG_ERR, "$cell->value() id: $id");
 	    ++$row;
 	    last;
 	}
+        #syslog(LOG_ERR, " EOL xls_date: $xls_date");
 	die "Did not find a row with 'Date' and a date and time"
 	    if($xls_date eq "");
-	die "Missing Title and database date from spreadsheet" 
-	    if(not $id or 
-	       $id !~ /Zapatista Coffee - (\d{4,4}.\d\d.\d\d \d\d:\d\d:\d\d)/);
+
+        #syslog(LOG_ERR, "|%s| %d %d", $id, ($id  =~ /Zapatista Coffee - .*/), ($id =~ /Zapatista Coffee - (\d{4,4}.\d\d.\d\d \d\d:\d\d:\d\d)/));
+        die "Missing Title and database date from spreadsheet"
+	    if((not $id) or 
+	       ($id !~ /Zapatista Coffee\s.\s(\d{4,4}.\d\d.\d\d \d\d:\d\d:\d\d)/));
 	$id = $1;
 	$id =~ s!/!-!g;
 	my $sth = prepare(
@@ -105,7 +111,7 @@ sub process {
 	    $h->{wh_update} = sprintf("%02d-%02d-%02d %02d:%02d:%02d", 
 	    $1, $2, $3, $4, $5, $6);
 	}
-    
+        #syslog(LOG_ERR, "db: $h->{wh_update} id: $id");
 	if($h->{wh_update} ne $id) {
 	    die "Products have been updated since this spreadsheet was " .
 		"downloaded. Download a new spreasheet and edit that one";
@@ -143,6 +149,7 @@ sub process {
 	    die "Product code $hash{wh_pr_id} appears twice, on row 1 + $hash{wh_pr_id}->{row} and ++$row"
 		if(defined($rows{$hash{wh_prid}}));
 	    $rows{$row} = \%hash;
+            #syslog(LOG_ERR, "$row, $hash{wh_pr_id} $hash{wh_descr}  $hash{wh_wh_q} $hash{wh_whpri} $hash{wh_btw}  $hash{wh_url}");
 	}
     }
 
@@ -161,7 +168,7 @@ sub process {
 			  "wh_prev_seen = ?  WHERE wh_pr_id = ?", $dbh);
     my $ins_sth = prepare("INSERT INTO zapatistadata (wh_pr_id, wh_whpri, wh_btw, " .
 			  "wh_descr, wh_url, wh_wh_q, wh_last_seen, wh_prev_seen, " .
-			  "wh_prcode) VALUES (?, ?, cast(? as numeric(5, 2), " .
+			  "wh_prcode) VALUES (?, ?, cast(? as numeric(5, 2)), " .
 			  "?, ?, ?, cast(? as timestamp), cast(? as timestamp), ?)", 
 			  $dbh);
 
